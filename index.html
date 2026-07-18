@@ -2762,6 +2762,9 @@ body {
   will-change: transform;
 }
 .slide-layer.ontop { z-index: 20; }   /* pop: outgoing page exits over the top */
+/* interactive swipe-back: a soft shadow cast to the LEFT of the moving page,
+   onto the revealed page beneath — sells "a sheet lifting off", like iOS */
+.slide-layer.sb-drag { box-shadow: -10px 0 34px rgba(0, 0, 0, 0.4); }
 .slide-freeze {                        /* mirror #app's box so the frozen page keeps its
                                           full scroll range (scrollTop would clamp short) */
   min-height: 100%;
@@ -3522,8 +3525,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 17:59 CEST';
-const APP_BUILD = 'v68';
+const COLLECTION_UPDATED = '18 July 2026 · 18:07 CEST';
+const APP_BUILD = 'v70';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7108,19 +7111,23 @@ function sbApplyScroll(layer, want) {
 }
 if (STANDALONE) {
   const EDGE = 30, DIST = 0.32, VEL = 0.28;      // start zone; commit past 32% or a flick
-  let g = null;
+  const SB_DIM = 0.20;                            // gentle reveal veil (NOT the 0.78 forward-push value)
+  const SB_OMEGA = 16;                            // spring stiffness — higher = snappier. tune on device.
+  const RM = matchMedia('(prefers-reduced-motion: reduce)');
+  let g = null, sbCleanup = null;
 
   const frame = () => {
     const p = Math.max(0, Math.min(g.dx / g.w, 1));
     g.layer.style.transform = `translateX(${g.dx}px)`;
-    g.under.style.transform = `translateX(${-SLIDE.parallax * g.w * (1 - p)}px)`;
-    g.dim.style.opacity = String(SLIDE.dim * (1 - p));
+    g.under.style.transform = `translateX(${RM.matches ? 0 : -SLIDE.parallax * g.w * (1 - p)}px)`;
+    g.dim.style.opacity = String(SB_DIM * (1 - p));
+    if (!g.tick && p > DIST) { g.tick = true; haptic(); }   // one buzz as it crosses the commit line
   };
 
   const startDrag = () => {
     const layer = captureOldLayer(g.departing);   // current page → scroll-frozen top layer
     if (!layer) { g = null; return; }
-    layer.classList.add('ontop');
+    layer.classList.add('ontop', 'sb-drag');       // sb-drag casts the leading-edge shadow
     renderView(g.back);                            // previous page → #app
     // the previous page renders with deferred (data-src) photos; it now lives in
     // a body-level layer that observeLazy never sees, so promote its photos here
@@ -7129,6 +7136,7 @@ if (STANDALONE) {
     const under = captureOldLayer(SCROLL_MEM[g.back] || 0);
     const dim = document.createElement('div');
     dim.className = 'slide-dim-under';
+    dim.style.willChange = 'opacity';
     document.body.appendChild(under);
     document.body.appendChild(dim);
     document.body.appendChild(layer);
@@ -7136,44 +7144,84 @@ if (STANDALONE) {
     sbApplyScroll(under, SCROLL_MEM[g.back] || 0);
     g.layer = layer; g.under = under; g.dim = dim; g.started = true;
     sbActive = true;
-    haptic();
     frame();
+  };
+
+  // hand the current page's DOM back to #app exactly as it was (snap-back / abort)
+  const restoreCurrent = (s) => {
+    while ($app.firstChild) $app.removeChild($app.firstChild);
+    const fz = s.layer && s.layer.firstChild;
+    while (fz && fz.firstChild) $app.appendChild(fz.firstChild);
+    $shell.scrollTop = s.departing;
+    restoreRails(lastRouteHash);
+    wireFocusGlow();
+    [s.layer, s.under, s.dim].forEach(el => el && el.remove());
   };
 
   const finish = (commit) => {
     const s = g; g = null;
-    const from = s.dx, remain = commit ? (s.w - from) : from;
-    const D = Math.max(120, Math.min(320, Math.round(remain / s.w * 300) + 90));
-    const opt = { duration: D, easing: SLIDE.ease, fill: 'both' };
-    const a = s.layer.animate([{ transform: `translateX(${from}px)` }, { transform: `translateX(${commit ? s.w : 0}px)` }], opt);
-    s.under.animate([{ transform: s.under.style.transform }, { transform: `translateX(${commit ? 0 : -SLIDE.parallax * s.w}px)` }], opt);
-    s.dim.animate([{ opacity: s.dim.style.opacity || String(SLIDE.dim) }, { opacity: commit ? 0 : SLIDE.dim }], opt);
+    const w = s.w, from = s.dx, target = commit ? w : 0;
     let done = false;
     const cleanup = () => {
-      if (done) return; done = true;
+      if (done) return; done = true; sbCleanup = null;
       if (commit) {
         // #app is empty; history.back() → renderRoute repaints the previous page
-        // with no slide (already-seen photos repaint solid → seamless). Then drop
-        // the gesture layers to reveal it.
-        const drop = () => { s.layer.remove(); s.under.remove(); s.dim.remove(); sbActive = false; };
+        // (already-seen photos repaint solid → seamless). Then drop the layers.
+        const drop = () => { [s.layer, s.under, s.dim].forEach(el => el && el.remove()); sbActive = false; };
         window.addEventListener('hashchange', () => requestAnimationFrame(() => requestAnimationFrame(drop)), { once: true });
         setTimeout(drop, 650);
         history.back();
       } else {
-        // snap back: hand the current page's DOM straight back to #app, untouched
-        while ($app.firstChild) $app.removeChild($app.firstChild);
-        const fz = s.layer.firstChild;
-        while (fz && fz.firstChild) $app.appendChild(fz.firstChild);
-        $shell.scrollTop = s.departing;
-        restoreRails(lastRouteHash);
-        wireFocusGlow();
-        s.layer.remove(); s.under.remove(); s.dim.remove();
+        restoreCurrent(s);
         sbActive = false;
       }
     };
+    sbCleanup = cleanup;
+    if (RM.matches) {                              // reduced motion: settle instantly, no spring
+      s.layer.style.transform = `translateX(${target}px)`;
+      s.under.style.transform = `translateX(${commit ? 0 : -SLIDE.parallax * w}px)`;
+      s.dim.style.opacity = commit ? '0' : String(SB_DIM);
+      cleanup(); return;
+    }
+    // Velocity-continuous critically-damped spring, SEEDED with the finger's exit
+    // speed: x(t) = target + (A + B·t)·e^(−ω·t), x(0)=from, x'(0)=v0. The page
+    // leaves your thumb at exactly the speed your thumb was moving — the iOS feel.
+    // Baked into linear keyframes so it runs on the compositor; under+dim are
+    // driven off the SAME per-sample progress so parallax/scrim stay locked.
+    const A = from - target, v0 = s.vx * 1000, B = v0 + SB_OMEGA * A;
+    const T = Math.min(0.5, Math.max(0.28, 5 / SB_OMEGA)), N = 44;
+    const kL = [], kU = [], kD = [];
+    for (let i = 0; i <= N; i++) {
+      const t = (i / N) * T;
+      let x = target + (A + B * t) * Math.exp(-SB_OMEGA * t);
+      x = x < 0 ? 0 : (x > w ? w : x);             // critically-damped can nudge past once — clamp
+      const p = x / w;
+      kL.push({ transform: `translateX(${x}px)` });
+      kU.push({ transform: `translateX(${-SLIDE.parallax * w * (1 - p)}px)` });
+      kD.push({ opacity: String(SB_DIM * (1 - p)) });
+    }
+    // pin the final frame exactly on target (the spring tail can land a few px short)
+    kL[N] = { transform: `translateX(${target}px)` };
+    kU[N] = { transform: `translateX(${commit ? 0 : -SLIDE.parallax * w}px)` };
+    kD[N] = { opacity: commit ? '0' : String(SB_DIM) };
+    const D = T * 1000, opt = { duration: D, easing: 'linear', fill: 'both' };
+    const a = s.layer.animate(kL, opt);
+    s.under.animate(kU, opt);
+    s.dim.animate(kD, opt);
     a.onfinish = cleanup; a.oncancel = cleanup;
     setTimeout(cleanup, D + 280);                  // safety if WAAPI callbacks are lost
   };
+
+  // backgrounding mid-gesture may never deliver touchcancel — without this the
+  // layers strand on screen and sbActive stays true, wedging every later render.
+  const abortGesture = () => {
+    if (g && g.started) { const s = g; g = null; restoreCurrent(s); sbActive = false; }
+    else if (sbCleanup) { sbCleanup(); }
+    else { sbActive = false; }
+    g = null;
+  };
+  addEventListener('pagehide', abortGesture);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) abortGesture(); });
 
   document.addEventListener('touchstart', (e) => {
     if (g || sbActive) return;
@@ -7182,7 +7230,7 @@ if (STANDALONE) {
     if ($sheet.classList.contains('open') || mapIsOpen() || (typeof cgIsOpen === 'function' && cgIsOpen())) return;
     if (!location.hash || location.hash === '#/' || !curBack) return;
     g = { x0: t.clientX, y0: t.clientY, back: curBack, started: false, dx: 0, w: innerWidth,
-          departing: $shell.scrollTop, lastX: t.clientX, lastT: Date.now(), vx: 0 };
+          departing: $shell.scrollTop, lastX: t.clientX, lastT: Date.now(), vx: 0, tick: false };
   }, { passive: true });
 
   document.addEventListener('touchmove', (e) => {
@@ -7194,10 +7242,12 @@ if (STANDALONE) {
       if (dx < 10) return;                                                        // wait for clear intent
       startDrag();
       if (!g) return;
+      g.x0 = t.clientX;                            // rebase: page tracks from 0, no 10px activation pop
     }
-    g.dx = Math.max(0, dx);
     const now = Date.now();
-    g.vx = (t.clientX - g.lastX) / Math.max(1, now - g.lastT);
+    g.dx = Math.max(0, t.clientX - g.x0);
+    const inst = (t.clientX - g.lastX) / Math.max(1, now - g.lastT);
+    g.vx = g.vx ? g.vx * 0.7 + inst * 0.3 : inst;  // EMA — a smooth, trustworthy release velocity
     g.lastX = t.clientX; g.lastT = now;
     frame();
     if (e.cancelable) e.preventDefault();          // own the gesture — no scroll underneath
@@ -7206,6 +7256,7 @@ if (STANDALONE) {
   const end = () => {
     if (!g) return;
     if (!g.started) { g = null; return; }
+    if (Date.now() - g.lastT > 60) g.vx = 0;       // a finger that paused before lifting is not a flick
     const p = g.dx / g.w;
     finish((p > DIST || g.vx > VEL) && p > 0.05);
   };
