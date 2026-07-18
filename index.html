@@ -54,6 +54,27 @@ var b=document.getElementById('boot');setTimeout(function(){if(b)b.classList.add
 </div>
 <div id="sheet-backdrop"></div>
 <div id="sheet"></div>
+<div id="refresh" aria-hidden="true">
+  <div class="rf-veil"></div>
+  <div class="rf-sky">
+    <span class="rf-shoot" style="top:10%;animation-duration:2.7s;animation-delay:.1s"></span>
+    <span class="rf-shoot" style="top:24%;animation-duration:3.3s;animation-delay:1.1s"></span>
+    <span class="rf-shoot" style="top:37%;animation-duration:2.5s;animation-delay:1.9s"></span>
+    <span class="rf-shoot" style="top:55%;animation-duration:3.5s;animation-delay:.5s"></span>
+    <span class="rf-shoot" style="top:69%;animation-duration:2.9s;animation-delay:2.3s"></span>
+    <span class="rf-shoot" style="top:82%;animation-duration:3.1s;animation-delay:1.5s"></span>
+    <span class="rf-shoot small" style="top:17%;animation-duration:3.6s;animation-delay:2.7s"></span>
+    <span class="rf-shoot small" style="top:47%;animation-duration:3s;animation-delay:3.3s"></span>
+    <span class="rf-shoot small" style="top:76%;animation-duration:3.4s;animation-delay:.9s"></span>
+  </div>
+  <div class="rf-core">
+    <div class="rf-ring">
+      <svg viewBox="0 0 120 120"><circle class="rf-track" cx="60" cy="60" r="54"/><circle class="rf-prog" cx="60" cy="60" r="54"/></svg>
+      <span class="rf-mono serif">M</span>
+    </div>
+    <div class="rf-label">Refreshing the collection</div>
+  </div>
+</div>
 <div id="toast"></div>
 
 <style>
@@ -3290,6 +3311,70 @@ body {
 .sp-cosmos, .sp-word { position: relative; z-index: 2; }
 @media (prefers-reduced-motion: reduce) { .sp-field, .sp-field::after { animation: none; } }
 
+/* ---------- refresh: a shooting-stars layer OVER the live app ----------
+   Not a black screen — a translucent veil so the page glows through while
+   gold stars streak across and a ring fills. Reveals the refreshed app. */
+#refresh {
+  position: fixed; inset: 0; z-index: 280; overflow: hidden;
+  opacity: 0; pointer-events: none; transition: opacity 0.55s ease;
+}
+#refresh.show { opacity: 1; pointer-events: auto; }
+#refresh.done { opacity: 0; }
+.rf-veil {
+  position: absolute; inset: 0;
+  background: radial-gradient(130% 120% at 50% 36%, rgba(12,10,7,0.5), rgba(7,6,4,0.8) 68%, rgba(4,3,2,0.9));
+  -webkit-backdrop-filter: blur(3px) saturate(1.05); backdrop-filter: blur(3px) saturate(1.05);
+}
+/* rotate the whole sky so purely-horizontal star travel reads as diagonal */
+.rf-sky { position: absolute; inset: -30% -15%; transform: rotate(18deg); }
+.rf-shoot {
+  position: absolute; left: 0; width: 3px; height: 3px; border-radius: 50%;
+  background: #fff6e0; box-shadow: 0 0 8px 2px rgba(244,230,191,0.75); opacity: 0;
+  animation-name: rfShoot; animation-timing-function: cubic-bezier(0.4,0.05,0.35,1);
+  animation-iteration-count: infinite; will-change: transform, opacity;
+}
+.rf-shoot::after {
+  content: ''; position: absolute; top: 50%; right: 2px; width: 130px; height: 1.5px;
+  transform: translateY(-50%);
+  background: linear-gradient(270deg, rgba(244,230,191,0), rgba(244,230,191,0.85));
+}
+.rf-shoot.small { width: 2px; height: 2px; }
+.rf-shoot.small::after { width: 82px; opacity: 0.7; }
+@keyframes rfShoot {
+  0%   { transform: translateX(-160px); opacity: 0; }
+  6%   { opacity: 1; }
+  55%  { opacity: 1; }
+  100% { transform: translateX(118vw); opacity: 0; }
+}
+.rf-core {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 26px;
+}
+.rf-ring { position: relative; width: 96px; height: 96px; display: grid; place-items: center; }
+.rf-ring svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.rf-track { fill: none; stroke: rgba(200,162,75,0.16); stroke-width: 2; }
+.rf-prog {
+  fill: none; stroke: #e8c980; stroke-width: 2.5; stroke-linecap: round;
+  stroke-dasharray: 339; stroke-dashoffset: 339;
+  filter: drop-shadow(0 0 5px rgba(232,201,128,0.55));
+}
+#refresh.show .rf-prog { animation: rfFill 1.7s cubic-bezier(0.35,0,0.2,1) forwards; }
+@keyframes rfFill { to { stroke-dashoffset: 0; } }
+.rf-mono {
+  font-size: 42px; color: #e8c980; letter-spacing: 0.04em;
+  text-shadow: 0 2px 26px rgba(232,201,128,0.45), 0 0 44px rgba(200,162,75,0.28);
+  animation: rfPulse 2.4s ease-in-out infinite;
+}
+@keyframes rfPulse { 0%,100% { opacity: 0.8; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
+.rf-label {
+  font-family: system-ui, -apple-system, sans-serif; font-size: 10px; font-weight: 400;
+  letter-spacing: 0.34em; text-transform: uppercase; color: rgba(244,239,230,0.6);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rf-shoot { display: none; } .rf-mono { animation: none; }
+  #refresh.show .rf-prog { animation: none; stroke-dashoffset: 84; }
+}
+
 .sp-field.f1{box-shadow:231px 886px rgba(232,201,128,0.9), 231px 520px rgba(232,201,128,0.5), 94px 823px rgba(232,201,128,0.9), 322px 628px rgba(232,201,128,0.5), 48px 457px rgba(232,201,128,0.7), 72px 92px rgba(232,201,128,0.35), 304px 405px rgba(232,201,128,0.9), 334px 756px rgba(232,201,128,0.5), 319px 15px rgba(232,201,128,0.35), 30px 36px rgba(232,201,128,0.5), 450px 247px rgba(232,201,128,0.35), 398px 475px rgba(232,201,128,0.7), 225px 605px rgba(232,201,128,0.5), 265px 239px rgba(232,201,128,0.7), 255px 4px rgba(232,201,128,0.35), 234px 670px rgba(232,201,128,0.7), 208px 564px rgba(232,201,128,0.35), 362px 260px rgba(232,201,128,0.7), 388px 235px rgba(232,201,128,0.7), 15px 71px rgba(232,201,128,0.35), 205px 110px rgba(232,201,128,0.7), 197px 68px rgba(232,201,128,0.35), 433px 701px rgba(232,201,128,0.35), 109px 214px rgba(232,201,128,0.35), 240px 384px rgba(232,201,128,0.9), 214px 74px rgba(232,201,128,0.5), 398px 691px rgba(232,201,128,0.7), 172px 89px rgba(232,201,128,0.7), 170px 15px rgba(232,201,128,0.9), 388px 944px rgba(232,201,128,0.35), 68px 252px rgba(232,201,128,0.35), 5px 61px rgba(232,201,128,0.9), 408px 498px rgba(232,201,128,0.5), 349px 572px rgba(232,201,128,0.5), 229px 521px rgba(232,201,128,0.5), 374px 787px rgba(232,201,128,0.5), 214px 659px rgba(232,201,128,0.9), 59px 404px rgba(232,201,128,0.9), 108px 0px rgba(232,201,128,0.7), 442px 994px rgba(232,201,128,0.7), 453px 20px rgba(232,201,128,0.5), 95px 403px rgba(232,201,128,0.35), 21px 149px rgba(232,201,128,0.5), 226px 264px rgba(232,201,128,0.35), 395px 624px rgba(232,201,128,0.7), 425px 303px rgba(232,201,128,0.9), 37px 76px rgba(232,201,128,0.35), 106px 596px rgba(232,201,128,0.5), 7px 615px rgba(232,201,128,0.7), 190px 637px rgba(232,201,128,0.9), 65px 982px rgba(232,201,128,0.9), 426px 588px rgba(232,201,128,0.5), 443px 395px rgba(232,201,128,0.5), 321px 157px rgba(232,201,128,0.7), 116px 837px rgba(232,201,128,0.5), 371px 194px rgba(232,201,128,0.5), 378px 644px rgba(232,201,128,0.5), 351px 972px rgba(232,201,128,0.9), 451px 494px rgba(232,201,128,0.35), 215px 48px rgba(232,201,128,0.35), 55px 39px rgba(232,201,128,0.7), 122px 757px rgba(232,201,128,0.9), 131px 430px rgba(232,201,128,0.9), 150px 532px rgba(232,201,128,0.5), 368px 1000px rgba(232,201,128,0.35), 64px 233px rgba(232,201,128,0.9), 286px 669px rgba(232,201,128,0.35), 143px 217px rgba(232,201,128,0.5), 383px 16px rgba(232,201,128,0.35), 137px 421px rgba(232,201,128,0.9), 127px 61px rgba(232,201,128,0.35), 90px 288px rgba(232,201,128,0.7), 271px 585px rgba(232,201,128,0.5), 47px 370px rgba(232,201,128,0.5), 456px 461px rgba(232,201,128,0.7), 336px 750px rgba(232,201,128,0.5), 302px 35px rgba(232,201,128,0.35), 243px 932px rgba(232,201,128,0.7), 358px 319px rgba(232,201,128,0.35), 10px 612px rgba(232,201,128,0.35), 246px 68px rgba(232,201,128,0.7), 163px 139px rgba(232,201,128,0.35), 38px 463px rgba(232,201,128,0.7), 377px 45px rgba(232,201,128,0.5), 406px 986px rgba(232,201,128,0.7), 180px 86px rgba(232,201,128,0.9), 39px 892px rgba(232,201,128,0.9), 404px 30px rgba(232,201,128,0.9), 293px 14px rgba(232,201,128,0.9), 194px 596px rgba(232,201,128,0.35);}.sp-field.f2{box-shadow:71px 248px rgba(232,201,128,0.35), 313px 457px rgba(232,201,128,0.5), 359px 123px rgba(232,201,128,0.7), 405px 910px rgba(232,201,128,0.35), 118px 275px rgba(232,201,128,0.35), 163px 999px rgba(232,201,128,0.5), 282px 701px rgba(232,201,128,0.9), 362px 904px rgba(232,201,128,0.35), 295px 902px rgba(232,201,128,0.35), 301px 270px rgba(232,201,128,0.7), 215px 194px rgba(232,201,128,0.5), 435px 114px rgba(232,201,128,0.35), 357px 334px rgba(232,201,128,0.7), 132px 188px rgba(232,201,128,0.9), 159px 922px rgba(232,201,128,0.5), 143px 845px rgba(232,201,128,0.7), 341px 708px rgba(232,201,128,0.5), 221px 50px rgba(232,201,128,0.7), 272px 922px rgba(232,201,128,0.35), 214px 947px rgba(232,201,128,0.7), 259px 291px rgba(232,201,128,0.9), 203px 676px rgba(232,201,128,0.5), 157px 576px rgba(232,201,128,0.7), 203px 596px rgba(232,201,128,0.35), 152px 589px rgba(232,201,128,0.9), 387px 689px rgba(232,201,128,0.9), 45px 92px rgba(232,201,128,0.9), 182px 100px rgba(232,201,128,0.9), 399px 412px rgba(232,201,128,0.35), 430px 975px rgba(232,201,128,0.5), 262px 244px rgba(232,201,128,0.9), 3px 98px rgba(232,201,128,0.9), 458px 198px rgba(232,201,128,0.5), 15px 559px rgba(232,201,128,0.9), 178px 183px rgba(232,201,128,0.7), 182px 644px rgba(232,201,128,0.5), 227px 37px rgba(232,201,128,0.35), 274px 137px rgba(232,201,128,0.5), 335px 710px rgba(232,201,128,0.35), 26px 199px rgba(232,201,128,0.9), 62px 847px rgba(232,201,128,0.5), 300px 471px rgba(232,201,128,0.35), 433px 122px rgba(232,201,128,0.9), 362px 536px rgba(232,201,128,0.5), 299px 291px rgba(232,201,128,0.9);}.sp-field.f3{box-shadow:292px 171px rgba(232,201,128,0.5), 418px 860px rgba(232,201,128,0.7), 245px 667px rgba(232,201,128,0.5), 333px 926px rgba(232,201,128,0.7), 351px 540px rgba(232,201,128,0.9), 227px 288px rgba(232,201,128,0.35), 154px 423px rgba(232,201,128,0.7), 265px 508px rgba(232,201,128,0.35), 380px 622px rgba(232,201,128,0.9), 417px 866px rgba(232,201,128,0.7), 163px 568px rgba(232,201,128,0.5), 60px 885px rgba(232,201,128,0.35), 163px 908px rgba(232,201,128,0.7), 109px 918px rgba(232,201,128,0.35), 383px 374px rgba(232,201,128,0.35), 334px 329px rgba(232,201,128,0.5), 262px 279px rgba(232,201,128,0.7), 3px 362px rgba(232,201,128,0.7), 284px 403px rgba(232,201,128,0.9), 94px 703px rgba(232,201,128,0.35);}
 </style>
 <script>
@@ -3401,8 +3486,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 16:05 CEST';
-const APP_BUILD = 'v57';
+const COLLECTION_UPDATED = '18 July 2026 · 16:15 CEST';
+const APP_BUILD = 'v58';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6687,20 +6772,52 @@ document.addEventListener('click', (e) => {
 /* ---------- pull-to-refresh ---------- */
 const $ptr = document.getElementById('ptr');
 $ptr.querySelector('.lbl').textContent = `Updated ${COLLECTION_UPDATED} · ${APP_BUILD}`;
+
+/* The shooting-stars refresh layer — a translucent veil OVER the live app,
+   never a black screen. Shows while we pull fresh data; reveals the app in
+   place, or (only if a genuinely newer build is live) carries into a reload. */
+const $refresh = document.getElementById('refresh');
+function showRefreshOverlay() {
+  $refresh.classList.remove('done', 'show');
+  void $refresh.offsetWidth;              // reflow so the ring fill restarts each time
+  $refresh.classList.add('show');
+}
+function hideRefreshOverlay() {
+  $refresh.classList.add('done');
+  setTimeout(() => $refresh.classList.remove('show', 'done'), 600);
+}
+
 function doRefresh() {
-  $ptr.classList.add('spinning');
-  toast('Refreshing the collection…');
-  // cache-busting reload so a refresh always fetches the newest published
-  // build — flush the offline shell first so the reload isn't served stale
-  setTimeout(() => {
-    swFlush().then(() => {
-      try {
-        const u = new URL(location.href);
-        u.searchParams.set('r', Date.now());
-        location.replace(u.toString());
-      } catch (_) { location.reload(); }
-    });
-  }, 350);
+  // retract the pull ring — the stars take over from here
+  $ptr.style.transform = ''; $ptr.classList.remove('armed', 'spinning');
+  showRefreshOverlay();
+  const t0 = Date.now();
+  const MIN = 1750;                        // let the animation breathe before revealing
+  const line = fetch('lineups.json?ts=' + Date.now(), { cache: 'no-store' })
+    .then(r => (r && r.ok) ? r.json() : null)
+    .then(j => { if (j && j.venues) { const sig = JSON.stringify(j); if (sig !== LINE_SIG) { LINE_SIG = sig; LINE = j; } } })
+    .catch(() => {});
+  const ver = fetch('version.json?ts=' + Date.now(), { cache: 'no-store' })
+    .then(r => (r && r.ok) ? r.json() : null).catch(() => null);
+  Promise.all([line, ver]).then(([, v]) => {
+    const newer = v && v.build && v.build !== COLLECTION_UPDATED;
+    const wait = Math.max(0, MIN - (Date.now() - t0));
+    setTimeout(() => {
+      if (newer) {
+        // a real new build is published — carry the veil into a cache-busting
+        // reload (flush the offline shell first so it isn't served stale)
+        swFlush().then(() => {
+          try { const u = new URL(location.href); u.searchParams.set('r', Date.now()); location.replace(u.toString()); }
+          catch (_) { location.reload(); }
+        });
+      } else {
+        // nothing new to fetch — refresh the current page in place and fade the
+        // stars away to reveal it. No reload, no black screen, no jump.
+        renderRoute(true);
+        hideRefreshOverlay();
+      }
+    }, wait);
+  });
 }
 let ptrStart = null, ptrReady = false;
 document.addEventListener('touchstart', (e) => {
@@ -6743,7 +6860,7 @@ function tryAutoUpdate() {
           if (sessionStorage.getItem('privee_upd') === v.build) return;
           sessionStorage.setItem('privee_upd', v.build);
         } catch (_) {}
-        toast('Updating the collection…');
+        showRefreshOverlay();
         setTimeout(() => {
           swFlush().then(() => {
             try {
