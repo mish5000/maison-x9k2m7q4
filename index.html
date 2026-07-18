@@ -3550,8 +3550,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 18:51 CEST';
-const APP_BUILD = 'v73';
+const COLLECTION_UPDATED = '18 July 2026 · 19:08 CEST';
+const APP_BUILD = 'v74';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7899,7 +7899,7 @@ function setMapHome(cityId) {
   const btn = mapDom && mapDom.querySelector('.map-home');
   if (!btn) return;
   const ci = cityId && buildCityIndex()[cityId];
-  if (ci) { btn.querySelector('.mh-name').textContent = ci.name; btn.classList.add('show'); }
+  if (ci) { btn.querySelector('.mh-name').textContent = 'Home'; btn.classList.add('show'); }
   else btn.classList.remove('show');
 }
 
