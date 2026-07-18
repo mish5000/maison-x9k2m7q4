@@ -3596,8 +3596,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 22:01 CEST';
-const APP_BUILD = 'v80';
+const COLLECTION_UPDATED = '18 July 2026 · 22:16 CEST';
+const APP_BUILD = 'v81';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7237,6 +7237,17 @@ if (STANDALONE) {
   const RM = matchMedia('(prefers-reduced-motion: reduce)');
   let g = null, settling = null;                  // g = live finger drag; settling = in-flight spring (re-grabbable)
 
+  // Belt-and-braces: gesture layers are exclusive — at most ONE (layer, under,
+  // dim) triple may exist. Any .slide-layer/.slide-dim-under outside the given
+  // keep-list is an orphan from an interrupted cycle (the on-device recordings
+  // caught one parked at the screen edge for ~650ms) and is removed on sight.
+  // Scoped to the GESTURE species only — .slide-enter belongs to runSlide.
+  const sweepStrays = (keep) => {
+    document.querySelectorAll('.slide-layer, .slide-dim-under').forEach(el => {
+      if (!keep || keep.indexOf(el) === -1) el.remove();
+    });
+  };
+
   const frame = () => {
     const p = Math.max(0, Math.min(g.dx / g.w, 1));
     g.layer.style.transform = `translateX(${g.dx}px)`;
@@ -7246,6 +7257,7 @@ if (STANDALONE) {
   };
 
   const startDrag = () => {
+    sweepStrays();                                // a fresh cycle begins with a clean slate
     const layer = captureOldLayer(g.departing);   // current page → scroll-frozen top layer
     if (!layer) { g = null; return; }
     layer.classList.add('ontop', 'sb-drag');       // sb-drag casts the leading-edge shadow
@@ -7277,6 +7289,7 @@ if (STANDALONE) {
     restoreRails(lastRouteHash);
     wireFocusGlow();
     [s.layer, s.under, s.dim].forEach(el => el && el.remove());
+    sweepStrays();                                 // no cycle may leave an orphan behind
   };
 
   const finish = (commit) => {
@@ -7288,9 +7301,12 @@ if (STANDALONE) {
       if (commit) {
         // #app is empty; history.back() → renderRoute repaints the previous page
         // (already-seen photos repaint solid → seamless). Then drop the layers.
-        const drop = () => { [s.layer, s.under, s.dim].forEach(el => el && el.remove()); sbActive = false; };
+        // drop sweeps ALL gesture layers (not just this cycle's) — the recordings
+        // caught an orphan parked on glass for the length of the old 650ms
+        // fallback, so the fallback is tighter and the removal is total.
+        const drop = () => { [s.layer, s.under, s.dim].forEach(el => el && el.remove()); sweepStrays(); sbActive = false; };
         window.addEventListener('hashchange', () => requestAnimationFrame(() => requestAnimationFrame(drop)), { once: true });
-        setTimeout(drop, 650);
+        setTimeout(drop, 350);
         history.back();
       } else {
         restoreCurrent(s);
@@ -7359,9 +7375,16 @@ if (STANDALONE) {
   document.addEventListener('touchstart', (e) => {
     if (g) return;                                 // a live drag already owns it
     const t = e.touches[0];
-    // CATCH a settling page from the edge — re-adopt the SAME layers (no re-render,
+    // CATCH a settling page from ANYWHERE — re-adopt the SAME layers (no re-render,
     // invariants safe), rebase so there's zero jump, then drag it EITHER direction.
-    if (settling && t.clientX <= EDGE) {
+    // Edge-only catching was the duplicate-page bug: rocking the sheet mid-flight
+    // puts the finger mid-screen, the catch was refused, the spring committed
+    // under the finger, and the still-moving finger started a SECOND gesture on
+    // the freshly-landed page while the first one's layers were still tearing
+    // down — two frozen copies of the same page on glass. While a sheet is in
+    // flight, any touch owns it (the layers are pointer-events:none anyway, so
+    // there is nothing else a touch could legitimately hit mid-settle).
+    if (settling) {
       const h = settling; settling = null; cancelAnimationFrame(h.raf);
       g = h.s;
       g.dx = h.x; g.x0 = t.clientX - h.x; g.vx = h.v / 1000;
