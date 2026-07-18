@@ -86,10 +86,21 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // icons / manifest: cache-first, best effort
+  // photos (assets/*.jpg), icons, manifest: cache-first, and cache-on-view so
+  // any image you've actually looked at is available offline. Bounded by what
+  // you browse — never a full precache, which would blow the iOS ~50MB quota.
   e.respondWith((async () => {
     const cached = await caches.match(req);
     if (cached) return cached;
-    try { return await fetch(req); } catch (_) { return Response.error(); }
+    try {
+      const net = await fetch(req);
+      if (net && net.ok && /\.(jpg|jpeg|png|json|webmanifest)$/.test(url.pathname)) {
+        const copy = net.clone();
+        e.waitUntil((async () => {
+          try { await (await caches.open(CACHE)).put(req, copy); } catch (_) {}
+        })());
+      }
+      return net;
+    } catch (_) { return Response.error(); }
   })());
 });
