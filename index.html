@@ -1305,7 +1305,7 @@ body {
   text-align: left;
 }
 
-.citycard .bg { position: absolute; inset: 0; z-index: -2; background-size: cover; background-position: center; transition: transform 0.5s; filter: saturate(1.07) contrast(1.03); }
+.citycard .bg { position: absolute; inset: 0; z-index: -2; background-size: cover; background-position: center; transition: transform 0.5s; filter: saturate(1.12) contrast(1.02) brightness(1.08); }
 .citycard::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg,
   rgba(11, 10, 8, 0) 0%, rgba(11, 10, 8, 0) 40%,
   rgba(11, 10, 8, 0.12) 58%, rgba(11, 10, 8, 0.62) 82%, rgba(11, 10, 8, 0.93) 100%); }
@@ -1374,10 +1374,10 @@ body {
   width: 100%;
 }
 
-.tile .bg { position: absolute; inset: 0; z-index: -2; background-size: cover; background-position: center; }
+.tile .bg { position: absolute; inset: 0; z-index: -2; background-size: cover; background-position: center; filter: saturate(1.1) brightness(1.09); }
 .tile::after { content: ''; position: absolute; inset: 0; z-index: -1; background:
-  radial-gradient(120% 90% at 50% 50%, rgba(11, 10, 8, 0.42) 0%, rgba(11, 10, 8, 0.12) 60%, rgba(11, 10, 8, 0) 78%),
-  linear-gradient(180deg, rgba(11, 10, 8, 0.14) 0%, rgba(11, 10, 8, 0.10) 45%, rgba(11, 10, 8, 0.55) 100%); }
+  radial-gradient(120% 90% at 50% 50%, rgba(11, 10, 8, 0.30) 0%, rgba(11, 10, 8, 0.08) 60%, rgba(11, 10, 8, 0) 78%),
+  linear-gradient(180deg, rgba(11, 10, 8, 0.10) 0%, rgba(11, 10, 8, 0.07) 45%, rgba(11, 10, 8, 0.46) 100%); }
 
 .tile .display { font-size: 26px; letter-spacing: 0.1em; text-transform: uppercase; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85); }
 .tile .count { font-size: 9.5px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-bright); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.75); }
@@ -2444,12 +2444,17 @@ body {
 .sevent .bg {
   position: absolute; inset: 0; z-index: -1;
   background-size: cover; background-position: center;
-  opacity: 0.72; filter: saturate(1.1);
+  opacity: 0.98; filter: saturate(1.18) brightness(1.14) contrast(1.02);   /* let the photo shine */
 }
-.sevent::after {
+.sevent::after {                          /* just enough veil to hold the text — bottom-weighted */
   content: ''; position: absolute; inset: 0; z-index: -1;
-  background: linear-gradient(180deg, rgba(11,10,8,0.25), rgba(11,10,8,0.88));
+  background: linear-gradient(180deg, rgba(11,10,8,0.04) 0%, rgba(11,10,8,0.12) 46%, rgba(11,10,8,0.58) 100%);
 }
+/* text stays crisp over the now-bright photo */
+.sevent .name { text-shadow: 0 2px 20px rgba(0,0,0,0.8), 0 1px 3px rgba(0,0,0,0.65); }
+.sevent .blurb { color: #f1ece3; text-shadow: 0 1px 12px rgba(0,0,0,0.82); }
+.sevent .when, .sevent .spots { text-shadow: 0 1px 3px rgba(0,0,0,0.75), 0 2px 14px rgba(0,0,0,0.7); }
+.sevent .spots .slabel { text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
 .sevent .body { padding: 24px 24px 22px; }
 .sevent .when {
   font-family: var(--sans);
@@ -3577,8 +3582,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 19:14 CEST';
-const APP_BUILD = 'v75';
+const COLLECTION_UPDATED = '18 July 2026 · 20:23 CEST';
+const APP_BUILD = 'v77';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
