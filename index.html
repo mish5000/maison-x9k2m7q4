@@ -3615,8 +3615,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 01:03 CEST';
-const APP_BUILD = 'v92';
+const COLLECTION_UPDATED = '19 July 2026 · 01:23 CEST';
+const APP_BUILD = 'v96';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7364,7 +7364,7 @@ if (STANDALONE) {
     // re-renders #app — the flicker/blink invariants stay untouched.
     let x = s.dx, v = s.vx * 1000;                 // EMA px/ms → integrator wants px/s
     if (commit) v = Math.max(v, 1200);             // authority floor so a slow commit doesn't crawl
-    const h = { s, x, v, raf: 0, commit };
+    const h = { s, x, v, raf: 0, commit, cleanup };
     let last = performance.now();
     const step = (now) => {
       if (settling !== h) return;                  // caught (re-grabbed) or aborted — stop
@@ -7376,7 +7376,12 @@ if (STANDALONE) {
       s.layer.style.transform = `translateX(${x}px)`;
       s.under.style.transform = `translateX(${-SLIDE.parallax * w * (1 - p)}px)`;
       s.dim.style.opacity = String(SB_DIM * (1 - p));
-      if (commit ? (x >= w - 0.5) : (x < 0.5 && Math.abs(v) < 40)) {
+      // commit-cross at w-2 (invisible under the layer's own edge shadow), plus
+      // a snap clause for the critically-damped tail: the old w-0.5 threshold
+      // let the spring ASYMPTOTE — the last 12px took ~240ms with the sheet
+      // visually gone but still "settling": a catchable invisible sheet (the
+      // device ghost) and ~300ms of late hashchange/nav work on every commit.
+      if (commit ? (x >= w - 2 || (w - x < 8 && Math.abs(v) < 240)) : (x < 0.5 && Math.abs(v) < 40)) {
         s.layer.style.transform = `translateX(${target}px)`;
         settling = null; cleanup(); return;
       }
@@ -7423,7 +7428,21 @@ if (STANDALONE) {
     // flight, any touch owns it (the layers are pointer-events:none anyway, so
     // there is nothing else a touch could legitimately hit mid-settle).
     if (settling) {
-      const h = settling; settling = null; cancelAnimationFrame(h.raf);
+      const h = settling;
+      // A sheet ≥97% settled is DONE for the eye. A touch now is the user's
+      // NEXT intention (usually starting to scroll the landed page) — never a
+      // re-grab of an invisible sheet. Device recording 01:11: catching one
+      // re-attached it to the scroll's slight horizontal arc and dragged a
+      // phantom strip of the old page back across the screen. Finalize it
+      // instantly and let this touch fall through as a fresh interaction.
+      const w97 = h.s.w * 0.97;
+      if (h.commit ? h.x >= w97 : h.x <= h.s.w * 0.03) {
+        settling = null; cancelAnimationFrame(h.raf);
+        h.s.layer.style.transform = `translateX(${h.commit ? h.s.w : 0}px)`;
+        h.cleanup();
+        return;
+      }
+      settling = null; cancelAnimationFrame(h.raf);
       g = h.s;
       g.dx = h.x; g.x0 = t.clientX - h.x; g.vx = h.v / 1000;
       g.started = true; g.tick = h.x / g.w > DIST;
