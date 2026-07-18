@@ -3496,8 +3496,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 16:26 CEST';
-const APP_BUILD = 'v60';
+const COLLECTION_UPDATED = '18 July 2026 · 16:40 CEST';
+const APP_BUILD = 'v61';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5528,9 +5528,14 @@ function viewHome() {
     </div>`;
   wireSearch();
   $shell.scrollTo(0, 0);   // Home must open at the top like every other view
-  // warm every destination hero after first paint so a fast rail fling never
-  // hits black — a small fixed set (~21), the app's signature images
-  (window.requestIdleCallback || ((f) => setTimeout(f, 250)))(prewarmDestinations, { timeout: 700 });
+  // after first paint, warm the whole browse tree into cache so nothing
+  // blinks in black: first every destination hero (the rail), then every
+  // city's category-tile photos (the screen you land on when you tap a city).
+  // A capped queue keeps it polite; visible cards still load first.
+  (window.requestIdleCallback || ((f) => setTimeout(f, 250)))(() => {
+    prewarmDestinations();
+    prewarmAllCityTiles();
+  }, { timeout: 800 });
   requestGeoSort();        // (geo reorder restores its own scroll afterwards)
 }
 
@@ -6053,12 +6058,25 @@ function toggleSave(key) {
    cards paint from cache with no blink. Bounded: only tiles you actually
    scroll near, only their top N venues. */
 const prewarmed = new Set();
-function prewarmImg(url) {
+const prewarmQueue = [];
+let prewarmActive = 0;
+const PREWARM_MAX = 6;                 // polite concurrency — never stampede
+function prewarmImg(url, urgent) {
   if (!url || prewarmed.has(url)) return;
   prewarmed.add(url);
-  const im = new Image();
-  im.decoding = 'async';
-  im.src = url;                       // lands in the HTTP + SW cache for reuse
+  if (urgent) prewarmQueue.unshift(url); else prewarmQueue.push(url);
+  pumpPrewarm();
+}
+function pumpPrewarm() {
+  while (prewarmActive < PREWARM_MAX && prewarmQueue.length) {
+    const url = prewarmQueue.shift();
+    prewarmActive++;
+    const im = new Image();
+    im.decoding = 'async';
+    const done = () => { prewarmActive--; pumpPrewarm(); };
+    im.onload = done; im.onerror = done;
+    im.src = url;                      // lands in the HTTP + SW cache for reuse
+  }
 }
 function prewarmCategory(cityId, catId, n) {
   const city = CITY_BY_ID[cityId]; if (!city) return;
@@ -6066,7 +6084,7 @@ function prewarmCategory(cityId, catId, n) {
   let c = 0;
   for (const { part, v, i } of catVenueEntries(city, cat)) {
     const im = venueImg(cityId, part, i, v);
-    if (im) { prewarmImg(im); if (++c >= (n || 3)) break; }
+    if (im) { prewarmImg(im, true); if (++c >= (n || 3)) break; }   // urgent: next tap
   }
 }
 
@@ -6077,6 +6095,31 @@ function prewarmCategory(cityId, catId, n) {
 function prewarmDestinations() {
   const cs = (typeof CITIES !== 'undefined' && CITIES) || [];
   cs.forEach(c => { if (c && c.hero) prewarmImg(c.hero); });
+}
+
+/* Warm a city's category-tile photos — the SAME picks tileImg() will make
+   (first unused venue photo per category, else the texture) — so the moment
+   you open that city its tiles paint from cache instead of blinking in black. */
+function prewarmCityTiles(cityId) {
+  const city = CITY_BY_ID[cityId]; if (!city) return;
+  const seen = new Set();
+  for (const cat of CATEGORIES) {
+    const entries = catVenueEntries(city, cat);
+    if (!entries.length) continue;
+    let pick = null;
+    for (const { part, v, i } of entries) {
+      const im = venueImg(city.id, part, i, v);
+      if (im && !seen.has(im)) { seen.add(im); pick = im; break; }
+    }
+    if (!pick) pick = (IMG[cat.id] || IMG[catParts(cat)[0]] || [])[0];
+    if (pick) prewarmImg(pick);
+  }
+}
+/* Every city's tile screen, warmed on app open — a fresh tap into any city
+   lands on fully-painted tiles. ~1 photo per category per city (small set). */
+function prewarmAllCityTiles() {
+  const cs = (typeof CITIES !== 'undefined' && CITIES) || [];
+  cs.forEach(c => prewarmCityTiles(c.id));
 }
 
 let prewarmObserver = null;
