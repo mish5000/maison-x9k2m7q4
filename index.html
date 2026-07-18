@@ -3499,8 +3499,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 17:31 CEST';
-const APP_BUILD = 'v65';
+const COLLECTION_UPDATED = '18 July 2026 · 17:51 CEST';
+const APP_BUILD = 'v66';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7109,6 +7109,10 @@ if (STANDALONE) {
     if (!layer) { g = null; return; }
     layer.classList.add('ontop');
     renderView(g.back);                            // previous page → #app
+    // the previous page renders with deferred (data-src) photos; it now lives in
+    // a body-level layer that observeLazy never sees, so promote its photos here
+    // or the whole page shows black. Already-seen photos repaint solid at once.
+    $app.querySelectorAll('img.heroimg[data-src]').forEach(loadLazy);
     const under = captureOldLayer(SCROLL_MEM[g.back] || 0);
     const dim = document.createElement('div');
     dim.className = 'slide-dim-under';
