@@ -1441,9 +1441,13 @@ body {
   background-size: cover;
   background-position: center;
   /* re-establish the rounded clip the card gave up (overflow:visible) so the
-     hero image + bottom scrim still honour the card corners */
+     hero image + bottom scrim still honour the card corners. isolation is
+     REQUIRED: without its own stacking context WebKit lets a composited child
+     escape a rounded overflow clip while the card animates (.rise) — the
+     "head pops over the frame" artifact on tall portrait photos. */
   border-radius: inherit;
   overflow: hidden;
+  isolation: isolate;
 }
 
 .vcard .photo::after {
@@ -3602,8 +3606,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 22:56 CEST';
-const APP_BUILD = 'v83';
+const COLLECTION_UPDATED = '18 July 2026 · 23:01 CEST';
+const APP_BUILD = 'v85';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
