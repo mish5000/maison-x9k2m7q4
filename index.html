@@ -1390,10 +1390,16 @@ body {
 .feedhead .display { font-size: 38px; }
 .feedhead .sub { font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--ink-dim); margin-top: 6px; }
 
-.feed { padding: 16px 18px; display: grid; gap: 22px; }
+/* minmax(0,1fr): the column must NEVER size itself from the cards' intrinsic
+   widths — with overflow:visible on .vcard (needed for the glow) the grid's
+   automatic-minimum rule kicks in and contain-intrinsic-size's 560px phantom
+   width blew every card past the viewport (the out-of-proportion screenshot). */
+.feed { padding: 16px 18px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
 
 .vcard {
   position: relative;
+  min-width: 0;   /* overflow:visible re-arms the grid automatic-minimum; without
+                     this the 560px contain-intrinsic phantom becomes a width floor */
   border-radius: var(--radius);
   /* overflow is VISIBLE so the focus-glow pseudo can bloom outward; the photo
      re-establishes the rounded clip for the image + scrim (see .vcard .photo). */
@@ -3596,8 +3602,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 22:16 CEST';
-const APP_BUILD = 'v81';
+const COLLECTION_UPDATED = '18 July 2026 · 22:22 CEST';
+const APP_BUILD = 'v82';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
