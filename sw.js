@@ -1,45 +1,49 @@
-/* PRIVÉE offline shell — instant opens and full airplane-mode use.
-   The whole app is one ~50MB file; cache it once and serve it from
-   the device thereafter. The tiny sidecars (version.json, lineups.json)
-   stay network-first so freshness and self-update still work online. */
-const CACHE = 'privee-shell-v1';
+/* PRIVÉE offline shell — v2.
+   Safety-first: the service worker must NEVER be able to stop the app
+   from loading. It serves the cached shell instantly when present, but
+   caches via an INDEPENDENT background fetch (it never clones or locks
+   the response handed to the page — an iOS cache-quota stall on the
+   ~50MB shell must not stall the page). Online always works; offline
+   works once the shell has been cached by one good online load. */
+const CACHE = 'privee-shell-v2';
 const SHELL = './';
+const OFFLINE_HTML =
+  '<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1">' +
+  '<body style="margin:0;height:100vh;display:flex;align-items:center;justify-content:center;' +
+  'background:#0b0a08;color:#e8c980;font-family:Georgia,serif;text-align:center;padding:32px">' +
+  '<div><div style="font-size:64px;letter-spacing:.05em">M</div>' +
+  '<p style="font-family:system-ui,sans-serif;font-size:13px;letter-spacing:.18em;' +
+  'text-transform:uppercase;color:#f4efe6;opacity:.7;margin-top:18px">Reconnect once to summon PRIVÉE</p></div></body>';
 
-self.addEventListener('install', (e) => {
-  self.skipWaiting();
-  e.waitUntil((async () => {
-    try {
-      const c = await caches.open(CACHE);
-      // force-cache reuses the copy the browser just downloaded for the
-      // page load, so precaching rarely costs a second download
-      const res = await fetch(SHELL, { cache: 'force-cache' });
-      if (res && res.ok) await c.put(SHELL, res.clone());
-    } catch (_) { /* offline at install — the first online launch will cache */ }
-  })());
-});
+self.addEventListener('install', () => { self.skipWaiting(); });
 
 self.addEventListener('activate', (e) => {
   e.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)));
+    // purge any older (possibly incomplete) cache from a prior worker
+    for (const k of await caches.keys()) if (k !== CACHE) await caches.delete(k);
     await self.clients.claim();
+    await cacheShellOnce();          // grab the shell the moment we take control
   })());
 });
 
-/* the app asks us to drop the cached shell when it knows a newer build
-   exists (pull-to-refresh, or the version poller) — the next navigation
-   then refetches fresh and re-caches it */
 self.addEventListener('message', (e) => {
   if (e.data !== 'flush') return;
   e.waitUntil((async () => {
-    const c = await caches.open(CACHE);
-    for (const r of await c.keys()) {
-      const u = new URL(r.url);
-      if (u.pathname.endsWith('/') || u.pathname.endsWith('index.html')) await c.delete(r);
-    }
+    await caches.delete(CACHE);
     if (e.source) e.source.postMessage('flushed');
   })());
 });
+
+/* cache the whole shell in the background, at most once, reusing the copy
+   the browser already downloaded (force-cache) so it costs no extra data.
+   Fully decoupled from any response served to the page. */
+async function cacheShellOnce() {
+  try {
+    if (await caches.match(SHELL)) return;
+    const copy = await fetch(SHELL, { cache: 'force-cache' });
+    if (copy && copy.ok) await (await caches.open(CACHE)).put(SHELL, copy);
+  } catch (_) { /* quota or offline — offline mode simply stays unavailable */ }
+}
 
 self.addEventListener('fetch', (e) => {
   const req = e.request;
@@ -47,9 +51,28 @@ self.addEventListener('fetch', (e) => {
   try { url = new URL(req.url); } catch (_) { return; }
   if (req.method !== 'GET' || url.origin !== location.origin) return;
 
-  // sidecars: network-first so online users get today's data, offline
-  // users get the last-known copy
-  if (url.pathname.endsWith('version.json') || url.pathname.endsWith('lineups.json')) {
+  const isNav = req.mode === 'navigate' || url.pathname.endsWith('/') || url.pathname.endsWith('index.html');
+  const isSidecar = url.pathname.endsWith('version.json') || url.pathname.endsWith('lineups.json');
+
+  if (isNav) {
+    e.respondWith((async () => {
+      const cached = await caches.match(SHELL);
+      if (cached) {                      // instant open + offline
+        e.waitUntil(cacheShellOnce());   // (no-op if already cached)
+        return cached;
+      }
+      try {
+        const net = await fetch(req);    // first time: live, then cache in bg
+        if (net && net.ok) e.waitUntil(cacheShellOnce());
+        return net;
+      } catch (_) {
+        return new Response(OFFLINE_HTML, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+      }
+    })());
+    return;
+  }
+
+  if (isSidecar) {                        // network-first, cache fallback
     e.respondWith((async () => {
       try {
         const net = await fetch(req, { cache: 'no-store' });
@@ -63,21 +86,10 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  const isNav = req.mode === 'navigate' || url.pathname.endsWith('/') || url.pathname.endsWith('index.html');
-
-  // the app shell + assets: cache-first (instant + offline), populated on
-  // first fetch; the shell is keyed ignoring the ?r= cache-bust
+  // icons / manifest: cache-first, best effort
   e.respondWith((async () => {
-    const cached = await caches.match(isNav ? SHELL : req);
+    const cached = await caches.match(req);
     if (cached) return cached;
-    try {
-      const net = await fetch(req);
-      if (net && net.ok && (isNav || /\.(png|json|webmanifest)$/.test(url.pathname))) {
-        (await caches.open(CACHE)).put(isNav ? SHELL : req, net.clone());
-      }
-      return net;
-    } catch (_) {
-      return (await caches.match(SHELL)) || Response.error();
-    }
+    try { return await fetch(req); } catch (_) { return Response.error(); }
   })());
 });
