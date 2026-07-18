@@ -2778,6 +2778,9 @@ body {
   transition: opacity 0.45s ease;
 }
 .heroimg.ready { opacity: 1; }
+/* a slide's incoming photos snap solid — no fade during the transition, so the
+   new page slides in fully painted (the expert-panel anti-flicker invariant) */
+.heroimg.instant { transition: none; }
 @media (prefers-reduced-motion: reduce) { .heroimg { transition: none; } }
 
 /* Placeholder behind any photo still loading: a warm dark sheen with a faint
@@ -3496,8 +3499,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 16:40 CEST';
-const APP_BUILD = 'v61';
+const COLLECTION_UPDATED = '18 July 2026 · 16:51 CEST';
+const APP_BUILD = 'v63';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5436,9 +5439,13 @@ function geoOrderedCities() {
    decide to. loadLazy() then fetches + decodes and fades the image in. */
 function heroImg(url) { return `<img class="heroimg" decoding="async" alt="" draggable="false" data-src="${url}">`; }
 
-function loadLazy(img) {
+function loadLazy(img, instant) {
+  // instant = a slide's incoming photo: it must appear SOLID the moment it
+  // decodes (no fade), so the page slides in fully painted — the expert-panel
+  // invariant. Only scroll-revealed photos get the gentle fade.
+  if (instant) img.classList.add('instant');
   const src = img && img.dataset && img.dataset.src;
-  if (!src) return;                      // already claimed / not lazy
+  if (!src) { if (instant) img.classList.add('ready'); return; }  // already promoted
   delete img.dataset.src;
   img.src = src;
   const ready = () => img.classList.add('ready');
@@ -6612,11 +6619,15 @@ function captureOldLayer(departingScroll) {
    to a hero fading in mid-slide rather than a stuck transition. */
 function decodeIncoming(root) {
   const vh = innerHeight;
+  // Vertical band ONLY. During the fence the incoming layer rests off-screen to
+  // the right (translateX ~100%), so a horizontal check wrongly excludes inset
+  // photos (venue cards) and leaves them black mid-slide — every column lands
+  // on-screen once it slides in, so above-the-fold is a vertical question.
   const imgs = [...root.querySelectorAll('img.heroimg')].filter(i => {
     const r = i.getBoundingClientRect();
-    return r.bottom > 0 && r.top < vh && r.right > 0 && r.left < innerWidth;
+    return r.bottom > 0 && r.top < vh;
   });
-  imgs.forEach(loadLazy);       // promote the incoming page's visible photos NOW
+  imgs.forEach(i => loadLazy(i, true));   // promote NOW + snap solid (no fade in-slide)
   if (!imgs.length) return Promise.resolve();
   return Promise.race([
     Promise.all(imgs.map(i => i.decode ? i.decode().catch(() => {}) : Promise.resolve())),
