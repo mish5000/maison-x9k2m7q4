@@ -2424,21 +2424,22 @@ body {
   overflow: hidden;
   isolation: isolate;
   border-radius: var(--radius);
-  border: 1px solid rgba(232, 201, 128, 0.38);
+  border: 1px solid rgba(232, 201, 128, 0.55);
   background: var(--bg-raised);
-  /* the glowing halo — a soft gold bloom (box-shadow is not clipped by the
-     card's own overflow:hidden) that lifts each event off the black */
+  /* the glowing halo — a rich gold bloom (box-shadow is not clipped by the
+     card's own overflow:hidden) that lifts each event clearly off the black */
   box-shadow:
-    0 0 26px rgba(200, 162, 75, 0.20),
-    0 0 3px rgba(232, 201, 128, 0.30),
-    0 14px 40px rgba(0, 0, 0, 0.55);
-  animation: seventGlow 5.5s ease-in-out infinite;
+    0 0 0 1px rgba(232, 201, 128, 0.35),
+    0 0 16px rgba(232, 201, 128, 0.30),
+    0 0 46px rgba(212, 175, 90, 0.34),
+    0 18px 46px rgba(0, 0, 0, 0.6);
+  animation: seventGlow 5s ease-in-out infinite;
 }
 @keyframes seventGlow {
-  0%, 100% { box-shadow: 0 0 22px rgba(200,162,75,0.16), 0 0 3px rgba(232,201,128,0.26), 0 14px 40px rgba(0,0,0,0.55); }
-  50%      { box-shadow: 0 0 36px rgba(200,162,75,0.30), 0 0 4px rgba(232,201,128,0.42), 0 14px 40px rgba(0,0,0,0.55); }
+  0%, 100% { box-shadow: 0 0 0 1px rgba(232,201,128,0.30), 0 0 14px rgba(232,201,128,0.24), 0 0 38px rgba(212,175,90,0.26), 0 18px 46px rgba(0,0,0,0.6); }
+  50%      { box-shadow: 0 0 0 1px rgba(232,201,128,0.45), 0 0 20px rgba(232,201,128,0.40), 0 0 56px rgba(212,175,90,0.44), 0 18px 46px rgba(0,0,0,0.6); }
 }
-.sevent:active { animation: none; box-shadow: 0 0 30px rgba(200,162,75,0.32), 0 0 4px rgba(232,201,128,0.5), 0 14px 40px rgba(0,0,0,0.55); }
+.sevent:active { animation: none; box-shadow: 0 0 0 1px rgba(232,201,128,0.6), 0 0 24px rgba(232,201,128,0.5), 0 0 60px rgba(212,175,90,0.5), 0 18px 46px rgba(0,0,0,0.6); }
 @media (prefers-reduced-motion: reduce) { .sevent { animation: none; } }
 .sevent .bg {
   position: absolute; inset: 0; z-index: -1;
@@ -3525,8 +3526,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 18:07 CEST';
-const APP_BUILD = 'v70';
+const COLLECTION_UPDATED = '18 July 2026 · 18:15 CEST';
+const APP_BUILD = 'v71';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6988,8 +6989,11 @@ function doRefresh() {
   });
 }
 let ptrStart = null, ptrReady = false;
+const atHome = () => { const h = location.hash || '#/'; return h === '#/' || h === '#'; };
 document.addEventListener('touchstart', (e) => {
-  if ($shell.scrollTop <= 0 && !$sheet.classList.contains('open') && !mapIsOpen() && !cgIsOpen()) {
+  // refresh lives ONLY on the home ("welcome") screen — never on sub-pages,
+  // where an accidental pull was retriggering it
+  if (atHome() && $shell.scrollTop <= 0 && !$sheet.classList.contains('open') && !mapIsOpen() && !cgIsOpen()) {
     ptrStart = e.touches[0].clientY; ptrReady = false;
   } else ptrStart = null;
 }, { passive: true });
@@ -7112,7 +7116,6 @@ function sbApplyScroll(layer, want) {
 if (STANDALONE) {
   const EDGE = 30, DIST = 0.32, VEL = 0.28;      // start zone; commit past 32% or a flick
   const SB_DIM = 0.20;                            // gentle reveal veil (NOT the 0.78 forward-push value)
-  const SB_OMEGA = 16;                            // spring stiffness — higher = snappier. tune on device.
   const RM = matchMedia('(prefers-reduced-motion: reduce)');
   let g = null, sbCleanup = null;
 
@@ -7183,31 +7186,21 @@ if (STANDALONE) {
       s.dim.style.opacity = commit ? '0' : String(SB_DIM);
       cleanup(); return;
     }
-    // Velocity-continuous critically-damped spring, SEEDED with the finger's exit
-    // speed: x(t) = target + (A + B·t)·e^(−ω·t), x(0)=from, x'(0)=v0. The page
-    // leaves your thumb at exactly the speed your thumb was moving — the iOS feel.
-    // Baked into linear keyframes so it runs on the compositor; under+dim are
-    // driven off the SAME per-sample progress so parallax/scrim stay locked.
-    const A = from - target, v0 = s.vx * 1000, B = v0 + SB_OMEGA * A;
-    const T = Math.min(0.5, Math.max(0.28, 5 / SB_OMEGA)), N = 44;
-    const kL = [], kU = [], kD = [];
-    for (let i = 0; i <= N; i++) {
-      const t = (i / N) * T;
-      let x = target + (A + B * t) * Math.exp(-SB_OMEGA * t);
-      x = x < 0 ? 0 : (x > w ? w : x);             // critically-damped can nudge past once — clamp
-      const p = x / w;
-      kL.push({ transform: `translateX(${x}px)` });
-      kU.push({ transform: `translateX(${-SLIDE.parallax * w * (1 - p)}px)` });
-      kD.push({ opacity: String(SB_DIM * (1 - p)) });
-    }
-    // pin the final frame exactly on target (the spring tail can land a few px short)
-    kL[N] = { transform: `translateX(${target}px)` };
-    kU[N] = { transform: `translateX(${commit ? 0 : -SLIDE.parallax * w}px)` };
-    kD[N] = { opacity: commit ? '0' : String(SB_DIM) };
-    const D = T * 1000, opt = { duration: D, easing: 'linear', fill: 'both' };
-    const a = s.layer.animate(kL, opt);
-    s.under.animate(kU, opt);
-    s.dim.animate(kD, opt);
+    // Velocity-MATCHED ease-out. A monotonic curve (never overshoots, so a hard
+    // throw can't glitch), but its DURATION continues your release speed: a fast
+    // flick finishes fast (no dead pause), a slow guide eases gently. This keeps
+    // the "leaves at your thumb's speed" feel without the spring's tail-hold.
+    const remain = Math.abs(target - from), speed = Math.abs(s.vx);   // px/ms
+    const D = speed > 0.06
+      ? Math.max(120, Math.min(360, Math.round(2.25 * remain / speed)))
+      : Math.max(170, Math.min(360, Math.round(remain / w * 300) + 110));
+    const opt = { duration: D, easing: SLIDE.ease, fill: 'both' };
+    const a = s.layer.animate(
+      [{ transform: `translateX(${from}px)` }, { transform: `translateX(${target}px)` }], opt);
+    s.under.animate(
+      [{ transform: s.under.style.transform }, { transform: `translateX(${commit ? 0 : -SLIDE.parallax * w}px)` }], opt);
+    s.dim.animate(
+      [{ opacity: s.dim.style.opacity || String(SB_DIM) }, { opacity: commit ? '0' : String(SB_DIM) }], opt);
     a.onfinish = cleanup; a.oncancel = cleanup;
     setTimeout(cleanup, D + 280);                  // safety if WAAPI callbacks are lost
   };
