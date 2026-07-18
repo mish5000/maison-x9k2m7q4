@@ -2844,6 +2844,33 @@ body {
               visibility 0s linear 0.38s;
 }
 #mapview.open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+/* THE ASCENT — the home-pill return: the map recedes INTO depth (scale down +
+   blur bloom) instead of looming toward the eye. A separate class from the base
+   close, so map-back / hardware-back keep their behaviour; re-adding .open
+   reverses it in place (catchable for free). */
+#mapview.returning:not(.open) {
+  transform: scale(0.94);
+  filter: blur(6px);
+  opacity: 0;
+  transition:
+    opacity 0.46s cubic-bezier(0.32, 0.72, 0, 1),
+    transform 0.46s cubic-bezier(0.32, 0.72, 0, 1),
+    filter 0.46s cubic-bezier(0.32, 0.72, 0, 1),
+    visibility 0s linear 0.46s;
+}
+@keyframes cityArrive {
+  from { transform: translateY(12px) scale(1.055); opacity: 0.55; }
+  to   { transform: none; opacity: 1; }
+}
+.cityhero.arriving {
+  animation: cityArrive 0.52s cubic-bezier(0.32, 0.72, 0, 1) both;
+  will-change: transform, opacity;
+}
+@media (prefers-reduced-motion: reduce) {
+  #mapview.returning:not(.open) { transform: none; filter: none;
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s; }
+  .cityhero.arriving { animation: none; }
+}
 #lmap { position: absolute; inset: 0; background: var(--bg) !important; }
 .leaflet-container { font-family: var(--sans); background: var(--bg) !important; }
 #mapview .leaflet-tile-pane { background: var(--bg); }
@@ -3550,8 +3577,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 19:08 CEST';
-const APP_BUILD = 'v74';
+const COLLECTION_UPDATED = '18 July 2026 · 19:14 CEST';
+const APP_BUILD = 'v75';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6663,6 +6690,34 @@ const SLIDE = {
 let pendingSlide = null;   // 'push' | 'pop' — set by the hashchange handler
 let chevronPop = false;    // goBack() marks its history.back() so the pop animates
 let sbActive = false;      // an interactive swipe-back drag is live (guards re-renders)
+let mapReturning = null;   // 'The Ascent': the map home-pill return wants the recede+rise, not a cut
+
+/* THE ASCENT — the beautiful return from the map to the city's page: the map
+   recedes into depth (scale down + blur) while the city hero rises to meet you,
+   the inverse of the cinematic dive. Two paths: the city page is already live
+   beneath the map (instant hero rise), or we roamed to another city and must
+   build + decode-fence the destination before it's revealed (never a black
+   flash). Reduced-motion falls back to a plain hash-set. */
+function mapHomeReturn(id) {
+  const dest = '#/city/' + id;
+  haptic();
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { location.hash = dest; return; }
+  const mv = document.getElementById('mapview');
+  if (dest === appHash) {                        // live-beneath: hero already solid — just rise it
+    const hero = $app.querySelector('.cityhero');
+    if (hero) {
+      hero.classList.remove('arriving'); void hero.offsetWidth;
+      hero.classList.add('arriving');
+      hero.addEventListener('animationend', () => hero.classList.remove('arriving'), { once: true });
+    }
+    if (mv) mv.classList.add('returning');
+    location.hash = dest;                         // → renderRoute early-return; closeMapView drops .open → recede fires
+    setTimeout(() => mv && mv.classList.remove('returning'), 560);
+  } else {                                        // roamed: renderRoute fences the destination before revealing
+    mapReturning = id;
+    location.hash = dest;
+  }
+}
 let activeSlide = null;    // running slide, so a rapid next nav can cut it short
 
 function captureOldLayer(departingScroll) {
@@ -6843,6 +6898,24 @@ function renderRoute(soft = false, dir = 'fwd') {
     return;
   }
   if (typeof closeMapView === 'function' && mapIsOpen()) {
+    if (mapReturning) {                    // THE ASCENT (roamed): build + decode BEFORE revealing
+      mapReturning = null;
+      const mv = document.getElementById('mapview');
+      pendingSlide = null;
+      renderView(h);                       // build the city into #app while the map is still opaque on top
+      wireFocusGlow();                     // arm lazy/prewarm for the freshly-built page
+      appHash = h; lastRouteHash = h;
+      $shell.scrollTop = Math.min(SCROLL_MEM[h] || 0, Math.max(0, $shell.scrollHeight - $shell.clientHeight));
+      decodeIncoming($app).then(() => requestAnimationFrame(() => requestAnimationFrame(() => {
+        const hero = $app.querySelector('.cityhero');
+        if (hero) { hero.classList.add('arriving');
+          hero.addEventListener('animationend', () => hero.classList.remove('arriving'), { once: true }); }
+        if (mv) mv.classList.add('returning');
+        closeMapView();                    // drop .open → the recede plays; #app already solid → zero flash
+        setTimeout(() => mv && mv.classList.remove('returning'), 560);
+      })));
+      return;
+    }
     closeMapView();
     if (h === appHash) {                   // returning to the page beneath — untouched
       pendingSlide = null;
@@ -7483,7 +7556,7 @@ function ensureMapDom() {
     <div id="maptoast"></div>`;
   document.body.appendChild(mapDom);
   mapDom.querySelector('.map-back').addEventListener('click', () => { history.length > 1 ? history.back() : (location.hash = appHash); });
-  mapDom.querySelector('.map-home').addEventListener('click', () => { if (mapCityId) { haptic(); location.hash = '#/city/' + mapCityId; } });
+  mapDom.querySelector('.map-home').addEventListener('click', () => { if (mapCityId) mapHomeReturn(mapCityId); });
   mapDom.querySelector('.map-locate').addEventListener('click', () => {
     if (meMarker) LMAP.flyTo(meMarker.getLatLng(), Math.max(LMAP.getZoom(), 15.5), { duration: 0.9, easeLinearity: 0.2 });
     else startGeo(true);
