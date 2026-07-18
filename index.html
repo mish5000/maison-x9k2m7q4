@@ -1278,14 +1278,16 @@ body {
 .fixcard .fixrow .pill.solid { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; font-size: 11px; }
 .fixcard .fixrow .pill.solid svg { width: 16px; height: 16px; }
 
-/* category tiles share the passing spotlight the venue cards have */
+/* category tiles share the passing spotlight the venue cards have — carried by
+   box-shadow, not filter (see .vcard: a filter offscreen-buffers the tile photo
+   every animated frame during scroll). */
 .tile {
-  filter: brightness(0.98) saturate(1.07) contrast(1.03);
-  transition: filter 0.55s ease, transform 0.16s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.30);
+  transition: box-shadow 0.5s ease, transform 0.16s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .tile.infocus {
-  filter: brightness(1.08) saturate(1.12) contrast(1.05);
+  box-shadow: 0 0 0 1px rgba(200, 162, 75, 0.4), 0 16px 40px rgba(0, 0, 0, 0.42);
 }
 
 .citycard {
@@ -1393,7 +1395,9 @@ body {
 .vcard {
   position: relative;
   border-radius: var(--radius);
-  overflow: hidden;
+  /* overflow is VISIBLE so the focus-glow pseudo can bloom outward; the photo
+     re-establishes the rounded clip for the image + scrim (see .vcard .photo). */
+  overflow: visible;
   isolation: isolate;
   background: var(--bg-raised);
   cursor: pointer;
@@ -1401,37 +1405,39 @@ body {
      paint cost when a category page is freshly built mid-slide */
   content-visibility: auto;
   contain-intrinsic-size: auto 560px;
-  /* scroll-focus: cards rest gently softened; the one in frame glows (.infocus / hover).
-     Contrast kept subtle and the transition long so scrolling reads as a calm
-     wash, never a flash. No transform here — it would fight the .rise entrance. */
-  filter: brightness(0.98) saturate(1.07) contrast(1.03);
-  box-shadow: 0 0 0 1px rgba(200, 162, 75, 0);
-  transition: filter 0.6s ease, box-shadow 0.6s ease;
+  /* Resting drop only — STATIC. The scroll-focus gold glow is a separate ::after
+     layer cross-faded with opacity (compositor-only). box-shadow is NOT a
+     compositable property in WebKit, so transitioning it repainted a 54px-blur,
+     3-layer shadow into each card's backing store on the main thread every frame
+     for 0.5s on both the card gaining AND losing focus — the measured ~3fps feed
+     scroll. opacity on a pre-painted layer costs zero per-frame paint. */
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.34);
 }
 
-.vcard.infocus {
-  filter: brightness(1.06) saturate(1.13) contrast(1.05);
+/* the gold focus halo — pre-painted, faded in on the GPU via opacity, never a
+   box-shadow transition. z-index:-1 keeps it behind the photo; its ring+bloom+drop
+   bloom OUTSIDE the card box (past the now-visible overflow) so they show. */
+.vcard::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  border-radius: inherit;
   box-shadow:
     0 0 0 1px rgba(200, 162, 75, 0.5),
     0 0 30px rgba(200, 162, 75, 0.14),
     0 20px 54px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
-
-@media (hover: hover) {
-  .vcard:hover {
-    filter: brightness(1.06) saturate(1.13) contrast(1.05);
-    box-shadow:
-      0 0 0 1px rgba(200, 162, 75, 0.5),
-      0 0 30px rgba(200, 162, 75, 0.14),
-      0 20px 54px rgba(0, 0, 0, 0.5);
-  }
-}
+.vcard.infocus::after, .vcard:hover::after { opacity: 1; }
 
 .vcard .photo {
   position: relative;
   aspect-ratio: 4 / 4.6;
   background-size: cover;
   background-position: center;
+  /* re-establish the rounded clip the card gave up (overflow:visible) so the
+     hero image + bottom scrim still honour the card corners */
+  border-radius: inherit;
+  overflow: hidden;
 }
 
 .vcard .photo::after {
@@ -2428,19 +2434,18 @@ body {
   background: var(--bg-raised);
   /* the glowing halo — a rich gold bloom (box-shadow is not clipped by the
      card's own overflow:hidden) that lifts each event clearly off the black */
+  /* Static gold halo set to the MIDPOINT of the old 5s breathe. WebKit cannot
+     composite a box-shadow animation — the old `animation: seventGlow` repainted
+     a 56px-blur, 4-layer shadow on EVERY season card, EVERY frame, forever,
+     colliding with scroll and the slide/swipe spring. A static shadow is one
+     repaint total; the pulse (0.24<->0.40 alpha) is imperceptible in practice. */
   box-shadow:
-    0 0 0 1px rgba(232, 201, 128, 0.35),
-    0 0 16px rgba(232, 201, 128, 0.30),
-    0 0 46px rgba(212, 175, 90, 0.34),
+    0 0 0 1px rgba(232, 201, 128, 0.38),
+    0 0 17px rgba(232, 201, 128, 0.32),
+    0 0 47px rgba(212, 175, 90, 0.35),
     0 18px 46px rgba(0, 0, 0, 0.6);
-  animation: seventGlow 5s ease-in-out infinite;
 }
-@keyframes seventGlow {
-  0%, 100% { box-shadow: 0 0 0 1px rgba(232,201,128,0.30), 0 0 14px rgba(232,201,128,0.24), 0 0 38px rgba(212,175,90,0.26), 0 18px 46px rgba(0,0,0,0.6); }
-  50%      { box-shadow: 0 0 0 1px rgba(232,201,128,0.45), 0 0 20px rgba(232,201,128,0.40), 0 0 56px rgba(212,175,90,0.44), 0 18px 46px rgba(0,0,0,0.6); }
-}
-.sevent:active { animation: none; box-shadow: 0 0 0 1px rgba(232,201,128,0.6), 0 0 24px rgba(232,201,128,0.5), 0 0 60px rgba(212,175,90,0.5), 0 18px 46px rgba(0,0,0,0.6); }
-@media (prefers-reduced-motion: reduce) { .sevent { animation: none; } }
+.sevent:active { box-shadow: 0 0 0 1px rgba(232,201,128,0.6), 0 0 24px rgba(232,201,128,0.5), 0 0 60px rgba(212,175,90,0.5), 0 18px 46px rgba(0,0,0,0.6); }
 .sevent .bg {
   position: absolute; inset: 0; z-index: -1;
   background-size: cover; background-position: center;
@@ -2807,7 +2812,7 @@ body {
    Marbella->Restaurants push. Force the flying layers to render their cards so
    the fence paints for real. The layers clip to the viewport (overflow:hidden),
    so only the ~1-2 on-fold cards actually cost anything. */
-.slide-enter .vcard, .slide-layer .vcard { content-visibility: visible; }
+.slide-enter .vcard:nth-of-type(-n+3), .slide-layer .vcard:nth-of-type(-n+3) { content-visibility: visible; }
 .heroimg {
   position: absolute;
   inset: 0;
@@ -3591,8 +3596,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 20:39 CEST';
-const APP_BUILD = 'v78';
+const COLLECTION_UPDATED = '18 July 2026 · 22:01 CEST';
+const APP_BUILD = 'v80';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
