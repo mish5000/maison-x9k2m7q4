@@ -3486,8 +3486,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 16:15 CEST';
-const APP_BUILD = 'v58';
+const COLLECTION_UPDATED = '18 July 2026 · 16:20 CEST';
+const APP_BUILD = 'v59';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5552,7 +5552,7 @@ function viewCity(cityId) {
       const n = catVenueEntries(city, cat).length;
       const tileBg = tileImg(city, cat.id);
       return `
-      <button class="tile rise rise-${Math.min(i, 3)}" onclick="location.hash='#/cat/${city.id}/${cat.id}'">
+      <button class="tile rise rise-${Math.min(i, 3)}" data-prewarm="${city.id}|${cat.id}" onclick="location.hash='#/cat/${city.id}/${cat.id}'">
         <span class="bg">${heroImg(tileBg)}</span>
         <span class="display serif">${cat.label}</span>
         <span class="count">${n} ${n === 1 ? 'address' : 'addresses'}</span>
@@ -6034,10 +6034,53 @@ function toggleSave(key) {
 
 /* Focus glow: the card most in frame glows; cards leaving the frame dim.
    (Desktop hover applies the same glow via CSS.) */
+/* Anticipatory cross-page prewarm — the real Instagram trick. While the
+   category tiles are on screen we quietly pull the first few venue photos
+   from each INTO the browser cache, so the moment you tap a category its
+   cards paint from cache with no blink. Bounded: only tiles you actually
+   scroll near, only their top N venues. */
+const prewarmed = new Set();
+function prewarmImg(url) {
+  if (!url || prewarmed.has(url)) return;
+  prewarmed.add(url);
+  const im = new Image();
+  im.decoding = 'async';
+  im.src = url;                       // lands in the HTTP + SW cache for reuse
+}
+function prewarmCategory(cityId, catId, n) {
+  const city = CITY_BY_ID[cityId]; if (!city) return;
+  const cat = CAT_BY_ID[displayCat(catId)]; if (!cat) return;
+  let c = 0;
+  for (const { part, v, i } of catVenueEntries(city, cat)) {
+    const im = venueImg(cityId, part, i, v);
+    if (im) { prewarmImg(im); if (++c >= (n || 3)) break; }
+  }
+}
+
+let prewarmObserver = null;
+function wirePrewarm() {
+  if (prewarmObserver) { prewarmObserver.disconnect(); prewarmObserver = null; }
+  const tiles = [...$app.querySelectorAll('[data-prewarm]')];
+  if (!tiles.length) return;
+  if (!('IntersectionObserver' in window)) {          // no IO: just do the first few
+    tiles.slice(0, 4).forEach(t => { const [c, k] = t.dataset.prewarm.split('|'); prewarmCategory(c, k, 3); });
+    return;
+  }
+  prewarmObserver = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) {
+      prewarmObserver.unobserve(e.target);
+      const [c, k] = e.target.dataset.prewarm.split('|');
+      prewarmCategory(c, k, 3);
+    }
+  }, { root: $shell, rootMargin: '900px 0px 900px 0px', threshold: 0.01 });
+  tiles.forEach(t => prewarmObserver.observe(t));
+}
+
 let cardObserver = null;
 let tileScrollHandler = null;
 function wireFocusGlow() {
   observeLazy($app);   // (re)arm photo prefetch for whatever just rendered
+  wirePrewarm();       // and anticipatorily warm the next-tap category photos
   if (cardObserver) cardObserver.disconnect();
   if (tileScrollHandler) { $shell.removeEventListener('scroll', tileScrollHandler); tileScrollHandler = null; }
 
