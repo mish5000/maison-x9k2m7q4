@@ -50,8 +50,14 @@ var b=document.getElementById('boot');setTimeout(function(){if(b)b.classList.add
 <div id="shell">
   <div id="ptr"><span class="ring"></span><span class="lbl">Pull to refresh</span></div>
   <main id="app"></main>
-  <nav id="nav"></nav>
 </div>
+<!-- nav lives at BODY level, never inside the #shell scroller: on real iOS the
+     momentum scroller (-webkit-overflow-scrolling) composites its own subtree
+     and a position:fixed child loses the z-order war against the body-level
+     transition layers — the device recordings show the bar vanishing for the
+     whole of every back-flick. Out here nothing can ever trap it: pages slide
+     BENEATH the bar, like a native tab bar. -->
+<nav id="nav"></nav>
 <div id="sheet-backdrop"></div>
 <div id="sheet"></div>
 <div id="refresh" aria-hidden="true">
@@ -3609,8 +3615,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 00:32 CEST';
-const APP_BUILD = 'v87';
+const COLLECTION_UPDATED = '19 July 2026 · 01:03 CEST';
+const APP_BUILD = 'v92';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6806,6 +6812,9 @@ function captureEnterLayer() {
 function runSlide(kind, oldLayer) {
   if (activeSlide) activeSlide();               // a newer nav cuts the last one short
   document.body.appendChild(oldLayer);
+  // same iOS reparent decode-drop as the gesture path: the frozen OLD page's
+  // photos can blank for a frame or two right at capture — re-decode at once
+  oldLayer.querySelectorAll('img.heroimg').forEach(i => { if (i.decode) i.decode().catch(() => {}); });
   // real scroll (not a translate) so sticky topbars stay pinned; if the frozen
   // copy's scroll range comes up short of #shell's (in-flow chrome the layer
   // doesn't carry), stretch the freeze until the exact offset is reachable
@@ -7286,6 +7295,11 @@ if (STANDALONE) {
     document.body.appendChild(under);
     document.body.appendChild(dim);
     document.body.appendChild(layer);
+    // reparenting live <img>s into a body layer can drop their decoded pixels
+    // on iOS (device frame f43: a card photo blanks ~2 frames at capture) —
+    // kick an immediate re-decode on both frozen copies. Fire-and-forget:
+    // never blocks the finger.
+    [layer, under].forEach(L => L.querySelectorAll('img.heroimg').forEach(i => { if (i.decode) i.decode().catch(() => {}); }));
     sbApplyScroll(layer, g.departing);
     sbApplyScroll(under, SCROLL_MEM[g.back] || 0);
     g.layer = layer; g.under = under; g.dim = dim; g.started = true;
