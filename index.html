@@ -1708,6 +1708,41 @@ body {
 .contactlist a svg.chev { width: 14px; height: 14px; color: var(--sage-ink); flex: none; }
 .contactlist a:active { background: rgba(46, 70, 54, 0.08); }
 
+/* season brief: <button> rows read exactly like the anchor rows */
+.contactlist button {
+  display: flex; align-items: center; gap: 14px; width: 100%;
+  padding: 17px 22px; border: none; border-top: 1px solid rgba(46, 70, 54, 0.14);
+  background: transparent; color: #1c2b21; font: inherit; font-size: 14.5px;
+  text-align: left; cursor: pointer;
+}
+.contactlist button svg.lead { width: 18px; height: 18px; color: var(--sage-ink); flex: none; }
+.contactlist button .label { flex: 1; min-width: 0; }
+.contactlist button svg.chev { width: 14px; height: 14px; color: var(--sage-ink); flex: none; }
+.contactlist button:active { background: rgba(46, 70, 54, 0.08); }
+.contactlist button#sevyear.on svg.lead { color: #b58a2e; }
+
+/* season brief: "Where to be" spot chips (gold, tappable ones lead to rooms) */
+.sev-spots { margin: 6px 0 20px; }
+.sev-spots .head {
+  font-size: 10.5px; font-weight: 500; letter-spacing: 0.26em;
+  text-transform: uppercase; color: var(--ink-dim); opacity: 0.72; margin-bottom: 12px;
+}
+.sev-spotwrap { display: flex; flex-wrap: wrap; gap: 9px; }
+.sev-spot {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 9px 14px; border-radius: 999px; font-size: 13px;
+  border: 1px solid rgba(232, 201, 128, 0.22); color: var(--ink-dim);
+  background: rgba(232, 201, 128, 0.04);
+}
+.sev-spot.has {
+  color: #f0e2be; border-color: rgba(232, 201, 128, 0.5);
+  background: rgba(232, 201, 128, 0.1); cursor: pointer; font-weight: 500;
+}
+.sev-spot.has svg.chev { width: 12px; height: 12px; color: #e8c980; }
+.sev-spot.has:active { background: rgba(232, 201, 128, 0.2); }
+
+.sevent { cursor: pointer; }
+
 .sheet-savewrap { margin-top: 22px; display: flex; }
 .sheet-savewrap .pill { flex: 1; }
 
@@ -3362,8 +3397,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 15:47 CEST';
-const APP_BUILD = 'v54';
+const COLLECTION_UPDATED = '18 July 2026 · 15:57 CEST';
+const APP_BUILD = 'v55';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6065,7 +6100,7 @@ function viewSeasonMonth(m) {
         const city = e.city && CITY_BY_ID[e.city];
         const im = ((typeof SEASON_IMG !== 'undefined') && SEASON_IMG[m + '-' + i]) || (city && city.hero);
         return `
-        <article class="sevent rise rise-${Math.min(i, 3)}" ${city ? `data-city="${e.city}"` : ''}>
+        <article class="sevent rise rise-${Math.min(i, 3)}" data-sev="${m}-${i}" ${city ? `data-city="${e.city}"` : ''}>
           ${im ? `<span class="bg">${heroImg(im)}</span>` : ''}
           <div class="body">
             <div class="when">${e.when} · ${e.loc}</div>
@@ -6087,7 +6122,101 @@ function viewSeasonMonth(m) {
     b.classList.toggle('solid');
     b.textContent = yearSet.has(b.dataset.year) ? 'In my year' : 'Add to my year';
   }));
+  // tap the card itself (anywhere but the inline pills) for the full brief
+  $app.querySelectorAll('.sevent[data-sev]').forEach(el => el.addEventListener('click', (ev) => {
+    if (ev.target.closest('.actions')) return;      // let the inline pills act
+    const [mm, ii] = el.dataset.sev.split('-');
+    openSeasonSheet(+mm, +ii);
+  }));
   $shell.scrollTo(0, 0);
+}
+
+/* Match a "Where to be" spot token ("Loulou", "Silencio late", "Badrutt's
+   Palace after dark") to a real room in that city's collection, so the season
+   brief can hand you straight to its page — and its booking. */
+function seasonSpotVenue(cityId, token) {
+  const city = CITY_BY_ID[cityId];
+  if (!city) return null;
+  const norm = s => s.toLowerCase().replace(/[’'".,·–—-]/g, ' ').replace(/\s+/g, ' ').trim();
+  const stop = /\b(the|preview|late|after|dark|afterwards|lunch|dinner|at|by|night|day|terrace|courtside|one|last|reopen|reopens|opens|from|onward|onwards|its|and|in)\b/g;
+  const t = norm(token).replace(stop, ' ').replace(/\s+/g, ' ').trim();
+  if (t.length < 3) return null;
+  let best = null;
+  for (const part in city.venues) {
+    (city.venues[part] || []).forEach((v, idx) => {
+      const n = norm(v.n);
+      if (n.length < 3) return;
+      if (t.includes(n) || n.includes(t)) {
+        const score = Math.min(n.length, t.length);
+        if (!best || score > best.score) best = { part, idx, v, score };
+      }
+    });
+  }
+  return best;
+}
+
+/* The season brief — a rich rise-up sheet for a calendar moment: what it is,
+   where to be (tappable to the real rooms), and ways to make it happen. */
+function openSeasonSheet(m, i) {
+  const e = (SEASON[m] || [])[i];
+  if (!e) return;
+  const city = e.city && CITY_BY_ID[e.city];
+  const im = ((typeof SEASON_IMG !== 'undefined') && SEASON_IMG[m + '-' + i]) || (city && city.hero);
+  const inYear = yearSet.has(m + '-' + i);
+
+  const spots = (e.spots || '').split('·').map(s => s.trim()).filter(Boolean);
+  const spotChips = spots.map(s => {
+    const hit = city && seasonSpotVenue(e.city, s);
+    return hit
+      ? `<button class="sev-spot has" data-city="${e.city}" data-part="${hit.part}" data-idx="${hit.idx}">${esc(s)}${I.chev}</button>`
+      : `<span class="sev-spot">${esc(s)}</span>`;
+  }).join('');
+
+  const rows = [];
+  rows.push(`<button id="sevyear" class="${inYear ? 'on' : ''}">
+      ${I.bookmark.replace('<svg', '<svg class="lead"')}<span class="label">${inYear ? 'In my year' : 'Add to my year'}</span>${I.chev}</button>`);
+  const cq = `Where should I be for ${e.n}${e.loc ? ' in ' + e.loc : ''}?`;
+  rows.push(`<button id="sevcg" data-q="${esc(cq)}">
+      ${I_SPARKLE.replace('<svg', '<svg class="lead"')}<span class="label">Ask the concierge to plan it</span>${I.chev}</button>`);
+  if (city) rows.push(`<a href="#/city/${e.city}" onclick="closeSheet()">
+      ${I.compass.replace('<svg', '<svg class="lead"')}<span class="label">Explore our ${city.name} collection</span>${I.chev}</a>`);
+  if (e.w) rows.push(`<a href="${e.w}" target="_blank" rel="noopener">
+      ${I.globe.replace('<svg', '<svg class="lead"')}<span class="label">Official site</span>${I.chev}</a>`);
+
+  $sheet.innerHTML = `
+    <div class="sheet-grab"><span></span></div>
+    <div class="sheet-photo${im ? '' : ' noimg'}"${im ? ` style="background-image:url('${im}')"` : ''}>
+      <button class="sheet-close" aria-label="Close">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="area">${esc(e.when)} · ${esc(e.loc)}</div>
+      <h2 class="name serif">${esc(e.n)}</h2>
+      <p class="blurb">${esc(e.b)}</p>
+      ${e.t ? `<div class="tags">${e.t.map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}
+      ${spotChips ? `<div class="sev-spots"><div class="head">Where to be</div><div class="sev-spotwrap">${spotChips}</div></div>` : ''}
+      <div class="contactlist">
+        <div class="head">Make it happen</div>
+        ${rows.join('')}
+      </div>
+    </div>`;
+
+  $sheet.querySelector('.sheet-close').onclick = closeSheet;
+  const yb = $sheet.querySelector('#sevyear');
+  yb.onclick = () => {
+    toggleYear(m + '-' + i, e.n);
+    const on = yearSet.has(m + '-' + i);
+    yb.classList.toggle('on', on);
+    yb.querySelector('.label').textContent = on ? 'In my year' : 'Add to my year';
+    renderRoute(true);
+  };
+  const cg = $sheet.querySelector('#sevcg');
+  cg.onclick = () => { closeSheet(); setTimeout(() => openConciergeAsk(cg.dataset.q), 280); };
+  $sheet.querySelectorAll('.sev-spot.has').forEach(b => b.onclick = () =>
+    { closeSheet(); setTimeout(() => openSheet(b.dataset.city, b.dataset.part, +b.dataset.idx), 280); });
+
+  $backdrop.classList.add('open');
+  $sheet.scrollTop = 0;
+  requestAnimationFrame(() => requestAnimationFrame(() => $sheet.classList.add('open')));
 }
 
 /* ---------- pulse: live city ranking from Google data ---------- */
@@ -7920,6 +8049,13 @@ function openConcierge() {
   setTimeout(() => { try { cgDom.querySelector('.cg-in').focus({ preventScroll: true }); } catch (_) {} }, 350);
 }
 function closeConcierge() { if (cgDom) cgDom.classList.remove('open'); }
+
+/* open the concierge already asking a question — used by the season sheet's
+   "Ask the concierge" so a tap lands you mid-conversation, not at a blank box */
+function openConciergeAsk(q) {
+  openConcierge();
+  setTimeout(() => { try { cgAsk(q); } catch (_) {} }, 420);
+}
 
 </script>
 </body>
