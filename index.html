@@ -2753,7 +2753,11 @@ body {
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
+  opacity: 0;                       /* held until decoded, then faded in — no pop */
+  transition: opacity 0.45s ease;
 }
+.heroimg.ready { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .heroimg { transition: none; } }
 #app.sliding {
   position: relative; z-index: 10; background: var(--bg);  /* opaque: old page can't ghost through */
   transform: translateZ(0);   /* pre-promote: backing store is allocated + painted
@@ -3397,8 +3401,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 15:57 CEST';
-const APP_BUILD = 'v55';
+const COLLECTION_UPDATED = '18 July 2026 · 16:05 CEST';
+const APP_BUILD = 'v57';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5333,7 +5337,36 @@ function geoOrderedCities() {
    in-document element's decode() carries a spec guarantee that the decoded
    frames are available for that element's next paint — the lever CSS
    backgrounds never offer. */
-function heroImg(url) { return `<img class="heroimg" loading="lazy" decoding="async" alt="" draggable="false" src="${url}">`; }
+/* Photos carry their URL in data-src, not src, so NOTHING loads until we
+   decide to. loadLazy() then fetches + decodes and fades the image in. */
+function heroImg(url) { return `<img class="heroimg" decoding="async" alt="" draggable="false" data-src="${url}">`; }
+
+function loadLazy(img) {
+  const src = img && img.dataset && img.dataset.src;
+  if (!src) return;                      // already claimed / not lazy
+  delete img.dataset.src;
+  img.src = src;
+  const ready = () => img.classList.add('ready');
+  if (img.decode) img.decode().then(ready).catch(ready);
+  else { img.onload = ready; img.onerror = ready; }
+}
+
+/* Instagram-style lookahead: prefetch every photo within ~2 screens of the
+   viewport so it is decoded and painted BEFORE you scroll to it — no pop-in.
+   Off-screen photos stay unloaded, so the data saving of the split holds. */
+let lazyObserver = null;
+function observeLazy(root) {
+  if (lazyObserver) { lazyObserver.disconnect(); lazyObserver = null; }
+  const imgs = [...root.querySelectorAll('img.heroimg[data-src]')];
+  if (!imgs.length) return;
+  if (!('IntersectionObserver' in window)) { imgs.forEach(loadLazy); return; }
+  // generous margin on ALL sides: vertical feeds prefetch ~2 screens down,
+  // horizontal rails (the city cards) prefetch several cards to the right.
+  lazyObserver = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { lazyObserver.unobserve(e.target); loadLazy(e.target); }
+  }, { root: $shell, rootMargin: '1000px 1400px 1800px 1400px', threshold: 0.01 });
+  imgs.forEach(i => lazyObserver.observe(i));
+}
 
 function viewHome() {
   const { cities: ordered, near, km } = geoOrderedCities();
@@ -5919,6 +5952,7 @@ function toggleSave(key) {
 let cardObserver = null;
 let tileScrollHandler = null;
 function wireFocusGlow() {
+  observeLazy($app);   // (re)arm photo prefetch for whatever just rendered
   if (cardObserver) cardObserver.disconnect();
   if (tileScrollHandler) { $shell.removeEventListener('scroll', tileScrollHandler); tileScrollHandler = null; }
 
@@ -6389,6 +6423,7 @@ function decodeIncoming(root) {
     const r = i.getBoundingClientRect();
     return r.bottom > 0 && r.top < vh && r.right > 0 && r.left < innerWidth;
   });
+  imgs.forEach(loadLazy);       // promote the incoming page's visible photos NOW
   if (!imgs.length) return Promise.resolve();
   return Promise.race([
     Promise.all(imgs.map(i => i.decode ? i.decode().catch(() => {}) : Promise.resolve())),
