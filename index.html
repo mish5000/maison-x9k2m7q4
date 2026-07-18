@@ -963,7 +963,9 @@ body {
   cursor: pointer;
   text-decoration: none;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 240, 200, 0.55);
-  transition: transform 0.16s ease, filter 0.2s;
+  /* paint law: filter never transitions — :active still brightens, but as one
+     instant repaint instead of 0.2s of per-frame filter re-rasterization */
+  transition: transform 0.16s ease;
 }
 
 .iconbtn svg { width: 19px; height: 19px; }
@@ -1278,17 +1280,23 @@ body {
 .fixcard .fixrow .pill.solid { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; font-size: 11px; }
 .fixcard .fixrow .pill.solid svg { width: 16px; height: 16px; }
 
-/* category tiles share the passing spotlight the venue cards have — carried by
-   box-shadow, not filter (see .vcard: a filter offscreen-buffers the tile photo
-   every animated frame during scroll). */
+/* category tiles share the passing spotlight the venue cards have. Paint law:
+   the resting shadow is STATIC and the focus glow is a pre-painted ::before
+   layer crossfaded with opacity — never a box-shadow transition (WebKit would
+   repaint the blurred shadow on the main thread every frame for its duration,
+   on both the gaining and losing tile, per scroll focus change). */
 .tile {
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.30);
-  transition: box-shadow 0.5s ease, transform 0.16s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1);
 }
-
-.tile.infocus {
+.tile::before {
+  content: ''; position: absolute; inset: 0; z-index: -3; pointer-events: none;
+  border-radius: inherit;
   box-shadow: 0 0 0 1px rgba(200, 162, 75, 0.4), 0 16px 40px rgba(0, 0, 0, 0.42);
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
+.tile.infocus::before { opacity: 1; }
 
 .citycard {
   position: relative;
@@ -1362,7 +1370,11 @@ body {
   position: relative;
   height: 116px;
   border-radius: 24px;
-  overflow: hidden;
+  /* overflow VISIBLE so the ::before focus glow can bloom outward (paint law:
+     the glow fades via opacity, never a box-shadow transition); .bg and the
+     ::after veil re-clip to the radius themselves */
+  overflow: visible;
+  min-width: 0;   /* overflow:visible re-arms the grid automatic-minimum (560px lesson) */
   border: none;
   padding: 0;
   cursor: pointer;
@@ -1376,8 +1388,8 @@ body {
   width: 100%;
 }
 
-.tile .bg { position: absolute; inset: 0; z-index: -2; background-size: cover; background-position: center; filter: saturate(1.1) brightness(1.09); }
-.tile::after { content: ''; position: absolute; inset: 0; z-index: -1; background:
+.tile .bg { position: absolute; inset: 0; z-index: -2; background-size: cover; background-position: center; filter: saturate(1.1) brightness(1.09); border-radius: inherit; }
+.tile::after { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background:
   radial-gradient(120% 90% at 50% 50%, rgba(11, 10, 8, 0.30) 0%, rgba(11, 10, 8, 0.08) 60%, rgba(11, 10, 8, 0) 78%),
   linear-gradient(180deg, rgba(11, 10, 8, 0.10) 0%, rgba(11, 10, 8, 0.07) 45%, rgba(11, 10, 8, 0.46) 100%); }
 
@@ -2182,7 +2194,12 @@ body {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: var(--ink);
-  animation: pulseglow 3.2s ease-in-out infinite;
+  /* Paint law: the amber burn is a STATIC midpoint of the old pulseglow
+     keyframes — an infinite box-shadow animation repaints the blurred glow on
+     the main thread every frame, forever, overlaid on the hero. The icon's
+     pulsebeat (transform-only, compositor-safe) keeps the button alive. */
+  box-shadow: 0 0 16px 4px rgba(250, 168, 62, 0.70), 0 0 39px 11px rgba(252, 145, 45, 0.40);
+  border-color: rgba(247, 170, 85, 0.85);
   font-family: var(--sans);
   font-size: 10px;
   letter-spacing: 0.26em;
@@ -2203,17 +2220,6 @@ body {
 }
 .pulsebtn svg { width: 16px; height: 16px; color: #f0a45a; animation: pulsebeat 2.1s ease-in-out infinite; }
 
-/* the Pulse button burns — a slow, vicious, very bright amber glow */
-@keyframes pulseglow {
-  0%, 100% {
-    box-shadow: 0 0 10px 2px rgba(245, 158, 66, 0.45), 0 0 26px 6px rgba(245, 140, 40, 0.25);
-    border-color: rgba(240, 150, 60, 0.7);
-  }
-  50% {
-    box-shadow: 0 0 22px 6px rgba(255, 178, 84, 0.95), 0 0 52px 16px rgba(250, 150, 50, 0.55);
-    border-color: rgba(255, 190, 110, 1);
-  }
-}
 
 @keyframes pulsebeat {
   0%, 100% { transform: scale(1); }
@@ -2263,11 +2269,8 @@ body {
 .ag-item.p3 .prank { font-size: 22px; }
 .ag-item.p1 .nm { font-size: 23px; -webkit-line-clamp: 3; }  /* the hottest room's name is never truncated */
 .ag-item.p1 {
-  animation: podiumglow 5.4s ease-in-out infinite;
-}
-@keyframes podiumglow {
-  0%, 100% { box-shadow: 0 0 12px 0 rgba(200, 162, 75, 0.12); }
-  50% { box-shadow: 0 0 22px 4px rgba(226, 186, 100, 0.3); }
+  /* paint law: static midpoint of the old podiumglow box-shadow animation */
+  box-shadow: 0 0 17px 2px rgba(213, 174, 88, 0.21);
 }
 .ag-item.plow {
   gap: 12px;
@@ -3606,8 +3609,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 23:01 CEST';
-const APP_BUILD = 'v85';
+const COLLECTION_UPDATED = '19 July 2026 · 00:32 CEST';
+const APP_BUILD = 'v87';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7314,9 +7317,20 @@ if (STANDALONE) {
         // drop sweeps ALL gesture layers (not just this cycle's) — the recordings
         // caught an orphan parked on glass for the length of the old 650ms
         // fallback, so the fallback is tighter and the removal is total.
-        const drop = () => { [s.layer, s.under, s.dim].forEach(el => el && el.remove()); sweepStrays(); sbActive = false; };
+        // drop runs ONCE (hashchange path cancels the fallback timer and vice
+        // versa). A fast re-rock can start a brand-new gesture inside the 350ms
+        // fallback window — the stale timer must never sweep that live cycle's
+        // layers or clobber its sbActive (fresh-review H1: doing so vanishes the
+        // sheet mid-drag in a jump-cut).
+        let dropTid = 0, dropped = false;
+        const drop = () => {
+          if (dropped) return; dropped = true; clearTimeout(dropTid);
+          [s.layer, s.under, s.dim].forEach(el => el && el.remove());
+          sweepStrays(g && g.started ? [g.layer, g.under, g.dim] : null);
+          if (!(g && g.started)) sbActive = false;
+        };
         window.addEventListener('hashchange', () => requestAnimationFrame(() => requestAnimationFrame(drop)), { once: true });
-        setTimeout(drop, 350);
+        dropTid = setTimeout(drop, 350);
         history.back();
       } else {
         restoreCurrent(s);
@@ -7400,6 +7414,16 @@ if (STANDALONE) {
       g.dx = h.x; g.x0 = t.clientX - h.x; g.vx = h.v / 1000;
       g.started = true; g.tick = h.x / g.w > DIST;
       g.lastX = t.clientX; g.lastT = Date.now(); g.samples = [{ x: t.clientX, t: Date.now() }];
+      // ownership isn't settled yet: the first significant move decides whether
+      // this touch steers the sheet or was meant to scroll the page beneath
+      g.caught = true; g.own = false; g.cx0 = t.clientX; g.cy0 = t.clientY;
+      // the layers are pointer-events:none, so the catching tap ALSO reaches
+      // whatever sits beneath (a card, #nav) and would click it — a catch must
+      // never double as a press (fresh-review M5). Swallow exactly that click;
+      // a drag never emits one, so time the eater out rather than leave it armed.
+      const eat = (e) => { e.stopPropagation(); e.preventDefault(); };
+      addEventListener('click', eat, { capture: true, once: true });
+      setTimeout(() => removeEventListener('click', eat, { capture: true }), 700);
       return;
     }
     if (sbActive) return;
@@ -7422,6 +7446,15 @@ if (STANDALONE) {
       startDrag();
       if (!g) return;
       g.x0 = t.clientX;                            // rebase: page tracks from 0, no 10px activation pop
+    }
+    // CAUGHT sheet, ownership undecided: a clearly vertical first move means the
+    // user wanted to scroll the page beneath, not steer the sheet — hand the
+    // sheet back to the spring (resumes with its caught velocity) and stand
+    // down WITHOUT preventDefault so the scroll proceeds naturally.
+    if (g.caught && !g.own) {
+      const adx = Math.abs(t.clientX - g.cx0), ady = Math.abs(t.clientY - g.cy0);
+      if (ady > adx && ady > 8) { finish(g.dx / g.w > DIST); return; }
+      if (adx > 8) g.own = true;
     }
     g.dx = Math.max(0, t.clientX - g.x0);
     g.samples.push({ x: t.clientX, t: Date.now() });
