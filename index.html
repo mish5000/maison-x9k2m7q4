@@ -2787,6 +2787,9 @@ body {
   pointer-events: none;
   will-change: transform;
   transform: translateX(calc(100% - 2px));
+  /* same leading-edge shadow the interactive back-drag casts — forward push and
+     back reveal now read as one physical stack of sheets */
+  box-shadow: -10px 0 34px rgba(0, 0, 0, 0.4);
 }
 .slide-enter .home-topscrim { position: absolute; }  /* fixed jumps space under transform */
 .slide-enter .vcard, .slide-enter .tile { transition: none !important; }  /* nothing may
@@ -3547,8 +3550,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 18:42 CEST';
-const APP_BUILD = 'v72';
+const COLLECTION_UPDATED = '18 July 2026 · 18:51 CEST';
+const APP_BUILD = 'v73';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6655,7 +6658,7 @@ const SLIDE = {
   dur: 350,
   ease: 'cubic-bezier(0.32, 0.72, 0, 1)',   // measured: strong ease-out, no overshoot
   parallax: 0.30,                            // measured: under-page moves at 0.30x
-  dim: 0.78,                                 // measured: proportional black scrim, no shadow
+  dim: 0.34,                                 // one stack of sheets: matches the back-swipe reveal veil
 };
 let pendingSlide = null;   // 'push' | 'pop' — set by the hashchange handler
 let chevronPop = false;    // goBack() marks its history.back() so the pop animates
@@ -7136,9 +7139,11 @@ function sbApplyScroll(layer, want) {
 }
 if (STANDALONE) {
   const EDGE = 30, DIST = 0.32, VEL = 0.28;      // start zone; commit past 32% or a flick
-  const SB_DIM = 0.20;                            // gentle reveal veil (NOT the 0.78 forward-push value)
+  const SB_DIM = 0.20;                            // gentle reveal veil
+  const OMEGA = 22;                               // spring stiffness (critically damped, ζ=1) — the feel knob
+  const K = OMEGA * OMEGA, C = 2 * OMEGA;
   const RM = matchMedia('(prefers-reduced-motion: reduce)');
-  let g = null, sbCleanup = null;
+  let g = null, settling = null;                  // g = live finger drag; settling = in-flight spring (re-grabbable)
 
   const frame = () => {
     const p = Math.max(0, Math.min(g.dx / g.w, 1));
@@ -7184,10 +7189,10 @@ if (STANDALONE) {
 
   const finish = (commit) => {
     const s = g; g = null;
-    const w = s.w, from = s.dx, target = commit ? w : 0;
+    const w = s.w, target = commit ? w : 0;
     let done = false;
     const cleanup = () => {
-      if (done) return; done = true; sbCleanup = null;
+      if (done) return; done = true;
       if (commit) {
         // #app is empty; history.back() → renderRoute repaints the previous page
         // (already-seen photos repaint solid → seamless). Then drop the layers.
@@ -7200,51 +7205,86 @@ if (STANDALONE) {
         sbActive = false;
       }
     };
-    sbCleanup = cleanup;
     if (RM.matches) {                              // reduced motion: settle instantly, no spring
       s.layer.style.transform = `translateX(${target}px)`;
       s.under.style.transform = `translateX(${commit ? 0 : -SLIDE.parallax * w}px)`;
       s.dim.style.opacity = commit ? '0' : String(SB_DIM);
-      cleanup(); return;
+      settling = null; cleanup(); return;
     }
-    // Velocity-MATCHED ease-out. A monotonic curve (never overshoots, so a hard
-    // throw can't glitch), but its DURATION continues your release speed: a fast
-    // flick finishes fast (no dead pause), a slow guide eases gently. This keeps
-    // the "leaves at your thumb's speed" feel without the spring's tail-hold.
-    const remain = Math.abs(target - from), speed = Math.abs(s.vx);   // px/ms
-    const D = speed > 0.06
-      ? Math.max(120, Math.min(360, Math.round(2.25 * remain / speed)))
-      : Math.max(170, Math.min(360, Math.round(remain / w * 300) + 110));
-    const opt = { duration: D, easing: SLIDE.ease, fill: 'both' };
-    const a = s.layer.animate(
-      [{ transform: `translateX(${from}px)` }, { transform: `translateX(${target}px)` }], opt);
-    s.under.animate(
-      [{ transform: s.under.style.transform }, { transform: `translateX(${commit ? 0 : -SLIDE.parallax * w}px)` }], opt);
-    s.dim.animate(
-      [{ opacity: s.dim.style.opacity || String(SB_DIM) }, { opacity: commit ? '0' : String(SB_DIM) }], opt);
-    a.onfinish = cleanup; a.oncancel = cleanup;
-    setTimeout(cleanup, D + 280);                  // safety if WAAPI callbacks are lost
+    // rAF critically-damped SPRING (masters' rework). It owns x,v every frame:
+    // duration is adaptive (a hard throw lands fast, a slow guide asymptotes), the
+    // commit fires the INSTANT the page clears glass (no dead-hang), and because the
+    // motion is live state it can be CAUGHT mid-flight (see touchstart). Never
+    // re-renders #app — the flicker/blink invariants stay untouched.
+    let x = s.dx, v = s.vx * 1000;                 // EMA px/ms → integrator wants px/s
+    if (commit) v = Math.max(v, 1200);             // authority floor so a slow commit doesn't crawl
+    const h = { s, x, v, raf: 0, commit };
+    let last = performance.now();
+    const step = (now) => {
+      if (settling !== h) return;                  // caught (re-grabbed) or aborted — stop
+      const dt = Math.min((now - last) / 1000, 1 / 30); last = now;   // clamp: a bg tab can't explode dt
+      v += (-K * (x - target) - C * v) * dt;
+      x += v * dt;
+      x = x < 0 ? 0 : (x > w ? w : x);             // never reveal the wrong edge (belt & braces vs overshoot)
+      const p = x / w;
+      s.layer.style.transform = `translateX(${x}px)`;
+      s.under.style.transform = `translateX(${-SLIDE.parallax * w * (1 - p)}px)`;
+      s.dim.style.opacity = String(SB_DIM * (1 - p));
+      if (commit ? (x >= w - 0.5) : (x < 0.5 && Math.abs(v) < 40)) {
+        s.layer.style.transform = `translateX(${target}px)`;
+        settling = null; cleanup(); return;
+      }
+      h.x = x; h.v = v;
+      h.raf = requestAnimationFrame(step);
+    };
+    settling = h;
+    h.raf = requestAnimationFrame(step);
+    setTimeout(() => { if (settling === h) { settling = null; cancelAnimationFrame(h.raf); cleanup(); } }, 1400);  // safety
   };
 
   // backgrounding mid-gesture may never deliver touchcancel — without this the
   // layers strand on screen and sbActive stays true, wedging every later render.
   const abortGesture = () => {
     if (g && g.started) { const s = g; g = null; restoreCurrent(s); sbActive = false; }
-    else if (sbCleanup) { sbCleanup(); }
-    else { sbActive = false; }
+    else if (settling) { const h = settling; settling = null; cancelAnimationFrame(h.raf); restoreCurrent(h.s); sbActive = false; }
+    else sbActive = false;
     g = null;
   };
   addEventListener('pagehide', abortGesture);
   document.addEventListener('visibilitychange', () => { if (document.hidden) abortGesture(); });
 
+  // release velocity from a short trailing window (~55ms) — honest at all speeds,
+  // where a re-weighted EMA under-reports a short crisp flick.
+  const releaseVX = (samples) => {
+    if (!samples || samples.length < 2) return 0;
+    const now = samples[samples.length - 1].t;
+    let i = samples.length - 1;
+    while (i > 0 && now - samples[i - 1].t < 55) i--;
+    const a = samples[i], b = samples[samples.length - 1], dt = b.t - a.t;
+    return dt > 0 ? (b.x - a.x) / dt : 0;          // px/ms
+  };
+
   document.addEventListener('touchstart', (e) => {
-    if (g || sbActive) return;
+    if (g) return;                                 // a live drag already owns it
     const t = e.touches[0];
+    // CATCH a settling page from the edge — re-adopt the SAME layers (no re-render,
+    // invariants safe), rebase so there's zero jump, then drag it EITHER direction.
+    if (settling && t.clientX <= EDGE) {
+      const h = settling; settling = null; cancelAnimationFrame(h.raf);
+      g = h.s;
+      g.dx = h.x; g.x0 = t.clientX - h.x; g.vx = h.v / 1000;
+      g.started = true; g.tick = h.x / g.w > DIST;
+      g.lastX = t.clientX; g.lastT = Date.now(); g.samples = [{ x: t.clientX, t: Date.now() }];
+      return;
+    }
+    if (sbActive) return;
     if (t.clientX > EDGE) return;
     if ($sheet.classList.contains('open') || mapIsOpen() || (typeof cgIsOpen === 'function' && cgIsOpen())) return;
+    if (activeSlide) activeSlide();                // land an in-flight forward push so #app is whole again
     if (!location.hash || location.hash === '#/' || !curBack) return;
     g = { x0: t.clientX, y0: t.clientY, back: curBack, started: false, dx: 0, w: innerWidth,
-          departing: $shell.scrollTop, lastX: t.clientX, lastT: Date.now(), vx: 0, tick: false };
+          departing: $shell.scrollTop, lastX: t.clientX, lastT: Date.now(), vx: 0, tick: false,
+          samples: [{ x: t.clientX, t: Date.now() }] };
   }, { passive: true });
 
   document.addEventListener('touchmove', (e) => {
@@ -7258,11 +7298,9 @@ if (STANDALONE) {
       if (!g) return;
       g.x0 = t.clientX;                            // rebase: page tracks from 0, no 10px activation pop
     }
-    const now = Date.now();
     g.dx = Math.max(0, t.clientX - g.x0);
-    const inst = (t.clientX - g.lastX) / Math.max(1, now - g.lastT);
-    g.vx = g.vx ? g.vx * 0.7 + inst * 0.3 : inst;  // EMA — a smooth, trustworthy release velocity
-    g.lastX = t.clientX; g.lastT = now;
+    g.samples.push({ x: t.clientX, t: Date.now() });
+    if (g.samples.length > 6) g.samples.shift();
     frame();
     if (e.cancelable) e.preventDefault();          // own the gesture — no scroll underneath
   }, { passive: false });
@@ -7270,7 +7308,7 @@ if (STANDALONE) {
   const end = () => {
     if (!g) return;
     if (!g.started) { g = null; return; }
-    if (Date.now() - g.lastT > 60) g.vx = 0;       // a finger that paused before lifting is not a flick
+    if (g.samples && g.samples.length >= 2) g.vx = releaseVX(g.samples);
     const p = g.dx / g.w;
     finish((p > DIST || g.vx > VEL) && p > 0.05);
   };
