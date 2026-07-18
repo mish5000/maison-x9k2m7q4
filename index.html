@@ -3499,8 +3499,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 16:51 CEST';
-const APP_BUILD = 'v63';
+const COLLECTION_UPDATED = '18 July 2026 · 17:08 CEST';
+const APP_BUILD = 'v64';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5439,16 +5439,30 @@ function geoOrderedCities() {
    decide to. loadLazy() then fetches + decodes and fades the image in. */
 function heroImg(url) { return `<img class="heroimg" decoding="async" alt="" draggable="false" data-src="${url}">`; }
 
+/* Every photo URL painted at least once this session. A re-render (a refresh,
+   a line-up update, a geo re-sort) rebuilds the DOM from scratch — without this,
+   every already-seen photo would reset to opacity:0 and fade back in together,
+   blinking the whole page. Seen photos are cached, so we repaint them SOLID. */
+const shownImages = new Set();
 function loadLazy(img, instant) {
-  // instant = a slide's incoming photo: it must appear SOLID the moment it
-  // decodes (no fade), so the page slides in fully painted — the expert-panel
-  // invariant. Only scroll-revealed photos get the gentle fade.
-  if (instant) img.classList.add('instant');
   const src = img && img.dataset && img.dataset.src;
-  if (!src) { if (instant) img.classList.add('ready'); return; }  // already promoted
+  if (!src) { img.classList.add('ready'); return; }        // already promoted
+  // Already shown this session ⇒ it's cached: repaint SOLID and synchronously
+  // (no fade, no decode wait). THIS is what stops any re-render from blinking
+  // content that was on screen a moment ago.
+  if (shownImages.has(src)) {
+    delete img.dataset.src;
+    img.classList.add('instant', 'ready');
+    img.src = src;
+    return;
+  }
+  // First appearance: a slide's incoming photo snaps solid (instant, the
+  // expert-panel invariant); a scroll reveal gets the gentle fade. Either way
+  // register it so every later re-render stays solid.
+  if (instant) img.classList.add('instant');
   delete img.dataset.src;
   img.src = src;
-  const ready = () => img.classList.add('ready');
+  const ready = () => { shownImages.add(src); img.classList.add('ready'); };
   if (img.decode) img.decode().then(ready).catch(ready);
   else { img.onload = ready; img.onerror = ready; }
 }
@@ -5459,7 +5473,13 @@ function loadLazy(img, instant) {
 let lazyObserver = null;
 function observeLazy(root) {
   if (lazyObserver) { lazyObserver.disconnect(); lazyObserver = null; }
-  const imgs = [...root.querySelectorAll('img.heroimg[data-src]')];
+  let imgs = [...root.querySelectorAll('img.heroimg[data-src]')];
+  if (!imgs.length) return;
+  // Repaint already-seen photos SYNCHRONOUSLY (this runs in the same task as the
+  // DOM swap) so a rebuilt page shows them solid on its very first frame — the
+  // page-wide fade/blink can't happen. Whatever's left is genuinely new.
+  for (const img of imgs) if (shownImages.has(img.dataset.src)) loadLazy(img);
+  imgs = imgs.filter(i => i.dataset.src);
   if (!imgs.length) return;
   if (!('IntersectionObserver' in window)) { imgs.forEach(loadLazy); return; }
   // generous margin on ALL sides: vertical feeds prefetch ~2 screens down,
