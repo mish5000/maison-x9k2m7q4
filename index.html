@@ -2779,6 +2779,16 @@ body {
 }
 .heroimg.ready { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .heroimg { transition: none; } }
+
+/* Placeholder behind any photo still loading: a warm dark sheen with a faint
+   gold cast — so a fast scroll shows elegant depth, never a black void. The
+   decoded photo (opacity 1) sits on top and covers it. */
+.citycard .bg, .tile .bg, .sevent .bg, .hero .bg, .cityhero .bg, .vcard .photo, .detail .photo {
+  background-color: #14110b;
+  background-image:
+    radial-gradient(120% 90% at 30% 18%, rgba(200, 162, 75, 0.09), transparent 62%),
+    linear-gradient(158deg, #1a150c 0%, #100d07 58%, #0c0a06 100%);
+}
 #app.sliding {
   position: relative; z-index: 10; background: var(--bg);  /* opaque: old page can't ghost through */
   transform: translateZ(0);   /* pre-promote: backing store is allocated + painted
@@ -3486,8 +3496,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 16:20 CEST';
-const APP_BUILD = 'v59';
+const COLLECTION_UPDATED = '18 July 2026 · 16:26 CEST';
+const APP_BUILD = 'v60';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5518,6 +5528,9 @@ function viewHome() {
     </div>`;
   wireSearch();
   $shell.scrollTo(0, 0);   // Home must open at the top like every other view
+  // warm every destination hero after first paint so a fast rail fling never
+  // hits black — a small fixed set (~21), the app's signature images
+  (window.requestIdleCallback || ((f) => setTimeout(f, 250)))(prewarmDestinations, { timeout: 700 });
   requestGeoSort();        // (geo reorder restores its own scroll afterwards)
 }
 
@@ -6055,6 +6068,15 @@ function prewarmCategory(cityId, catId, n) {
     const im = venueImg(cityId, part, i, v);
     if (im) { prewarmImg(im); if (++c >= (n || 3)) break; }
   }
+}
+
+/* The destinations are a small fixed set (~21) and the app's signature
+   images — a fast fling outruns edge-triggered lazy-loading and hits black
+   gaps. So eagerly warm EVERY city hero into cache (idle, after first paint,
+   so the visible cards still load first). */
+function prewarmDestinations() {
+  const cs = (typeof CITIES !== 'undefined' && CITIES) || [];
+  cs.forEach(c => { if (c && c.hero) prewarmImg(c.hero); });
 }
 
 let prewarmObserver = null;
