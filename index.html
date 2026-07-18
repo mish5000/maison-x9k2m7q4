@@ -2799,6 +2799,15 @@ body {
 .slide-enter .home-topscrim { position: absolute; }  /* fixed jumps space under transform */
 .slide-enter .vcard, .slide-enter .tile { transition: none !important; }  /* nothing may
                                   dirty the flying layer mid-animation */
+/* content-visibility:auto skips painting a card while it sits off-screen — and
+   during the push fence the whole enter layer rests off-screen right, so every
+   card is skipped and the decoded hero never lands in the layer's backing store.
+   It only composites when the card slides onto glass: one black frame (var(--bg))
+   before the photo appears — the exact flash the device recordings caught at the
+   Marbella->Restaurants push. Force the flying layers to render their cards so
+   the fence paints for real. The layers clip to the viewport (overflow:hidden),
+   so only the ~1-2 on-fold cards actually cost anything. */
+.slide-enter .vcard, .slide-layer .vcard { content-visibility: visible; }
 .heroimg {
   position: absolute;
   inset: 0;
@@ -3582,8 +3591,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 20:23 CEST';
-const APP_BUILD = 'v77';
+const COLLECTION_UPDATED = '18 July 2026 · 20:39 CEST';
+const APP_BUILD = 'v78';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
