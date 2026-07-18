@@ -3499,8 +3499,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '18 July 2026 · 17:08 CEST';
-const APP_BUILD = 'v64';
+const COLLECTION_UPDATED = '18 July 2026 · 17:31 CEST';
+const APP_BUILD = 'v65';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5320,7 +5320,9 @@ function goBack(backHash) {
     location.hash = backHash;
   }
 }
+let curBack = null;   // the current page's back target — the interactive swipe reads it
 function topbar(title, backHash) {
+  curBack = backHash;
   return `
     <div class="topbar">
       <button class="backbtn" onclick="goBack('${backHash}')" aria-label="Back">${I.back}</button>
@@ -6619,6 +6621,7 @@ const SLIDE = {
 };
 let pendingSlide = null;   // 'push' | 'pop' — set by the hashchange handler
 let chevronPop = false;    // goBack() marks its history.back() so the pop animates
+let sbActive = false;      // an interactive swipe-back drag is live (guards re-renders)
 let activeSlide = null;    // running slide, so a rapid next nav can cut it short
 
 function captureOldLayer(departingScroll) {
@@ -6763,7 +6766,27 @@ function runSlide(kind, oldLayer) {
 // a hidden/suspended app must never keep a half-run slide pinned on screen
 addEventListener('pagehide', () => { if (activeSlide) activeSlide(); });
 
+/* Paint a route hash's content into #app — no slide, no history, no scroll
+   bookkeeping. Used by renderRoute for the actual view, and by the interactive
+   swipe-back to paint the previous page underneath the drag. */
+function renderView(h) {
+  const parts = (h || '#/').replace(/^#\//, '').split('/').filter(Boolean);
+  if (parts.length === 0) { renderNav('home'); viewHome(); return; }
+  switch (parts[0]) {
+    case 'explore': renderNav('explore'); viewExplore(); break;
+    case 'season': renderNav('home'); parts[1] ? viewSeasonMonth(parts[1]) : viewSeason(); break;
+    case 'saved': renderNav('saved'); viewSaved(); break;
+    case 'club': renderNav('club'); viewClub(); break;
+    case 'city': renderNav('explore'); viewCity(parts[1]); break;
+    case 'pulse': renderNav('explore'); viewPulse(parts[1]); break;
+    case 'concierge': renderNav('explore'); viewConcierge(parts[1]); break;
+    case 'cat': renderNav('explore'); viewCategory(parts[1], parts[2]); break;
+    default: renderNav('home'); viewHome();
+  }
+}
+
 function renderRoute(soft = false, dir = 'fwd') {
+  if (sbActive && soft) return;          // never rebuild #app mid swipe-back drag
   const h = location.hash || '#/';
   const parts = h.replace(/^#\//, '').split('/').filter(Boolean);
 
@@ -6811,18 +6834,8 @@ function renderRoute(soft = false, dir = 'fwd') {
   if (!soft) closeSheet();
   const y = soft ? $shell.scrollTop : 0;
 
-  if (parts.length === 0) { renderNav('home'); viewHome(); }
-  else switch (parts[0]) {
-    case 'explore': renderNav('explore'); viewExplore(); break;
-    case 'season': renderNav('home'); parts[1] ? viewSeasonMonth(parts[1]) : viewSeason(); break;
-    case 'saved': renderNav('saved'); viewSaved(); break;
-    case 'club': renderNav('club'); viewClub(); break;
-    case 'city': renderNav('explore'); viewCity(parts[1]); break;
-    case 'pulse': renderNav('explore'); viewPulse(parts[1]); break;
-    case 'concierge': renderNav('explore'); viewConcierge(parts[1]); break;
-    case 'cat': renderNav('explore'); viewCategory(parts[1], parts[2]); break;
-    default: renderNav('home'); viewHome();
-  }
+  curBack = null;                         // topbar() re-sets it; home leaves it null
+  renderView(h);
 
   // Back-pop: restore the remembered offset in the SAME task as the innerHTML
   // swap (the view functions above just scrolled to 0), so the browser paints
@@ -7068,23 +7081,119 @@ document.addEventListener('visibilitychange', () => {
 const STANDALONE = window.navigator.standalone === true ||
   (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
 
-/* edge swipe-back — ONLY in standalone, where iOS gives no native gesture.
-   In a browser tab this handler double-fired on top of the OS gesture, which
-   is what tore the back transition. */
+/* Interactive swipe-back — ONLY in standalone (iOS gives no native gesture
+   there; a browser tab owns its own edge-swipe and we must not fight it).
+   Instagram-smooth: the page FOLLOWS your thumb 1:1, revealing the previous
+   page under a parallax + dim, and completes or snaps back on release by how
+   far / how fast you flicked. Not a canned animation — direct manipulation. */
+function sbApplyScroll(layer, want) {
+  layer.scrollTop = want;
+  if (layer.scrollTop < want && layer.firstChild) {
+    layer.firstChild.style.minHeight = (want + layer.clientHeight) + 'px';
+    layer.scrollTop = want;
+  }
+}
 if (STANDALONE) {
-  let esX = null, esY = null;
+  const EDGE = 30, DIST = 0.32, VEL = 0.28;      // start zone; commit past 32% or a flick
+  let g = null;
+
+  const frame = () => {
+    const p = Math.max(0, Math.min(g.dx / g.w, 1));
+    g.layer.style.transform = `translateX(${g.dx}px)`;
+    g.under.style.transform = `translateX(${-SLIDE.parallax * g.w * (1 - p)}px)`;
+    g.dim.style.opacity = String(SLIDE.dim * (1 - p));
+  };
+
+  const startDrag = () => {
+    const layer = captureOldLayer(g.departing);   // current page → scroll-frozen top layer
+    if (!layer) { g = null; return; }
+    layer.classList.add('ontop');
+    renderView(g.back);                            // previous page → #app
+    const under = captureOldLayer(SCROLL_MEM[g.back] || 0);
+    const dim = document.createElement('div');
+    dim.className = 'slide-dim-under';
+    document.body.appendChild(under);
+    document.body.appendChild(dim);
+    document.body.appendChild(layer);
+    sbApplyScroll(layer, g.departing);
+    sbApplyScroll(under, SCROLL_MEM[g.back] || 0);
+    g.layer = layer; g.under = under; g.dim = dim; g.started = true;
+    sbActive = true;
+    haptic();
+    frame();
+  };
+
+  const finish = (commit) => {
+    const s = g; g = null;
+    const from = s.dx, remain = commit ? (s.w - from) : from;
+    const D = Math.max(120, Math.min(320, Math.round(remain / s.w * 300) + 90));
+    const opt = { duration: D, easing: SLIDE.ease, fill: 'both' };
+    const a = s.layer.animate([{ transform: `translateX(${from}px)` }, { transform: `translateX(${commit ? s.w : 0}px)` }], opt);
+    s.under.animate([{ transform: s.under.style.transform }, { transform: `translateX(${commit ? 0 : -SLIDE.parallax * s.w}px)` }], opt);
+    s.dim.animate([{ opacity: s.dim.style.opacity || String(SLIDE.dim) }, { opacity: commit ? 0 : SLIDE.dim }], opt);
+    let done = false;
+    const cleanup = () => {
+      if (done) return; done = true;
+      if (commit) {
+        // #app is empty; history.back() → renderRoute repaints the previous page
+        // with no slide (already-seen photos repaint solid → seamless). Then drop
+        // the gesture layers to reveal it.
+        const drop = () => { s.layer.remove(); s.under.remove(); s.dim.remove(); sbActive = false; };
+        window.addEventListener('hashchange', () => requestAnimationFrame(() => requestAnimationFrame(drop)), { once: true });
+        setTimeout(drop, 650);
+        history.back();
+      } else {
+        // snap back: hand the current page's DOM straight back to #app, untouched
+        while ($app.firstChild) $app.removeChild($app.firstChild);
+        const fz = s.layer.firstChild;
+        while (fz && fz.firstChild) $app.appendChild(fz.firstChild);
+        $shell.scrollTop = s.departing;
+        restoreRails(lastRouteHash);
+        wireFocusGlow();
+        s.layer.remove(); s.under.remove(); s.dim.remove();
+        sbActive = false;
+      }
+    };
+    a.onfinish = cleanup; a.oncancel = cleanup;
+    setTimeout(cleanup, D + 280);                  // safety if WAAPI callbacks are lost
+  };
+
   document.addEventListener('touchstart', (e) => {
+    if (g || sbActive) return;
     const t = e.touches[0];
-    esX = t.clientX <= 28 && !$sheet.classList.contains('open') && !mapIsOpen() ? t.clientX : null;
-    esY = t.clientY;
+    if (t.clientX > EDGE) return;
+    if ($sheet.classList.contains('open') || mapIsOpen() || (typeof cgIsOpen === 'function' && cgIsOpen())) return;
+    if (!location.hash || location.hash === '#/' || !curBack) return;
+    g = { x0: t.clientX, y0: t.clientY, back: curBack, started: false, dx: 0, w: innerWidth,
+          departing: $shell.scrollTop, lastX: t.clientX, lastT: Date.now(), vx: 0 };
   }, { passive: true });
-  document.addEventListener('touchend', (e) => {
-    if (esX === null) return;
-    const t = e.changedTouches[0];
-    const dx = t.clientX - esX, dy = Math.abs(t.clientY - esY);
-    esX = null;
-    if (dx > 72 && dy < 60 && location.hash && location.hash !== '#/') { haptic(); history.back(); }
-  }, { passive: true });
+
+  document.addEventListener('touchmove', (e) => {
+    if (!g) return;
+    const t = e.touches[0];
+    const dx = t.clientX - g.x0, dy = t.clientY - g.y0;
+    if (!g.started) {
+      if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 6) { g = null; return; }  // vertical → scroll wins
+      if (dx < 10) return;                                                        // wait for clear intent
+      startDrag();
+      if (!g) return;
+    }
+    g.dx = Math.max(0, dx);
+    const now = Date.now();
+    g.vx = (t.clientX - g.lastX) / Math.max(1, now - g.lastT);
+    g.lastX = t.clientX; g.lastT = now;
+    frame();
+    if (e.cancelable) e.preventDefault();          // own the gesture — no scroll underneath
+  }, { passive: false });
+
+  const end = () => {
+    if (!g) return;
+    if (!g.started) { g = null; return; }
+    const p = g.dx / g.w;
+    finish((p > DIST || g.vx > VEL) && p > 0.05);
+  };
+  document.addEventListener('touchend', end, { passive: true });
+  document.addEventListener('touchcancel', end, { passive: true });
 }
 
 /* Direction of travel, so the router knows a genuine history back-pop (which
