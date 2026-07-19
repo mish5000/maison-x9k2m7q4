@@ -982,31 +982,37 @@ body {
   font-size: 13px;
   letter-spacing: 0.42em;
 }
-/* star row filled to the exact rating — a clipped gold layer over a faint base */
-.starmeter {
-  position: relative;
-  display: inline-block;
-  white-space: nowrap;
-  vertical-align: middle;
-}
-.starmeter .sm-base { color: rgba(200, 162, 75, 0.24); }
-.starmeter .sm-fill {
-  position: absolute;
-  left: 0;
-  top: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  color: var(--gold-bright);
-}
-
-.grating {
-  margin-left: 12px;
+/* numeral-first rating badge — the score reads at a glance, one gold star as
+   the unit mark (replaced the 10-glyph star meter: too small to parse) */
+.rbadge {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
   font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  color: var(--gold-dim);
-  vertical-align: 1px;
+  letter-spacing: 0;
+  color: var(--gold-bright);
+  font-size: 13px;
+}
+.rbadge b {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 600;
+  color: #f6e7c1;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.rbadge i {
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: rgba(244, 239, 230, 0.78);
+}
+/* over card photos the badge wears the same smoked ribbon as name/eyebrow */
+.vcard .stars .rbadge {
+  background: rgba(12, 10, 7, 0.55);
+  border-radius: 8px;
+  padding: 4px 10px 5px;
+  margin-left: -10px;
 }
 
 .grating-line {
@@ -1545,7 +1551,7 @@ body {
 }
 
 .vcard .body .area, .vcard .body .blurb, .vcard .body .stars,
-.vcard .body .grating, .vcard .body .hours-line { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65); }
+.vcard .body .hours-line { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65); }
 .vcard .area {
   /* the small gold line was invisible over bright photos (Mishari 14:09,
      Pangea) — give it the same smoked ribbon the name wears, so legibility
@@ -2489,9 +2495,21 @@ body {
   content: ''; position: absolute; inset: 0; z-index: -1;
   background: linear-gradient(180deg, rgba(11,10,8,0.04) 0%, rgba(11,10,8,0.12) 46%, rgba(11,10,8,0.58) 100%);
 }
-/* text stays crisp over the now-bright photo */
+/* Per-line smoked ribbons: this card's text lives at the TOP where the
+   bottom-weighted veil can't reach — white-on-white chalet, unreadable
+   (Mishari 15:26). Each line carries its own strip, so legibility never
+   depends on the photo, and the photo stays bright between the lines. */
+.sevent .rb {
+  display: inline;
+  background: rgba(11, 10, 8, 0.55);
+  border-radius: 10px;
+  padding: 3px 10px;
+  margin-left: -10px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
 .sevent .name { text-shadow: 0 2px 20px rgba(0,0,0,0.8), 0 1px 3px rgba(0,0,0,0.65); }
-.sevent .blurb { color: #f1ece3; text-shadow: 0 1px 12px rgba(0,0,0,0.82); }
+.sevent .blurb { color: #f4f0e7; text-shadow: 0 1px 12px rgba(0,0,0,0.82); }
 .sevent .when, .sevent .spots { text-shadow: 0 1px 3px rgba(0,0,0,0.75), 0 2px 14px rgba(0,0,0,0.7); }
 .sevent .spots .slabel { text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
 .sevent .body { padding: 24px 24px 22px; }
@@ -2510,8 +2528,14 @@ body {
   font-size: 11px;
   line-height: 1.8;
   color: var(--ink);
+  /* frosted panel (static — never animated, paint law): the room list must
+     read over any photo mid-card */
+  background: rgba(11, 10, 8, 0.5);
+  -webkit-backdrop-filter: blur(9px);
+  backdrop-filter: blur(9px);
+  border-radius: 0 14px 14px 0;
   border-left: 2px solid rgba(200, 162, 75, 0.55);
-  padding-left: 14px;
+  padding: 10px 14px;
   margin-bottom: 16px;
 }
 .sevent .spots .slabel {
@@ -2519,7 +2543,7 @@ body {
   font-size: 8.5px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--gold-dim);
+  color: var(--gold-bright);   /* gold-dim washed out on the frosted panel */
   margin-bottom: 3px;
 }
 .sevent .actions { display: flex; gap: 10px; }
@@ -3644,8 +3668,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 14:52 CEST';
-const APP_BUILD = 'v138';
+const COLLECTION_UPDATED = '19 July 2026 · 15:35 CEST';
+const APP_BUILD = 'v141';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5272,23 +5296,16 @@ const venueTags = (key, v) => {
 
 /* Subtle Google rating beside the brand stars. */
 const venueRating = (key) => (typeof VENUE_RATING !== 'undefined' && VENUE_RATING[key]) || null;
-const ratingInline = (key) => {
-  const r = venueRating(key);
-  return r ? `<span class="grating">${r[0].toFixed(1)}</span>` : '';
-};
 const ratingLine = (key) => {
   const r = venueRating(key);
-  // no leading star glyph — the gold star-meter below is the sheet's star system
-  return r ? `<div class="grating-line">${r[0].toFixed(1)} · ${r[1].toLocaleString()} Google reviews</div>` : '';
+  return r ? `<div class="grating-line">Google · ${r[1].toLocaleString()} reviews</div>` : '';
 };
-/* Five stars filled to the true Google score — never a flat decorative row
-   that contradicts the number beside it. */
-const starMeter = (key) => {
+/* Numeral-first rating: the NUMBER is the signal (Mishari 15:26 — a row of
+   tiny stars "doesn't tell us much"); one gold star as the unit mark, the
+   score large and unmissable, review count for trust. */
+const ratingBadge = (key) => {
   const r = venueRating(key);
-  if (!r) return '';
-  const pct = Math.max(0, Math.min(100, (r[0] / 5) * 100));
-  return `<span class="starmeter"><span class="sm-base">★★★★★</span>` +
-    `<span class="sm-fill" style="width:${pct.toFixed(1)}%">★★★★★</span></span>`;
+  return r ? `<span class="rbadge">★<b>${r[0].toFixed(1)}</b><i>· ${r[1].toLocaleString()}</i></span>` : '';
 };
 
 /* Phone: Google's listed number (js/venue-phones.js) wins; curated fallback. */
@@ -5871,7 +5888,7 @@ function venueCard(city, catId, v, idx) {
       <div class="body">
         <div class="area">${v.a} · ${city.name}</div>
         <h2 class="name"><span class="nm">${v.n}</span></h2>
-        <span class="stars">${starMeter(key)}${ratingInline(key)}</span>
+        <span class="stars">${ratingBadge(key)}</span>
         <div class="txt">
           ${hoursLine(key)}
           <p class="blurb">${v.b}</p>
@@ -6129,7 +6146,7 @@ function openSheet(cityId, catId, idx) {
       <h2 class="name serif">${v.n}</h2>
       ${ratingLine(key)}
       ${hoursLine(key)}
-      <span class="stars">${starMeter(key)}</span>
+      <span class="stars">${ratingBadge(key)}</span>
       ${djBill}
       <p class="blurb">${v.b}</p>
       <div class="tags">${bpBadge(key, catId)}${venueTags(key, v).map(t => `<span class="chip">${t}</span>`).join('')}</div>
@@ -6546,9 +6563,9 @@ function viewSeasonMonth(m) {
         <article class="sevent rise rise-${Math.min(i, 3)}" data-sev="${m}-${i}" ${city ? `data-city="${e.city}"` : ''}>
           ${im ? `<span class="bg">${heroImg(im)}</span>` : ''}
           <div class="body">
-            <div class="when">${e.when} · ${e.loc}</div>
-            <h2 class="name serif">${e.n}</h2>
-            <p class="blurb">${e.b}</p>
+            <div class="when"><span class="rb">${e.when} · ${e.loc}</span></div>
+            <h2 class="name serif"><span class="rb">${e.n}</span></h2>
+            <p class="blurb"><span class="rb">${e.b}</span></p>
             <div class="spots"><span class="slabel">Where to be</span>${e.spots}</div>
             <div class="sev-cue">${yearSet.has(m + '-' + i) ? '<span class="in">In your year</span>' : ''}<span class="open">Open the brief</span>${I.chev}</div>
           </div>
