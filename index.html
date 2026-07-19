@@ -3724,8 +3724,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 17:27 CEST';
-const APP_BUILD = 'v166';
+const COLLECTION_UPDATED = '19 July 2026 · 17:32 CEST';
+const APP_BUILD = 'v168';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5765,7 +5765,7 @@ function viewHome() {
     <header class="hero">
       <span class="bg">${heroImg(UNSPLASH('1414235077428-338989a2e8c0', 1600))}</span>
       <button class="cgpill" onclick="openConcierge()" aria-label="The Concierge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg><span>AI Concierge</span></button>
-      <a class="herotaxi" href="https://m.uber.com/ul/?action=setPickup&pickup=my_location" target="_blank" rel="noopener" aria-label="Uber from my current location">${I.car}<span>Taxi</span></a>
+      <a class="herotaxi" href="https://m.uber.com/ul/?action=setPickup&pickup=my_location" target="_blank" rel="noopener" aria-label="Uber from my current location">${I.car}<span>Uber</span></a>
       <div class="greeting-block rise">
         <div class="eyebrow">${greeting()}</div>
         <span class="prefix serif">${MEMBER.prefix}</span>
@@ -8318,7 +8318,7 @@ function fetchDriveEta(e, card) {
   const ck = e.key + '@' + me.la.toFixed(2) + ',' + me.lo.toFixed(2);
   const put = (txt) => {
     const s = card.querySelector(`.mapcard[data-key="${e.key}"] .mc-taxi span`);
-    if (s) s.textContent = 'Taxi · ' + txt;   // key-guarded: never lands on another venue's card
+    if (s) s.textContent = 'Uber · ' + txt;   // key-guarded: never lands on another venue's card
   };
   if (DRIVE_ETA[ck]) { put(DRIVE_ETA[ck]); return; }
   fetch(`https://router.project-osrm.org/route/v1/driving/${me.lo},${me.la};${e.ll[1]},${e.ll[0]}?overview=false`)
@@ -8368,12 +8368,12 @@ function showMapCard(group, preferKey) {
       </button>
       <div class="mc-actions">
         <button class="mc-info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.5"/></svg><span>Details</span></button>
-        <a class="mc-taxi" href="${uber}" target="_blank" rel="noopener">${I.car}<span>Taxi${kmTag ? ' · ' + kmTag : ''}</span></a>
+        <a class="mc-taxi" href="${uber}" target="_blank" rel="noopener">${I.car}<span>Uber${kmTag ? ' · ' + kmTag : ''}</span></a>
       </div>
     </div>${chooser}`;
   card.classList.add('open');
   mapDom.classList.add('card-open');   // the venue sheet owns the bottom — hide the home pill
-  fetchDriveEta(e, card);              // "Taxi · 14 min" replaces the km reading when the route answers
+  fetchDriveEta(e, card);              // "Uber · 14 min" replaces the km reading when the route answers
   let sel = Math.max(0, preferKey
     ? group.entries.findIndex(x => x.key === preferKey)
     : group.entries.findIndex(x => !mapFilter || x.cat === mapFilter));
