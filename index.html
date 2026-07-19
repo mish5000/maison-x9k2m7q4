@@ -3615,8 +3615,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 07:26 CEST';
-const APP_BUILD = 'v101';
+const COLLECTION_UPDATED = '19 July 2026 · 07:42 CEST';
+const APP_BUILD = 'v107';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6728,6 +6728,10 @@ const SLIDE = {
 let pendingSlide = null;   // 'push' | 'pop' — set by the hashchange handler
 let chevronPop = false;    // goBack() marks its history.back() so the pop animates
 let sbActive = false;      // an interactive swipe-back drag is live (guards re-renders)
+let sbPreRendered = [];    // hashes committed swipe-backs ALREADY rendered synchronously —
+                           // their (late, on iOS ~300ms+) hashchange events are bookkeeping only
+let sbBackQueue = 0;       // back-traversals owed to the browser: a back() issued while one is
+                           // pending is silently DROPPED, so rapid flick-chains must queue them
 let mapReturning = null;   // 'The Ascent': the map home-pill return wants the recede+rise, not a cut
 
 /* THE ASCENT — the beautiful return from the map to the city's page: the map
@@ -7326,36 +7330,39 @@ if (STANDALONE) {
     const cleanup = () => {
       if (done) return; done = true;
       if (commit) {
-        // #app is empty; history.back() → renderRoute repaints the previous page
-        // (already-seen photos repaint solid → seamless). Then drop the layers.
-        // drop sweeps ALL gesture layers (not just this cycle's) — the recordings
-        // caught an orphan parked on glass for the length of the old 650ms
-        // fallback, so the fallback is tighter and the removal is total.
-        // drop runs ONCE (hashchange path cancels the fallback timer and vice
-        // versa). A fast re-rock can start a brand-new gesture inside the 350ms
-        // fallback window — the stale timer must never sweep that live cycle's
-        // layers or clobber its sbActive (fresh-review H1: doing so vanishes the
-        // sheet mid-drag in a jump-cut).
-        let dropTid = 0, dropped = false, dropTries = 0;
+        // SYNCHRONOUS LANDING. The old flow waited for history.back()'s
+        // hashchange to rebuild the destination — but iOS delivers that event
+        // ~300-600ms late, and every wait on it became a bug in turn: nav
+        // popping in late, the catchable invisible sheet, the scroll-position
+        // jerk, and rapid second flicks swallowed while sbActive guarded the
+        // gap (the Marbella snap-then-teleport recording). Render the
+        // destination NOW, in this task — scroll restored in the same paint —
+        // then let the late hashchange be pure history bookkeeping (the
+        // handler skips its render via sbPreRendered). The gesture engine
+        // reopens two frames later instead of ~half a second.
+        const dest = s.back || '#/';
+        SCROLL_MEM[lastRouteHash] = s.departing;
+        captureRails(lastRouteHash);
+        lastRouteHash = dest; appHash = dest;
+        curBack = null;
+        renderView(dest);
+        $shell.scrollTop = Math.min(SCROLL_MEM[dest] || 0, Math.max(0, $shell.scrollHeight - $shell.clientHeight));
+        restoreRails(dest);
+        wireFocusGlow();
+        sbPreRendered.push(dest);
+        sbBackQueue++;
+        if (sbBackQueue === 1) history.back();   // further backs chain from the hashchange handler
+        let dropped = false;
         const drop = () => {
-          if (dropped) return;
-          // NEVER reveal an unready page. On device, hashchange can lag
-          // ~300ms behind the visual commit and LOSE the race to this
-          // fallback — stripping the frozen layers then would flash the bare
-          // shell at scrollTop 0 and snap down when the route finally lands
-          // (the "forgot where I clicked" jerk). The back-render restores
-          // scroll in the same task it builds, so waiting for #app content
-          // guarantees the reveal is position-perfect. Hard-capped so a
-          // broken route can never strand the layers.
-          if (!$app.firstChild && dropTries++ < 8) { dropTid = setTimeout(drop, 120); return; }
-          dropped = true; clearTimeout(dropTid);
+          if (dropped) return; dropped = true;
           [s.layer, s.under, s.dim].forEach(el => el && el.remove());
           sweepStrays(g && g.started ? [g.layer, g.under, g.dim] : null);
           if (!(g && g.started)) sbActive = false;
         };
-        window.addEventListener('hashchange', () => requestAnimationFrame(() => requestAnimationFrame(drop)), { once: true });
-        dropTid = setTimeout(drop, 350);
-        history.back();
+        // the destination is ALREADY painted beneath the layers — two frames
+        // let it present, then the curtain lifts on a finished page
+        requestAnimationFrame(() => requestAnimationFrame(drop));
+        setTimeout(drop, 250);   // safety only
       } else {
         restoreCurrent(s);
         sbActive = false;
@@ -7446,12 +7453,25 @@ if (STANDALONE) {
       // phantom strip of the old page back across the screen. Finalize it
       // instantly and let this touch fall through as a fresh interaction.
       const w97 = h.s.w * 0.97;
-      if (h.commit ? h.x >= w97 : h.x <= h.s.w * 0.03) {
+      // Distinguish the user's two possible intentions for a touch during a
+      // COMMITTING settle: an EDGE touch means "next back gesture" (chain) —
+      // finalize this sheet and start fresh; a mid-screen touch means "catch
+      // and steer". Adopting edge touches let a rapid second flick steer the
+      // OLD sheet and re-commit the same landing (device 07:22: the second
+      // flick did nothing and the app appeared to teleport).
+      if (h.commit ? (h.x >= w97 || t.clientX <= EDGE) : (h.x <= h.s.w * 0.03)) {
         settling = null; cancelAnimationFrame(h.raf);
         h.s.layer.style.transform = `translateX(${h.commit ? h.s.w : 0}px)`;
         h.cleanup();
-        return;
-      }
+        // the landing is already rendered (synchronous commit), so clear the
+        // stage NOW: a rapid second flick from the edge must CHAIN into a
+        // fresh gesture on the landed page, never be eaten as a mere
+        // finalizer (device 07:22: eaten flick read as a snap-then-teleport).
+        sweepStrays();
+        sbActive = false;
+        if (t.clientX > EDGE) return;    // not an edge touch: a plain page tap/scroll
+        // edge touch: fall through to the fresh-gesture setup below
+      } else {
       settling = null; cancelAnimationFrame(h.raf);
       g = h.s;
       g.dx = h.x; g.x0 = t.clientX - h.x; g.vx = h.v / 1000;
@@ -7468,8 +7488,17 @@ if (STANDALONE) {
       addEventListener('click', eat, { capture: true, once: true });
       setTimeout(() => removeEventListener('click', eat, { capture: true }), 700);
       return;
+      }
     }
-    if (sbActive) return;
+    if (sbActive) {
+      // a committed landing is already live beneath the frozen layers, but the
+      // curtain-drop (2 frames after cleanup) hasn't fired yet. An EDGE touch
+      // in that sliver is the user's NEXT gesture — instrumentation showed a
+      // rapid second flick missing the reopened engine by ~30ms and being
+      // swallowed here. Clear the stage and chain; any other touch waits.
+      if (t.clientX <= EDGE && !g && !settling && $app.firstChild) { sweepStrays(); sbActive = false; }
+      else return;
+    }
     if (t.clientX > EDGE) return;
     if ($sheet.classList.contains('open') || mapIsOpen() || (typeof cgIsOpen === 'function' && cgIsOpen())) return;
     if (activeSlide) activeSlide();                // land an in-flight forward push so #app is whole again
@@ -7547,6 +7576,18 @@ window.addEventListener('hashchange', () => {
   if (dir === 'back') NAV_STACK.pop();
   else if (dir === 'fwd') NAV_STACK.push(location.hash || '#/');
   else NAV_STACK[NAV_STACK.length - 1] = location.hash || '#/';
+  // committed swipe-backs already rendered their destinations synchronously
+  // (see the gesture's commit path) — their late events are pure bookkeeping,
+  // and each consumed back-traversal releases the next queued one (a back()
+  // issued while a traversal is pending is silently dropped by the browser).
+  const curHash = location.hash || '#/';
+  if (dir === 'back' && sbBackQueue > 0) {
+    sbBackQueue--;
+    if (sbBackQueue > 0) history.back();
+  }
+  const preIdx = sbPreRendered.indexOf(curHash);
+  if (preIdx !== -1) { sbPreRendered.splice(preIdx, 1); return; }
+  sbPreRendered.length = 0;   // a foreign navigation invalidates pending skips
   // forward navs slide in from the right; a chevron-tap back mirrors it.
   // gesture/hardware back-pops stay unanimated (iOS's own slide owns those).
   // switching bottom tabs (root <-> root) is a lateral move, not a push.
