@@ -3724,8 +3724,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 17:43 CEST';
-const APP_BUILD = 'v174';
+const COLLECTION_UPDATED = '19 July 2026 · 17:46 CEST';
+const APP_BUILD = 'v177';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -8147,7 +8147,9 @@ function landOnPendingVenue() {
   mapFilter = key.split('|')[1];
   renderFilterRail(mapCityId);
   applyFilter();
-  LMAP.setView(g.ll, Math.max(BAND_NEAR + 0.6, LMAP.getZoom() || 0), { animate: false });
+  // district framing, not street level: the venue in its neighbourhood with
+  // the coast and its named neighbours in view (Mishari 17:37, example two)
+  LMAP.setView(g.ll, BAND_MID + 0.1, { animate: false });
   applyBands(false);
   selectPin(g.marker, g, key);
 }
