@@ -3724,8 +3724,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 17:32 CEST';
-const APP_BUILD = 'v168';
+const COLLECTION_UPDATED = '19 July 2026 · 17:43 CEST';
+const APP_BUILD = 'v174';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -8641,6 +8641,10 @@ function cgParse(q) {
   }
   return {
     cat, city,
+    vibe: cgParseVibe(t),
+    soph: /( sophisticated | elegant | refined | upscale | classy | chic | polished | tasteful | stylish )/.test(t),
+    days: cgParseDays(t),
+    slot: cgParseSlot(t),
     nearMe: /( near me | nearby | closest | nearest | around me | close to me | around here | here )/.test(t),
     tonight: /( tonight | playing | dj | djs | line ?up | who s on | this evening )/.test(t),
     best: /( best | top | finest | nicest | greatest | number one )/.test(t),
@@ -8667,6 +8671,57 @@ function cgParseWhen(t) {
   const time = tm ? (tm[1] + (tm[2] ? ':' + tm[2] : '') + tm[3]) : '';
   if (day && /^(mon|tue|wed|thu|fri|sat|sun)/.test(day)) day = 'on ' + day.charAt(0).toUpperCase() + day.slice(1);
   return [day, time].filter(Boolean).join(' at ').trim();
+}
+
+/* ---- the thinking layer: desire, days, hours --------------------------------
+   Desire polarity: +1 wants energy, -1 wants calm, 0 unstated. A negation or a
+   complaint ("the popular ones are always busy") reads as calm-seeking — the
+   word "busy" alone is NOT a wish for crowds (Mishari 17:32: his ask for
+   quiet sophistication was answered with the busiest room in town). */
+function cgParseVibe(t) {
+  const NEG_BUSY = /(not?(?: too| so| very)? |avoid(?:ing)? |without |away from |escape |skip |tired of |sick of |hate )(the )?(busy|crowds?|crowded|packed|noise|noisy|loud|scene|chaos)/;
+  const COMPLAINT_BUSY = /(are|is|get|gets|always|usually|too|so) (all )?(busy|crowded|packed|full|loud|rammed)/;
+  if (NEG_BUSY.test(t) || COMPLAINT_BUSY.test(t)) return -1;
+  if (/( quiet | quieter | chill | chilled | calm | calmer | relaxed | relaxing | low key | laid back | peaceful | tranquil | serene | discreet | hidden gem | intimate | mellow | unhurried | slow )/.test(t)) return -1;
+  if (/( busy | busiest | lively | buzzing | packed | happening | popping | energetic | wild | party | action | vibrant | electric | full of life | big night | where the energy )/.test(t)) return 1;
+  return 0;
+}
+const CG_DAYNAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const CG_DSHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+/* generic hospitality week rhythm layered over the hour curves — a typical
+   model, same "usually" honesty as the Pulse; weekends breathe harder */
+const CG_DAYLIFT = [1.08, 0.85, 0.9, 0.95, 1.0, 1.12, 1.2];
+function cgParseDays(t) {
+  if (/( every ?day | each day | all week | through the week | day by day | whole week | monday to sunday | rest of the week )/.test(t))
+    return [1, 2, 3, 4, 5, 6, 0];
+  const days = [];
+  CG_DAYNAMES.forEach((d, i) => { if (t.includes(' ' + d.toLowerCase())) days.push(i); });
+  return days;
+}
+/* which hours of the day they mean — returns { hours, phrase } or null */
+function cgParseSlot(t) {
+  if (/( during the day | daytime | day time | in the day | midday | lunch | lunchtime | afternoon )/.test(t)) return { hours: [13, 14, 15, 16], phrase: 'in the afternoon' };
+  if (/( morning | breakfast | brunch )/.test(t)) return { hours: [10, 11, 12], phrase: 'in the morning' };
+  if (/( sunset | golden hour | early evening | aperitivo )/.test(t)) return { hours: [18, 19, 20], phrase: 'at sunset' };
+  if (/( after midnight | late night | small hours | very late )/.test(t)) return { hours: [0, 1, 2], phrase: 'in the small hours' };
+  if (/( tonight | evening | night )/.test(t)) return { hours: [21, 22, 23], phrase: 'in the evening' };
+  return null;
+}
+/* open at a given weekday+hour, from the venue's real Google hours.
+   true / false / null (no data — treated as a maybe, softly penalised) */
+function cgOpenAt(key, jsDay, hour) {
+  const h = (typeof VENUE_HOURS !== 'undefined') && VENUE_HOURS[key];
+  if (!h || !h.p || !h.p.length) return null;
+  if (h.p[0][0] === -1) return true;
+  const WEEK = 7 * 1440;
+  const tMin = jsDay * 1440 + hour * 60;
+  for (const [od, om, cd, cm] of h.p) {
+    const start = od * 1440 + om;
+    let end = cd * 1440 + cm;
+    if (end <= start) end += WEEK;
+    for (const x of [tMin, tMin + WEEK]) if (x >= start && x < end) return true;
+  }
+  return false;
 }
 
 /* moods and cravings resolve through the venues' own tags */
@@ -8771,6 +8826,116 @@ function cgBooking(e, party, whenText) {
   };
 }
 
+/* ---- the planner: multi-constraint scoring over the whole collection.
+   Every venue is judged against EVERYTHING the member said at once —
+   desired energy (Pulse level at the target hours, weekday rhythm applied),
+   sophistication (standing = rating x log reviews), mood tags, and whether
+   the doors are actually open that day at that hour. Answers carry the
+   reasoning, and a day-list request returns one address per day. */
+function cgPlanAnswer(p, q, cityId, idx) {
+  if (!cityId) return { text: 'Name the city — or let me use your location — and I\'ll think it through properly.' };
+  cgCity = cityId;
+  const pool = idx[cityId].entries.filter(e => !p.cat || e.cat === p.cat);
+  if (!pool.length) return { text: `${idx[cityId].name} carries nothing of that kind yet.` };
+  const catLabel = p.cat ? ((CATEGORIES.find(c => c.id === displayCat(p.cat)) || {}).label || p.cat).toLowerCase() : 'rooms';
+  const slot = p.slot || (p.cat === 'beach' || p.cat === 'pools' ? { hours: [13, 14, 15, 16], phrase: 'in the afternoon' }
+    : p.cat === 'nightclubs' ? { hours: [22, 23, 0], phrase: 'at night' }
+    : { hours: [20, 21, 22], phrase: 'in the evening' });
+  const wantQuiet = p.vibe < 0, wantBusy = p.vibe > 0;
+  const maxStanding = Math.max(...pool.map(e => cgStanding(e.v)), 1);
+  // the venues' own tags know their temperament — the rhythm curves can't
+  // tell a scene arena from a daybed hideout, the curation can
+  const LOUD = ['party', 'dj', 'djs', 'white party', 'the scene', 'pool parties', 'live music', 'show', 'arena', 'cabaret', 'dancefloor', 'club night'];
+  const CALM = ['daybeds', 'hidden', 'bohemian', 'adults only', 'barefoot', 'intimate', 'garden', 'wellness', 'lakeside', 'library', 'salon', 'hideaway', 'sanctuary'];
+  const temperament = (e) => {
+    const tags = [...(((typeof VENUE_TAGS !== 'undefined') && VENUE_TAGS[e.key]) || []), ...((e.v.t) || [])]
+      .map(x => x.toLowerCase());
+    const loud = tags.some(t => LOUD.some(w => t.includes(w)));
+    const calm = tags.some(t => CALM.some(w => t.includes(w)));
+    return loud && !calm ? 1 : calm && !loud ? -1 : 0;
+  };
+
+  const judge = (e, jsDay) => {
+    const opens = slot.hours.map(h => cgOpenAt(e.key, jsDay, h));
+    if (opens.every(o => o === false)) return null;              // dark that day
+    const openHours = slot.hours.filter((h, i) => opens[i] !== false);
+    // UNCLAMPED mean over the slot, straight from the model's parts:
+    // busyEstimate clamps to 1.0, and at peak hours every room pins there —
+    // the quiet-fit went flat and flagships won again. The raw value keeps
+    // the loud rooms distinguishable above the ceiling.
+    const standingV = cgStanding(e.v);
+    const nudge = 0.82 + 0.22 * Math.max(0, Math.min(1, (standingV - 8) / 10));
+    const jit = (keyJitter(e.key) - 0.62) * 0.16;
+    const curve = CAT_RHYTHM[e.cat];
+    let raw = 0, nH = 0;
+    for (const h of openHours) {
+      const base = curve ? curve[((h % 24) + 24) % 24] : 0;
+      if (base > 0) { raw += base * nudge + jit; nH++; }
+    }
+    if (!nH || raw <= 0) return null;  // the room doesn't breathe at those
+                                       // hours — a dead pool at midnight is
+                                       // not a "quiet" find
+    raw = (raw / nH) * CG_DAYLIFT[jsDay];
+    const lvl = Math.max(0, Math.min(1, raw));
+    const vibeFit = wantQuiet ? (1 - raw) : wantBusy ? Math.min(raw, 1.15) : 0.5;
+    const tags = [...(((typeof VENUE_TAGS !== 'undefined') && VENUE_TAGS[e.key]) || []), ...((e.v.t) || [])];
+    const tagFit = p.moodTags.length
+      ? (tags.some(tag => p.moodTags.some(m => tag.toLowerCase().includes(m.toLowerCase()))) ? 1 : 0) : 0;
+    const standing = cgStanding(e.v) / maxStanding;
+    // desire sets the balance of power: a calm-seeker must NOT be handed the
+    // loudest flagship because its rating outweighs the noise (first-cut bug:
+    // "quiet sophisticated" returned Trocadero at full tilt)
+    const wV = wantQuiet ? 2.4 : wantBusy ? 1.6 : 0.6;
+    const wS = wantQuiet ? (p.soph ? 0.55 : 0.3) : (p.soph ? 1.2 : 0.7);
+    const temp = temperament(e);
+    const tempFit = wantQuiet ? -temp * 0.7 : wantBusy ? temp * 0.5 : 0;
+    const unknownHours = opens.every(o => o === null) ? 0.88 : 1;  // no hours on file: soft penalty
+    const label = (BUSY_BANDS.find(b => lvl >= b[0]) || BUSY_BANDS[BUSY_BANDS.length - 1])[1];
+    return { score: (vibeFit * wV + standing * wS + tagFit * 0.9 + tempFit) * unknownHours, lvl, label };
+  };
+
+  // ---- a day-list request: one address per day, doors and rhythm respected
+  if (p.days.length >= 2) {
+    const used = new Set(), picks = [];
+    for (const d of p.days) {
+      const ranked = pool.map(e => ({ e, j: judge(e, d) })).filter(x => x.j)
+        .sort((a, b) => b.j.score - a.j.score);
+      const pick = ranked.find(x => !used.has(x.e.key)) || ranked[0];
+      if (pick) { used.add(pick.e.key); picks.push({ d, ...pick }); }
+    }
+    if (!picks.length) return { text: `${idx[cityId].name} sleeps through those days — nothing verified open.` };
+    const venues = [], notes = [];
+    for (const pk of picks) {
+      const at = venues.indexOf(pk.e);
+      if (at >= 0) { notes[at] = notes[at].replace(/ ·.*$/, '') + ' + ' + CG_DSHORT[pk.d] + notes[at].slice(notes[at].indexOf(' ·')); continue; }
+      venues.push(pk.e);
+      notes.push(`${CG_DSHORT[pk.d]} · ${pk.j.label.toLowerCase()} ${slot.phrase}`);
+    }
+    const tone = wantQuiet ? 'the crowd magnets sit out the loud days' : wantBusy ? 'each day points at the loudest sand' : 'each day gets the room at its best';
+    return {
+      text: `Thought through, not thrown together — ${p.days.length} days of ${p.soph ? 'polished ' : ''}${catLabel} ${slot.phrase}, ${tone}. Your week:`,
+      venues, notes,
+    };
+  }
+
+  // ---- single ask with a desired energy or polish: today's read, explained
+  const today = new Date(Date.now() + 120 * 60000).getUTCDay();
+  const ranked = pool.map(e => ({ e, j: judge(e, today) })).filter(x => x.j)
+    .sort((a, b) => b.j.score - a.j.score).slice(0, 3);
+  if (!ranked.length) return { text: `Nothing verified open in ${idx[cityId].name} ${slot.phrase} today. Ask me for another hour — or another day.` };
+  const lead = ranked[0];
+  // never promise hush the model can't deliver: if even the calmest pick
+  // runs hot, the copy owns it instead of contradicting the note beneath
+  const text = wantQuiet
+    ? (lead.j.lvl >= 0.6
+      ? `Truly quiet doesn't exist ${slot.phrase} in ${idx[cityId].name} — but these run calmest, ${lead.e.v.n} first.`
+      : `Away from the crowds — ${lead.e.v.n} tends to stay ${lead.j.label.toLowerCase().replace('usually ', '')} ${slot.phrase}${ranked[1] ? `; ${ranked[1].e.v.n} is the fallback if it fills` : ''}.`)
+    : wantBusy
+      ? `For the energy — ${lead.e.v.n} runs ${lead.j.label.toLowerCase()} ${slot.phrase}${ranked[1] ? `, ${ranked[1].e.v.n} close behind` : ''}.`
+      : `The polished picks ${slot.phrase} — led by ${lead.e.v.n}.`;
+  return { text, venues: ranked.map(x => x.e), notes: ranked.map(x => `${x.j.label} ${slot.phrase}`) };
+}
+
 async function cgAnswer(q) {
   const p = cgParse(q);
   const idx = buildCityIndex();
@@ -8820,7 +8985,8 @@ async function cgAnswer(q) {
 
   // ---- venue lookup: they named a house (word-boundary + distinctive tokens,
   // so "Milan" never matches MILA and "Cipriani" finds Cipriani Downtown)
-  const structural = !!(p.cat || p.nearMe || p.tonight || p.busy || p.openNow || p.best || p.moodTags.length);
+  const structural = !!(p.cat || p.nearMe || p.tonight || p.busy || p.openNow || p.best || p.moodTags.length
+    || p.vibe !== 0 || p.soph || p.days.length >= 2);
   if (!p.city) {
     const t = cgNorm(q);
     const GENERIC = new Set(['beach', 'club', 'clubs', 'the', 'bar', 'grill', 'del', 'de', 'la', 'le', 'el', 'les', 'los', 'by', 'san', 'villa', 'casa', 'hotel', 'restaurant', 'rooftop', 'lounge', 'house', 'room', 'best', 'about', 'tell', 'what', 'where', 'cocktail', 'cocktails', 'night', 'nightclub', 'pool', 'pools', 'plage', 'playa', 'wine', 'sushi', 'steak', 'tables', 'dinner', 'garden', 'terrace']);
@@ -8853,6 +9019,12 @@ async function cgAnswer(q) {
         venues: [hit.e], notes: [openNote],
       };
     }
+  }
+
+  // ---- the planner: any ask carrying a desired energy, polish, or a list
+  // of days gets the full constraint read — never the keyword shortcuts
+  if (p.days.length >= 2 || p.vibe !== 0 || p.soph) {
+    return cgPlanAnswer(p, q, cityId, idx);
   }
 
   // ---- open now
