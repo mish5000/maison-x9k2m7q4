@@ -3698,8 +3698,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 16:15 CEST';
-const APP_BUILD = 'v154';
+const COLLECTION_UPDATED = '19 July 2026 · 17:05 CEST';
+const APP_BUILD = 'v157';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5902,7 +5902,9 @@ function venueCard(city, catId, v, idx) {
       : (hasOpenTable(city, catId)
         ? `<a class="iconbtn" href="${otUrl(v, city)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Book on OpenTable">${I.opentable}</a>`
         : ''));
-  const map = `<a class="iconbtn" href="${mapsUrl(v, city, key)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Directions">${I.pin}</a>`;
+  // the pin opens OUR cartography on this venue (drive time on the card
+  // there) — the external Google Maps hop lives on in the sheet's address row
+  const map = `<button type="button" class="iconbtn" onclick="event.stopPropagation();openMapAtVenue('${city.id}','${catId}',${idx})" aria-label="Show on the map">${I.pin}</button>`;
   const uber = `<a class="iconbtn" href="${uberUrl(v, city, key)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Uber">${I.car}</a>`;
 
   const dj = catId === 'nightclubs' ? djTonight(key) : null;
@@ -8083,13 +8085,37 @@ function applyFilter() {
 }
 
 let selectedPin = null;
-function selectPin(marker, group) {
+function selectPin(marker, group, preferKey) {
   if (selectedPin) selectedPin.classList.remove('sel');
   const el = marker.getElement()?.querySelector('.vpin');
   if (el) { el.classList.add('sel'); selectedPin = el; }
   const target = LMAP.project(marker.getLatLng(), LMAP.getZoom()).subtract([0, LMAP.getSize().y * 0.12]);
   LMAP.panTo(LMAP.unproject(target, LMAP.getZoom()), { animate: true, duration: 0.45, easeLinearity: 0.25 });
-  showMapCard(group);
+  showMapCard(group, preferKey);
+}
+
+/* Card pin → OUR cartography: open the map landed on this exact venue —
+   seal selected, card up, drive time loading (replaces the external
+   Google Maps pin on venue cards, Mishari 16:58). */
+let pendingVenueKey = null;
+function openMapAtVenue(cityId, part, idx) {
+  pendingVenueKey = vkey(cityId, part, idx);
+  if (mapDom && mapDom.classList.contains('open') && mapCityId === cityId) {
+    landOnPendingVenue();                    // already on this city's map: no hashchange will fire
+  } else {
+    location.hash = '#/map/' + cityId;       // history entry — back returns to the list you left
+  }
+}
+function landOnPendingVenue() {
+  if (!pendingVenueKey || !LMAP || !mapGroups) return;
+  const key = pendingVenueKey;
+  pendingVenueKey = null;
+  const g = mapGroups.find(gr => gr.entries.some(e => e.key === key));
+  if (!g) return;
+  ++diveToken;                               // cancel the city-frame flight mid-air
+  LMAP.setView(g.ll, Math.max(BAND_NEAR + 0.6, LMAP.getZoom() || 0), { animate: false });
+  applyBands(false);
+  selectPin(g.marker, g, key);
 }
 
 /* ---------- clustering: crowded seals gather into one ---------- */
@@ -8238,10 +8264,46 @@ function stopGeo() {
   if (geoWatch !== null) { navigator.geolocation.clearWatch(geoWatch); geoWatch = null; }
 }
 
+/* Drive time from the member's position — OSRM's public router: free,
+   keyless, CORS-open, so it lives within the house laws (no API keys, no
+   accounts, no backend). Model: real road routing, not straight-line. If
+   the router is slow, down, or we're offline, the km reading simply stays. */
+const DRIVE_ETA = Object.create(null);       // "key@~1km-position" -> "14 min"
+function geoNow() {
+  if (meMarker) { const m = meMarker.getLatLng(); return { la: m.lat, lo: m.lng }; }
+  try {
+    const c = JSON.parse(localStorage.getItem(GEO_KEY) || 'null');
+    if (c && Date.now() - c.t < 6 * 3600 * 1000) return { la: c.la, lo: c.lo };
+  } catch (_) {}
+  return null;
+}
+function fetchDriveEta(e, card) {
+  const me = geoNow();
+  if (!me) return;
+  if (mapHaversine(me.la, me.lo, e.ll[0], e.ll[1]) > 250) return;   // another continent — minutes are meaningless
+  const ck = e.key + '@' + me.la.toFixed(2) + ',' + me.lo.toFixed(2);
+  const put = (txt) => {
+    const s = card.querySelector(`.mapcard[data-key="${e.key}"] .mc-taxi span`);
+    if (s) s.textContent = 'Taxi · ' + txt;   // key-guarded: never lands on another venue's card
+  };
+  if (DRIVE_ETA[ck]) { put(DRIVE_ETA[ck]); return; }
+  fetch(`https://router.project-osrm.org/route/v1/driving/${me.lo},${me.la};${e.ll[1]},${e.ll[0]}?overview=false`)
+    .then(r => (r.ok ? r.json() : null))
+    .then(j => {
+      const sec = j && j.code === 'Ok' && j.routes && j.routes[0] && j.routes[0].duration;
+      if (!sec) return;
+      const min = Math.max(1, Math.round(sec / 60));
+      const txt = min < 60 ? `${min} min` : `${Math.floor(min / 60)} h ${String(min % 60).padStart(2, '0')}`;
+      DRIVE_ETA[ck] = txt;
+      put(txt);
+    })
+    .catch(() => {});
+}
+
 /* ---------- mini-card ---------- */
-function showMapCard(group) {
+function showMapCard(group, preferKey) {
   const card = mapDom.querySelector('#mapcard');
-  const e = group.entries[0];
+  const e = (preferKey && group.entries.find(x => x.key === preferKey)) || group.entries[0];
   const img = venueImg(e.city, e.cat, e.idx, e.v);
   const cat = CATEGORIES.find(c => c.id === displayCat(e.cat));
   const dj = e.cat === 'nightclubs' ? djTonight(e.key) : null;
@@ -8277,7 +8339,10 @@ function showMapCard(group) {
     </div>${chooser}`;
   card.classList.add('open');
   mapDom.classList.add('card-open');   // the venue sheet owns the bottom — hide the home pill
-  let sel = Math.max(0, group.entries.findIndex(x => !mapFilter || x.cat === mapFilter));
+  fetchDriveEta(e, card);              // "Taxi · 14 min" replaces the km reading when the route answers
+  let sel = Math.max(0, preferKey
+    ? group.entries.findIndex(x => x.key === preferKey)
+    : group.entries.findIndex(x => !mapFilter || x.cat === mapFilter));
   card.querySelectorAll('.mc-choose button').forEach(b => b.addEventListener('click', (ev) => {
     ev.stopPropagation();
     sel = +b.dataset.i;
@@ -8470,6 +8535,8 @@ function openMapView(cityId) {
     // resuming a previous session's camera — just repaint bands
     applyBands(false);
   }
+  // a card pin queued an exact venue: land on it once the city's pins exist
+  if (pendingVenueKey) setTimeout(landOnPendingVenue, 40);
   startGeo(false);
 }
 
