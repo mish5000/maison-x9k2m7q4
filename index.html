@@ -3698,8 +3698,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 16:12 CEST';
-const APP_BUILD = 'v151';
+const COLLECTION_UPDATED = '19 July 2026 · 16:15 CEST';
+const APP_BUILD = 'v154';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5437,7 +5437,9 @@ function busyChip(est) {
   return `<span class="busy${hot}"><span class="bm">${meter}</span>${est.label}</span>`;
 }
 
-/* Mon-first day strip: bright letters = open that day. */
+/* Mon-first day strip — OPEN days only; the greyed closed letters were
+   noise (Mishari 16:07, COYA: show W T F S, drop the rest). A seven-day
+   room reads "Daily" instead of a full row of letters. */
 function hoursLine(key) {
   const h = (typeof VENUE_HOURS !== 'undefined') && VENUE_HOURS[key];
   if (!h) return '';
@@ -5447,8 +5449,10 @@ function hoursLine(key) {
   const openDays = new Set();
   if (h.p && h.p.length && h.p[0][0] === -1) LETTERS.forEach((_, i) => openDays.add(i));
   else (h.p || []).forEach(([d]) => openDays.add((d + 6) % 7)); // Places: 0=Sun → Mon-first
-  const strip = `<span class="days">${LETTERS.map((l, i) =>
-    `<i class="${openDays.has(i) ? 'on' : ''}">${l}</i>`).join('')}</span>`;
+  const strip = openDays.size === 7
+    ? `<span class="days"><i class="on">Daily</i></span>`
+    : `<span class="days">${LETTERS.map((l, i) =>
+        openDays.has(i) ? `<i class="on">${l}</i>` : '').join('')}</span>`;
   let badge = '';
   if (st) badge = st.open
     ? `<span class="ob on">Open${st.always ? '' : ' · until ' + st.until}</span>`
