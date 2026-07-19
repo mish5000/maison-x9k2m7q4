@@ -1546,7 +1546,19 @@ body {
 
 .vcard .body .area, .vcard .body .blurb, .vcard .body .stars,
 .vcard .body .grating, .vcard .body .hours-line { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65); }
-.vcard .area { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-bright); margin-bottom: 8px; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 2px 12px rgba(0, 0, 0, 0.6); }
+.vcard .area {
+  /* the small gold line was invisible over bright photos (Mishari 14:09,
+     Pangea) — give it the same smoked ribbon the name wears, so legibility
+     never depends on what the photo happens to be underneath */
+  display: inline-block;
+  font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: #f4dfa8; margin-bottom: 8px;
+  background: rgba(12, 10, 7, 0.55);
+  border-radius: 8px;
+  padding: 3px 9px;
+  margin-left: -9px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 2px 12px rgba(0, 0, 0, 0.6);
+}
 .vcard .name {
   font-family: var(--serif);
   font-size: 31px;
@@ -1659,6 +1671,9 @@ body {
   box-shadow: 0 -14px 70px rgba(0, 0, 0, 0.75), 0 0 34px rgba(200, 162, 75, 0.16);
 }
 #sheet.dragging { transition: none; }
+/* native back-pop close: the page underneath is already re-rendered, so the
+   zoom-down must not play over it (ghost sheet lingering after the swipe) */
+#sheet.instant, #sheet-backdrop.instant { transition: none !important; }
 .sheet-grab {
   position: absolute;
   top: 0;
@@ -2524,11 +2539,22 @@ body {
 .smonth .bg {
   position: absolute; inset: 0; z-index: -1;
   background-size: cover; background-position: center;
-  opacity: 0.72; filter: saturate(1.08) contrast(1.02);
+  /* same lift the season event cards got (Mishari 14:07: grid "very dark") —
+     photo near-full strength, veil bottom-weighted instead of a flat smoke */
+  opacity: 0.96; filter: saturate(1.16) brightness(1.12) contrast(1.02);
 }
 .smonth::after {
   content: ''; position: absolute; inset: 0; z-index: -1;
-  background: linear-gradient(180deg, rgba(11,10,8,0.22), rgba(11,10,8,0.84));
+  background: linear-gradient(180deg, rgba(11,10,8,0.06) 0%, rgba(11,10,8,0.24) 48%, rgba(11,10,8,0.6) 100%);
+}
+/* text stays crisp over the now-bright photo — static shadows only (paint law) */
+.smonth .mname { text-shadow: 0 2px 16px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.7); }
+.smonth .mteaser { color: rgba(248, 244, 236, 0.92); text-shadow: 0 1px 3px rgba(0,0,0,0.85), 0 2px 10px rgba(0,0,0,0.7); }
+.smonth .mnow { text-shadow: 0 1px 3px rgba(0,0,0,0.85); }
+/* a quiet gold ring lifts each month off the black, without the full event halo */
+.smonth {
+  border-color: rgba(232, 201, 128, 0.3);
+  box-shadow: 0 0 14px rgba(232, 201, 128, 0.12), 0 10px 26px rgba(0, 0, 0, 0.45);
 }
 
 /* home back button — returns through navigation history */
@@ -3618,8 +3644,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 14:15 CEST';
-const APP_BUILD = 'v128';
+const COLLECTION_UPDATED = '19 July 2026 · 14:24 CEST';
+const APP_BUILD = 'v130';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6169,8 +6195,19 @@ function openSheet(cityId, catId, idx) {
   requestAnimationFrame(() => requestAnimationFrame(() => $sheet.classList.add('open')));
 }
 
-function closeSheet() {
-  bb('sheetC');
+function closeSheet(instant) {
+  bb('sheetC' + (instant ? '-i' : ''));
+  if (instant) {
+    /* Native back-pop with the sheet open: iOS has already slid the page away,
+       so the 0.5s zoom-down close played OVER the incoming instant render as a
+       lingering ghost (Mishari 14:14). Kill the transition for this close only;
+       restore it next frame so ✕ / flick / backdrop closes stay animated. */
+    $sheet.classList.add('instant'); $backdrop.classList.add('instant');
+    $backdrop.classList.remove('open'); $sheet.classList.remove('open');
+    void $sheet.offsetHeight;                     // commit the no-transition state now
+    requestAnimationFrame(() => { $sheet.classList.remove('instant'); $backdrop.classList.remove('instant'); });
+    return;
+  }
   $backdrop.classList.remove('open');
   $sheet.classList.remove('open');
 }
@@ -7028,7 +7065,7 @@ function renderRoute(soft = false, dir = 'fwd') {
     SCROLL_MEM[lastRouteHash] = departingScroll;   // remember where we left this page
     lastRouteHash = h;
   }
-  if (!soft) closeSheet();
+  if (!soft) closeSheet(true);   // hard render = the page is changing NOW; an animated close would ghost over it
   const y = soft ? $shell.scrollTop : 0;
 
   curBack = null;                         // topbar() re-sets it; home leaves it null
