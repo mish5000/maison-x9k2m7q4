@@ -1,21 +1,8 @@
 {
- "generated": "2026-07-18T03:16:03Z",
+ "generated": "2026-07-19T03:13:00Z",
  "venues": {
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-07-17": {
-     "hl": "Dom Dolla",
-     "line": [
-      "Dom Dolla",
-      "Interplanetary Criminal",
-      "Ewan McVicar",
-      "Bradley Zero"
-     ],
-     "party": "",
-     "doors": "23:30",
-     "src": "hiibiza.com",
-     "conf": "high"
-    },
     "2026-07-18": {
      "hl": "Black Coffee",
      "line": [
@@ -34,103 +21,91 @@
     "2026-07-19": {
      "hl": "CamelPhat",
      "line": [
-      "CamelPhat",
       "Tiga",
       "Volkoder",
-      "Indira Paganotto",
-      "Biia"
+      "Indira Paganotto"
      ],
-     "party": "CamelPhat presents Summer Of Love",
+     "party": "Summer of Love",
      "doors": "23:30",
-     "src": "ibiza-spotlight.com",
+     "src": "hiibiza.com",
      "conf": "high"
     },
     "2026-07-20": {
-     "hl": "Francis Mercier",
+     "hl": "Francis Mercier B2B Kasango",
      "line": [
-      "Francis Mercier B2B Kasanga",
       "Francis Mercier B2B Marten Lou",
       "Mambo Brothers",
       "Andrea Oliva",
       "Alex Wann"
      ],
-     "party": "Francis Mercier presents Solèy",
+     "party": "Solèy",
      "doors": "23:30",
-     "src": "ibiza-spotlight.com",
+     "src": "hiibiza.com",
      "conf": "high"
     },
     "2026-07-21": {
      "hl": "East End Dubs",
      "line": [
-      "East End Dubs",
       "Toman B2B Jay de Lys",
-      "Di Chiara Brothers",
-      "Joëlla Jackson",
-      "Paco Osuna"
+      "Paco Osuna",
+      "Di Chiara Brothers"
      ],
-     "party": "East End Dubs presents Eastenderz",
+     "party": "Eastenderz",
      "doors": "23:30",
-     "src": "ibiza-spotlight.com",
+     "src": "hiibiza.com",
      "conf": "high"
     },
     "2026-07-22": {
      "hl": "MEDUZA & James Hype",
      "line": [
-      "MEDUZA",
-      "James Hype",
       "The Blessed Madonna",
-      "Syreeta",
       "Helena Hauff",
-      "Adiel B2B Quest",
-      "Binh"
+      "SYREETA"
      ],
-     "party": "MEDUZA & James Hype present Our House",
+     "party": "Our House",
      "doors": "23:30",
-     "src": "ibiza-spotlight.com",
+     "src": "hiibiza.com",
      "conf": "high"
     },
     "2026-07-23": {
-     "hl": "HUGEL",
+     "hl": "HUGEL B2B MoBlack",
      "line": [
-      "HUGEL B2B MoBlack",
-      "MoBlack",
-      "Kurd Maverick",
       "Miss Monique",
-      "Pete Tong"
+      "Pete Tong",
+      "Kurd Maverick"
      ],
-     "party": "HUGEL presents Make The Girls Dance",
+     "party": "Make The Girls Dance",
      "doors": "23:30",
-     "src": "ibiza-spotlight.com",
+     "src": "hiibiza.com",
      "conf": "high"
     },
     "2026-07-24": {
      "hl": "Dom Dolla",
      "line": [
-      "Dom Dolla",
       "Boys Noize B2B Busy P",
-      "Azzecca",
       "Ewan McVicar",
       "Dan Shake"
      ],
-     "party": "Dom Dolla",
+     "party": "",
      "doors": "23:30",
-     "src": "ibiza-spotlight.com",
+     "src": "hiibiza.com",
+     "conf": "high"
+    },
+    "2026-07-25": {
+     "hl": "Black Coffee",
+     "line": [
+      "Shimza",
+      "Skepta (DJ set)"
+     ],
+     "party": "",
+     "doors": "23:30",
+     "src": "hiibiza.com",
      "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-07-17": {
-     "hl": "Calvin Harris",
-     "line": [
-      "Calvin Harris"
-     ],
-     "party": "",
-     "doors": "",
-     "src": "ticketsibiza.com",
-     "conf": "med"
-    },
     "2026-07-18": {
      "hl": "The Martinez Brothers",
      "line": [
@@ -148,11 +123,10 @@
     "2026-07-19": {
      "hl": "Swedish House Mafia",
      "line": [
-      "Swedish House Mafia",
       "Bea Sylvan",
       "Nosefine"
      ],
-     "party": "Swedish House Mafia",
+     "party": "",
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
@@ -160,12 +134,10 @@
     "2026-07-20": {
      "hl": "David Guetta",
      "line": [
-      "David Guetta",
       "Disco Lines",
-      "Ian Asher",
-      "Paul Reynolds"
+      "Ian Asher"
      ],
-     "party": "F*** ME I'M FAMOUS!",
+     "party": "F*** Me I'm Famous!",
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
@@ -173,24 +145,23 @@
     "2026-07-21": {
      "hl": "Calvin Harris",
      "line": [
-      "Calvin Harris",
       "Disciples",
-      "Tyson O'Brien"
+      "Tyson O’Brien"
      ],
-     "party": "Calvin Harris",
+     "party": "",
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
     },
     "2026-07-22": {
-     "hl": "AAT",
+     "hl": "elrow Outdoors",
      "line": [
-      "AAT",
-      "De La Swing",
       "Marco Faraone",
-      "Wade"
+      "Wade",
+      "De La Swing",
+      "AAT"
      ],
-     "party": "elrow Outdoors | Bhūtarāh",
+     "party": "Bhūtarāh",
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
@@ -198,12 +169,10 @@
     "2026-07-23": {
      "hl": "Martin Garrix",
      "line": [
-      "Martin Garrix",
-      "Sofi Tukker",
-      "Matt Sassari",
-      "Telykast"
+      "SOFI TUKKER",
+      "Matt Sassari"
      ],
-     "party": "Martin Garrix",
+     "party": "",
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
@@ -211,12 +180,20 @@
     "2026-07-24": {
      "hl": "Calvin Harris",
      "line": [
-      "Calvin Harris",
       "MK",
-      "Airwolf Paradise",
-      "Tyson O'Brien"
+      "Airwolf Paradise"
      ],
-     "party": "Calvin Harris | Friday",
+     "party": "",
+     "doors": "17:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-07-25": {
+     "hl": "ANTS: Archie Hamilton",
+     "line": [
+      "Obskür"
+     ],
+     "party": "ANTS",
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
@@ -225,16 +202,6 @@
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-07-17": {
-     "hl": "Marco Carola",
-     "line": [
-      "Marco Carola"
-     ],
-     "party": "Music On",
-     "doors": "",
-     "src": "ticketsibiza.com",
-     "conf": "high"
-    },
     "2026-07-18": {
      "hl": "Roger Sanchez",
      "line": [
@@ -251,7 +218,6 @@
     "2026-07-19": {
      "hl": "Solomun",
      "line": [
-      "Solomun",
       "Peggy Gou"
      ],
      "party": "Solomun +1",
@@ -262,12 +228,10 @@
     "2026-07-20": {
      "hl": "Sonny Fodera",
      "line": [
-      "Sonny Fodera",
       "Dombresky",
-      "Danny Howard",
-      "Laeet"
+      "Danny Howard"
      ],
-     "party": "Sonny Fodera",
+     "party": "",
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
@@ -275,10 +239,9 @@
     "2026-07-21": {
      "hl": "RÜFÜS DU SOL (DJ set)",
      "line": [
-      "RÜFÜS DU SOL (DJ set)",
       "Jimi Jules"
      ],
-     "party": "RÜFÜS DU SOL",
+     "party": "",
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
@@ -286,13 +249,9 @@
     "2026-07-22": {
      "hl": "BLOND:ISH",
      "line": [
-      "BLOND:ISH",
-      "Vintage Culture",
-      "Maloné",
-      "Morenz",
-      "Apache"
+      "Vintage Culture"
      ],
-     "party": "BLOND:ISH presents Abracadabra",
+     "party": "Abracadabra",
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
@@ -300,10 +259,7 @@
     "2026-07-23": {
      "hl": "Purple Disco Machine",
      "line": [
-      "Purple Disco Machine",
-      "LP Giobbi",
-      "Midnight Generation",
-      "David Bay"
+      "LP Giobbi"
      ],
      "party": "Pure Pacha",
      "doors": "23:00",
@@ -313,12 +269,20 @@
     "2026-07-24": {
      "hl": "Marco Carola",
      "line": [
-      "Marco Carola",
       "PAWSA",
-      "Franky Rizardo",
-      "Joey Daniel"
+      "Franky Rizardo"
      ],
      "party": "Music On",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-07-25": {
+     "hl": "Roger Sanchez",
+     "line": [
+      "Sarah Story"
+     ],
+     "party": "Flower Power",
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
@@ -327,20 +291,6 @@
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-07-17": {
-     "hl": "Louie Vega & Anané",
-     "line": [
-      "Louie Vega",
-      "Anané",
-      "O'Flynn",
-      "Alan Dixon",
-      "Heidi Lawden"
-     ],
-     "party": "Rememberland",
-     "doors": "19:00",
-     "src": "tryibiza.com",
-     "conf": "high"
-    },
     "2026-07-18": {
      "hl": "Khea",
      "line": [
@@ -354,53 +304,45 @@
     "2026-07-19": {
      "hl": "Sven Väth",
      "line": [
-      "Sven Väth",
       "Richie Hawtin",
       "Nina Kraviz",
       "Len Faki"
      ],
-     "party": "Sven Väth presents Cocoon",
+     "party": "Cocoon",
      "doors": "23:00",
-     "src": "ibiza-spotlight.com",
+     "src": "amnesia.es",
      "conf": "high"
     },
     "2026-07-20": {
-     "hl": "Kettama",
+     "hl": "KETTAMA",
      "line": [
-      "Kettama",
       "Partiboi69",
-      "Juicy Romance",
-      "Menna"
+      "Juicy Romance"
      ],
-     "party": "Kettama presents Steel City",
+     "party": "Steel City",
      "doors": "23:30",
-     "src": "ibiza-spotlight.com",
+     "src": "amnesia.es",
      "conf": "high"
     },
     "2026-07-21": {
-     "hl": "Joseph Capriati",
+     "hl": "Joseph Capriati B2B Max Dean",
      "line": [
-      "Joseph Capriati B2B Max Dean",
       "Patrick Topping",
-      "Salomé Le Chat",
-      "Us Two"
+      "Salomé Le Chat"
      ],
-     "party": "Joseph Capriati presents Metamorfosi",
+     "party": "Metamorfosi",
      "doors": "23:00",
-     "src": "ibiza-spotlight.com",
+     "src": "amnesia.es",
      "conf": "high"
     },
     "2026-07-22": {
-     "hl": "Adam Beyer",
+     "hl": "Adam Beyer + Boris Brejcha",
      "line": [
-      "Adam Beyer",
-      "Boris Brejcha",
-      "Massano",
       "HI-LO",
       "Eli Brown",
-      "Space 92 x Popof present Turbulences"
+      "Massano"
      ],
-     "party": "RESISTANCE Ibiza Opening Party",
+     "party": "RESISTANCE Opening",
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
@@ -408,26 +350,29 @@
     "2026-07-23": {
      "hl": "Josh Baker",
      "line": [
-      "Josh Baker",
-      "Kolter B2B Sidney Charles",
-      "jWave"
+      "Kolter B2B Sidney Charles"
      ],
-     "party": "Josh Baker presents You&Me",
+     "party": "You&Me",
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
     },
     "2026-07-24": {
-     "hl": "Grace Jones (live PA)",
+     "hl": "Armand Van Helden",
      "line": [
-      "Armand Van Helden",
-      "Grace Jones (live PA)",
-      "The Shapeshifters",
-      "DJ Holographic",
+      "Grace Jones (live)",
       "Horse Meat Disco",
-      "Natasha Diggs"
+      "The Shapeshifters"
      ],
      "party": "Glitterbox",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-07-25": {
+     "hl": "BRESH",
+     "line": [],
+     "party": "BRESH Ibiza",
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
@@ -436,16 +381,6 @@
   },
   "marbella|nightclubs|0": {
    "nights": {
-    "2026-07-17": {
-     "hl": "HUGEL",
-     "line": [
-      "HUGEL"
-     ],
-     "party": "",
-     "doors": "23:00",
-     "src": "mandalatickets.com",
-     "conf": "high"
-    },
     "2026-07-18": {
      "hl": "Hot Since 82",
      "line": [
@@ -458,63 +393,56 @@
     },
     "2026-07-19": {
      "hl": "Tom & Collins",
-     "line": [
-      "Tom & Collins"
-     ],
+     "line": [],
      "party": "Terms and Conditions",
      "doors": "",
      "src": "mandalatickets.com",
      "conf": "high"
     },
     "2026-07-20": {
-     "hl": "Uzzo",
-     "line": [
-      "Uzzo",
-      "Alex Puche"
-     ],
-     "party": "Uzzo & Alex Puche",
+     "hl": "Uzzo & Alex Puche",
+     "line": [],
+     "party": "",
      "doors": "",
      "src": "mandalatickets.com",
      "conf": "high"
     },
     "2026-07-21": {
-     "hl": "Ruben Alegre",
-     "line": [
-      "Ruben Alegre",
-      "Spinoff"
-     ],
+     "hl": "Ruben Alegre & Spinoff",
+     "line": [],
      "party": "",
      "doors": "",
      "src": "mandalatickets.com",
      "conf": "high"
     },
     "2026-07-22": {
-     "hl": "Alex Puche",
-     "line": [
-      "Alex Puche",
-      "Luke Garcia"
-     ],
-     "party": "Alex Puche & Luke Garcia",
+     "hl": "Alex Puche & Luke Garcia",
+     "line": [],
+     "party": "",
      "doors": "",
      "src": "mandalatickets.com",
      "conf": "high"
     },
     "2026-07-23": {
-     "hl": "Agents Of Time",
-     "line": [
-      "Agents Of Time"
-     ],
-     "party": "Agents Of Time",
+     "hl": "Agents of Time",
+     "line": [],
+     "party": "",
      "doors": "",
      "src": "mandalatickets.com",
      "conf": "high"
     },
     "2026-07-24": {
      "hl": "Max Styler",
-     "line": [
-      "Max Styler"
-     ],
-     "party": "Max Styler",
+     "line": [],
+     "party": "",
+     "doors": "",
+     "src": "mandalatickets.com",
+     "conf": "high"
+    },
+    "2026-07-25": {
+     "hl": "ARTBAT",
+     "line": [],
+     "party": "",
      "doors": "",
      "src": "mandalatickets.com",
      "conf": "high"
@@ -523,16 +451,6 @@
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-07-17": {
-     "hl": "John Summit",
-     "line": [
-      "John Summit"
-     ],
-     "party": "",
-     "doors": "",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
     "2026-07-18": {
      "hl": "Benny Benassi",
      "line": [
@@ -548,11 +466,7 @@
     },
     "2026-07-19": {
      "hl": "Armand Van Helden",
-     "line": [
-      "Armand Van Helden",
-      "Paisley Jensen",
-      "Freespirit"
-     ],
+     "line": [],
      "party": "Ministry of Sound 35 World Tour",
      "doors": "23:00",
      "src": "cavoparadiso.gr",
@@ -561,7 +475,6 @@
     "2026-07-20": {
      "hl": "Robin Schulz",
      "line": [
-      "Robin Schulz",
       "Agent Greg"
      ],
      "party": "",
@@ -570,13 +483,13 @@
      "conf": "high"
     },
     "2026-07-21": {
-     "hl": "Joezi",
+     "hl": "BTRFLYFX",
      "line": [
       "Joezi",
       "Liva K",
       "Freespirit"
      ],
-     "party": "B T R F L Y FX",
+     "party": "",
      "doors": "23:00",
      "src": "cavoparadiso.gr",
      "conf": "high"
@@ -620,17 +533,6 @@
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-07-17": {
-     "hl": "KAYTRANADA",
-     "line": [
-      "KAYTRANADA",
-      "French Montana"
-     ],
-     "party": "",
-     "doors": "",
-     "src": "11miami.com",
-     "conf": "high"
-    },
     "2026-07-18": {
      "hl": "Damian Lazarus",
      "line": [
@@ -643,9 +545,7 @@
     },
     "2026-07-19": {
      "hl": "Damaged Goods",
-     "line": [
-      "Damaged Goods"
-     ],
+     "line": [],
      "party": "",
      "doors": "",
      "src": "11miami.com",
@@ -653,9 +553,7 @@
     },
     "2026-07-20": {
      "hl": "Five Venoms",
-     "line": [
-      "Five Venoms"
-     ],
+     "line": [],
      "party": "",
      "doors": "",
      "src": "11miami.com",
@@ -663,9 +561,7 @@
     },
     "2026-07-21": {
      "hl": "CX",
-     "line": [
-      "CX"
-     ],
+     "line": [],
      "party": "",
      "doors": "",
      "src": "11miami.com",
@@ -673,9 +569,7 @@
     },
     "2026-07-22": {
      "hl": "Renn Mateos",
-     "line": [
-      "Renn Mateos"
-     ],
+     "line": [],
      "party": "",
      "doors": "",
      "src": "11miami.com",
@@ -683,19 +577,23 @@
     },
     "2026-07-23": {
      "hl": "Rockwell",
-     "line": [
-      "Rockwell"
-     ],
+     "line": [],
      "party": "",
      "doors": "",
      "src": "11miami.com",
      "conf": "high"
     },
     "2026-07-24": {
-     "hl": "Savi",
-     "line": [
-      "Savi"
-     ],
+     "hl": "SAVI",
+     "line": [],
+     "party": "",
+     "doors": "",
+     "src": "11miami.com",
+     "conf": "high"
+    },
+    "2026-07-25": {
+     "hl": "SHIFT",
+     "line": [],
      "party": "",
      "doors": "",
      "src": "11miami.com",
@@ -707,19 +605,15 @@
    "nights": {
     "2026-07-21": {
      "hl": "Arkadyan",
-     "line": [
-      "Arkadyan"
-     ],
-     "party": "Arkadyan present Voyage",
+     "line": [],
+     "party": "Voyage",
      "doors": "23:45",
      "src": "ibiza-spotlight.com",
      "conf": "high"
     },
     "2026-07-23": {
      "hl": "Nomis",
-     "line": [
-      "Nomis"
-     ],
+     "line": [],
      "party": "Tiempo",
      "doors": "23:45",
      "src": "ibiza-spotlight.com",
@@ -727,10 +621,40 @@
     },
     "2026-07-24": {
      "hl": "Sebastian Gamboa",
-     "line": [
-      "Sebastian Gamboa"
-     ],
+     "line": [],
      "party": "Vintage",
+     "doors": "23:45",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-07-19": {
+     "hl": "Travieso",
+     "line": [],
+     "party": "Travieso",
+     "doors": "23:45",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-07-20": {
+     "hl": "Nasty Beats",
+     "line": [],
+     "party": "Nasty Beats",
+     "doors": "23:45",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-07-22": {
+     "hl": "Toy Room",
+     "line": [],
+     "party": "Toy Room",
+     "doors": "23:45",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-07-25": {
+     "hl": "Kōdō",
+     "line": [],
+     "party": "Kōdō",
      "doors": "23:45",
      "src": "ibiza-spotlight.com",
      "conf": "high"
@@ -982,19 +906,31 @@
     },
     "2026-07-19": {
      "hl": "Rick Ross",
-     "line": [
-      "Rick Ross"
-     ],
-     "party": "LIV on Sunday",
+     "line": [],
+     "party": "",
      "doors": "23:30",
      "src": "livnightclub.com",
      "conf": "high"
     },
     "2026-07-23": {
      "hl": "Bebeshito",
-     "line": [
-      "Bebeshito"
-     ],
+     "line": [],
+     "party": "",
+     "doors": "23:30",
+     "src": "livnightclub.com",
+     "conf": "high"
+    },
+    "2026-07-24": {
+     "hl": "Swae Lee",
+     "line": [],
+     "party": "",
+     "doors": "23:30",
+     "src": "livnightclub.com",
+     "conf": "high"
+    },
+    "2026-07-25": {
+     "hl": "Ian Asher",
+     "line": [],
      "party": "",
      "doors": "23:30",
      "src": "livnightclub.com",
@@ -1047,21 +983,25 @@
     },
     "2026-07-22": {
      "hl": "Jamestown Revival",
-     "line": [
-      "Jamestown Revival"
-     ],
+     "line": [],
      "party": "",
-     "doors": "19:30",
+     "doors": "",
      "src": "bellyupaspen.com",
      "conf": "high"
     },
     "2026-07-24": {
-     "hl": "DRAMA (DJ Set)",
-     "line": [
-      "DRAMA"
-     ],
+     "hl": "DRAMA (DJ set)",
+     "line": [],
      "party": "",
-     "doors": "20:00",
+     "doors": "",
+     "src": "bellyupaspen.com",
+     "conf": "high"
+    },
+    "2026-07-25": {
+     "hl": "Josh Abbott Band",
+     "line": [],
+     "party": "",
+     "doors": "",
      "src": "bellyupaspen.com",
      "conf": "high"
     }
@@ -1083,19 +1023,16 @@
     "2026-07-19": {
      "hl": "Martin Sexton",
      "line": [
-      "Martin Sexton",
-      "Inner Roots"
+      "Reggae Night w/ Inner Roots (late)"
      ],
-     "party": "Live Wide Open Tour 2026",
+     "party": "Live Wide Open Tour",
      "doors": "19:00",
      "src": "stephentalkhouse.com",
      "conf": "high"
     },
     "2026-07-20": {
      "hl": "Pet Sounds LIVE — Music of the Beach Boys",
-     "line": [
-      "Pet Sounds LIVE"
-     ],
+     "line": [],
      "party": "",
      "doors": "20:00",
      "src": "stephentalkhouse.com",
@@ -1104,10 +1041,9 @@
     "2026-07-21": {
      "hl": "Heavy Traffic Band",
      "line": [
-      "Heavy Traffic Band",
-      "Fudge"
+      "Industry Night w/ Fudge (late)"
      ],
-     "party": "Industry Night",
+     "party": "",
      "doors": "20:00",
      "src": "stephentalkhouse.com",
      "conf": "high"
