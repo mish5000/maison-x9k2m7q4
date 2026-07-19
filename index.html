@@ -3615,8 +3615,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 07:42 CEST';
-const APP_BUILD = 'v107';
+const COLLECTION_UPDATED = '19 July 2026 · 12:23 CEST';
+const APP_BUILD = 'v110';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6928,7 +6928,14 @@ function renderView(h) {
 
 function renderRoute(soft = false, dir = 'fwd') {
   if (sbActive && soft) return;          // never rebuild #app mid swipe-back drag
-  const h = location.hash || '#/';
+  // While a synchronous swipe-back landing awaits its (late, iOS ~300-600ms)
+  // history event, location.hash is STALE — it still names the page the user
+  // just LEFT. A soft re-render in that window (e.g. the line-ups fetch
+  // resolving right after a landing) must target the page actually on glass,
+  // or it rebuilds the WRONG page and the scroll cascade ends at the top
+  // (device 09:37: home landed on the right pixel, flashed Marbella, jumped
+  // to top). The landed hash is the authority until history catches up.
+  const h = (soft && sbPreRendered.length ? lastRouteHash : location.hash) || '#/';
   const parts = h.replace(/^#\//, '').split('/').filter(Boolean);
 
   // THE WORLD — a body-level overlay, never a routed rebuild of #app: the
