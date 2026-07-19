@@ -1613,6 +1613,8 @@ body {
 .vcard .actions .spacer { flex: 1; }
 .vcard .actions .iconbtn { width: 38px; height: 38px; }
 .vcard .actions .iconbtn svg { width: 17px; height: 17px; }
+/* the Uber wordmark badge — brand letterforms, house gold (icon spec A) */
+.iconbtn .ub { font-family: var(--sans); font-size: 9.5px; font-weight: 700; letter-spacing: 0.02em; }
 
 .mono {
   position: relative;
@@ -1810,6 +1812,8 @@ body {
 }
 
 .contactlist a svg.lead { width: 18px; height: 18px; color: var(--sage-ink); flex: none; }
+/* Google Maps row: their letter, our dress — a quiet serif G (icon spec A) */
+.contactlist a .gmark { width: 18px; flex: none; font-size: 17px; font-weight: 600; line-height: 1; color: var(--sage-ink); text-align: center; }
 .contactlist a .label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .contactlist a svg.chev { width: 14px; height: 14px; color: var(--sage-ink); flex: none; }
 .contactlist a:active { background: rgba(46, 70, 54, 0.08); }
@@ -3698,8 +3702,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 17:05 CEST';
-const APP_BUILD = 'v157';
+const COLLECTION_UPDATED = '19 July 2026 · 17:13 CEST';
+const APP_BUILD = 'v160';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5902,10 +5906,11 @@ function venueCard(city, catId, v, idx) {
       : (hasOpenTable(city, catId)
         ? `<a class="iconbtn" href="${otUrl(v, city)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Book on OpenTable">${I.opentable}</a>`
         : ''));
-  // the pin opens OUR cartography on this venue (drive time on the card
-  // there) — the external Google Maps hop lives on in the sheet's address row
-  const map = `<button type="button" class="iconbtn" onclick="event.stopPropagation();openMapAtVenue('${city.id}','${catId}',${idx})" aria-label="Show on the map">${I.pin}</button>`;
-  const uber = `<a class="iconbtn" href="${uberUrl(v, city, key)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Uber">${I.car}</a>`;
+  // the globe (same glyph as the MAP tab) opens OUR cartography on this
+  // venue — the external Google Maps hop lives on in the sheet's address row
+  const map = `<button type="button" class="iconbtn" onclick="event.stopPropagation();openMapAtVenue('${city.id}','${catId}',${idx})" aria-label="Show on the map">${I.globe}</button>`;
+  // Uber by its own letterforms, dressed in house gold (icon row spec A)
+  const uber = `<a class="iconbtn" href="${uberUrl(v, city, key)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Uber"><span class="ub">Uber</span></a>`;
 
   const dj = catId === 'nightclubs' ? djTonight(key) : null;
   const djtag = dj ? `<div class="djtag ${dj.conf === 'med' ? 'soft' : ''}">${I.disc}<span>Tonight · ${esc(dj.hl)}</span></div>` : '';
@@ -6204,7 +6209,7 @@ function openSheet(cityId, catId, idx) {
   if (bookUrl(key)) rows.push(`<a href="${bookUrl(key)}" target="_blank" rel="noopener">
       ${I.book.replace('<svg', '<svg class="lead"')}<span class="label">Book now</span>${I.chev}</a>`);
   rows.push(`<a href="${mapsUrl(v, city, key)}" target="_blank" rel="noopener">
-      ${I.pin.replace('<svg', '<svg class="lead"')}<span class="label">${v.ad || v.a + ', ' + city.name}</span>${I.chev}</a>`);
+      <span class="lead gmark serif">G</span><span class="label">${v.ad || v.a + ', ' + city.name}</span>${I.chev}</a>`);
   rows.push(`<a href="${uberUrl(v, city, key)}" target="_blank" rel="noopener">
       ${I.car.replace('<svg', '<svg class="lead"')}<span class="label">Uber to ${v.n}</span>${I.chev}</a>`);
   rows.push(`<a href="${v.w}" target="_blank" rel="noopener">
