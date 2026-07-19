@@ -1539,6 +1539,28 @@ body {
 .vcard .save svg { width: 18px; height: 18px; }
 .vcard .save.on { color: var(--gold-bright); border-color: var(--gold); }
 
+/* our-map globe: the save button's quiet twin, riding beneath it — opens
+   PRIVÉE cartography landed on this venue (Mishari 17:14, circled corner) */
+.vcard .onmap {
+  position: absolute;
+  top: 68px;              /* save's 16px top + 42px + 10px breath */
+  right: 16px;
+  z-index: 3;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(232, 201, 128, 0.4);
+  background: rgba(11, 10, 8, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--gold-bright);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.vcard .onmap svg { width: 18px; height: 18px; }
+
 .vcard .tags { position: absolute; top: 18px; left: 18px; z-index: 3; display: flex; gap: 8px; flex-wrap: wrap; max-width: 70%; }
 
 .vcard .body {
@@ -3702,8 +3724,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 17:13 CEST';
-const APP_BUILD = 'v160';
+const COLLECTION_UPDATED = '19 July 2026 · 17:20 CEST';
+const APP_BUILD = 'v163';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5906,9 +5928,9 @@ function venueCard(city, catId, v, idx) {
       : (hasOpenTable(city, catId)
         ? `<a class="iconbtn" href="${otUrl(v, city)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Book on OpenTable">${I.opentable}</a>`
         : ''));
-  // the globe (same glyph as the MAP tab) opens OUR cartography on this
-  // venue — the external Google Maps hop lives on in the sheet's address row
-  const map = `<button type="button" class="iconbtn" onclick="event.stopPropagation();openMapAtVenue('${city.id}','${catId}',${idx})" aria-label="Show on the map">${I.globe}</button>`;
+  // the row keeps the original Google Maps pin (Mishari 17:14); OUR map
+  // rides as the subtle globe in the photo's corner, under the bookmark
+  const map = `<a class="iconbtn" href="${mapsUrl(v, city, key)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Directions">${I.pin}</a>`;
   // Uber by its own letterforms, dressed in house gold (icon row spec A)
   const uber = `<a class="iconbtn" href="${uberUrl(v, city, key)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Uber"><span class="ub">Uber</span></a>`;
 
@@ -5926,6 +5948,7 @@ function venueCard(city, catId, v, idx) {
       <button class="save ${on ? 'on' : ''}" data-save="${key}" aria-label="Save">
         ${on ? I.bookmarkFill : I.bookmark}
       </button>
+      <button type="button" class="onmap" onclick="event.stopPropagation();openMapAtVenue('${city.id}','${catId}',${idx})" aria-label="Show on our map">${I.globe}</button>
       <div class="body">
         <div class="area">${v.a} · ${city.name}</div>
         <h2 class="name"><span class="nm">${v.n}</span></h2>
