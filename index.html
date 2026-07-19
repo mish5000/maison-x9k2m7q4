@@ -3698,8 +3698,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 15:56 CEST';
-const APP_BUILD = 'v144';
+const COLLECTION_UPDATED = '19 July 2026 · 16:12 CEST';
+const APP_BUILD = 'v151';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5998,7 +5998,7 @@ function viewCategory(cityId, catId) {
 
   const sortbar = `
     <div class="sortbar rise">
-      ${[['edit', 'The Edit'], ['hot', 'Hot now'], ['rated', 'Top rated']].map(([id, label]) =>
+      ${[['edit', 'Editor’s List'], ['hot', 'Hot now'], ['rated', 'Top rated']].map(([id, label]) =>
         `<button class="schip ${catSort === id ? 'on' : ''}" data-sort="${id}">${label}</button>`).join('')}
       ${catSort === 'hot' ? `<button class="sortstamp" data-sort="hot" aria-label="Refresh the pulse">${I.pulse}Pulse · ${cityClock(cityId)}</button>` : ''}
     </div>`;
