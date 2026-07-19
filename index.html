@@ -3615,8 +3615,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 13:17 CEST';
-const APP_BUILD = 'v118';
+const COLLECTION_UPDATED = '19 July 2026 · 13:53 CEST';
+const APP_BUILD = 'v126';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7290,7 +7290,19 @@ function sbApplyScroll(layer, want) {
     layer.scrollTop = want;
   }
 }
-if (STANDALONE) {
+/* THE CUSTOM BACK-SWIPE IS PERMANENTLY RETIRED. The black box (13:38, line
+   76520) proved iOS runs its NATIVE edge-back gesture inside the standalone
+   PWA, concurrently with this engine: iOS popped cat->city 93ms into the
+   drag, then our commit popped city->home — every back-swipe travelled TWO
+   levels ("skips the sub-menu"), the root of the whole gesture saga. Two
+   back engines can never coexist; the OS one is unremovable and flawless
+   (it is the exact gesture Instagram rides). It owns the back-swipe alone:
+   renderRoute's nativeBack path renders the landing instantly at the
+   remembered pixel beneath iOS's own slide. Forward pushes and chevron pops
+   (taps, no native gesture involved) keep our animations.
+   CUSTOM_BACK stays as a labelled tombstone — never re-arm it. */
+const CUSTOM_BACK = false;
+if (STANDALONE && CUSTOM_BACK) {
   const EDGE = 30, DIST = 0.32, VEL = 0.28;      // start zone; commit past 32% or a flick
   const SB_DIM = 0.20;                            // gentle reveal veil
   const OMEGA = 22;                               // spring stiffness (critically damped, ζ=1) — the feel knob
