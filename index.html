@@ -3724,8 +3724,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 17:20 CEST';
-const APP_BUILD = 'v163';
+const COLLECTION_UPDATED = '19 July 2026 · 17:27 CEST';
+const APP_BUILD = 'v166';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -8141,6 +8141,12 @@ function landOnPendingVenue() {
   const g = mapGroups.find(gr => gr.entries.some(e => e.key === key));
   if (!g) return;
   ++diveToken;                               // cancel the city-frame flight mid-air
+  // arriving FROM a category: the rail pre-selects that category, so the
+  // map shows the world you were browsing (Mishari 17:24 — Cipriani should
+  // land among Restaurants, not All)
+  mapFilter = key.split('|')[1];
+  renderFilterRail(mapCityId);
+  applyFilter();
   LMAP.setView(g.ll, Math.max(BAND_NEAR + 0.6, LMAP.getZoom() || 0), { animate: false });
   applyBands(false);
   selectPin(g.marker, g, key);
