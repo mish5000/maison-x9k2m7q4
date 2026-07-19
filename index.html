@@ -3615,8 +3615,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 12:23 CEST';
-const APP_BUILD = 'v110';
+const COLLECTION_UPDATED = '19 July 2026 · 13:17 CEST';
+const APP_BUILD = 'v118';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5436,9 +5436,35 @@ function goBack(backHash) {
     location.hash = backHash;
   }
 }
+/* THE BLACK BOX — an in-app flight recorder for navigation decisions. Device
+   behaviour has repeatedly diverged from every harness; this is ground truth
+   from the phone itself. Ring of the last 90 events; triple-tap the version
+   stamp on the home page to reveal (screenshot-able overlay), tap it to hide.
+   Zero cost when idle: string pushes only, no rendering until revealed. */
+const BB = [];
+function bb(...a) {
+  BB.push((Date.now() % 1000000) + ' ' + a.join(' '));
+  if (BB.length > 90) BB.shift();
+}
+let bbTaps = 0, bbTapT = 0;
+function bbTap() {
+  const n = Date.now();
+  bbTaps = (n - bbTapT < 500) ? bbTaps + 1 : 1;
+  bbTapT = n;
+  if (bbTaps < 3) return;
+  bbTaps = 0;
+  let el = document.getElementById('bbox');
+  if (el) { el.remove(); return; }
+  el = document.createElement('pre');
+  el.id = 'bbox';
+  el.style.cssText = 'position:fixed;inset:6% 3%;z-index:9999;background:rgba(6,5,3,0.96);color:#e8d9b0;font:9px/1.45 monospace;padding:14px;border:1px solid #c8a24b;border-radius:14px;overflow:auto;white-space:pre-wrap;';
+  el.textContent = 'PRIVÉE BLACK BOX · ' + APP_BUILD + ' · tap to close\n\n' + BB.join('\n');
+  el.onclick = () => el.remove();
+  document.body.appendChild(el);
+}
 let curBack = null;   // the current page's back target — the interactive swipe reads it
 function topbar(title, backHash) {
-  curBack = backHash;
+  curBack = backHash; bb('back=', backHash);
   return `
     <div class="topbar">
       <button class="backbtn" onclick="goBack('${backHash}')" aria-label="Back">${I.back}</button>
@@ -5669,7 +5695,7 @@ function viewHome() {
 
     <div class="statement rise rise-3">
       <div class="rule"></div>
-      <p class="buildstamp">Refreshed ${COLLECTION_UPDATED} &nbsp;·&nbsp; ${APP_BUILD}</p>
+      <p class="buildstamp" onclick="bbTap()">Refreshed ${COLLECTION_UPDATED} &nbsp;·&nbsp; ${APP_BUILD}</p>
     </div>`;
   wireSearch();
   $shell.scrollTo(0, 0);   // Home must open at the top like every other view
@@ -6141,6 +6167,7 @@ function openSheet(cityId, catId, idx) {
 }
 
 function closeSheet() {
+  bb('sheetC');
   $backdrop.classList.remove('open');
   $sheet.classList.remove('open');
 }
@@ -6936,6 +6963,7 @@ function renderRoute(soft = false, dir = 'fwd') {
   // (device 09:37: home landed on the right pixel, flashed Marbella, jumped
   // to top). The landed hash is the authority until history catches up.
   const h = (soft && sbPreRendered.length ? lastRouteHash : location.hash) || '#/';
+  bb('RR', soft ? 'soft' : 'hard', dir, h, 'sT=' + Math.round($shell.scrollTop));
   const parts = h.replace(/^#\//, '').split('/').filter(Boolean);
 
   // THE WORLD — a body-level overlay, never a routed rebuild of #app: the
@@ -7009,7 +7037,7 @@ function renderRoute(soft = false, dir = 'fwd') {
   // top-of-page; soft re-renders keep their own scroll logic below.
   if (!soft) appHash = h;                  // the live page beneath any overlay
   if (!soft && dir === 'back') {
-    const remembered = SCROLL_MEM[h] || 0;
+    const remembered = SCROLL_MEM[h] || 0; bb('restore', h, remembered);
     $shell.scrollTop = Math.min(remembered, Math.max(0, $shell.scrollHeight - $shell.clientHeight));
   }
   // rail positions are browse-state, not page position: they survive back-pops
@@ -7348,6 +7376,7 @@ if (STANDALONE) {
         // handler skips its render via sbPreRendered). The gesture engine
         // reopens two frames later instead of ~half a second.
         const dest = s.back || '#/';
+        bb('LAND', dest, 'mem=' + (SCROLL_MEM[dest] || 0), 'from=' + lastRouteHash);
         SCROLL_MEM[lastRouteHash] = s.departing;
         captureRails(lastRouteHash);
         lastRouteHash = dest; appHash = dest;
@@ -7371,6 +7400,7 @@ if (STANDALONE) {
         requestAnimationFrame(() => requestAnimationFrame(drop));
         setTimeout(drop, 250);   // safety only
       } else {
+        bb('SNAP-BACK');
         restoreCurrent(s);
         sbActive = false;
       }
@@ -7467,6 +7497,7 @@ if (STANDALONE) {
       // OLD sheet and re-commit the same landing (device 07:22: the second
       // flick did nothing and the app appeared to teleport).
       if (h.commit ? (h.x >= w97 || t.clientX <= EDGE) : (h.x <= h.s.w * 0.03)) {
+        bb('TS-finalize', Math.round(h.x), 'edge=' + (t.clientX <= EDGE));
         settling = null; cancelAnimationFrame(h.raf);
         h.s.layer.style.transform = `translateX(${h.commit ? h.s.w : 0}px)`;
         h.cleanup();
@@ -7486,7 +7517,7 @@ if (STANDALONE) {
       g.lastX = t.clientX; g.lastT = Date.now(); g.samples = [{ x: t.clientX, t: Date.now() }];
       // ownership isn't settled yet: the first significant move decides whether
       // this touch steers the sheet or was meant to scroll the page beneath
-      g.caught = true; g.own = false; g.cx0 = t.clientX; g.cy0 = t.clientY;
+      g.caught = true; g.own = false; g.cx0 = t.clientX; g.cy0 = t.clientY; bb('TS-catch', Math.round(g.dx));
       // the layers are pointer-events:none, so the catching tap ALSO reaches
       // whatever sits beneath (a card, #nav) and would click it — a catch must
       // never double as a press (fresh-review M5). Swallow exactly that click;
@@ -7503,13 +7534,14 @@ if (STANDALONE) {
       // in that sliver is the user's NEXT gesture — instrumentation showed a
       // rapid second flick missing the reopened engine by ~30ms and being
       // swallowed here. Clear the stage and chain; any other touch waits.
-      if (t.clientX <= EDGE && !g && !settling && $app.firstChild) { sweepStrays(); sbActive = false; }
-      else return;
+      if (t.clientX <= EDGE && !g && !settling && $app.firstChild) { bb('TS-chain'); sweepStrays(); sbActive = false; }
+      else { bb('TS-blocked-sbActive'); return; }
     }
     if (t.clientX > EDGE) return;
     if ($sheet.classList.contains('open') || mapIsOpen() || (typeof cgIsOpen === 'function' && cgIsOpen())) return;
     if (activeSlide) activeSlide();                // land an in-flight forward push so #app is whole again
     if (!location.hash || location.hash === '#/' || !curBack) return;
+    bb('TS-new', 'back=' + curBack, 'hash=' + location.hash);
     g = { x0: t.clientX, y0: t.clientY, back: curBack, started: false, dx: 0, w: innerWidth,
           departing: $shell.scrollTop, lastX: t.clientX, lastT: Date.now(), vx: 0, tick: false,
           samples: [{ x: t.clientX, t: Date.now() }] };
@@ -7578,6 +7610,7 @@ function detectDir() {
 
 window.addEventListener('hashchange', () => {
   const dir = detectDir();
+  bb('HC', location.hash || '#/', dir, 'q=' + sbBackQueue, 'pre=' + sbPreRendered.join('|'));
   // keep the in-app trail in step with real history, so the topbar chevron
   // can tell "the parent is one entry behind me" (goBack) from a deep jump
   if (dir === 'back') NAV_STACK.pop();
@@ -7593,7 +7626,7 @@ window.addEventListener('hashchange', () => {
     if (sbBackQueue > 0) history.back();
   }
   const preIdx = sbPreRendered.indexOf(curHash);
-  if (preIdx !== -1) { sbPreRendered.splice(preIdx, 1); return; }
+  if (preIdx !== -1) { sbPreRendered.splice(preIdx, 1); bb('HC-skip'); return; }
   sbPreRendered.length = 0;   // a foreign navigation invalidates pending skips
   // forward navs slide in from the right; a chevron-tap back mirrors it.
   // gesture/hardware back-pops stay unanimated (iOS's own slide owns those).
