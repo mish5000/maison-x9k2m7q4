@@ -3615,8 +3615,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 01:39 CEST';
-const APP_BUILD = 'v98';
+const COLLECTION_UPDATED = '19 July 2026 · 07:26 CEST';
+const APP_BUILD = 'v101';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7336,9 +7336,19 @@ if (STANDALONE) {
         // fallback window — the stale timer must never sweep that live cycle's
         // layers or clobber its sbActive (fresh-review H1: doing so vanishes the
         // sheet mid-drag in a jump-cut).
-        let dropTid = 0, dropped = false;
+        let dropTid = 0, dropped = false, dropTries = 0;
         const drop = () => {
-          if (dropped) return; dropped = true; clearTimeout(dropTid);
+          if (dropped) return;
+          // NEVER reveal an unready page. On device, hashchange can lag
+          // ~300ms behind the visual commit and LOSE the race to this
+          // fallback — stripping the frozen layers then would flash the bare
+          // shell at scrollTop 0 and snap down when the route finally lands
+          // (the "forgot where I clicked" jerk). The back-render restores
+          // scroll in the same task it builds, so waiting for #app content
+          // guarantees the reveal is position-perfect. Hard-capped so a
+          // broken route can never strand the layers.
+          if (!$app.firstChild && dropTries++ < 8) { dropTid = setTimeout(drop, 120); return; }
+          dropped = true; clearTimeout(dropTid);
           [s.layer, s.under, s.dim].forEach(el => el && el.remove());
           sweepStrays(g && g.started ? [g.layer, g.under, g.dim] : null);
           if (!(g && g.started)) sbActive = false;
