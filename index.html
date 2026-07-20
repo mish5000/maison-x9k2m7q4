@@ -1076,7 +1076,9 @@ body {
   z-index: 50;   /* above #app content, below #nav (60) and #sheet (95) */
 }
 
-.greeting-block { margin-bottom: 34px; }
+/* the member's name is the door to My Club — an anchor now, styled as ever */
+.greeting-block { display: block; margin-bottom: 34px; color: inherit; text-decoration: none; }
+.greeting-block:active .name { opacity: 0.75; }
 
 .greeting-block .eyebrow { margin-bottom: 14px; }
 
@@ -3787,8 +3789,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '20 July 2026 · 13:26 CEST';
-const APP_BUILD = 'v194';
+const COLLECTION_UPDATED = '20 July 2026 · 13:32 CEST';
+const APP_BUILD = 'v197';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5829,11 +5831,11 @@ function viewHome() {
       <span class="bg">${heroImg(UNSPLASH('1414235077428-338989a2e8c0', 1600))}</span>
       <button class="cgpill" onclick="openConcierge()" aria-label="The Concierge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg><span>AI Concierge</span></button>
       <a class="herotaxi" href="https://m.uber.com/ul/?action=setPickup&pickup=my_location" target="_blank" rel="noopener" aria-label="Uber from my current location">${I.car}<span>Uber</span></a>
-      <div class="greeting-block rise">
+      <a class="greeting-block rise" href="#/club" aria-label="My Club">
         <div class="eyebrow">${greeting()}</div>
         <span class="prefix serif">${MEMBER.prefix}</span>
         <span class="name serif">${MEMBER.name}</span>
-      </div>
+      </a>
       <div class="searchwrap rise rise-1">
         <div class="searchbar">
           ${I.search}
@@ -6657,7 +6659,7 @@ const NAV = [
 
 /* Tabs can step out of the dock without losing their code or routes —
    Explore lives on through search, the Destinations rail and deep links. */
-const NAV_HIDDEN = new Set(['explore', 'club']);   // club lives on the home hero monogram
+const NAV_HIDDEN = new Set(['explore', 'club']);   // club opens from the member's name on the home hero
 function renderNav(active) {
   $nav.innerHTML = NAV.filter(n => !NAV_HIDDEN.has(n.id)).map(n => `
     <button class="${n.id === active ? 'active' : ''}${n.id === 'concierge' ? ' cgnav' : ''}" onclick="${n.action || ("location.hash='" + n.hash + "'")}" aria-label="${n.label}">
