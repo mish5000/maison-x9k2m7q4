@@ -1135,7 +1135,7 @@ body {
    the member's door to My Club (Mishari 13:31, circled spot) */
 .heroprofile {
   position: absolute;
-  top: calc(74px + env(safe-area-inset-top, 0px));
+  top: calc(22px + env(safe-area-inset-top, 0px));   /* the prime corner is identity's */
   left: 22px;
   width: 44px; height: 44px;
   border-radius: 50%;
@@ -1153,8 +1153,11 @@ body {
 /* discreet taxi pill — Uber with pickup at the member's current location */
 .herotaxi {
   position: absolute;
-  top: calc(22px + env(safe-area-inset-top, 0px));
-  left: 22px;
+  /* services stack on the right, beneath the Concierge pill (Mishari 13:4x:
+     "the Uber should be moved") */
+  top: calc(74px + env(safe-area-inset-top, 0px));
+  right: 18px;
+  left: auto;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -3813,8 +3816,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '20 July 2026 · 13:36 CEST';
-const APP_BUILD = 'v200';
+const COLLECTION_UPDATED = '20 July 2026 · 13:39 CEST';
+const APP_BUILD = 'v203';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
