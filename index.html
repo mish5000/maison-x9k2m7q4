@@ -3178,12 +3178,21 @@ body {
   pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .vpin.named .lbl { opacity: 1; transform: none; }
+/* THE SELECTED SEAL TURNS RED — on a field of gold, a brighter gold said
+   nothing (Mishari 00:42: "it doesn't tell me which one I'm looking at").
+   Deep carmine, unmistakable at any zoom, glyph and tip dressed to match. */
 .vpin.sel { transform: scale(1.2); }
 .vpin.sel .disc {
-  background: linear-gradient(135deg, #fbe9bc, #e8c980 52%, #c8a24b);
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.6), 0 0 26px rgba(232, 201, 128, 0.65);
+  background: linear-gradient(135deg, #e4574a, #c73b2e 52%, #9c2a20);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.6), 0 0 26px rgba(216, 72, 58, 0.7);
+  color: #fff2ea;              /* glyph AND letter monograms go ivory */
 }
-.vpin.sel .disc::after { border-color: rgba(251, 233, 188, 0.8); }
+.vpin.sel .disc::after { border-color: rgba(255, 200, 188, 0.85); }
+.vpin.sel .tip {
+  background: linear-gradient(135deg, #c73b2e, #9c2a20);
+  border-right-color: rgba(60, 12, 8, 0.92); border-bottom-color: rgba(60, 12, 8, 0.92);
+}
+.vpin.sel .badge { color: #ffd9d0; border-color: rgba(228, 87, 74, 0.7); }
 .vpin.pre { transform: scale(0); transition: none; }
 
 /* band sizing: FAR 28 -> MID 34 -> NEAR 44 photo medallions */
@@ -3724,8 +3733,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '19 July 2026 · 17:46 CEST';
-const APP_BUILD = 'v177';
+const COLLECTION_UPDATED = '20 July 2026 · 07:17 CEST';
+const APP_BUILD = 'v180';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
