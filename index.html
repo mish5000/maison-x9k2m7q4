@@ -3256,23 +3256,30 @@ body {
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
   color: var(--ink);
 }
-/* ‹ › — the card walks the visible seals by distance, nearest first.
-   Quiet ghost discs riding the card's edges; static paint only. */
-.mc-step {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  z-index: 5;
-  width: 30px; height: 30px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(11, 10, 8, 0.6);
-  border: 1px solid rgba(232, 201, 128, 0.4);
-  color: var(--gold-bright);
-  cursor: pointer;
-  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+/* the distance walk: swipe the card, or tap the whisper pager beneath the
+   actions — "‹  3 OF 19  ›". Generous tap zones, no floating discs. */
+.mc-pager {
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  margin: -2px 0 -4px;
 }
-.mc-step svg { width: 14px; height: 14px; }
-.mc-step.prev { left: -7px; }
-.mc-step.next { right: -7px; }
-.mc-step:active { transform: translateY(-50%) scale(0.9); }
+.mc-pager button {
+  background: none; border: none; cursor: pointer;
+  color: var(--gold-bright);
+  font-family: var(--serif); font-size: 24px; line-height: 1;
+  padding: 4px 26px 8px;                    /* small glyph, generous target */
+}
+.mc-pager button:active { opacity: 0.5; }
+.mc-pager .pg-count {
+  font-family: var(--sans); font-size: 9px; letter-spacing: 0.3em;
+  text-transform: uppercase; color: rgba(244, 239, 230, 0.55);
+  white-space: nowrap;
+}
+/* the stepped card arrives with a small directional slide (transform +
+   opacity only — paint law) */
+@keyframes mcInL { from { transform: translateX(26px); opacity: 0.3; } to { transform: none; opacity: 1; } }
+@keyframes mcInR { from { transform: translateX(-26px); opacity: 0.3; } to { transform: none; opacity: 1; } }
+.mapcard.enter-l { animation: mcInL 0.26s cubic-bezier(0.22, 1, 0.36, 1); }
+.mapcard.enter-r { animation: mcInR 0.26s cubic-bezier(0.22, 1, 0.36, 1); }
 .mapcard .mc-main {
   display: flex; align-items: center; gap: 13px; text-align: left;
   background: none; border: none; padding: 0; color: var(--ink); width: 100%;
@@ -3751,8 +3758,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '20 July 2026 · 07:58 CEST';
-const APP_BUILD = 'v187';
+const COLLECTION_UPDATED = '20 July 2026 · 08:10 CEST';
+const APP_BUILD = 'v190';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -8001,6 +8008,19 @@ function ensureMapDom() {
     hideMapCard();
     showWorldStage(true);
   });
+  // swipe the card itself to walk the category — the whole card is the
+  // control (the little edge discs were fiddly); left = next, right = back
+  const mc = mapDom.querySelector('#mapcard');
+  let swX = null, swY = null;
+  mc.addEventListener('touchstart', (e) => {
+    swX = e.touches[0].clientX; swY = e.touches[0].clientY;
+  }, { passive: true });
+  mc.addEventListener('touchend', (e) => {
+    if (swX === null) return;
+    const dx = e.changedTouches[0].clientX - swX, dy = e.changedTouches[0].clientY - swY;
+    swX = null;
+    if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.4) stepVenue(dx < 0 ? 1 : -1);
+  }, { passive: true });
   return mapDom;
 }
 
@@ -8146,7 +8166,7 @@ function applyFilter() {
 }
 
 let selectedPin = null, selectedGroup = null;
-function selectPin(marker, group, preferKey) {
+function selectPin(marker, group, preferKey, noPan) {
   if (selectedPin) selectedPin.classList.remove('sel');
   if (selectedGroup && selectedGroup.marker) selectedGroup.marker.setZIndexOffset(0);
   selectedGroup = group;
@@ -8154,8 +8174,10 @@ function selectPin(marker, group, preferKey) {
   reclusterPins();                          // re-gather WITHOUT the selected seal
   const el = marker.getElement()?.querySelector('.vpin');
   if (el) { el.classList.add('sel'); el.classList.remove('clustered'); selectedPin = el; }
-  const target = LMAP.project(marker.getLatLng(), LMAP.getZoom()).subtract([0, LMAP.getSize().y * 0.12]);
-  LMAP.panTo(LMAP.unproject(target, LMAP.getZoom()), { animate: true, duration: 0.45, easeLinearity: 0.25 });
+  if (!noPan) {
+    const target = LMAP.project(marker.getLatLng(), LMAP.getZoom()).subtract([0, LMAP.getSize().y * 0.12]);
+    LMAP.panTo(LMAP.unproject(target, LMAP.getZoom()), { animate: true, duration: 0.45, easeLinearity: 0.25 });
+  }
   showMapCard(group, preferKey);
 }
 
@@ -8398,6 +8420,13 @@ function showMapCard(group, preferKey) {
     + `&dropoff[latitude]=${e.ll[0]}&dropoff[longitude]=${e.ll[1]}`
     + `&dropoff[nickname]=${encodeURIComponent(e.v.n)}`;
   const kmTag = dist ? dist.replace(/^ · /, '').replace(' from you', '') : '';
+  // the pager reads "3 of 19" within the current filter's distance walk
+  let pagerPos = '';
+  if (mapGroups) {
+    const order = venueOrder();
+    const at = order.indexOf(group);
+    if (at >= 0 && order.length > 1) pagerPos = `${at + 1} of ${order.length}`;
+  }
   card.innerHTML = `
     <div class="mapcard" data-key="${e.key}">
       <button class="mc-main">
@@ -8413,8 +8442,11 @@ function showMapCard(group, preferKey) {
         <button class="mc-info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.5"/></svg><span>Details</span></button>
         <a class="mc-taxi" href="${uber}" target="_blank" rel="noopener">${I.car}<span>Uber${kmTag ? ' · ' + kmTag : ''}</span></a>
       </div>
-      <button class="mc-step prev" aria-label="Previous venue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.5 6l-6 6 6 6"/></svg></button>
-      <button class="mc-step next" aria-label="Next venue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.5 6l6 6-6 6"/></svg></button>
+      ${pagerPos ? `<div class="mc-pager">
+        <button class="pg-prev" aria-label="Previous venue">‹</button>
+        <span class="pg-count">${pagerPos}</span>
+        <button class="pg-next" aria-label="Next venue">›</button>
+      </div>` : ''}
     </div>${chooser}`;
   card.classList.add('open');
   mapDom.classList.add('card-open');   // the venue sheet owns the bottom — hide the home pill
@@ -8430,30 +8462,42 @@ function showMapCard(group, preferKey) {
   const openDetails = () => { const t = group.entries[sel]; openSheet(t.city, t.cat, t.idx); };
   card.querySelector('.mc-main').addEventListener('click', openDetails);
   card.querySelector('.mc-info').addEventListener('click', openDetails);
-  card.querySelectorAll('.mc-step').forEach(b => b.addEventListener('click', (ev) => {
-    ev.stopPropagation();
-    stepVenue(b.classList.contains('next') ? 1 : -1);
-  }));
+  const pgP = card.querySelector('.pg-prev'), pgN = card.querySelector('.pg-next');
+  if (pgP) pgP.addEventListener('click', (ev) => { ev.stopPropagation(); stepVenue(-1); });
+  if (pgN) pgN.addEventListener('click', (ev) => { ev.stopPropagation(); stepVenue(1); });
+  // the freshly stepped card arrives with a small directional slide
+  const mcEl = card.querySelector('.mapcard');
+  if (stepDir && mcEl) { mcEl.classList.add(stepDir > 0 ? 'enter-l' : 'enter-r'); stepDir = 0; }
 }
 
-/* ‹ › on the card: STRATEGIC stepping, not random panning — the visible
-   seals (whatever the filter shows) ordered by distance from the member
-   (city centre when location is off), one press per room, wrapping at the
-   edges. Right walks outward, left walks back home. */
+/* STRATEGIC stepping — swipe the card (or tap ‹ ›): the visible seals,
+   ordered by distance from the member (city centre when location is off),
+   wrapping at the ends. Each step FLIES IN a touch (never below ~14) so
+   the chosen venue lives and breathes instead of sitting in the cluster
+   crush (Mishari 08:0x). */
+let stepDir = 0;
+function venueOrder() {
+  const vis = (mapGroups || []).filter(g => !g.hidden);
+  const me = geoNow();
+  const ref = me ? [me.la, me.lo] : (buildCityIndex()[mapCityId] || {}).center;
+  if (!ref) return vis;
+  return vis.slice().sort((a, b) =>
+    mapHaversine(ref[0], ref[1], a.ll[0], a.ll[1]) - mapHaversine(ref[0], ref[1], b.ll[0], b.ll[1]));
+}
 function stepVenue(dir) {
   if (!mapGroups || !mapCityId) return;
-  const vis = mapGroups.filter(g => !g.hidden);
-  if (!vis.length) return;
-  const me = geoNow();
-  const ref = me ? [me.la, me.lo] : buildCityIndex()[mapCityId].center;
-  const order = vis.slice().sort((a, b) =>
-    mapHaversine(ref[0], ref[1], a.ll[0], a.ll[1]) - mapHaversine(ref[0], ref[1], b.ll[0], b.ll[1]));
+  const order = venueOrder();
+  if (!order.length) return;
   let i = order.indexOf(selectedGroup);
   i = i < 0 ? (dir > 0 ? 0 : order.length - 1) : (i + dir + order.length) % order.length;
   const g = order[i];
   const prefer = mapFilter ? ((g.entries.find(e => e.cat === mapFilter) || g.entries[0]).key) : null;
   if (typeof haptic === 'function') haptic();
-  selectPin(g.marker, g, prefer);
+  stepDir = dir;
+  const Z = Math.max(14.1, LMAP.getZoom());
+  const pt = LMAP.project(g.ll, Z).subtract([0, LMAP.getSize().y * 0.12]);
+  LMAP.flyTo(LMAP.unproject(pt, Z), Z, { duration: 0.55, easeLinearity: 0.25 });
+  selectPin(g.marker, g, prefer, true);   // the fly owns the camera
 }
 function hideMapCard() {
   const card = mapDom && mapDom.querySelector('#mapcard');
