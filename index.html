@@ -3733,8 +3733,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '20 July 2026 · 07:17 CEST';
-const APP_BUILD = 'v180';
+const COLLECTION_UPDATED = '20 July 2026 · 07:35 CEST';
+const APP_BUILD = 'v184';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -8103,6 +8103,12 @@ function renderFilterRail(cityId) {
   rail.innerHTML = `<button class="fchip ${!mapFilter ? 'on' : ''}" data-f="">All</button>` +
     parts.map(p => `<button class="fchip ${mapFilter === p ? 'on' : ''}" data-f="${p}">${MAP_GLYPH[p] || ''}<span>${esc(partLabel(p))}</span></button>`).join('');
   rail.classList.add('show');
+  // the active chip must be SEEN to be believed — Spas sat off-screen right
+  // and the pre-select read as "nothing happened" (Mishari 07:31)
+  requestAnimationFrame(() => {
+    const on = rail.querySelector('.fchip.on');
+    if (on && on.dataset.f) on.scrollIntoView({ inline: 'center', block: 'nearest' });
+  });
   rail.querySelectorAll('.fchip').forEach(b => b.addEventListener('click', () => {
     mapFilter = b.dataset.f || null;
     rail.querySelectorAll('.fchip').forEach(x => x.classList.toggle('on', x === b));
@@ -8121,11 +8127,15 @@ function applyFilter() {
   applyBands(false);
 }
 
-let selectedPin = null;
+let selectedPin = null, selectedGroup = null;
 function selectPin(marker, group, preferKey) {
   if (selectedPin) selectedPin.classList.remove('sel');
+  if (selectedGroup && selectedGroup.marker) selectedGroup.marker.setZIndexOffset(0);
+  selectedGroup = group;
+  marker.setZIndexOffset(900);              // above any cluster disc
+  reclusterPins();                          // re-gather WITHOUT the selected seal
   const el = marker.getElement()?.querySelector('.vpin');
-  if (el) { el.classList.add('sel'); selectedPin = el; }
+  if (el) { el.classList.add('sel'); el.classList.remove('clustered'); selectedPin = el; }
   const target = LMAP.project(marker.getLatLng(), LMAP.getZoom()).subtract([0, LMAP.getSize().y * 0.12]);
   LMAP.panTo(LMAP.unproject(target, LMAP.getZoom()), { animate: true, duration: 0.45, easeLinearity: 0.25 });
   showMapCard(group, preferKey);
@@ -8177,6 +8187,10 @@ function reclusterPins() {
   for (const g of mapGroups) {
     g.clustered = false;
     if (g.hidden) continue;
+    // the SELECTED seal never gathers into a cluster — the carmine marker
+    // must stay visible at any zoom (Mishari 07:31: BACK and the spa were
+    // swallowed by the "4" and "5" discs, so no red showed at all)
+    if (g === selectedGroup) continue;
     pts.push({ g, pt: LMAP.latLngToContainerPoint(g.ll) });
   }
   pts.sort((a, b) => a.g.rank - b.g.rank);
@@ -8402,6 +8416,11 @@ function hideMapCard() {
   if (card) card.classList.remove('open');
   if (mapDom) mapDom.classList.remove('card-open');   // the home pill may return
   if (selectedPin) { selectedPin.classList.remove('sel'); selectedPin = null; }
+  if (selectedGroup) {
+    if (selectedGroup.marker) selectedGroup.marker.setZIndexOffset(0);
+    selectedGroup = null;
+    if (LMAP && mapGroups) reclusterPins();   // the freed seal may gather again
+  }
 }
 
 function mapToast(msg) {
