@@ -2384,17 +2384,28 @@ body {
   /* paint law: static midpoint of the old podiumglow box-shadow animation */
   box-shadow: 0 0 17px 2px rgba(213, 174, 88, 0.21);
 }
+/* the field matches the podium's SIZE (the stepped-back rows were
+   unreadable — Mishari 20:14); only 1-2-3 keep the gilt edge and halo */
 .ag-item.plow {
-  gap: 12px;
-  padding: 6px 10px 6px 8px;
+  gap: 15px;
+  padding: 14px 12px 14px 10px;
+  margin-bottom: 10px;
 }
-.ag-item.plow .thumb { width: 40px; height: 40px; border-radius: 10px; }
-.ag-item.plow .thumb.mono-mini { font-size: 16px; }
-.ag-item.plow .nm { font-size: 15px; }
-.ag-item.plow .ob { font-size: 13px; }
-.ag-item.plow .what { font-size: 8.5px; }
-.ag-item.plow .prank { width: 20px; font-size: 14px; }
-.ag-item.plow .ag-uber { width: 32px; height: 32px; }
+.ag-item.plow .thumb { width: 62px; height: 62px; border-radius: 14px; }
+.ag-item.plow .thumb.mono-mini { font-size: 22px; }
+.ag-item.plow .nm {
+  font-size: 21px;
+  color: #f8f3e8;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.12;
+}
+.ag-item.plow .ob { font-size: 17px; }
+.ag-item.plow .what { font-size: 10px; }
+.ag-item.plow .prank { width: 30px; font-size: 18px; font-style: italic; color: rgba(232, 201, 128, 0.55); }
+.ag-item.plow .ag-uber { width: 36px; height: 36px; }
 .ag-item .pright { flex: 0 0 auto; }
 .pulse-note {
   padding: 18px 30px 8px;
@@ -3816,8 +3827,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '20 July 2026 · 13:39 CEST';
-const APP_BUILD = 'v203';
+const COLLECTION_UPDATED = '20 July 2026 · 20:19 CEST';
+const APP_BUILD = 'v206';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
