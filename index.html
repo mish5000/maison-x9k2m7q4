@@ -1131,6 +1131,25 @@ body {
 
 .searchbar input::placeholder { color: var(--ink-faint); letter-spacing: 0.22em; }
 
+/* the profile medallion — a gold-ringed monogram beneath the Uber pill,
+   the member's door to My Club (Mishari 13:31, circled spot) */
+.heroprofile {
+  position: absolute;
+  top: calc(74px + env(safe-area-inset-top, 0px));
+  left: 22px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(11, 10, 8, 0.45);
+  border: 1px solid rgba(232, 201, 128, 0.55);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  color: var(--gold-bright);
+  font-size: 20px;
+  text-decoration: none;
+  z-index: 4;
+}
+.heroprofile:active { transform: scale(0.94); }
+
 /* discreet taxi pill — Uber with pickup at the member's current location */
 .herotaxi {
   position: absolute;
@@ -1930,6 +1949,11 @@ body {
 .membercard .crest { font-family: var(--serif); font-size: 58px; color: var(--gold-bright); line-height: 1; }
 .membercard .club { font-size: 10px; letter-spacing: 0.44em; text-transform: uppercase; color: var(--gold-bright); }
 .membercard .member { font-family: var(--serif); font-size: 21px; color: var(--ink); }
+.membercard .msince {
+  font-family: var(--sans); font-size: 8.5px; letter-spacing: 0.28em;
+  text-transform: uppercase; color: rgba(232, 201, 128, 0.75);
+  margin-top: 10px;
+}
 
 .clublinks { padding: 18px 22px; display: grid; gap: 14px; }
 
@@ -3789,8 +3813,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '20 July 2026 · 13:32 CEST';
-const APP_BUILD = 'v197';
+const COLLECTION_UPDATED = '20 July 2026 · 13:36 CEST';
+const APP_BUILD = 'v200';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5831,6 +5855,7 @@ function viewHome() {
       <span class="bg">${heroImg(UNSPLASH('1414235077428-338989a2e8c0', 1600))}</span>
       <button class="cgpill" onclick="openConcierge()" aria-label="The Concierge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg><span>AI Concierge</span></button>
       <a class="herotaxi" href="https://m.uber.com/ul/?action=setPickup&pickup=my_location" target="_blank" rel="noopener" aria-label="Uber from my current location">${I.car}<span>Uber</span></a>
+      <a class="heroprofile" href="#/club" aria-label="My profile"><span class="serif">M</span></a>
       <a class="greeting-block rise" href="#/club" aria-label="My Club">
         <div class="eyebrow">${greeting()}</div>
         <span class="prefix serif">${MEMBER.prefix}</span>
@@ -6280,6 +6305,7 @@ function viewClub() {
       <div class="crest serif">M</div>
       <div class="club">Privée · The Marafie Collection</div>
       <div class="member serif">${MEMBER.prefix} ${MEMBER.name}</div>
+      <div class="msince">Fondateur · Nº 001 · Member since MMXXVI</div>
     </div>
     <div class="statrow rise rise-2">
       <div class="statbox"><div class="num serif">${CITIES.length}</div><div class="lbl">Destinations</div></div>
