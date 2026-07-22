@@ -1593,12 +1593,14 @@ body {
   z-index: 3;
   width: 42px; height: 42px;
   border-radius: 50%;
-  border: none;
-  background: linear-gradient(160deg, #e2c176 0%, #c8a24b 60%, #b08a38 100%);
-  color: #241b0a;
+  /* ghost like its stack-mates — the solid gold shouted (Mishari 19:04) */
+  border: 1px solid rgba(232, 201, 128, 0.55);
+  background: rgba(11, 10, 8, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--gold-bright);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
 }
 .vcard .plan-add svg { width: 18px; height: 18px; }
 .vcard .plan-add:active { transform: scale(0.94); }
@@ -1875,6 +1877,23 @@ body {
 
 .sheet-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,18,14,0) 40%, var(--bg-raised) 100%); }
 
+/* the sheet's + — plan this venue, right under the close */
+.sheet-plan {
+  position: absolute;
+  top: 66px;
+  right: 14px;
+  z-index: 3;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(232, 201, 128, 0.55);
+  background: rgba(11, 10, 8, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--gold-bright);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.sheet-plan svg { width: 17px; height: 17px; }
 .sheet-close {
   position: absolute;
   top: 14px;
@@ -3914,8 +3933,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 July 2026 · 18:50 CEST';
-const APP_BUILD = 'v221';
+const COLLECTION_UPDATED = '22 July 2026 · 19:45 CEST';
+const APP_BUILD = 'v224';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6631,6 +6650,7 @@ function openSheet(cityId, catId, idx) {
       return im ? `<div class="sheet-photo" style="background-image:url('${im}')">`
                 : monogram(v, 'sheet-photo').replace('</div>', ''); })()}
       <button class="sheet-close" aria-label="Close">✕</button>
+      <button class="sheet-plan" aria-label="Plan this venue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
     </div>
     <div class="sheet-body">
       <div class="area">${v.a} · ${city.name}</div>
@@ -6693,6 +6713,8 @@ function openSheet(cityId, catId, idx) {
     el.addEventListener('contextmenu', (e) => e.preventDefault());
   });
   $sheet.querySelector('.sheet-close').onclick = closeSheet;
+  const shp = $sheet.querySelector('.sheet-plan');
+  if (shp) shp.onclick = () => openPlanSheet(cityId, catId, idx);
   $sheet.querySelector('#sheetsave').onclick = (e) => {
     toggleSave(key);
     const nowOn = savedSet.has(key);
