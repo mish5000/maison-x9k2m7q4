@@ -3062,6 +3062,25 @@ body {
   border-radius: 26px 26px 0 0;
   will-change: transform;
 }
+/* the Calendar rests at 90% like a true sheet — a breath of the room stays
+   above it, so the pull-down invites itself (Mishari 21:36) */
+body.calmodal #shell {
+  height: 90vh; height: 90dvh;
+  margin-top: 10vh; margin-top: 10dvh;
+  border-radius: 26px 26px 0 0;
+  border-top: 1px solid rgba(200, 162, 75, 0.5);
+  box-shadow: 0 -16px 60px rgba(0, 0, 0, 0.7);
+}
+.pagegrab { display: flex; justify-content: center; padding: 10px 0 0; margin-bottom: -8px; }
+.pagegrab span {
+  width: 46px; height: 5px; border-radius: 999px;
+  background: rgba(244, 239, 230, 0.4);
+}
+/* flying layers that carry the Calendar keep the same 90% geometry */
+.slide-enter.rise-cal, .slide-layer.cal-strip, .slide-layer.pd-drag {
+  top: 10vh; top: 10dvh;
+  border-radius: 26px 26px 0 0;
+}
 .slide-freeze {                        /* mirror #app's box so the frozen page keeps its
                                           full scroll range (scrollTop would clamp short) */
   min-height: 100%;
@@ -4024,8 +4043,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 July 2026 · 21:31 CEST';
-const APP_BUILD = 'v258';
+const COLLECTION_UPDATED = '22 July 2026 · 21:44 CEST';
+const APP_BUILD = 'v261';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6791,6 +6810,7 @@ function viewSaved() {
     </div>`;
 
   $app.innerHTML = `
+    <div class="pagegrab"><span></span></div>
     <button class="pagesearch" onclick="openSearch()" aria-label="Search">${I.search}</button>
     <div class="pagehead">
       <h1 class="display serif rise">My Calendar</h1>
@@ -7749,7 +7769,7 @@ function captureEnterLayer() {
   return layer;
 }
 
-function runSlide(kind, oldLayer, axis = 'x') {
+function runSlide(kind, oldLayer, axis = 'x', riseCal = false) {
   if (activeSlide) activeSlide();               // a newer nav cuts the last one short
   document.body.appendChild(oldLayer);
   // same iOS reparent decode-drop as the gesture path: the frozen OLD page's
@@ -7830,6 +7850,7 @@ function runSlide(kind, oldLayer, axis = 'x') {
     // fly a viewport-sized body-level layer, never the giant #app
     enter = captureEnterLayer();
     if (axis === 'y') enter.classList.add('rise');   // rests BELOW the glass instead of beside it
+    if (riseCal) enter.classList.add('rise-cal');    // the Calendar flies at its 90% geometry
     document.body.appendChild(enter);           // rests at calc(100% - 2px):
     document.body.appendChild(dim);             // 2px on glass = paint demand
     decodeIncoming(enter).then(() => {
@@ -7861,6 +7882,9 @@ addEventListener('pagehide', () => { if (activeSlide) activeSlide(); });
 function renderView(h) {
   const parts = (h || '#/').replace(/^#\//, '').split('/').filter(Boolean);
   document.body.classList.toggle('weekshare', parts[0] === 'week');
+  // the Calendar rests at 90% like a true sheet (Mishari 21:36) — the shell
+  // itself steps down, so every path that paints #app keeps the geometry honest
+  document.body.classList.toggle('calmodal', parts[0] === 'saved');
   if (parts.length === 0) { renderNav('home'); viewHome(); return; }
   switch (parts[0]) {
     case 'explore': renderNav('explore'); viewExplore(); break;
@@ -7946,6 +7970,8 @@ function renderRoute(soft = false, dir = 'fwd') {
       // category pages and the Calendar rise like sheets: a push INTO them
       // ascends, a pop OUT descends — every other route keeps the lateral slide
       slideAxis = /^#\/(cat\/|saved)/.test(slideKind === 'push' ? h : lastRouteHash) ? 'y' : 'x';
+      // a departing Calendar keeps its 90% geometry in the frozen layer
+      if (lastRouteHash.startsWith('#/saved')) oldLayer.classList.add('cal-strip');
     }
   }
   pendingSlide = null;
@@ -7988,7 +8014,7 @@ function renderRoute(soft = false, dir = 'fwd') {
     // Instagram-style slide owns this navigation — no fade on top of it
     ++fadeSeq;
     $app.classList.remove('navfade', 'prefade');
-    runSlide(slideKind, oldLayer, slideAxis);
+    runSlide(slideKind, oldLayer, slideAxis, slideKind === 'push' && h.startsWith('#/saved'));
   } else if (!soft && !nativeBack) {
     // Hold the fresh page at its from-state (prefade) synchronously with the
     // DOM swap, then start the animation across a paint boundary (double rAF)
@@ -8542,6 +8568,7 @@ if (STANDALONE && CUSTOM_BACK) {
     while ($app.firstChild) $app.removeChild($app.firstChild);
     const fz = s.layer && s.layer.firstChild;
     while (fz && fz.firstChild) $app.appendChild(fz.firstChild);
+    document.body.classList.add('calmodal');   // the floor's renderView dropped it; we're back on the Calendar
     $shell.scrollTop = s.departing;
     wireFocusGlow();
     clear(s);
