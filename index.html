@@ -3956,8 +3956,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 July 2026 · 20:07 CEST';
-const APP_BUILD = 'v234';
+const COLLECTION_UPDATED = '22 July 2026 · 20:26 CEST';
+const APP_BUILD = 'v238';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6425,17 +6425,24 @@ function shareWeek() {
    installed app's storage away from Safari's — an adopt link tapped from
    chat lands in the wrong copy. Inside the installed app, paste the same
    link (or bare code) and it writes HERE. */
-function importBookings() {
-  const raw = prompt('Paste the booking link or code');
+async function importBookings() {
+  // one tap: read the clipboard directly (iOS shows its paste banner);
+  // fall back to a paste box. Whitespace/line-breaks from chat copies are
+  // stripped — a wrapped link silently truncated the code (22 Jul).
+  let raw = '';
+  try { raw = await navigator.clipboard.readText(); } catch (_) {}
+  const looksRight = (s) => /adopt\//.test(s) || /^[A-Za-z0-9\-_]+$/.test(s.replace(/\s+/g, ''));
+  if (!raw || !looksRight(raw)) raw = prompt('Paste the booking link or code') || '';
+  raw = String(raw).replace(/\s+/g, '');
   if (!raw) return;
-  const m = String(raw).trim().match(/adopt\/([A-Za-z0-9\-_]+)/) || [null, String(raw).trim()];
-  viewAdopt(m[1]);
+  const m = raw.match(/adopt\/([A-Za-z0-9\-_]+)/);
+  viewAdopt(m ? m[1] : raw);
 }
 
 function viewAdopt(b64) {
   let p = null;
   try { p = JSON.parse(decodeURIComponent(escape(atob((b64 || '').replace(/-/g, '+').replace(/_/g, '/'))))); } catch (_) {}
-  if (!p || !p.d || typeof p.d !== 'object') { go('#/'); return; }
+  if (!p || !p.d || typeof p.d !== 'object') { toast('That code didn\u2019t read \u2014 copy the whole link and try again'); return; }
   const today = isoDay(new Date());
   let n = 0;
   for (const iso of Object.keys(p.d)) {
@@ -6458,7 +6465,7 @@ function viewAdopt(b64) {
 function viewWeek(b64) {
   let p = null;
   try { p = JSON.parse(decodeURIComponent(escape(atob((b64 || '').replace(/-/g, '+').replace(/_/g, '/'))))); } catch (_) {}
-  if (!p || !p.d || typeof p.d !== 'object') { go('#/'); return; }
+  if (!p || !p.d || typeof p.d !== 'object') { toast('That code didn\u2019t read \u2014 copy the whole link and try again'); return; }
   const days = Object.keys(p.d).sort();
   const rows = days.map(iso => {
     const dt = new Date(iso + 'T12:00:00');
