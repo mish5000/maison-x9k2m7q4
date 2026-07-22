@@ -2099,6 +2099,7 @@ body {
 }
 #nav button { gap: 6px; font-family: var(--sans); font-size: 9.5px;
   font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; }
+#nav button span { white-space: nowrap; }
 #nav button svg { width: 22px; height: 22px; }
 #nav button.active { color: var(--gold-bright); }
 /* the AI Concierge — always gold, the house's brightest key */
@@ -3826,12 +3827,36 @@ body.weekshare #nav { display: none; }
 .mycal { padding: 4px 0 14px; }
 .pc { position: relative; }
 .pc .dotp {
-  position: absolute; bottom: 5px; left: 50%; margin-left: -2px;
-  width: 4px; height: 4px; border-radius: 50%;
+  position: absolute; bottom: 5px; left: 50%; margin-left: -2.5px;
+  width: 5px; height: 5px; border-radius: 50%;
   background: var(--gold-bright);
 }
+/* two or more bookings that day: the dot stretches into a little bar */
+.pc .dotp.wide { width: 13px; margin-left: -6.5px; border-radius: 3px; }
 .pc.has { border-color: rgba(232, 201, 128, 0.5); }
 .pc.on .dotp { background: #fff2ea; }
+.pc.td:not(.on) { border-color: rgba(232, 201, 128, 0.85); }  /* today keeps a gold ring */
+.pc[data-cd] { transition: transform 0.12s ease; }
+.pc[data-cd]:active { transform: scale(0.9); }
+
+/* My Calendar's grid runs LARGER than the plan-sheet's (his 22 Jul ask) */
+.mycal .pmonth { margin-bottom: 14px; }
+.mycal .pm-name { font-size: 23px; }
+.mycal .pdow { gap: 7px; font-size: 10px; }
+.mycal .pdow span:nth-child(6), .mycal .pdow span:nth-child(7) { color: var(--gold-dim); }
+.mycal .pgrid { gap: 7px; }
+.mycal .pc { font-size: 16.5px; border-radius: 14px; }
+.mycal .pc .dotp { bottom: 6px; }
+
+/* the tools row: Share · Edit · + on one right-aligned line */
+.caltools { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin: 0 0 4px; }
+.calplus {
+  flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid rgba(232, 201, 128, 0.55);
+  background: rgba(232, 201, 128, 0.08);
+  color: var(--gold-bright); font-size: 19px; line-height: 1; cursor: pointer;
+}
+.calplus:active { transform: scale(0.9); }
 
 /* the paste-import whisper under My Calendar */
 .cal-import {
@@ -3844,6 +3869,20 @@ body.weekshare #nav { display: none; }
 
 /* + Add to this day — under the chosen day's bill on My Calendar */
 .dayadd { margin-top: 12px; }
+
+/* the day's bill reads as an itinerary: time rail, generous photo */
+.ag-item.cal { padding: 10px 12px 10px 10px; gap: 13px; }
+.ag-item.cal .ag-when {
+  flex: 0 0 auto; width: 48px; text-align: center;
+  font-size: 16px; color: var(--gold-bright);
+}
+.ag-item.cal .ag-when.tbd { color: rgba(244, 239, 230, 0.22); }
+.ag-item.cal .thumb { width: 72px; height: 72px; border-radius: 16px; }
+.ag-item.cal .thumb.mono-mini { font-size: 26px; }
+.ag-item.cal .nm { font-size: 19px; white-space: normal; line-height: 1.18; }
+/* ✕ only shows in edit mode — Edit owns removal, the resting view stays calm */
+.ag-item.cal .ag-x { display: none; }
+.ag-day.editing .ag-item.cal .ag-x { display: block; color: #e4574a; font-size: 15px; }
 
 .sp-field.f1{box-shadow:231px 886px rgba(232,201,128,0.9), 231px 520px rgba(232,201,128,0.5), 94px 823px rgba(232,201,128,0.9), 322px 628px rgba(232,201,128,0.5), 48px 457px rgba(232,201,128,0.7), 72px 92px rgba(232,201,128,0.35), 304px 405px rgba(232,201,128,0.9), 334px 756px rgba(232,201,128,0.5), 319px 15px rgba(232,201,128,0.35), 30px 36px rgba(232,201,128,0.5), 450px 247px rgba(232,201,128,0.35), 398px 475px rgba(232,201,128,0.7), 225px 605px rgba(232,201,128,0.5), 265px 239px rgba(232,201,128,0.7), 255px 4px rgba(232,201,128,0.35), 234px 670px rgba(232,201,128,0.7), 208px 564px rgba(232,201,128,0.35), 362px 260px rgba(232,201,128,0.7), 388px 235px rgba(232,201,128,0.7), 15px 71px rgba(232,201,128,0.35), 205px 110px rgba(232,201,128,0.7), 197px 68px rgba(232,201,128,0.35), 433px 701px rgba(232,201,128,0.35), 109px 214px rgba(232,201,128,0.35), 240px 384px rgba(232,201,128,0.9), 214px 74px rgba(232,201,128,0.5), 398px 691px rgba(232,201,128,0.7), 172px 89px rgba(232,201,128,0.7), 170px 15px rgba(232,201,128,0.9), 388px 944px rgba(232,201,128,0.35), 68px 252px rgba(232,201,128,0.35), 5px 61px rgba(232,201,128,0.9), 408px 498px rgba(232,201,128,0.5), 349px 572px rgba(232,201,128,0.5), 229px 521px rgba(232,201,128,0.5), 374px 787px rgba(232,201,128,0.5), 214px 659px rgba(232,201,128,0.9), 59px 404px rgba(232,201,128,0.9), 108px 0px rgba(232,201,128,0.7), 442px 994px rgba(232,201,128,0.7), 453px 20px rgba(232,201,128,0.5), 95px 403px rgba(232,201,128,0.35), 21px 149px rgba(232,201,128,0.5), 226px 264px rgba(232,201,128,0.35), 395px 624px rgba(232,201,128,0.7), 425px 303px rgba(232,201,128,0.9), 37px 76px rgba(232,201,128,0.35), 106px 596px rgba(232,201,128,0.5), 7px 615px rgba(232,201,128,0.7), 190px 637px rgba(232,201,128,0.9), 65px 982px rgba(232,201,128,0.9), 426px 588px rgba(232,201,128,0.5), 443px 395px rgba(232,201,128,0.5), 321px 157px rgba(232,201,128,0.7), 116px 837px rgba(232,201,128,0.5), 371px 194px rgba(232,201,128,0.5), 378px 644px rgba(232,201,128,0.5), 351px 972px rgba(232,201,128,0.9), 451px 494px rgba(232,201,128,0.35), 215px 48px rgba(232,201,128,0.35), 55px 39px rgba(232,201,128,0.7), 122px 757px rgba(232,201,128,0.9), 131px 430px rgba(232,201,128,0.9), 150px 532px rgba(232,201,128,0.5), 368px 1000px rgba(232,201,128,0.35), 64px 233px rgba(232,201,128,0.9), 286px 669px rgba(232,201,128,0.35), 143px 217px rgba(232,201,128,0.5), 383px 16px rgba(232,201,128,0.35), 137px 421px rgba(232,201,128,0.9), 127px 61px rgba(232,201,128,0.35), 90px 288px rgba(232,201,128,0.7), 271px 585px rgba(232,201,128,0.5), 47px 370px rgba(232,201,128,0.5), 456px 461px rgba(232,201,128,0.7), 336px 750px rgba(232,201,128,0.5), 302px 35px rgba(232,201,128,0.35), 243px 932px rgba(232,201,128,0.7), 358px 319px rgba(232,201,128,0.35), 10px 612px rgba(232,201,128,0.35), 246px 68px rgba(232,201,128,0.7), 163px 139px rgba(232,201,128,0.35), 38px 463px rgba(232,201,128,0.7), 377px 45px rgba(232,201,128,0.5), 406px 986px rgba(232,201,128,0.7), 180px 86px rgba(232,201,128,0.9), 39px 892px rgba(232,201,128,0.9), 404px 30px rgba(232,201,128,0.9), 293px 14px rgba(232,201,128,0.9), 194px 596px rgba(232,201,128,0.35);}.sp-field.f2{box-shadow:71px 248px rgba(232,201,128,0.35), 313px 457px rgba(232,201,128,0.5), 359px 123px rgba(232,201,128,0.7), 405px 910px rgba(232,201,128,0.35), 118px 275px rgba(232,201,128,0.35), 163px 999px rgba(232,201,128,0.5), 282px 701px rgba(232,201,128,0.9), 362px 904px rgba(232,201,128,0.35), 295px 902px rgba(232,201,128,0.35), 301px 270px rgba(232,201,128,0.7), 215px 194px rgba(232,201,128,0.5), 435px 114px rgba(232,201,128,0.35), 357px 334px rgba(232,201,128,0.7), 132px 188px rgba(232,201,128,0.9), 159px 922px rgba(232,201,128,0.5), 143px 845px rgba(232,201,128,0.7), 341px 708px rgba(232,201,128,0.5), 221px 50px rgba(232,201,128,0.7), 272px 922px rgba(232,201,128,0.35), 214px 947px rgba(232,201,128,0.7), 259px 291px rgba(232,201,128,0.9), 203px 676px rgba(232,201,128,0.5), 157px 576px rgba(232,201,128,0.7), 203px 596px rgba(232,201,128,0.35), 152px 589px rgba(232,201,128,0.9), 387px 689px rgba(232,201,128,0.9), 45px 92px rgba(232,201,128,0.9), 182px 100px rgba(232,201,128,0.9), 399px 412px rgba(232,201,128,0.35), 430px 975px rgba(232,201,128,0.5), 262px 244px rgba(232,201,128,0.9), 3px 98px rgba(232,201,128,0.9), 458px 198px rgba(232,201,128,0.5), 15px 559px rgba(232,201,128,0.9), 178px 183px rgba(232,201,128,0.7), 182px 644px rgba(232,201,128,0.5), 227px 37px rgba(232,201,128,0.35), 274px 137px rgba(232,201,128,0.5), 335px 710px rgba(232,201,128,0.35), 26px 199px rgba(232,201,128,0.9), 62px 847px rgba(232,201,128,0.5), 300px 471px rgba(232,201,128,0.35), 433px 122px rgba(232,201,128,0.9), 362px 536px rgba(232,201,128,0.5), 299px 291px rgba(232,201,128,0.9);}.sp-field.f3{box-shadow:292px 171px rgba(232,201,128,0.5), 418px 860px rgba(232,201,128,0.7), 245px 667px rgba(232,201,128,0.5), 333px 926px rgba(232,201,128,0.7), 351px 540px rgba(232,201,128,0.9), 227px 288px rgba(232,201,128,0.35), 154px 423px rgba(232,201,128,0.7), 265px 508px rgba(232,201,128,0.35), 380px 622px rgba(232,201,128,0.9), 417px 866px rgba(232,201,128,0.7), 163px 568px rgba(232,201,128,0.5), 60px 885px rgba(232,201,128,0.35), 163px 908px rgba(232,201,128,0.7), 109px 918px rgba(232,201,128,0.35), 383px 374px rgba(232,201,128,0.35), 334px 329px rgba(232,201,128,0.5), 262px 279px rgba(232,201,128,0.7), 3px 362px rgba(232,201,128,0.7), 284px 403px rgba(232,201,128,0.9), 94px 703px rgba(232,201,128,0.35);}
 </style>
@@ -3956,8 +3995,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 July 2026 · 20:26 CEST';
-const APP_BUILD = 'v238';
+const COLLECTION_UPDATED = '22 July 2026 · 20:38 CEST';
+const APP_BUILD = 'v242';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5413,6 +5452,7 @@ const I = {
   home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/></svg>',
   compass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>',
   bookmark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 4h10v16l-5-4-5 4z"/></svg>',
+  cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="5.5" width="16" height="15" rx="2.5"/><path d="M8 3.5v4M16 3.5v4M4 10h16"/><circle cx="12" cy="15" r="1.6" fill="currentColor" stroke="none"/></svg>',
   bookmarkFill: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><path d="M7 4h10v16l-5-4-5 4z"/></svg>',
   member: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1.2-3.6 4-5 7-5s5.8 1.4 7 5"/></svg>',
   globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9S14.6 18.4 12 21c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3z"/></svg>',
@@ -5822,26 +5862,29 @@ function topbar(title, backHash) {
 const STARS = '★ ★ ★ ★ ★';
 
 /* ---------- search ---------- */
+/* accent-blind: he types "Lena", the venue is "Leña" — fold diacritics on
+   BOTH sides before matching (NFD strips the combining marks) */
+const fold = (s) => String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 function findCities(q) {
-  q = q.trim().toLowerCase();
+  q = fold(q.trim());
   if (!q) return [];
   return CITIES.filter(c =>
-    c.name.toLowerCase().includes(q) ||
-    c.country.toLowerCase().includes(q) ||
-    (c.aliases || []).some(a => a.includes(q))
+    fold(c.name).includes(q) ||
+    fold(c.country).includes(q) ||
+    (c.aliases || []).some(a => fold(a).includes(q))
   );
 }
 
 function findVenues(q) {
-  q = q.trim().toLowerCase();
+  q = fold(q.trim());
   if (q.length < 2) return [];
   const hits = [];
   for (const city of CITIES)
     for (const cat of CATEGORIES)
       for (const part of catParts(cat))
         (city.venues[part] || []).forEach((v, idx) => {
-          const name = v.n.toLowerCase();
-          const area = (v.a || '').toLowerCase();
+          const name = fold(v.n);
+          const area = fold(v.a || '');
           if (!name.includes(q) && !area.includes(q)) return;
           hits.push({ city, cat, part, v, idx, rank: name.startsWith(q) ? 0 : name.includes(q) ? 1 : 2 });
         });
@@ -6364,7 +6407,7 @@ function renderPlanSheet() {
       <div class="pgrid">${cells.join('')}</div>
       <div class="ptime${planDate ? '' : ' veiled'}">
         <span class="pt-lbl">At</span>
-        <input type="time" id="ptimein" value="21:00" step="60">
+        <input type="time" id="ptimein" value="${(planDate && planTimes[planDate + '|' + planCtx.key]) || '21:00'}" step="60">
         <button class="pill solid" id="plock">Lock it in</button>
       </div>
     </div>`;
@@ -6388,6 +6431,13 @@ function renderPlanSheet() {
     toast(`${planCtx.name} — ${DAY_FULL[dt.getDay()]} ${dt.getDate()} ${MONTHS[dt.getMonth()]}${t ? ' · ' + t : ''}`);
     haptic();
     closeSheet();
+    // instant impact: if the calendar page is behind this sheet, the dot
+    // must land the moment he locks — jump the grid to that day and repaint
+    if ((location.hash || '').startsWith('#/saved')) {
+      viewSaved.sel = planDate;
+      viewSaved.ym = [dt.getFullYear(), dt.getMonth()];
+      renderRoute(true);
+    }
   });
 }
 
@@ -6470,7 +6520,9 @@ function viewWeek(b64) {
   const rows = days.map(iso => {
     const dt = new Date(iso + 'T12:00:00');
     if (isNaN(dt)) return '';
-    const items = (Array.isArray(p.d[iso]) ? p.d[iso] : []).map(k => {
+    const items = (Array.isArray(p.d[iso]) ? p.d[iso] : []).slice()
+      .sort((a, b) => ((p.t || {})[iso + '|' + a] || '99:99').localeCompare((p.t || {})[iso + '|' + b] || '99:99'))
+      .map(k => {
       const [cityId, catId, idx] = String(k).split('|');
       const city = CITY_BY_ID[cityId];
       const v = city?.venues?.[catId]?.[+idx];
@@ -6533,29 +6585,40 @@ function viewSaved() {
   for (let d = 1; d <= dim; d++) {
     const iso = isoDay(new Date(cy, cm, d));
     const past = iso < today;
-    const has = !past && (plans[iso] || []).length;
-    cells.push(`<button class="pc${past ? ' off' : ''}${has ? ' has' : ''}${iso === viewSaved.sel ? ' on' : ''}"${past ? ' disabled' : ` data-cd="${iso}"`}>${d}${has ? '<i class="dotp"></i>' : ''}</button>`);
+    const cnt = past ? 0 : (plans[iso] || []).length;
+    // one booking = a dot; a full day = a little gold bar — readable at a glance
+    cells.push(`<button class="pc${past ? ' off' : ''}${cnt ? ' has' : ''}${iso === viewSaved.sel ? ' on' : ''}${iso === today ? ' td' : ''}"${past ? ' disabled' : ` data-cd="${iso}"`}>${d}${cnt ? `<i class="dotp${cnt > 1 ? ' wide' : ''}"></i>` : ''}</button>`);
   }
   const selIso = viewSaved.sel;
   const selDt = new Date(selIso + 'T12:00:00');
-  const selItems = (plans[selIso] || []).map(k => {
-    const [cityId, catId, idx] = k.split('|');
-    const city = CITY_BY_ID[cityId];
-    const v = city?.venues?.[catId]?.[+idx];
-    if (!v) return '';
-    const im = venueImg(cityId, catId, +idx, v);
-    return `
-      <div class="ag-item" data-open="${k}">
+  // the day reads top-to-bottom like an itinerary: earliest first, untimed last
+  const selItems = (plans[selIso] || []).slice()
+    .sort((a, b) => (planTimes[selIso + '|' + a] || '99:99').localeCompare(planTimes[selIso + '|' + b] || '99:99'))
+    .map(k => {
+      const [cityId, catId, idx] = k.split('|');
+      const city = CITY_BY_ID[cityId];
+      const v = city?.venues?.[catId]?.[+idx];
+      if (!v) return '';
+      const im = venueImg(cityId, catId, +idx, v);
+      const tm = planTimes[selIso + '|' + k];
+      return `
+      <div class="ag-item cal" data-open="${k}">
+        <span class="ag-when serif${tm ? '' : ' tbd'}">${tm || '·'}</span>
         ${im ? `<span class="thumb" style="background-image:url('${im}')"></span>` : `<span class="thumb mono-mini serif">${v.n.charAt(0)}</span>`}
         <span class="meta">
           <span class="nm serif">${v.n}</span>
-          <span class="what">${CAT_SINGLE[catId] || catId} · ${city.name}${planTimes[selIso + '|' + k] ? ` · <b class="ag-time">${planTimes[selIso + '|' + k]}</b>` : ''}</span>
+          <span class="what">${CAT_SINGLE[catId] || catId} · ${city.name}</span>
         </span>
         <button class="ag-x" data-unplan="${selIso}|${k}" aria-label="Remove">✕</button>
       </div>`;
-  }).join('');
+    }).join('');
   const agenda = `
     <div class="mycal">
+      <div class="caltools">
+        <button class="pill small" onclick="shareWeek()">Share</button>
+        <button class="pill small${viewSaved.edit ? ' solid' : ''}" id="caledit">${viewSaved.edit ? 'Done' : 'Edit'}</button>
+        <button class="calplus" id="calplus" aria-label="Add a plan">+</button>
+      </div>
       <button class="cal-import" onclick="importBookings()">Have a booking code? Import</button>
       <div class="pmonth">
         <button class="pm-nav" data-cm="-1" ${curYM <= nowYM ? 'disabled' : ''}>‹</button>
@@ -6565,7 +6628,7 @@ function viewSaved() {
       <div class="pdow">${['M', 'T', 'W', 'T', 'F', 'S', 'S'].map(l => `<span>${l}</span>`).join('')}</div>
       <div class="pgrid">${cells.join('')}</div>
     </div>
-    <div class="ag-day ${selIso === today ? 'today' : ''}">
+    <div class="ag-day ${selIso === today ? 'today' : ''}${viewSaved.edit ? ' editing' : ''}">
       <div class="ag-head">
         <span class="d serif">${DAY_FULL[selDt.getDay()]}</span>
         <span class="dt">${selDt.getDate()} ${MONTHS[selDt.getMonth()]}${selIso === today ? ' · Today' : ''}</span>
@@ -6577,12 +6640,10 @@ function viewSaved() {
   $app.innerHTML = `
     <button class="pagesearch" onclick="openSearch()" aria-label="Search">${I.search}</button>
     <div class="pagehead">
-      <h1 class="display serif rise">My List</h1>
-      <div class="sub rise">Your week, then everything you have marked</div>
+      <h1 class="display serif rise">My Calendar</h1>
+      <div class="sub rise">Your plans, then everything you have marked</div>
     </div>
     <section class="agenda rise rise-1">
-      <div class="section-head"><span class="display serif">My Calendar</span>
-        <button class="pill small" onclick="shareWeek()">Share</button></div>
       ${agenda}
     </section>
     ${(() => {
@@ -6621,6 +6682,7 @@ function viewSaved() {
         ${blocks}
       </section>` : '';
     })()}
+    <div class="section-head rise rise-1"><span class="display serif">My List</span></div>
     <div class="statrow rise rise-1">
       <div class="statbox"><div class="num serif">${entries.length}</div><div class="lbl">Saved</div></div>
       <div class="statbox"><div class="num serif">${cityCount}</div><div class="lbl">Cities</div></div>
@@ -6633,12 +6695,18 @@ function viewSaved() {
          </div>`}`;
   $app.querySelectorAll('.ag-item[data-open]').forEach(el => el.addEventListener('click', () => {
     const [c, cat, i] = el.dataset.open.split('|');
+    // edit mode: a tap re-opens the plan sheet ON that day — move it, retime it
+    if (viewSaved.edit && el.classList.contains('cal')) { openPlanSheet(c, cat, +i, viewSaved.sel); return; }
     openSheet(c, cat, +i);
   }));
   $app.querySelectorAll('.ag-item[data-goseason]').forEach(el => el.addEventListener('click', () =>
     go('#/season/' + el.dataset.goseason)));
   const da = $app.querySelector('#dayadd');
   if (da) da.addEventListener('click', () => { dayAddFor = viewSaved.sel; openSearch(); });
+  const cp = $app.querySelector('#calplus');
+  if (cp) cp.addEventListener('click', () => { dayAddFor = viewSaved.sel; haptic(); openSearch(); });
+  const ce = $app.querySelector('#caledit');
+  if (ce) ce.addEventListener('click', () => { viewSaved.edit = !viewSaved.edit; haptic(); renderRoute(true); });
   // the calendar grid: tap a day to read it; ‹ › walk the months
   $app.querySelectorAll('.pc[data-cd]').forEach(b => b.addEventListener('click', () => {
     viewSaved.sel = b.dataset.cd; haptic(); renderRoute(true);
@@ -7064,7 +7132,7 @@ const NAV = [
   { id: 'explore', label: 'Explore', icon: I.compass, hash: '#/explore' },
   { id: 'map', label: 'Map', icon: I.globe, hash: '#/map' },
   { id: 'concierge', label: 'Concierge', icon: I_SPARKLE, action: 'openConcierge()' },
-  { id: 'saved', label: 'My List', icon: I.bookmark, hash: '#/saved' },
+  { id: 'saved', label: 'My Calendar', icon: I.cal, hash: '#/saved' },
   { id: 'club', label: 'My Club', icon: I.member, hash: '#/club' },
 ];
 
