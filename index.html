@@ -1602,12 +1602,24 @@ body {
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
 }
-.vcard .plan-add svg { width: 18px; height: 18px; }
+.vcard .plan-add svg { width: 20px; height: 20px; }
 .vcard .plan-add:active { transform: scale(0.94); }
+/* the calendar + wears a static halo — it should read as THE next move.
+   (Static shadow only: the paint law forbids animating it.) */
+.vcard .plan-add, .sheet-plan {
+  box-shadow: 0 0 14px rgba(232, 201, 128, 0.38), 0 0 30px rgba(232, 201, 128, 0.14);
+}
 
 /* ---------- the plan sheet: month grid + carmine day + time ---------- */
 .plansheet { padding: 26px 24px calc(30px + env(safe-area-inset-bottom, 0px)); }
 .plansheet h2 { font-size: 27px; margin: 6px 0 18px; }
+/* his 22 Jul note: the calendar should be bigger, easier to hit */
+.plansheet .pm-name { font-size: 21px; }
+.plansheet .pgrid, .plansheet .pdow { gap: 7px; }
+.plansheet .pc { font-size: 16px; border-radius: 13px; }
+.plansheet .ptime { margin-top: 20px; }
+.plansheet .ptime input[type="time"] { font-size: 18px; padding: 12px 14px; }
+.plansheet #plock { padding: 13px 22px; font-size: 12px; }
 .pmonth {
   display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 12px;
@@ -1836,6 +1848,10 @@ body {
   box-shadow: 0 -14px 70px rgba(0, 0, 0, 0.75), 0 0 34px rgba(200, 162, 75, 0.16);
 }
 #sheet.dragging { transition: none; }
+/* the venue-card → calendar hand-off: a quicker dip down and rise back up,
+   so tapping + inside the sheet never hard-swaps content (22 Jul) */
+#sheet.swap { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.3s; }
+#sheet.swap.open { transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s; }
 /* native back-pop close: the page underneath is already re-rendered, so the
    zoom-down must not play over it (ghost sheet lingering after the swipe) */
 #sheet.instant, #sheet-backdrop.instant { transition: none !important; }
@@ -1883,7 +1899,7 @@ body {
   top: 66px;
   right: 14px;
   z-index: 3;
-  width: 40px; height: 40px;
+  width: 46px; height: 46px;
   border-radius: 50%;
   border: 1px solid rgba(232, 201, 128, 0.55);
   background: rgba(11, 10, 8, 0.45);
@@ -1893,7 +1909,7 @@ body {
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
 }
-.sheet-plan svg { width: 17px; height: 17px; }
+.sheet-plan svg { width: 20px; height: 20px; }
 .sheet-close {
   position: absolute;
   top: 14px;
@@ -3065,6 +3081,13 @@ body {
      back reveal now read as one physical stack of sheets */
   box-shadow: -10px 0 34px rgba(0, 0, 0, 0.4);
 }
+/* category rise: the enter layer parks BELOW the glass (same 2px-sliver paint
+   demand, bottom edge) and casts its shadow upward — reads as one more sheet */
+.slide-enter.rise {
+  transform: translateY(calc(100% - 2px));
+  box-shadow: 0 -12px 34px rgba(0, 0, 0, 0.45);
+  border-radius: 26px 26px 0 0;
+}
 .slide-enter .home-topscrim { position: absolute; }  /* fixed jumps space under transform */
 .slide-enter .vcard, .slide-enter .tile { transition: none !important; }  /* nothing may
                                   dirty the flying layer mid-animation */
@@ -3995,8 +4018,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 July 2026 · 20:38 CEST';
-const APP_BUILD = 'v242';
+const COLLECTION_UPDATED = '22 July 2026 · 20:51 CEST';
+const APP_BUILD = 'v246';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6359,11 +6382,12 @@ function viewCategory(cityId, catId) {
    the chosen day turns CARMINE (the "you are looking at this" red), the
    native time wheel takes 12h or 24h, and Lock It In writes venue + time
    into the week (My List and the shared-week link both carry it). */
-let planCtx = null, planDate = null, planMonth = null;
+let planCtx = null, planDate = null, planMonth = null, planPresetTime = null;
 let dayAddFor = null;   // "add to this day" from My Calendar: preselects the date
-function openPlanSheet(cityId, catId, idx, presetIso) {
+function openPlanSheet(cityId, catId, idx, presetIso, presetTime) {
   const v = CITY_BY_ID[cityId].venues[catId][idx];
   planCtx = { key: vkey(cityId, catId, idx), name: v.n };
+  planPresetTime = presetTime || null;
   if (presetIso) {
     const pd = new Date(presetIso + 'T12:00:00');
     planMonth = [pd.getFullYear(), pd.getMonth()];
@@ -6372,6 +6396,21 @@ function openPlanSheet(cityId, catId, idx, presetIso) {
     const now = new Date();
     planMonth = [now.getFullYear(), now.getMonth()];
     planDate = null;
+  }
+  if ($sheet.classList.contains('open')) {
+    // from inside the venue sheet: the card bows out and the calendar rises
+    // in its place — the house slide, never an instant content swap (22 Jul)
+    $sheet.classList.add('swap');
+    $sheet.classList.remove('open');
+    setTimeout(() => {
+      renderPlanSheet();
+      $sheet.scrollTop = 0;
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        $sheet.classList.add('open');
+        setTimeout(() => $sheet.classList.remove('swap'), 360);
+      }));
+    }, 330);
+    return;
   }
   renderPlanSheet();
   $backdrop.classList.add('open');
@@ -6407,7 +6446,7 @@ function renderPlanSheet() {
       <div class="pgrid">${cells.join('')}</div>
       <div class="ptime${planDate ? '' : ' veiled'}">
         <span class="pt-lbl">At</span>
-        <input type="time" id="ptimein" value="${(planDate && planTimes[planDate + '|' + planCtx.key]) || '21:00'}" step="60">
+        <input type="time" id="ptimein" value="${planPresetTime || (planDate && planTimes[planDate + '|' + planCtx.key]) || '21:00'}" step="60">
         <button class="pill solid" id="plock">Lock it in</button>
       </div>
     </div>`;
@@ -6475,18 +6514,108 @@ function shareWeek() {
    installed app's storage away from Safari's — an adopt link tapped from
    chat lands in the wrong copy. Inside the installed app, paste the same
    link (or bare code) and it writes HERE. */
+/* Read a booking CONFIRMATION as text — the venue, the date, the hour —
+   and hand it to the plan sheet for one confirming tap. Feeds two mouths:
+   pasted email text, and iOS Live Text (hold a booking screenshot, Copy —
+   Apple's own OCR does the reading, so no engine ships in the app). */
+const BK_MONTHS = {
+  jan: 1, ene: 1, feb: 2, mar: 3, apr: 4, abr: 4, may: 5, jun: 6, jul: 7,
+  aug: 8, ago: 8, sep: 9, oct: 10, nov: 11, dec: 12, dic: 12,
+};
+function parseBookingText(raw) {
+  const t = ' ' + fold(raw).replace(/\s+/g, ' ') + ' ';
+  if (t.length < 8) return null;
+  // the venue, scored: a named CITY dominates (his "Leña Marbella" must land
+  // on Marbella's Leña, not Madrid's), a full-name hit beats loose tokens,
+  // and generic words never match on their own
+  const BK_STOP = new Set(['beach', 'club', 'pool', 'restaurant', 'hotel', 'casa', 'the', 'del', 'de', 'la', 'el', 'los', 'las', 'by', 'and', 'bar', 'grill', 'lounge', 'spa']);
+  let best = null;
+  for (const city of CITIES) {
+    const cityIn = t.includes(fold(city.name));
+    for (const part in city.venues) (city.venues[part] || []).forEach((v, idx) => {
+      const n = fold(v.n);
+      const toks = n.split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !BK_STOP.has(w) && w !== fold(city.name));
+      const tokSum = toks.reduce((s, w) => s + (t.includes(w) ? w.length : 0), 0);
+      if (!tokSum) return;
+      const s = tokSum + (n.length >= 4 && t.includes(n) ? 1000 : 0) + (cityIn ? 2000 : 0);
+      if (!best || s > best.s) best = { city, part, idx, s, name: v.n };
+    });
+  }
+  if (!best) return null;
+  const today = isoDay(new Date());
+  const yNow = new Date().getFullYear();
+  const mk = (y, mo, d, yearless) => {
+    if (!mo || !d || d > 31) return null;
+    if (mo > 12 && d <= 12) { const s = mo; mo = d; d = s; }   // a US-ordered 07/24 slipped through
+    if (mo > 12) return null;
+    return { iso: `${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}`, yearless };
+  };
+  // dates, all shapes: 24/07/2026 · 24 July · July 24 — collect them all,
+  // take the first that is today-or-later (emails carry sent-dates too);
+  // only a yearless date with no future sibling rolls to next year
+  const found = [];
+  let m;
+  const reNum = /(\d{1,2})[\/.\-](\d{1,2})(?:[\/.\-](\d{2,4}))?(?!\d)/g;
+  while ((m = reNum.exec(t))) {
+    const y = m[3] ? (+m[3] < 100 ? 2000 + +m[3] : +m[3]) : yNow;
+    const f = mk(y, +m[2], +m[1], !m[3]);               // his world writes day-first
+    if (f) found.push(f);
+  }
+  const reDM = /(\d{1,2})(?:st|nd|rd|th)?\s+(?:de\s+)?([a-z]{3,})\.?\s*(\d{4})?/g;
+  while ((m = reDM.exec(t))) {
+    const mo = BK_MONTHS[m[2].slice(0, 3)];
+    const f = mo && mk(m[3] ? +m[3] : yNow, mo, +m[1], !m[3]);
+    if (f) found.push(f);
+  }
+  const reMD = /([a-z]{3,})\.?\s+(\d{1,2})(?:st|nd|rd|th)?(?:,?\s*(\d{4}))?/g;
+  while ((m = reMD.exec(t))) {
+    const mo = BK_MONTHS[m[1].slice(0, 3)];
+    const f = mo && mk(m[3] ? +m[3] : yNow, mo, +m[2], !m[3]);
+    if (f) found.push(f);
+  }
+  let iso = (found.find(f => f.iso >= today) || {}).iso || null;
+  if (!iso && found.length) {
+    const f0 = found[0];
+    iso = f0.yearless ? (+f0.iso.slice(0, 4) + 1) + f0.iso.slice(4) : f0.iso;
+  }
+  // the hour: 21:15 · 9:15 pm · 9 pm — first plausible sitting wins
+  let tm = null;
+  if ((m = t.match(/(\d{1,2})[:.](\d{2})\s*(pm|am)?/))) {
+    let hh = +m[1];
+    if (m[3] === 'pm' && hh < 12) hh += 12;
+    if (m[3] === 'am' && hh === 12) hh = 0;
+    if (hh <= 23 && +m[2] <= 59) tm = `${String(hh).padStart(2, '0')}:${m[2]}`;
+  } else if ((m = t.match(/(\d{1,2})\s*(pm|am)/))) {
+    let hh = +m[1] % 12;
+    if (m[2] === 'pm') hh += 12;
+    tm = `${String(hh).padStart(2, '0')}:00`;
+  }
+  return { cityId: best.city.id, part: best.part, idx: best.idx, name: best.name, iso, tm };
+}
+
 async function importBookings() {
   // one tap: read the clipboard directly (iOS shows its paste banner);
-  // fall back to a paste box. Whitespace/line-breaks from chat copies are
-  // stripped — a wrapped link silently truncated the code (22 Jul).
+  // fall back to a paste box. Takes an adopt link/code OR the plain text of
+  // a confirmation. Whitespace stripped on the code path — a chat-wrapped
+  // link silently truncated the code (22 Jul).
   let raw = '';
   try { raw = await navigator.clipboard.readText(); } catch (_) {}
-  const looksRight = (s) => /adopt\//.test(s) || /^[A-Za-z0-9\-_]+$/.test(s.replace(/\s+/g, ''));
-  if (!raw || !looksRight(raw)) raw = prompt('Paste the booking link or code') || '';
-  raw = String(raw).replace(/\s+/g, '');
-  if (!raw) return;
-  const m = raw.match(/adopt\/([A-Za-z0-9\-_]+)/);
-  viewAdopt(m ? m[1] : raw);
+  raw = String(raw || '');
+  const isCode = (s) => { const c = s.replace(/\s+/g, ''); return /adopt\//.test(c) || (/^[A-Za-z0-9\-_]+$/.test(c) && c.length > 40); };
+  if (!raw.trim() || (!isCode(raw) && !parseBookingText(raw)))
+    raw = prompt('Paste the booking link, code, or the text of your confirmation') || '';
+  if (!raw.trim()) return;
+  const compact = raw.replace(/\s+/g, '');
+  const m = compact.match(/adopt\/([A-Za-z0-9\-_]+)/);
+  if (m) { viewAdopt(m[1]); return; }
+  if (/^[A-Za-z0-9\-_]+$/.test(compact) && compact.length > 40) { viewAdopt(compact); return; }
+  const bk = parseBookingText(raw);
+  if (bk) {
+    toast(`Read: ${bk.name}${bk.iso ? '' : ' — pick the day'}`);
+    openPlanSheet(bk.cityId, bk.part, bk.idx, bk.iso || undefined, bk.tm || undefined);
+    return;
+  }
+  toast('Couldn’t read that — paste the confirmation text or the link');
 }
 
 function viewAdopt(b64) {
@@ -7594,7 +7723,7 @@ function captureEnterLayer() {
   return layer;
 }
 
-function runSlide(kind, oldLayer) {
+function runSlide(kind, oldLayer, axis = 'x') {
   if (activeSlide) activeSlide();               // a newer nav cuts the last one short
   document.body.appendChild(oldLayer);
   // same iOS reparent decode-drop as the gesture path: the frozen OLD page's
@@ -7640,10 +7769,21 @@ function runSlide(kind, oldLayer) {
     if (activeSlide !== done) return;           // superseded mid-hold
     // commit-weightless start: z-order and the dim were established at setup,
     // so THIS rendering update carries three animations and nothing else
-    if (kind === 'push') {
+    if (kind === 'push' && axis === 'y') {
+      // category pages present like the house sheets: rise from the bottom,
+      // the page beneath recedes a breath (his 22 Jul screen recording)
+      anims.push(enter.animate([{ transform: 'translateY(100%)' }, { transform: 'translateY(0)' }], { duration: D, easing: E, fill: 'both' }));
+      anims.push(oldLayer.animate([{ transform: 'scale(1)' }, { transform: 'scale(0.965)' }], { duration: D, easing: E, fill: 'both' }));
+      anims.push(dim.animate([{ opacity: 0 }, { opacity: SLIDE.dim }], { duration: D, easing: E, fill: 'both' }));
+    } else if (kind === 'push') {
       anims.push(enter.animate([{ transform: 'translateX(100%)' }, { transform: 'translateX(0)' }], { duration: D, easing: E, fill: 'both' }));
       anims.push(oldLayer.animate([{ transform: 'translateX(0)' }, { transform: `translateX(-${P}%)` }], { duration: D, easing: E, fill: 'both' }));
       anims.push(dim.animate([{ opacity: 0 }, { opacity: SLIDE.dim }], { duration: D, easing: E, fill: 'both' }));
+    } else if (axis === 'y') {
+      // chevron-back off a category: it sets back down the way it rose
+      anims.push($app.animate([{ transform: 'scale(0.965)' }, { transform: 'scale(1)' }], { duration: D, easing: E, fill: 'both' }));
+      anims.push(oldLayer.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(100%)' }], { duration: D, easing: E, fill: 'both' }));
+      anims.push(dim.animate([{ opacity: SLIDE.dim }, { opacity: 0 }], { duration: D, easing: E, fill: 'both' }));
     } else {
       anims.push($app.animate([{ transform: `translateX(-${P}%)` }, { transform: 'translateX(0)' }], { duration: D, easing: E, fill: 'both' }));
       anims.push(oldLayer.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(100%)' }], { duration: D, easing: E, fill: 'both' }));
@@ -7663,6 +7803,7 @@ function runSlide(kind, oldLayer) {
   if (kind === 'push') {
     // fly a viewport-sized body-level layer, never the giant #app
     enter = captureEnterLayer();
+    if (axis === 'y') enter.classList.add('rise');   // rests BELOW the glass instead of beside it
     document.body.appendChild(enter);           // rests at calc(100% - 2px):
     document.body.appendChild(dim);             // 2px on glass = paint demand
     decodeIncoming(enter).then(() => {
@@ -7771,10 +7912,15 @@ function renderRoute(soft = false, dir = 'fwd') {
   // finishes an in-flight slide first, so its reparent lands before a rebuild
   if (activeSlide) activeSlide();
   // keep the outgoing page alive for the slide (before scroll mem / rebuild)
-  let slideKind = null, oldLayer = null;
+  let slideKind = null, oldLayer = null, slideAxis = 'x';
   if (!soft && pendingSlide && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     oldLayer = captureOldLayer(departingScroll);
-    if (oldLayer) { oldLayer.dataset.hash = lastRouteHash; slideKind = pendingSlide; }
+    if (oldLayer) {
+      oldLayer.dataset.hash = lastRouteHash; slideKind = pendingSlide;
+      // category pages rise like sheets: push INTO #/cat/ ascends, a chevron
+      // pop OUT of #/cat/ descends — every other route keeps the lateral slide
+      slideAxis = (slideKind === 'push' ? h : lastRouteHash).startsWith('#/cat/') ? 'y' : 'x';
+    }
   }
   pendingSlide = null;
 
@@ -7816,7 +7962,7 @@ function renderRoute(soft = false, dir = 'fwd') {
     // Instagram-style slide owns this navigation — no fade on top of it
     ++fadeSeq;
     $app.classList.remove('navfade', 'prefade');
-    runSlide(slideKind, oldLayer);
+    runSlide(slideKind, oldLayer, slideAxis);
   } else if (!soft && !nativeBack) {
     // Hold the fresh page at its from-state (prefade) synchronously with the
     // DOM swap, then start the animation across a paint boundary (double rAF)
