@@ -3076,8 +3076,9 @@ body.calmodal #shell {
   width: 46px; height: 5px; border-radius: 999px;
   background: rgba(244, 239, 230, 0.4);
 }
-/* flying layers that carry the Calendar keep the same 90% geometry */
-.slide-enter.rise-cal, .slide-layer.cal-strip, .slide-layer.pd-drag {
+/* flying layers that carry the Calendar keep the same 90% geometry
+   (pd-drag alone stays full-height — category pages ride it too) */
+.slide-enter.rise-cal, .slide-layer.cal-strip {
   top: 10vh; top: 10dvh;
   border-radius: 26px 26px 0 0;
 }
@@ -4043,8 +4044,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 July 2026 · 21:44 CEST';
-const APP_BUILD = 'v261';
+const COLLECTION_UPDATED = '23 July 2026 · 00:59 CEST';
+const APP_BUILD = 'v264';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -8564,24 +8565,30 @@ if (STANDALONE && CUSTOM_BACK) {
   const RM2 = matchMedia('(prefers-reduced-motion: reduce)');
   let d = null;
   const clear = (s) => { [s.layer, s.dim].forEach(el => el && el.remove()); pdActive = false; sbActive = false; };
-  const restore = (s) => {   // snap-back: hand the calendar's DOM straight back to #app
+  const restore = (s) => {   // snap-back: hand the page's DOM straight back to #app
     while ($app.firstChild) $app.removeChild($app.firstChild);
     const fz = s.layer && s.layer.firstChild;
     while (fz && fz.firstChild) $app.appendChild(fz.firstChild);
-    document.body.classList.add('calmodal');   // the floor's renderView dropped it; we're back on the Calendar
+    // the floor's renderView re-decided the body classes; put the page's back
+    document.body.classList.toggle('calmodal', s.fromHash.startsWith('#/saved'));
     $shell.scrollTop = s.departing;
     wireFocusGlow();
     clear(s);
   };
+  const pdRoute = (h) => /^#\/(saved|cat\/)/.test(h || '');
   document.addEventListener('touchstart', (e) => {
     if (d || pdActive || sbActive) return;
-    if (!(appHash || '').startsWith('#/saved') || !(location.hash || '').startsWith('#/saved')) return;
+    if (!pdRoute(appHash) || !pdRoute(location.hash)) return;
     if ($sheet.classList.contains('open') || mapIsOpen() || (typeof cgIsOpen === 'function' && cgIsOpen())) return;
     if ($gsearch.classList.contains('open')) return;
     if ($shell.scrollTop > 0) return;
     const t = e.touches[0];
+    // the floor this page sets down onto: the Calendar remembers its tab,
+    // a category goes home to its city (the chevron's own target)
+    const fromHash = appHash || '#/';
+    const floor = fromHash.startsWith('#/cat/') ? (curBack || '#/') : (calFrom || '#/');
     d = { y0: t.clientY, x0: t.clientX, dy: 0, started: false, departing: $shell.scrollTop,
-          lastY: t.clientY, lastT: Date.now(), vy: 0 };
+          lastY: t.clientY, lastT: Date.now(), vy: 0, fromHash, floor };
   }, { passive: true });
   document.addEventListener('touchmove', (e) => {
     if (!d) return;
@@ -8592,10 +8599,11 @@ if (STANDALONE && CUSTOM_BACK) {
       if (Math.abs(dx) > dyRaw || dyRaw < 12) return;              // wait for clear downward intent
       if ($shell.scrollTop > 0) { d = null; return; }
       if (activeSlide) activeSlide();              // land an in-flight slide so #app is whole
-      const layer = captureOldLayer(d.departing);  // the calendar, frozen, on top
+      const layer = captureOldLayer(d.departing);  // the departing page, frozen, on top
       if (!layer) { d = null; return; }
       layer.classList.add('ontop', 'pd-drag');
-      renderView(calFrom);                         // its floor, live beneath
+      if (d.fromHash.startsWith('#/saved')) layer.classList.add('cal-strip');   // keep the 90% geometry
+      renderView(d.floor);                         // its floor, live beneath
       $app.querySelectorAll('img.heroimg[data-src]').forEach(loadLazy);
       const dim = document.createElement('div');
       dim.className = 'slide-undim';
@@ -8605,7 +8613,7 @@ if (STANDALONE && CUSTOM_BACK) {
       document.body.appendChild(layer);
       layer.querySelectorAll('img.heroimg').forEach(i => { if (i.decode) i.decode().catch(() => {}); });
       layer.scrollTop = d.departing;
-      $shell.scrollTop = Math.min(SCROLL_MEM[calFrom] || 0, Math.max(0, $shell.scrollHeight - $shell.clientHeight));
+      $shell.scrollTop = Math.min(SCROLL_MEM[d.floor] || 0, Math.max(0, $shell.scrollHeight - $shell.clientHeight));
       d.layer = layer; d.dim = dim; d.started = true;
       d.y0 = t.clientY;                            // rebase: tracks from 0, no activation pop
       pdActive = true; sbActive = true;            // hold off re-renders and the back engine
@@ -8626,14 +8634,17 @@ if (STANDALONE && CUSTOM_BACK) {
       if (commit) {
         // synchronous landing, the back engine's lesson: the floor is already
         // painted beneath — bookkeep now, let any late hashchange be a no-op
-        const dest = calFrom || '#/';
-        SCROLL_MEM['#/saved'] = s.departing;
-        captureRails('#/saved');
+        const dest = s.floor || '#/';
+        SCROLL_MEM[s.fromHash] = s.departing;
+        captureRails(s.fromHash);
         lastRouteHash = dest; appHash = dest; curBack = null;
         $shell.scrollTop = Math.min(SCROLL_MEM[dest] || 0, Math.max(0, $shell.scrollHeight - $shell.clientHeight));
         restoreRails(dest);
         wireFocusGlow();
-        renderNav(dest === '#/' ? 'home' : dest.startsWith('#/explore') ? 'explore' : dest.startsWith('#/club') ? 'club' : 'home');
+        renderNav(dest === '#/' ? 'home'
+          : dest.startsWith('#/explore') || dest.startsWith('#/city') || dest.startsWith('#/cat') ? 'explore'
+          : dest.startsWith('#/saved') ? 'saved'
+          : dest.startsWith('#/club') ? 'club' : 'home');
         sbPreRendered.push(dest);
         if (NAV_STACK.length > 1 && NAV_STACK[NAV_STACK.length - 2] === dest) {
           sbBackQueue++;
