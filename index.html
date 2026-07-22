@@ -3056,6 +3056,12 @@ body {
 /* interactive swipe-back: a soft shadow cast to the LEFT of the moving page,
    onto the revealed page beneath — sells "a sheet lifting off", like iOS */
 .slide-layer.sb-drag { box-shadow: -10px 0 34px rgba(0, 0, 0, 0.4); }
+/* calendar pull-down: the dragged page reads as a sheet lifting off upward-lit */
+.slide-layer.pd-drag {
+  box-shadow: 0 -12px 34px rgba(0, 0, 0, 0.45);
+  border-radius: 26px 26px 0 0;
+  will-change: transform;
+}
 .slide-freeze {                        /* mirror #app's box so the frozen page keeps its
                                           full scroll range (scrollTop would clamp short) */
   min-height: 100%;
@@ -4018,8 +4024,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 July 2026 · 21:23 CEST';
-const APP_BUILD = 'v255';
+const COLLECTION_UPDATED = '22 July 2026 · 21:31 CEST';
+const APP_BUILD = 'v258';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7656,6 +7662,8 @@ const SLIDE = {
 let pendingSlide = null;   // 'push' | 'pop' — set by the hashchange handler
 let chevronPop = false;    // goBack() marks its history.back() so the pop animates
 let sbActive = false;      // an interactive swipe-back drag is live (guards re-renders)
+let pdActive = false;      // the calendar pull-down drag is live (holds off the back engine)
+let calFrom = '#/';        // the tab the calendar rose from — where a pull-down sets it back
 let sbPreRendered = [];    // hashes committed swipe-backs ALREADY rendered synchronously —
                            // their (late, on iOS ~300ms+) hashchange events are bookkeeping only
 let sbBackQueue = 0;       // back-traversals owed to the browser: a back() issued while one is
@@ -8404,7 +8412,7 @@ if (STANDALONE && CUSTOM_BACK) {
   };
 
   document.addEventListener('touchstart', (e) => {
-    if (g) return;                                 // a live drag already owns it
+    if (g || pdActive) return;                     // a live drag already owns it
     const t = e.touches[0];
     // CATCH a settling page from ANYWHERE — re-adopt the SAME layers (no re-render,
     // invariants safe), rebase so there's zero jump, then drag it EITHER direction.
@@ -8519,6 +8527,123 @@ if (STANDALONE && CUSTOM_BACK) {
   document.addEventListener('touchcancel', end, { passive: true });
 }
 
+/* ---- pull the Calendar back down (Mishari 21:20) --------------------------
+   The Calendar arrives like a sheet, so a downward drag from its top must
+   dismiss it like one: the page follows the finger, the tab it rose from is
+   live beneath, a committed pull sets it off-glass, a short one snaps back.
+   Vertical-only and saved-route-only — the horizontal back engine (and every
+   OS gesture) is untouched; pdActive holds the two engines apart. */
+(function () {
+  if (!('ontouchstart' in window)) return;
+  const RM2 = matchMedia('(prefers-reduced-motion: reduce)');
+  let d = null;
+  const clear = (s) => { [s.layer, s.dim].forEach(el => el && el.remove()); pdActive = false; sbActive = false; };
+  const restore = (s) => {   // snap-back: hand the calendar's DOM straight back to #app
+    while ($app.firstChild) $app.removeChild($app.firstChild);
+    const fz = s.layer && s.layer.firstChild;
+    while (fz && fz.firstChild) $app.appendChild(fz.firstChild);
+    $shell.scrollTop = s.departing;
+    wireFocusGlow();
+    clear(s);
+  };
+  document.addEventListener('touchstart', (e) => {
+    if (d || pdActive || sbActive) return;
+    if (!(appHash || '').startsWith('#/saved') || !(location.hash || '').startsWith('#/saved')) return;
+    if ($sheet.classList.contains('open') || mapIsOpen() || (typeof cgIsOpen === 'function' && cgIsOpen())) return;
+    if ($gsearch.classList.contains('open')) return;
+    if ($shell.scrollTop > 0) return;
+    const t = e.touches[0];
+    d = { y0: t.clientY, x0: t.clientX, dy: 0, started: false, departing: $shell.scrollTop,
+          lastY: t.clientY, lastT: Date.now(), vy: 0 };
+  }, { passive: true });
+  document.addEventListener('touchmove', (e) => {
+    if (!d) return;
+    const t = e.touches[0];
+    const dyRaw = t.clientY - d.y0, dx = t.clientX - d.x0;
+    if (!d.started) {
+      if (dyRaw < -6 || Math.abs(dx) > 12) { d = null; return; }   // a scroll or a side-swipe — not ours
+      if (Math.abs(dx) > dyRaw || dyRaw < 12) return;              // wait for clear downward intent
+      if ($shell.scrollTop > 0) { d = null; return; }
+      if (activeSlide) activeSlide();              // land an in-flight slide so #app is whole
+      const layer = captureOldLayer(d.departing);  // the calendar, frozen, on top
+      if (!layer) { d = null; return; }
+      layer.classList.add('ontop', 'pd-drag');
+      renderView(calFrom);                         // its floor, live beneath
+      $app.querySelectorAll('img.heroimg[data-src]').forEach(loadLazy);
+      const dim = document.createElement('div');
+      dim.className = 'slide-undim';
+      dim.style.opacity = String(SLIDE.dim);
+      dim.style.willChange = 'opacity';
+      document.body.appendChild(dim);
+      document.body.appendChild(layer);
+      layer.querySelectorAll('img.heroimg').forEach(i => { if (i.decode) i.decode().catch(() => {}); });
+      layer.scrollTop = d.departing;
+      $shell.scrollTop = Math.min(SCROLL_MEM[calFrom] || 0, Math.max(0, $shell.scrollHeight - $shell.clientHeight));
+      d.layer = layer; d.dim = dim; d.started = true;
+      d.y0 = t.clientY;                            // rebase: tracks from 0, no activation pop
+      pdActive = true; sbActive = true;            // hold off re-renders and the back engine
+    }
+    d.dy = Math.max(0, t.clientY - d.y0);
+    const now = Date.now();
+    if (now > d.lastT) { d.vy = (t.clientY - d.lastY) / (now - d.lastT); d.lastY = t.clientY; d.lastT = now; }
+    d.layer.style.transform = `translateY(${d.dy}px)`;
+    d.dim.style.opacity = String(SLIDE.dim * Math.max(0, 1 - d.dy / (innerHeight * 0.9)));
+    if (e.cancelable) e.preventDefault();          // the drag owns the frame — no rubber-band beneath
+  }, { passive: false });
+  const settle = (commit) => {
+    const s = d; d = null;
+    if (!s || !s.started) return;
+    let done = false;
+    const fin = () => {
+      if (done) return; done = true;
+      if (commit) {
+        // synchronous landing, the back engine's lesson: the floor is already
+        // painted beneath — bookkeep now, let any late hashchange be a no-op
+        const dest = calFrom || '#/';
+        SCROLL_MEM['#/saved'] = s.departing;
+        captureRails('#/saved');
+        lastRouteHash = dest; appHash = dest; curBack = null;
+        $shell.scrollTop = Math.min(SCROLL_MEM[dest] || 0, Math.max(0, $shell.scrollHeight - $shell.clientHeight));
+        restoreRails(dest);
+        wireFocusGlow();
+        renderNav(dest === '#/' ? 'home' : dest.startsWith('#/explore') ? 'explore' : dest.startsWith('#/club') ? 'club' : 'home');
+        sbPreRendered.push(dest);
+        if (NAV_STACK.length > 1 && NAV_STACK[NAV_STACK.length - 2] === dest) {
+          sbBackQueue++;
+          if (sbBackQueue === 1) history.back();
+        } else location.hash = dest;
+        clear(s);
+      } else restore(s);
+    };
+    if (RM2.matches) {
+      s.layer.style.transform = commit ? `translateY(${innerHeight}px)` : 'translateY(0)';
+      fin(); return;
+    }
+    const D = commit ? 240 : 200, E = 'cubic-bezier(0.32, 0.72, 0, 1)';
+    const a = s.layer.animate(
+      [{ transform: `translateY(${s.dy}px)` }, { transform: commit ? `translateY(${innerHeight}px)` : 'translateY(0)' }],
+      { duration: D, easing: E, fill: 'forwards' });
+    s.dim.animate([{ opacity: s.dim.style.opacity }, { opacity: commit ? 0 : SLIDE.dim }],
+      { duration: D, easing: E, fill: 'forwards' });
+    a.onfinish = fin; a.oncancel = fin;
+    setTimeout(fin, D + 400);                      // safety: fin is idempotent
+  };
+  document.addEventListener('touchend', () => {
+    if (!d) return;
+    if (!d.started) { d = null; return; }
+    settle(d.dy > 130 || d.vy > 0.55);
+  }, { passive: true });
+  document.addEventListener('touchcancel', () => {
+    if (!d) return;
+    if (!d.started) { d = null; return; }
+    settle(false);                                 // OS took the gesture — never commit blind
+  }, { passive: true });
+  // backgrounding mid-drag may never deliver touchcancel — never strand layers
+  const abort = () => { if (d && d.started) { const s = d; d = null; restore(s); } else d = null; };
+  addEventListener('pagehide', abort);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) abort(); });
+})();
+
 /* Direction of travel, so the router knows a genuine history back-pop (which
    iOS animates natively) from a forward push. A monotonic index is stamped on
    each entry's history.state on arrival, touching none of the app's existing
@@ -8572,8 +8697,11 @@ window.addEventListener('hashchange', () => {
   // #/saved rises from the bottom even on a tab switch; leaving it for
   // another tab sets it back down. Gesture/hardware back-pops stay native.
   const dest = location.hash || '#/';
-  if (!pendingSlide && dir !== 'back' && dest.startsWith('#/saved') && lastRouteHash !== dest)
+  if (!pendingSlide && dir !== 'back' && dest.startsWith('#/saved') && lastRouteHash !== dest) {
     pendingSlide = 'push';
+    // remember the floor it rose from (map is an overlay, never a floor)
+    calFrom = TAB_ROOTS.includes(lastRouteHash) && lastRouteHash !== '#/map' ? lastRouteHash : '#/';
+  }
   else if (!pendingSlide && dir !== 'back' && (lastRouteHash || '').startsWith('#/saved') && TAB_ROOTS.includes(dest))
     pendingSlide = 'pop';
   chevronPop = false;
