@@ -3919,6 +3919,30 @@ body.weekshare #nav { display: none; }
 /* + Add to this day — under the chosen day's bill on My Calendar */
 .dayadd { margin-top: 12px; }
 
+/* the + chooser rows: screenshot reader / collection search */
+.srcsheet .srcrow {
+  display: flex; align-items: center; gap: 16px; width: 100%;
+  padding: 16px 14px; margin-top: 12px;
+  border-radius: 18px;
+  background: rgba(244, 239, 230, 0.05);
+  border: 1px solid rgba(232, 201, 128, 0.35);
+  color: var(--ink); text-align: left; cursor: pointer;
+}
+.srcsheet .srcrow:active { transform: scale(0.98); }
+.srcsheet .srcrow .ic {
+  width: 42px; height: 42px; flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; border: 1px solid rgba(232, 201, 128, 0.5);
+  color: var(--gold-bright);
+}
+.srcsheet .srcrow .ic svg { width: 19px; height: 19px; }
+.srcsheet .srcrow .tx { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.srcsheet .srcrow .tx b { font-weight: 500; font-size: 17px; }
+.srcsheet .srcrow .tx i {
+  font-style: normal; font-family: var(--sans); font-size: 9.5px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-dim);
+}
+
 /* the day's bill reads as an itinerary: time rail, generous photo */
 .ag-item.cal { padding: 10px 12px 10px 10px; gap: 13px; }
 .ag-item.cal .ag-when {
@@ -4044,8 +4068,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 July 2026 · 00:59 CEST';
-const APP_BUILD = 'v264';
+const COLLECTION_UPDATED = '23 July 2026 · 01:14 CEST';
+const APP_BUILD = 'v269';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6573,19 +6597,45 @@ function parseBookingText(raw) {
   // on Marbella's Leña, not Madrid's), a full-name hit beats loose tokens,
   // and generic words never match on their own
   const BK_STOP = new Set(['beach', 'club', 'pool', 'restaurant', 'hotel', 'casa', 'the', 'del', 'de', 'la', 'el', 'los', 'las', 'by', 'and', 'bar', 'grill', 'lounge', 'spa']);
+  // hard city gate: a confirmation that names a collection city can never
+  // land on another city's venue (the Milan 'Principe' stole a Marbella
+  // booking off a street named Príncipe — 22 Jul)
+  const namedCities = CITIES.filter(c => t.includes(fold(c.name)));
+  const pool = namedCities.length ? namedCities : CITIES;
+  const tokensOf = (s, cityName) =>
+    fold(s || '').split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !BK_STOP.has(w) && w !== cityName);
   let best = null;
-  for (const city of CITIES) {
-    const cityIn = t.includes(fold(city.name));
+  for (const city of pool) {
+    const cityName = fold(city.name);
+    const cityIn = t.includes(cityName);
     for (const part in city.venues) (city.venues[part] || []).forEach((v, idx) => {
       const n = fold(v.n);
-      const toks = n.split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !BK_STOP.has(w) && w !== fold(city.name));
-      const tokSum = toks.reduce((s, w) => s + (t.includes(w) ? w.length : 0), 0);
-      if (!tokSum) return;
-      const s = tokSum + (n.length >= 4 && t.includes(n) ? 1000 : 0) + (cityIn ? 2000 : 0);
-      if (!best || s > best.s) best = { city, part, idx, s, name: v.n };
+      // the NAME must speak — area/address alone can't tell neighbours apart
+      // (half the Golden Mile shares one boulevard)
+      const nameSum = tokensOf(v.n, cityName).reduce((s, w) => s + (t.includes(w) ? w.length : 0), 0);
+      if (!nameSum) return;
+      const sideSum = tokensOf((v.a || '') + ' ' + (v.ad || ''), cityName)
+        .reduce((s, w) => s + (t.includes(w) ? w.length : 0), 0);
+      const s = nameSum + Math.min(sideSum, 40) + (n.length >= 4 && t.includes(n) ? 1000 : 0) + (cityIn ? 2000 : 0);
+      if (!best || s > best.s) best = { city, part, idx, s, name: v.n, n, toks: tokensOf(v.n, cityName) };
     });
   }
   if (!best) return null;
+  // brand-before-place: "Cipriani Puente Romano" must be Cipriani's booking,
+  // not the resort's — when another venue's name token sits RIGHT BEFORE the
+  // winner's full name in the text, the brand in front takes it
+  if (t.includes(best.n)) {
+    outer:
+    for (const part in best.city.venues) {
+      const list = best.city.venues[part] || [];
+      for (let idx = 0; idx < list.length; idx++) {
+        const v = list[idx];
+        if (v === best.city.venues[best.part][best.idx]) continue;
+        for (const w of tokensOf(v.n, fold(best.city.name)))
+          if (t.includes(w + ' ' + best.n)) { best = { city: best.city, part, idx, name: v.n }; break outer; }
+      }
+    }
+  }
   const today = isoDay(new Date());
   const yNow = new Date().getFullYear();
   const mk = (y, mo, d, yearless) => {
@@ -6622,9 +6672,11 @@ function parseBookingText(raw) {
     const f0 = found[0];
     iso = f0.yearless ? (+f0.iso.slice(0, 4) + 1) + f0.iso.slice(4) : f0.iso;
   }
-  // the hour: 21:15 · 9:15 pm · 9 pm — first plausible sitting wins
+  // the hour. am/pm-marked times outrank bare ones, and the first ~30 chars
+  // are the STATUS BAR of a screenshot — its clock read as the booking time
+  // once (19:12, 22 Jul) and never may again
   let tm = null;
-  if ((m = t.match(/(\d{1,2})[:.](\d{2})\s*(pm|am)?/))) {
+  if ((m = t.match(/(\d{1,2})[:.](\d{2})\s*(pm|am)/))) {
     let hh = +m[1];
     if (m[3] === 'pm' && hh < 12) hh += 12;
     if (m[3] === 'am' && hh === 12) hh = 0;
@@ -6633,8 +6685,114 @@ function parseBookingText(raw) {
     let hh = +m[1] % 12;
     if (m[2] === 'pm') hh += 12;
     tm = `${String(hh).padStart(2, '0')}:00`;
+  } else {
+    const re = /(\d{1,2})[:.](\d{2})(?!\d)/g;
+    while ((m = re.exec(t))) {
+      if (m.index < 30) continue;                  // the screenshot's own clock
+      const hh = +m[1];
+      if (hh <= 23 && +m[2] <= 59) { tm = `${String(hh).padStart(2, '0')}:${m[2]}`; break; }
+    }
   }
   return { cityId: best.city.id, part: best.part, idx: best.idx, name: best.name, iso, tm };
+}
+
+/* ---- the + chooser: a screenshot the house reads, or the collection ---- */
+let $bkin = null;
+function bkInput() {
+  if ($bkin) return $bkin;
+  $bkin = document.createElement('input');
+  $bkin.type = 'file'; $bkin.accept = 'image/*'; $bkin.hidden = true;
+  $bkin.addEventListener('change', () => {
+    const f = $bkin.files && $bkin.files[0];
+    $bkin.value = '';
+    if (f) ocrImport(f);
+  });
+  document.body.appendChild($bkin);
+  return $bkin;
+}
+function openPlanSource() {
+  $sheet.innerHTML = `
+    <div class="sheet-grab"><span></span></div>
+    <div class="plansheet srcsheet">
+      <div class="eyebrow gold">Add to your calendar</div>
+      <button class="srcrow" id="srcshot">
+        <span class="ic">${I.cal}</span>
+        <span class="tx"><b class="serif">Read a booking screenshot</b><i>Pick the confirmation photo — the house reads it and locks it in</i></span>
+      </button>
+      <button class="srcrow" id="srcsearch">
+        <span class="ic">${I.search}</span>
+        <span class="tx"><b class="serif">Add from the collection</b><i>Search the addresses yourself</i></span>
+      </button>
+    </div>`;
+  $sheet.querySelector('#srcshot').onclick = () => { closeSheet(); bkInput().click(); };
+  $sheet.querySelector('#srcsearch').onclick = () => { closeSheet(); dayAddFor = viewSaved.sel; openSearch(); };
+  $backdrop.classList.add('open');
+  $sheet.scrollTop = 0;
+  requestAnimationFrame(() => requestAnimationFrame(() => $sheet.classList.add('open')));
+}
+
+/* On-device OCR — Tesseract served from OUR assets/ocr (no key, no service,
+   no account: the house laws hold). Lazy: nobody pays the ~9MB until the
+   first screenshot; iOS then keeps it in HTTP cache. Import (paste / Live
+   Text) remains the fallback for anything the reader stumbles on. */
+let ocrLib = null;
+function loadOcr() {
+  if (ocrLib) return ocrLib;
+  ocrLib = new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = 'assets/ocr/tesseract.min.js';
+    s.onload = () => res();
+    s.onerror = () => { ocrLib = null; rej(new Error('ocr-load')); };
+    document.head.appendChild(s);
+  });
+  return ocrLib;
+}
+async function ocrImport(file) {
+  toast('Reading your booking…');
+  let worker = null;
+  try {
+    await loadOcr();
+    const base = new URL('assets/ocr/', location.href).href;
+    let lastPct = 0;
+    worker = await Tesseract.createWorker('eng', 1, {
+      workerPath: base + 'worker.min.js',
+      corePath: base,
+      langPath: base.replace(/\/$/, ''),
+      logger: (m) => {
+        if (m.status === 'recognizing text' && m.progress - lastPct >= 0.25) {
+          lastPct = m.progress;
+          toast(`Reading… ${Math.round(m.progress * 100)}%`);
+        }
+      },
+    });
+    const out = await worker.recognize(file);
+    const text = (out && out.data && out.data.text) || '';
+    const bk = parseBookingText(text);
+    if (bk && bk.iso) {
+      // fully read — lock it in without another tap (Mishari 23:00)
+      const key = bk.cityId + '|' + bk.part + '|' + bk.idx;
+      if (!plans[bk.iso]) plans[bk.iso] = [];
+      if (!plans[bk.iso].includes(key)) plans[bk.iso].push(key);
+      if (bk.tm) planTimes[bk.iso + '|' + key] = bk.tm;
+      persistPlans(); persistPlanTimes();
+      const dt = new Date(bk.iso + 'T12:00:00');
+      haptic();
+      toast(`${bk.name} — ${DAY_FULL[dt.getDay()]} ${dt.getDate()} ${MONTHS[dt.getMonth()]}${bk.tm ? ' · ' + bk.tm : ''} locked in`);
+      if ((location.hash || '').startsWith('#/saved')) {
+        viewSaved.sel = bk.iso;
+        viewSaved.ym = [dt.getFullYear(), dt.getMonth()];
+        renderRoute(true);
+      }
+    } else if (bk) {
+      toast(`Read ${bk.name} — now pick the day`);
+      openPlanSheet(bk.cityId, bk.part, bk.idx, undefined, bk.tm || undefined);
+    } else {
+      toast('No booking found in that image — try Import with the copied text');
+    }
+  } catch (_) {
+    toast('The reader stumbled — use Import with the copied text');
+  }
+  if (worker) { try { await worker.terminate(); } catch (_) {} }
 }
 
 async function importBookings() {
@@ -6878,7 +7036,7 @@ function viewSaved() {
   const da = $app.querySelector('#dayadd');
   if (da) da.addEventListener('click', () => { dayAddFor = viewSaved.sel; openSearch(); });
   const cp = $app.querySelector('#calplus');
-  if (cp) cp.addEventListener('click', () => { dayAddFor = viewSaved.sel; haptic(); openSearch(); });
+  if (cp) cp.addEventListener('click', () => { haptic(); openPlanSource(); });
   const ce = $app.querySelector('#caledit');
   if (ce) ce.addEventListener('click', () => { viewSaved.edit = !viewSaved.edit; haptic(); renderRoute(true); });
   // the calendar grid: tap a day to read it; ‹ › walk the months
