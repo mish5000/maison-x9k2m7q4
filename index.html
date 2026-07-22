@@ -4018,8 +4018,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 July 2026 · 20:55 CEST';
-const APP_BUILD = 'v249';
+const COLLECTION_UPDATED = '22 July 2026 · 21:18 CEST';
+const APP_BUILD = 'v252';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7917,9 +7917,9 @@ function renderRoute(soft = false, dir = 'fwd') {
     oldLayer = captureOldLayer(departingScroll);
     if (oldLayer) {
       oldLayer.dataset.hash = lastRouteHash; slideKind = pendingSlide;
-      // category pages rise like sheets: push INTO #/cat/ ascends, a chevron
-      // pop OUT of #/cat/ descends — every other route keeps the lateral slide
-      slideAxis = (slideKind === 'push' ? h : lastRouteHash).startsWith('#/cat/') ? 'y' : 'x';
+      // category pages and the Calendar rise like sheets: a push INTO them
+      // ascends, a pop OUT descends — every other route keeps the lateral slide
+      slideAxis = /^#\/(cat\/|saved)/.test(slideKind === 'push' ? h : lastRouteHash) ? 'y' : 'x';
     }
   }
   pendingSlide = null;
@@ -8550,6 +8550,14 @@ window.addEventListener('hashchange', () => {
   const from = NAV_STACK.length > 1 && dir === 'fwd' ? NAV_STACK[NAV_STACK.length - 2] : lastRouteHash;
   const tabSwitch = TAB_ROOTS.includes(from) && TAB_ROOTS.includes(location.hash || '#/');
   pendingSlide = dir === 'fwd' && !tabSwitch ? 'push' : (dir === 'back' && chevronPop ? 'pop' : null);
+  // the Calendar tab presents like a sheet (his 22 Jul ask): arriving at
+  // #/saved rises from the bottom even on a tab switch; leaving it for
+  // another tab sets it back down. Gesture/hardware back-pops stay native.
+  const dest = location.hash || '#/';
+  if (!pendingSlide && dir !== 'back' && dest.startsWith('#/saved') && lastRouteHash !== dest)
+    pendingSlide = 'push';
+  else if (!pendingSlide && dir !== 'back' && (lastRouteHash || '').startsWith('#/saved') && TAB_ROOTS.includes(dest))
+    pendingSlide = 'pop';
   chevronPop = false;
   renderRoute(false, dir);
 });
