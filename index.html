@@ -4018,8 +4018,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 July 2026 · 21:18 CEST';
-const APP_BUILD = 'v252';
+const COLLECTION_UPDATED = '22 July 2026 · 21:23 CEST';
+const APP_BUILD = 'v255';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6497,12 +6497,30 @@ function weekPayload() {
   }
   return Object.keys(d).length ? { n: MEMBER.name, d, t } : null;
 }
-function shareWeek() {
+/* The raw week link is a wall of base64 — hideous in a chat bubble (Mishari
+   21:20). TinyURL's create endpoint is keyless and answers CORS for our
+   origin (verified 22 Jul), so the app shortens BEFORE sharing. Capped at
+   1.6s: iOS only honours share() inside the tap's activation window, so a
+   slow shortener degrades to the long link, never to a dead button. */
+async function tinyify(url) {
+  try {
+    const r = await Promise.race([
+      fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(url)),
+      new Promise((_, rj) => setTimeout(() => rj(new Error('slow')), 1600)),
+    ]);
+    if (r && r.ok) {
+      const s = (await r.text()).trim();
+      if (/^https:\/\/tinyurl\.com\/[A-Za-z0-9]+$/.test(s)) return s;
+    }
+  } catch (_) {}
+  return url;
+}
+async function shareWeek() {
   const p = weekPayload();
   if (!p) { toast('Plan a day first — tap the calendar on any venue'); return; }
   const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(p))))
     .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  const url = APP_URL + '#/week/' + b64;
+  const url = await tinyify(APP_URL + '#/week/' + b64);
   if (navigator.share) { navigator.share({ title: `${MEMBER.name}'s week`, url }).catch(() => {}); return; }
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject())
     .then(() => toast('Link copied'), () => toast(url));
