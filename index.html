@@ -885,7 +885,7 @@ body {
   justify-content: center;
   height: calc(62px + env(safe-area-inset-top, 0px));
   padding: env(safe-area-inset-top, 0px) 18px 0;
-  background: rgba(5, 5, 4, 0.9);
+  background: rgba(5, 5, 4, 0.82);
   backdrop-filter: blur(10px);          /* halved — full-width re-sample per frame (audit F2) */
   -webkit-backdrop-filter: blur(10px);
 }
@@ -1559,7 +1559,7 @@ body {
   border: 1px solid rgba(244, 239, 230, 0.35);
   /* no backdrop-filter: it re-samples EVERY momentum-scroll frame (WebKit
      audit F1, 23 Jul) — deeper tint carries the legibility instead */
-  background: rgba(11, 10, 8, 0.62);
+  background: rgba(11, 10, 8, 0.45);   /* light tint — never darken the imagery */
   color: var(--ink);
   display: flex;
   align-items: center;
@@ -1581,7 +1581,7 @@ body {
   height: 42px;
   border-radius: 50%;
   border: 1px solid rgba(232, 201, 128, 0.4);
-  background: rgba(11, 10, 8, 0.62);   /* blur dropped — audit F1 */
+  background: rgba(11, 10, 8, 0.45);   /* light tint — never darken the imagery */
   color: var(--gold-bright);
   display: flex;
   align-items: center;
@@ -1600,7 +1600,7 @@ body {
   border-radius: 50%;
   /* ghost like its stack-mates — the solid gold shouted (Mishari 19:04) */
   border: 1px solid rgba(232, 201, 128, 0.55);
-  background: rgba(11, 10, 8, 0.62);   /* blur dropped — audit F1 */
+  background: rgba(11, 10, 8, 0.45);   /* light tint — never darken the imagery */
   color: var(--gold-bright);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
@@ -1701,7 +1701,8 @@ body {
   border-radius: 14px;
   /* lighter frost so the photo reads through it; the photo scrim + text-shadow
      already guarantee legibility. Right edge dissolves so it isn't a hard slab. */
-  background: rgba(12, 10, 7, 0.5);   /* frost blur dropped — audit F1 */
+  background: rgba(12, 10, 7, 0.34);  /* frost blur dropped (audit F1); tint kept
+                                          LIGHT — never darken the imagery (23 Jul) */
   -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent 100%);
   mask-image: linear-gradient(90deg, #000 82%, transparent 100%);
 }
@@ -1903,7 +1904,7 @@ body {
   width: 46px; height: 46px;
   border-radius: 50%;
   border: 1px solid rgba(232, 201, 128, 0.55);
-  background: rgba(11, 10, 8, 0.62);   /* blur dropped — audit F1 */
+  background: rgba(11, 10, 8, 0.45);   /* light tint — never darken the imagery */
   color: var(--gold-bright);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
@@ -1918,7 +1919,7 @@ body {
   height: 40px;
   border-radius: 50%;
   border: 1px solid rgba(244, 239, 230, 0.3);
-  background: rgba(11, 10, 8, 0.5);
+  background: rgba(11, 10, 8, 0.45);
   color: var(--ink);
   font-size: 17px;
   cursor: pointer;
@@ -2248,7 +2249,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(5, 5, 4, 0.86);
+  background: rgba(5, 5, 4, 0.82);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   opacity: 0;
@@ -2740,7 +2741,7 @@ body {
   color: var(--ink);
   /* frosted panel (static — never animated, paint law): the room list must
      read over any photo mid-card */
-  background: rgba(11, 10, 8, 0.5);
+  background: rgba(11, 10, 8, 0.45);
   -webkit-backdrop-filter: blur(9px);
   backdrop-filter: blur(9px);
   border-radius: 0 14px 14px 0;
@@ -2803,7 +2804,7 @@ body {
   justify-content: center;
   border-radius: 50%;
   border: 1px solid rgba(200, 162, 75, 0.6);
-  background: rgba(11, 10, 8, 0.5);
+  background: rgba(11, 10, 8, 0.45);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: var(--ink);
@@ -2849,7 +2850,7 @@ body {
   display: flex; align-items: center; justify-content: center;
   border-radius: 50%;
   border: 1px solid rgba(200, 162, 75, 0.6);
-  background: rgba(11, 10, 8, 0.5);
+  background: rgba(11, 10, 8, 0.45);
   backdrop-filter: blur(10px);
   color: var(--ink);
   cursor: pointer;
@@ -2923,7 +2924,7 @@ body {
   display: flex; align-items: center; justify-content: center;
   border-radius: 50%;
   border: 1px solid rgba(200, 162, 75, 0.5);
-  background: rgba(11, 10, 8, 0.5);
+  background: rgba(11, 10, 8, 0.45);
   color: var(--gold-bright);
   cursor: pointer;
 }
@@ -3127,6 +3128,10 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
      back reveal now read as one physical stack of sheets */
   box-shadow: -10px 0 34px rgba(0, 0, 0, 0.4);
 }
+/* pop: the incoming page rests at its NATURAL pose (fully covered by the
+   departing sheet above it) — no offscreen park, backing store paints during
+   the hold (audit F3) */
+.slide-enter.pop { transform: none; box-shadow: none; }
 /* category rise: the enter layer parks BELOW the glass (same 2px-sliver paint
    demand, bottom edge) and casts its shadow upward — reads as one more sheet */
 .slide-enter.rise {
@@ -4091,8 +4096,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 July 2026 · 19:29 CEST';
-const APP_BUILD = 'v317';
+const COLLECTION_UPDATED = '23 July 2026 · 19:45 CEST';
+const APP_BUILD = 'v322';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6227,6 +6232,10 @@ function viewCity(cityId) {
   screenSeen = new Set();
   const city = CITY_BY_ID[cityId];
   if (!city) { go('#/'); return; }
+  // arriving in a city warms its leading categories AT ONCE (his 19:29 —
+  // 'restaurants should be preloaded, cocktails, the first three') so the
+  // next tap down paints from cache, not the network
+  CATEGORIES.slice(0, 3).forEach(cat => prewarmCategory(cityId, cat.id, 3));
 
   const tiles = CATEGORIES
     .filter(cat => catVenueEntries(city, cat).length)
@@ -6396,6 +6405,9 @@ function cityClock(cityId) {
 function viewCategory(cityId, catId) {
   screenSeen = new Set();
   catId = displayCat(catId); // legacy #/cat/x/beach and /pools routes fold in
+  // inside a category, warm the WHOLE first screenful-and-beyond urgently —
+  // scrolling down must meet photos already in cache (his 19:29)
+  prewarmCategory(cityId, catId, 10);
   const city = CITY_BY_ID[cityId];
   const cat = CAT_BY_ID[catId];
   if (!city || !cat) { go('#/'); return; }
@@ -8160,7 +8172,7 @@ function captureEnterLayer() {
   return layer;
 }
 
-function runSlide(kind, oldLayer, axis = 'x', riseCal = false) {
+function runSlide(kind, oldLayer, axis = 'x', riseCal = false, destHash = '') {
   if (activeSlide) activeSlide();               // a newer nav cuts the last one short
   document.body.appendChild(oldLayer);
   // same iOS reparent decode-drop as the gesture path: the frozen OLD page's
@@ -8192,7 +8204,11 @@ function runSlide(kind, oldLayer, axis = 'x', riseCal = false) {
       const fz = enter.firstChild;
       if (fz && !$app.firstChild) {             // a mid-flight rebuild wins
         while (fz.firstChild) $app.appendChild(fz.firstChild);
-        $shell.scrollTo(0, 0);
+        // land at the pose the flight showed: push = top of page, pop = the
+        // remembered offset — and rails at their exact pixel (reparenting
+        // resets scroll positions, so re-apply in the SAME task)
+        $shell.scrollTo(0, +enter.dataset.destScroll || 0);
+        if (enter.dataset.destHash) restoreRails(enter.dataset.destHash);
       }
       enter.remove();
     }
@@ -8217,12 +8233,15 @@ function runSlide(kind, oldLayer, axis = 'x', riseCal = false) {
       anims.push(oldLayer.animate([{ transform: 'translateX(0)' }, { transform: `translateX(-${P}%)` }], { duration: D, easing: E, fill: 'both' }));
       anims.push(dim.animate([{ opacity: 0 }, { opacity: SLIDE.dim }], { duration: D, easing: E, fill: 'both' }));
     } else if (axis === 'y') {
-      // chevron-back off a category: it sets back down the way it rose
-      anims.push($app.animate([{ transform: 'scale(0.965)' }, { transform: 'scale(1)' }], { duration: D, easing: E, fill: 'both' }));
+      // chevron-back off a sheet: it sets down the way it rose. The incoming
+      // page flies on the viewport enter layer, NEVER document-height #app —
+      // the one species the device recordings show failing to present
+      // mid-flight (WebKit audit F3, his 19:29 'vulgar transitions' video)
+      anims.push(enter.animate([{ transform: 'scale(0.965)' }, { transform: 'scale(1)' }], { duration: D, easing: E, fill: 'both' }));
       anims.push(oldLayer.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(100%)' }], { duration: D, easing: E, fill: 'both' }));
       anims.push(dim.animate([{ opacity: SLIDE.dim }, { opacity: 0 }], { duration: D, easing: E, fill: 'both' }));
     } else {
-      anims.push($app.animate([{ transform: `translateX(-${P}%)` }, { transform: 'translateX(0)' }], { duration: D, easing: E, fill: 'both' }));
+      anims.push(enter.animate([{ transform: `translateX(-${P}%)` }, { transform: 'translateX(0)' }], { duration: D, easing: E, fill: 'both' }));
       anims.push(oldLayer.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(100%)' }], { duration: D, easing: E, fill: 'both' }));
       anims.push(dim.animate([{ opacity: SLIDE.dim }, { opacity: 0 }], { duration: D, easing: E, fill: 'both' }));
     }
@@ -8252,10 +8271,25 @@ function runSlide(kind, oldLayer, axis = 'x', riseCal = false) {
       }));
     });
   } else {
-    $app.classList.add('sliding');
+    // pop: the destination ALSO flies on a viewport layer (audit F3) — grab
+    // the freshly-rendered page from #app, carry its remembered scroll and
+    // rails, and rest it at its natural pose UNDER the departing sheet
+    const destScroll = $shell.scrollTop;         // renderRoute restored it just before us
+    enter = captureEnterLayer();
+    enter.classList.add('pop');                  // natural pose — no offscreen park
+    if (SHEET_ROUTE.test(destHash)) enter.classList.add('rise-cal');   // dest is itself a 90% sheet
+    enter.dataset.destScroll = destScroll;
+    enter.dataset.destHash = destHash;
+    document.body.appendChild(enter);
+    enter.scrollTop = destScroll;
+    if (enter.scrollTop < destScroll && enter.firstChild) {
+      enter.firstChild.style.minHeight = (destScroll + enter.clientHeight) + 'px';
+      enter.scrollTop = destScroll;
+    }
+    if (destHash) restoreRails(destHash, enter); // reparent reset the rails — re-pin them
     oldLayer.classList.add('ontop');
     document.body.appendChild(dim);
-    decodeIncoming($app).then(() => {
+    decodeIncoming(enter).then(() => {
       if (activeSlide !== done) return;
       requestAnimationFrame(() => requestAnimationFrame(() => {
         if (activeSlide !== done) return;
@@ -8345,13 +8379,14 @@ function renderRoute(soft = false, dir = 'fwd') {
     pendingSlide = null;                   // map exit never slides
   }
 
-  // read the departing page's offset FIRST — emptying #app collapses the
-  // scroll container, so any later read would see 0
+  // land any in-flight slide BEFORE reading the departing offset: during a
+  // pop flight #app is empty and scrollTop reads 0 — capturing that would
+  // freeze the next transition at top-of-page and wipe the page's remembered
+  // offset (fresh-context review, 23 Jul). activeSlide() hands the DOM back
+  // and restores scroll + rails in the same task, so the reads below are true.
+  if (activeSlide) activeSlide();
   const departingScroll = $shell.scrollTop;
   captureRails(lastRouteHash);   // rails die with the innerHTML swap; read first
-  // ANY navigation — soft re-renders included (lineup fetch, pulse refresh) —
-  // finishes an in-flight slide first, so its reparent lands before a rebuild
-  if (activeSlide) activeSlide();
   // keep the outgoing page alive for the slide (before scroll mem / rebuild)
   let slideKind = null, oldLayer = null, slideAxis = 'x';
   if (!soft && pendingSlide && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -8405,7 +8440,7 @@ function renderRoute(soft = false, dir = 'fwd') {
     // Instagram-style slide owns this navigation — no fade on top of it
     ++fadeSeq;
     $app.classList.remove('navfade', 'prefade');
-    runSlide(slideKind, oldLayer, slideAxis, slideKind === 'push' && SHEET_ROUTE.test(h));
+    runSlide(slideKind, oldLayer, slideAxis, slideKind === 'push' && SHEET_ROUTE.test(h), h);
   } else if (!soft && !nativeBack) {
     // Hold the fresh page at its from-state (prefade) synchronously with the
     // DOM swap, then start the animation across a paint boundary (double rAF)
