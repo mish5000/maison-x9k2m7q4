@@ -3080,6 +3080,10 @@ body.calmodal #shell {
               0 -2px 22px rgba(232, 201, 128, 0.28),
               0 -1px 46px rgba(232, 201, 128, 0.12);
 }
+/* inside a 90% sheet the status bar lives ABOVE the card — the topbar's
+   safe-area headroom became dead black space (his 14:50 'a little low') */
+body.calmodal .topbar { height: 62px; padding-top: 0; }
+body.calmodal .backbtn, body.calmodal .topbar-search { top: 31px; }
 .pagegrab { display: flex; justify-content: center; padding: 10px 0 0; margin-bottom: -8px; }
 .pagegrab span {
   width: 46px; height: 5px; border-radius: 999px;
@@ -4080,8 +4084,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 July 2026 · 14:54 CEST';
-const APP_BUILD = 'v304';
+const COLLECTION_UPDATED = '23 July 2026 · 14:59 CEST';
+const APP_BUILD = 'v307';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
