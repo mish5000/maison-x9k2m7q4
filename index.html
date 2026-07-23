@@ -4091,8 +4091,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 July 2026 · 15:13 CEST';
-const APP_BUILD = 'v311';
+const COLLECTION_UPDATED = '23 July 2026 · 16:04 CEST';
+const APP_BUILD = 'v314';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6133,7 +6133,7 @@ function viewHome() {
       ? `Closest to you${km < 500 ? ' · ' + (km < 10 ? km.toFixed(1) : Math.round(km)) + ' km' : ''}`
       : c.country;
     return `
-    <button class="citycard" onclick="location.hash='#/city/${c.id}'">
+    <button class="citycard" data-city="${c.id}" onclick="location.hash='#/city/${c.id}'">
       <span class="bg">${heroImg(c.hero)}</span>
       <span class="meta">
         <span class="eyebrow gold">${eyebrow}</span>
@@ -7559,7 +7559,7 @@ function prewarmDestinations() {
 /* Warm a city's category-tile photos — the SAME picks tileImg() will make
    (first unused venue photo per category, else the texture) — so the moment
    you open that city its tiles paint from cache instead of blinking in black. */
-function prewarmCityTiles(cityId) {
+function prewarmCityTiles(cityId, urgent) {
   const city = CITY_BY_ID[cityId]; if (!city) return;
   const seen = new Set();
   for (const cat of CATEGORIES) {
@@ -7571,8 +7571,33 @@ function prewarmCityTiles(cityId) {
       if (im && !seen.has(im)) { seen.add(im); pick = im; break; }
     }
     if (!pick) pick = (IMG[cat.id] || IMG[catParts(cat)[0]] || [])[0];
-    if (pick) prewarmImg(pick);
+    if (pick) prewarmImg(pick, urgent);
   }
+}
+
+/* Carousel focus (his 15:57 recording — black tiles landing in Courchevel):
+   the moment a destination card slides into view on the home rail, that
+   city's first paint starts downloading URGENTLY — hero, every category
+   tile photo, and the first venues of the leading categories — jumping the
+   ~200-image app-open warm queue instead of waiting behind it. */
+function prewarmCityFocus(cityId) {
+  const city = CITY_BY_ID[cityId]; if (!city) return;
+  if (city.hero) prewarmImg(city.hero, true);
+  prewarmCityTiles(cityId, true);
+  CATEGORIES.slice(0, 3).forEach(cat => prewarmCategory(cityId, cat.id, 2));
+}
+let cityFocusObserver = null;
+function wireCityFocus() {
+  if (cityFocusObserver) { cityFocusObserver.disconnect(); cityFocusObserver = null; }
+  const cards = [...$app.querySelectorAll('.citycard[data-city]')];
+  if (!cards.length || !('IntersectionObserver' in window)) return;
+  cityFocusObserver = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) {
+      cityFocusObserver.unobserve(e.target);
+      prewarmCityFocus(e.target.dataset.city);
+    }
+  }, { threshold: 0.35 });
+  cards.forEach(c => cityFocusObserver.observe(c));
 }
 /* Every city's tile screen, warmed on app open — a fresh tap into any city
    lands on fully-painted tiles. ~1 photo per category per city (small set). */
@@ -7604,6 +7629,7 @@ let cardObserver = null;
 let tileScrollHandler = null;
 function wireFocusGlow() {
   observeLazy($app);   // (re)arm photo prefetch for whatever just rendered
+  wireCityFocus();     // home rail: a card sliding into view warms its city
   wirePrewarm();       // and anticipatorily warm the next-tap category photos
   if (cardObserver) cardObserver.disconnect();
   if (tileScrollHandler) { $shell.removeEventListener('scroll', tileScrollHandler); tileScrollHandler = null; }
