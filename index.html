@@ -4080,8 +4080,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 July 2026 · 14:26 CEST';
-const APP_BUILD = 'v290';
+const COLLECTION_UPDATED = '23 July 2026 · 14:34 CEST';
+const APP_BUILD = 'v295';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6685,32 +6685,37 @@ function bkWhen(t) {
     if (mo > 12) return null;
     return { iso: `${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}`, yearless };
   };
-  // dates, all shapes: 24/07/2026 · 24 July · July 24 — collect them all,
-  // take the first that is today-or-later (emails carry sent-dates too);
-  // only a yearless date with no future sibling rolls to next year
-  const found = [];
+  // dates, all shapes — collected then RANKED, because a flight's "departs
+  // 11.10" parses as 11 October in day-first Europe (his 14:29 bug). Named
+  // months (July 27) and explicit years always beat bare dotted pairs, and a
+  // dotted pair right after depart/arrival words is an HOUR, never a date.
+  const found = [];   // {iso, yearless, rank, pos} — lower rank = stronger evidence
   let m;
-  const reNum = /(\d{1,2})[\/.\-](\d{1,2})(?:[\/.\-](\d{2,4}))?(?!\d)/g;
+  const reNum = /(\d{1,2})([\/.\-])(\d{1,2})(?:[\/.\-](\d{2,4}))?(?!\d)/g;
   while ((m = reNum.exec(t))) {
-    const y = m[3] ? (+m[3] < 100 ? 2000 + +m[3] : +m[3]) : yNow;
-    const f = mk(y, +m[2], +m[1], !m[3]);               // his world writes day-first
-    if (f) found.push(f);
+    const dotted = m[2] !== '/';
+    if (dotted && !m[4] && /(depart|arriv|doors|pick[\s-]?up|check[\s-]?in|at)\s*$/.test(t.slice(Math.max(0, m.index - 12), m.index))) continue;
+    const y = m[4] ? (+m[4] < 100 ? 2000 + +m[4] : +m[4]) : yNow;
+    const f = mk(y, +m[3], +m[1], !m[4]);               // his world writes day-first
+    if (f) found.push({ ...f, rank: m[4] ? (dotted ? 2 : 1) : (dotted ? 5 : 3), pos: m.index });
   }
   const reDM = /(\d{1,2})(?:st|nd|rd|th)?\s+(?:de\s+)?([a-z]{3,})\.?\s*(\d{4})?/g;
   while ((m = reDM.exec(t))) {
     const mo = BK_MONTHS[m[2].slice(0, 3)];
     const f = mo && mk(m[3] ? +m[3] : yNow, mo, +m[1], !m[3]);
-    if (f) found.push(f);
+    if (f) found.push({ ...f, rank: m[3] ? 0 : 2, pos: m.index });
   }
   const reMD = /([a-z]{3,})\.?\s+(\d{1,2})(?:st|nd|rd|th)?(?:,?\s*(\d{4}))?/g;
   while ((m = reMD.exec(t))) {
     const mo = BK_MONTHS[m[1].slice(0, 3)];
     const f = mo && mk(m[3] ? +m[3] : yNow, mo, +m[2], !m[3]);
-    if (f) found.push(f);
+    if (f) found.push({ ...f, rank: m[3] ? 0 : 2, pos: m.index });
   }
-  let iso = (found.find(f => f.iso >= today) || {}).iso || null;
+  const byStrength = (a, b) => a.rank - b.rank || a.pos - b.pos;
+  const futures = found.filter(f => f.iso >= today).sort(byStrength);
+  let iso = futures.length ? futures[0].iso : null;
   if (!iso && found.length) {
-    const f0 = found[0];
+    const f0 = found.slice().sort(byStrength)[0];
     iso = f0.yearless ? (+f0.iso.slice(0, 4) + 1) + f0.iso.slice(4) : f0.iso;
   }
   // the hour. am/pm-marked times outrank bare ones, and the first ~30 chars
@@ -6727,9 +6732,13 @@ function bkWhen(t) {
     if (m[2] === 'pm') hh += 12;
     tm = `${String(hh).padStart(2, '0')}:00`;
   } else {
-    const re = /(\d{1,2})[:.](\d{2})(?!\d)/g;
+    // (?![.\-\/]\d) — a dotted pair inside a longer run (23.07.2026) is a
+    // DATE fragment, never the hour
+    const re = /(\d{1,2})[:.](\d{2})(?!\d)(?![.\-\/]\d)/g;
     while ((m = re.exec(t))) {
-      if (m.index < 30) continue;                  // the screenshot's own clock
+      // a long OCR dump opens with the STATUS BAR clock — skip its zone;
+      // a short pasted snippet has no status bar, so no zone to skip
+      if (t.length > 140 && m.index < 30) continue;
       const hh = +m[1];
       if (hh <= 23 && +m[2] <= 59) { tm = `${String(hh).padStart(2, '0')}:${m[2]}`; break; }
     }
