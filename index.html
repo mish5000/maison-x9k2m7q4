@@ -4091,8 +4091,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 July 2026 · 16:04 CEST';
-const APP_BUILD = 'v314';
+const COLLECTION_UPDATED = '23 July 2026 · 19:29 CEST';
+const APP_BUILD = 'v317';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -9006,6 +9006,10 @@ if (STANDALONE && CUSTOM_BACK) {
       layer.querySelectorAll('img.heroimg').forEach(i => { if (i.decode) i.decode().catch(() => {}); });
       layer.scrollTop = d.departing;
       $shell.scrollTop = Math.min(SCROLL_MEM[d.floor] || 0, Math.max(0, $shell.scrollHeight - $shell.clientHeight));
+      // rails too, NOW — the floor must sit at the exact pixel it was left at
+      // (the carousel jumped to its remembered spot only at landing: the
+      // Monaco jerk, 23 Jul — same law as the back-pop scroll restore)
+      restoreRails(d.floor);
       d.layer = layer; d.dim = dim; d.started = true;
       d.y0 = t.clientY;                            // rebase: tracks from 0, no activation pop
       pdActive = true; sbActive = true;            // hold off re-renders and the back engine
