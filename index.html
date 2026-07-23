@@ -4071,8 +4071,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 July 2026 · 13:40 CEST';
-const APP_BUILD = 'v274';
+const COLLECTION_UPDATED = '23 July 2026 · 13:53 CEST';
+const APP_BUILD = 'v277';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6444,6 +6444,15 @@ function viewCategory(cityId, catId) {
    into the week (My List and the shared-week link both carry it). */
 let planCtx = null, planDate = null, planMonth = null, planPresetTime = null;
 let dayAddFor = null;   // "add to this day" from My Calendar: preselects the date
+/* the Calendar tab is a TOGGLE (his 23 Jul ask): open → tap → it sets back
+   down onto its floor; closed → tap → it rises. Every tap answers, even
+   mid-flight — renderRoute lands any running slide before starting the next,
+   so rapid taps read as up-down-up-down, never a dead press. */
+function calTabTap() {
+  haptic();
+  if ((location.hash || '').startsWith('#/saved')) { go(calFrom || '#/'); return; }
+  go('#/saved');
+}
 function openPlanSheet(cityId, catId, idx, presetIso, presetTime) {
   const v = CITY_BY_ID[cityId].venues[catId][idx];
   planCtx = { key: vkey(cityId, catId, idx), name: v.n };
@@ -7558,7 +7567,7 @@ const NAV = [
   { id: 'explore', label: 'Explore', icon: I.compass, hash: '#/explore' },
   { id: 'map', label: 'Map', icon: I.globe, hash: '#/map' },
   { id: 'concierge', label: 'Concierge', icon: I_SPARKLE, action: 'openConcierge()' },
-  { id: 'saved', label: 'Calendar', icon: I.cal, hash: '#/saved' },
+  { id: 'saved', label: 'Calendar', icon: I.cal, hash: '#/saved', action: 'calTabTap()' },
   { id: 'club', label: 'My Club', icon: I.member, hash: '#/club' },
 ];
 
