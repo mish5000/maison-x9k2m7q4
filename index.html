@@ -4096,8 +4096,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 July 2026 · 20:05 CEST';
-const APP_BUILD = 'v325';
+const COLLECTION_UPDATED = '23 July 2026 · 21:29 CEST';
+const APP_BUILD = 'v329';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -8097,6 +8097,8 @@ let fadeSeq = 0;   // invalidates a queued appfade start when a newer nav lands
    slide already owns that motion. Constants calibrated to the reference. */
 const SLIDE = {
   dur: 350,
+  durY: 500,                                 // sheet rise/set-down: iOS's own sheet presentation
+                                             // clock — 350 read as rushed (his 21:20 recording)
   ease: 'cubic-bezier(0.32, 0.72, 0, 1)',   // measured: strong ease-out, no overshoot
   parallax: 0.30,                            // measured: under-page moves at 0.30x
   dim: 0.34,                                 // one stack of sheets: matches the back-swipe reveal veil
@@ -8228,7 +8230,7 @@ function runSlide(kind, oldLayer, axis = 'x', riseCal = false, destHash = '') {
     oldLayer.scrollTop = want;
   }
   if (oldLayer.dataset.hash) restoreRails(oldLayer.dataset.hash, oldLayer);
-  const D = SLIDE.dur, E = SLIDE.ease, P = SLIDE.parallax * 100;
+  const D = axis === 'y' ? SLIDE.durY : SLIDE.dur, E = SLIDE.ease, P = SLIDE.parallax * 100;
   // the scrim lives at body level (a scrolled layer's absolute child wouldn't
   // cover the viewport): push dims the OLD page (under the mover), pop the NEW
   const dim = document.createElement('div');
