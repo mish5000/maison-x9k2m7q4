@@ -3073,8 +3073,12 @@ body.calmodal #shell {
   height: 90vh; height: 90dvh;
   margin-top: 10vh; margin-top: 10dvh;
   border-radius: 26px 26px 0 0;
-  border-top: 1px solid rgba(200, 162, 75, 0.5);
-  box-shadow: 0 -16px 60px rgba(0, 0, 0, 0.7);
+  border-top: 1px solid rgba(200, 162, 75, 0.55);
+  /* the halo (his 14:16 ask): a static gold breath around the lifted edge —
+     depth shadow underneath, glow above. Never animated (paint law). */
+  box-shadow: 0 -16px 60px rgba(0, 0, 0, 0.7),
+              0 -2px 22px rgba(232, 201, 128, 0.28),
+              0 -1px 46px rgba(232, 201, 128, 0.12);
 }
 .pagegrab { display: flex; justify-content: center; padding: 10px 0 0; margin-bottom: -8px; }
 .pagegrab span {
@@ -4076,8 +4080,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 July 2026 · 14:05 CEST';
-const APP_BUILD = 'v283';
+const COLLECTION_UPDATED = '23 July 2026 · 14:20 CEST';
+const APP_BUILD = 'v286';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -8198,9 +8202,10 @@ addEventListener('pagehide', () => { if (activeSlide) activeSlide(); });
 function renderView(h) {
   const parts = (h || '#/').replace(/^#\//, '').split('/').filter(Boolean);
   document.body.classList.toggle('weekshare', parts[0] === 'week');
-  // the Calendar rests at 90% like a true sheet (Mishari 21:36) — the shell
-  // itself steps down, so every path that paints #app keeps the geometry honest
-  document.body.classList.toggle('calmodal', parts[0] === 'saved');
+  // the Calendar AND category pages rest at 90% like true sheets (Mishari
+  // 21:36 + 14:16) — the shell itself steps down, so every path that paints
+  // #app keeps the geometry honest
+  document.body.classList.toggle('calmodal', parts[0] === 'saved' || parts[0] === 'cat');
   if (parts.length === 0) { renderNav('home'); viewHome(); return; }
   switch (parts[0]) {
     case 'explore': renderNav('explore'); viewExplore(); break;
@@ -8286,8 +8291,8 @@ function renderRoute(soft = false, dir = 'fwd') {
       // category pages and the Calendar rise like sheets: a push INTO them
       // ascends, a pop OUT descends — every other route keeps the lateral slide
       slideAxis = /^#\/(cat\/|saved)/.test(slideKind === 'push' ? h : lastRouteHash) ? 'y' : 'x';
-      // a departing Calendar keeps its 90% geometry in the frozen layer
-      if (lastRouteHash.startsWith('#/saved')) oldLayer.classList.add('cal-strip');
+      // a departing Calendar or category keeps its 90% geometry in the frozen layer
+      if (/^#\/(saved|cat\/)/.test(lastRouteHash)) oldLayer.classList.add('cal-strip');
     }
   }
   pendingSlide = null;
@@ -8330,7 +8335,7 @@ function renderRoute(soft = false, dir = 'fwd') {
     // Instagram-style slide owns this navigation — no fade on top of it
     ++fadeSeq;
     $app.classList.remove('navfade', 'prefade');
-    runSlide(slideKind, oldLayer, slideAxis, slideKind === 'push' && h.startsWith('#/saved'));
+    runSlide(slideKind, oldLayer, slideAxis, slideKind === 'push' && /^#\/(saved|cat\/)/.test(h));
   } else if (!soft && !nativeBack) {
     // Hold the fresh page at its from-state (prefade) synchronously with the
     // DOM swap, then start the animation across a paint boundary (double rAF)
@@ -8919,8 +8924,7 @@ if (STANDALONE && CUSTOM_BACK) {
       if (activeSlide) activeSlide();              // land an in-flight slide so #app is whole
       const layer = captureOldLayer(d.departing);  // the departing page, frozen, on top
       if (!layer) { d = null; return; }
-      layer.classList.add('ontop', 'pd-drag');
-      if (d.fromHash.startsWith('#/saved')) layer.classList.add('cal-strip');   // keep the 90% geometry
+      layer.classList.add('ontop', 'pd-drag', 'cal-strip');   // saved AND cat ride at 90% now
       renderView(d.floor);                         // its floor, live beneath
       $app.querySelectorAll('img.heroimg[data-src]').forEach(loadLazy);
       const dim = document.createElement('div');
