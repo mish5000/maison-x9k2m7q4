@@ -4080,8 +4080,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 July 2026 · 14:48 CEST';
-const APP_BUILD = 'v299';
+const COLLECTION_UPDATED = '23 July 2026 · 14:54 CEST';
+const APP_BUILD = 'v304';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -8029,6 +8029,10 @@ const SLIDE = {
   parallax: 0.30,                            // measured: under-page moves at 0.30x
   dim: 0.34,                                 // one stack of sheets: matches the back-swipe reveal veil
 };
+/* THE SHEET FAMILY — every routed page that presents as a 90% halo card
+   and moves vertically (rise in, set down out, pull-down to dismiss).
+   Home, Destinations and the chrome-less shared week stay full-bleed. */
+const SHEET_ROUTE = /^#\/(saved|cat\/|city\/|pulse|season|club)/;
 let pendingSlide = null;   // 'push' | 'pop' — set by the hashchange handler
 let chevronPop = false;    // goBack() marks its history.back() so the pop animates
 let sbActive = false;      // an interactive swipe-back drag is live (guards re-renders)
@@ -8232,10 +8236,9 @@ addEventListener('pagehide', () => { if (activeSlide) activeSlide(); });
 function renderView(h) {
   const parts = (h || '#/').replace(/^#\//, '').split('/').filter(Boolean);
   document.body.classList.toggle('weekshare', parts[0] === 'week');
-  // the Calendar, category AND city pages rest at 90% like true sheets
-  // (Mishari 21:36 + 14:16 + 14:44) — the shell itself steps down, so every
-  // path that paints #app keeps the geometry honest. Home stays full.
-  document.body.classList.toggle('calmodal', parts[0] === 'saved' || parts[0] === 'cat' || parts[0] === 'city');
+  // the whole sheet family rests at 90% (Mishari 21:36 → 14:52) — the shell
+  // itself steps down, so every path that paints #app keeps geometry honest
+  document.body.classList.toggle('calmodal', SHEET_ROUTE.test('#/' + parts.join('/')));
   if (parts.length === 0) { renderNav('home'); viewHome(); return; }
   switch (parts[0]) {
     case 'explore': renderNav('explore'); viewExplore(); break;
@@ -8320,9 +8323,9 @@ function renderRoute(soft = false, dir = 'fwd') {
       oldLayer.dataset.hash = lastRouteHash; slideKind = pendingSlide;
       // category pages and the Calendar rise like sheets: a push INTO them
       // ascends, a pop OUT descends — every other route keeps the lateral slide
-      slideAxis = /^#\/(cat\/|saved|city\/)/.test(slideKind === 'push' ? h : lastRouteHash) ? 'y' : 'x';
+      slideAxis = SHEET_ROUTE.test(slideKind === 'push' ? h : lastRouteHash) ? 'y' : 'x';
       // a departing sheet-page keeps its 90% geometry in the frozen layer
-      if (/^#\/(saved|cat\/|city\/)/.test(lastRouteHash)) oldLayer.classList.add('cal-strip');
+      if (SHEET_ROUTE.test(lastRouteHash)) oldLayer.classList.add('cal-strip');
     }
   }
   pendingSlide = null;
@@ -8365,7 +8368,7 @@ function renderRoute(soft = false, dir = 'fwd') {
     // Instagram-style slide owns this navigation — no fade on top of it
     ++fadeSeq;
     $app.classList.remove('navfade', 'prefade');
-    runSlide(slideKind, oldLayer, slideAxis, slideKind === 'push' && /^#\/(saved|cat\/|city\/)/.test(h));
+    runSlide(slideKind, oldLayer, slideAxis, slideKind === 'push' && SHEET_ROUTE.test(h));
   } else if (!soft && !nativeBack) {
     // Hold the fresh page at its from-state (prefade) synchronously with the
     // DOM swap, then start the animation across a paint boundary (double rAF)
@@ -8925,7 +8928,7 @@ if (STANDALONE && CUSTOM_BACK) {
     wireFocusGlow();
     clear(s);
   };
-  const pdRoute = (h) => /^#\/(saved|cat\/|city\/)/.test(h || '');
+  const pdRoute = (h) => SHEET_ROUTE.test(h || '');
   document.addEventListener('touchstart', (e) => {
     if (d || pdActive || sbActive) return;
     if (!pdRoute(appHash) || !pdRoute(location.hash)) return;
@@ -9087,13 +9090,14 @@ window.addEventListener('hashchange', () => {
   // #/saved rises from the bottom even on a tab switch; leaving it for
   // another tab sets it back down. Gesture/hardware back-pops stay native.
   const dest = location.hash || '#/';
-  if (!pendingSlide && dir !== 'back' && dest.startsWith('#/saved') && lastRouteHash !== dest) {
-    pendingSlide = 'push';
-    // remember the floor it rose from (map is an overlay, never a floor)
-    calFrom = TAB_ROOTS.includes(lastRouteHash) && lastRouteHash !== '#/map' ? lastRouteHash : '#/';
+  if (!pendingSlide && dir !== 'back' && SHEET_ROUTE.test(dest) && lastRouteHash !== dest) {
+    pendingSlide = 'push';   // sheet pages rise even on a tab switch (saved, club)
+    if (dest.startsWith('#/saved'))
+      // remember the floor the Calendar rose from (map is an overlay, never a floor)
+      calFrom = TAB_ROOTS.includes(lastRouteHash) && lastRouteHash !== '#/map' ? lastRouteHash : '#/';
   }
-  else if (!pendingSlide && dir !== 'back' && (lastRouteHash || '').startsWith('#/saved') && TAB_ROOTS.includes(dest))
-    pendingSlide = 'pop';
+  else if (!pendingSlide && dir !== 'back' && SHEET_ROUTE.test(lastRouteHash || '') && TAB_ROOTS.includes(dest))
+    pendingSlide = 'pop';    // leaving any sheet for a full-bleed tab sets it down
   chevronPop = false;
   renderRoute(false, dir);
 });
