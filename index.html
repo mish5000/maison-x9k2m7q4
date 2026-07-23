@@ -4080,8 +4080,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 July 2026 · 14:20 CEST';
-const APP_BUILD = 'v286';
+const COLLECTION_UPDATED = '23 July 2026 · 14:26 CEST';
+const APP_BUILD = 'v290';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6663,12 +6663,15 @@ function parseBookingText(raw) {
         const v = list[idx];
         if (v === best.city.venues[best.part][best.idx]) continue;
         for (const w of tokensOf(v.n, fold(best.city.name)))
-          if (t.includes(w + ' ' + best.n)) { best = { city: best.city, part, idx, name: v.n }; break outer; }
+          if (t.includes(w + ' ' + best.n)) { best = { city: best.city, part, idx, name: v.n, viaBrand: true }; break outer; }
       }
     }
   }
   const when = bkWhen(t);
-  return { cityId: best.city.id, part: best.part, idx: best.idx, name: best.name, iso: when.iso, tm: when.tm };
+  // strong = the full venue name (or a brand-at-place phrase) is in the text —
+  // the arbiter uses this to keep weak venue guesses from beating travel
+  const strong = !!(best.n && t.includes(best.n)) || !!best.viaBrand;
+  return { cityId: best.city.id, part: best.part, idx: best.idx, name: best.name, iso: when.iso, tm: when.tm, strong };
 }
 
 /* dates + hour out of folded confirmation text — shared by venue bookings
@@ -6759,6 +6762,19 @@ function parseTravelText(raw) {
   return null;
 }
 
+/* One arbiter for every reader (screenshot + pasted text). Flight evidence
+   beats any venue guess (his LA flight became Four Seasons, 14:21); a
+   chauffeur beats a venue UNLESS the text actually reads like a table —
+   a pickup POINT naming a resort is still a transfer. */
+function readConfirmation(text) {
+  const bk = parseBookingText(text);
+  const tv = parseTravelText(text);
+  const dining = /(reservation|reservad|table|guests|dinner|lunch|brunch|sunbed|daybed|tasting|menu)/.test(fold(text));
+  if (tv && (tv.k === 'flight' || !(bk && bk.strong && dining))) return { kind: 'travel', tv };
+  if (bk) return { kind: 'venue', bk };
+  return null;
+}
+
 /* ---- the + chooser: a screenshot the house reads, or the collection ---- */
 let $bkin = null;
 function bkInput() {
@@ -6830,8 +6846,11 @@ async function ocrImport(file) {
     });
     const out = await worker.recognize(file);
     const text = (out && out.data && out.data.text) || '';
-    const bk = parseBookingText(text);
-    if (bk && bk.iso) {
+    const read = readConfirmation(text);
+    const bk = read && read.kind === 'venue' ? read.bk : null;
+    if (read && read.kind === 'travel') {
+      if (!addTravel(read.tv)) toast(`Read the ${read.tv.k} but not its date — try Import with the copied text`);
+    } else if (bk && bk.iso) {
       // fully read — lock it in without another tap (Mishari 23:00)
       const key = bk.cityId + '|' + bk.part + '|' + bk.idx;
       if (!plans[bk.iso]) plans[bk.iso] = [];
@@ -6849,8 +6868,6 @@ async function ocrImport(file) {
     } else if (bk) {
       toast(`Read ${bk.name} — now pick the day`);
       openPlanSheet(bk.cityId, bk.part, bk.idx, undefined, bk.tm || undefined);
-    } else if (addTravel(parseTravelText(text))) {
-      /* a flight or chauffeur — locked by addTravel with its own toast */
     } else {
       toast('No booking found in that image — try Import with the copied text');
     }
@@ -6894,13 +6911,17 @@ async function importBookings() {
   const m = compact.match(/adopt\/([A-Za-z0-9\-_]+)/);
   if (m) { viewAdopt(m[1]); return; }
   if (/^[A-Za-z0-9\-_]+$/.test(compact) && compact.length > 40) { viewAdopt(compact); return; }
-  const bk = parseBookingText(raw);
-  if (bk) {
+  const read = readConfirmation(raw);
+  if (read && read.kind === 'travel') {
+    if (!addTravel(read.tv)) toast(`Read the ${read.tv.k} but not its date — include the date line`);
+    return;
+  }
+  if (read && read.kind === 'venue') {
+    const bk = read.bk;
     toast(`Read: ${bk.name}${bk.iso ? '' : ' — pick the day'}`);
     openPlanSheet(bk.cityId, bk.part, bk.idx, bk.iso || undefined, bk.tm || undefined);
     return;
   }
-  if (addTravel(parseTravelText(raw))) return;
   toast('Couldn’t read that — paste the confirmation text or the link');
 }
 
