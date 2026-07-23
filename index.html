@@ -782,6 +782,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 html { scroll-behavior: smooth; }
+/* rapid taps must never be read as double-tap-to-zoom (the 'weird zoom',
+   23 Jul): manipulation keeps scroll + pinch, drops native double-tap zoom.
+   touch-action composes by INTERSECTION down the tree, so one root rule
+   covers every button — descendants may only restrict further (e.g. pan-x). */
+html { touch-action: manipulation; }
 
 html, body { height: 100%; overflow: hidden; }
 
@@ -4071,8 +4076,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 July 2026 · 14:00 CEST';
-const APP_BUILD = 'v280';
+const COLLECTION_UPDATED = '23 July 2026 · 14:05 CEST';
+const APP_BUILD = 'v283';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
