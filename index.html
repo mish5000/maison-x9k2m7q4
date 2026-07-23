@@ -4096,8 +4096,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 July 2026 · 19:45 CEST';
-const APP_BUILD = 'v322';
+const COLLECTION_UPDATED = '23 July 2026 · 20:05 CEST';
+const APP_BUILD = 'v325';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6097,6 +6097,8 @@ function loadLazy(img, instant) {
     img.src = src;
     return;
   }
+  // slide-incoming photos also win the h2 priority contest over the warm flood
+  if (instant) { try { img.fetchPriority = 'high'; } catch (_) {} }
   // First appearance: a slide's incoming photo snaps solid (instant, the
   // expert-panel invariant); a scroll reveal gets the gentle fade. Either way
   // register it so every later re-render stays solid.
@@ -7530,12 +7532,25 @@ function toggleSave(key) {
    scroll near, only their top N venues. */
 const prewarmed = new Set();
 const prewarmQueue = [];
+const prewarmUrgent = new Set();       // urls that must win h2 priority contests
 let prewarmActive = 0;
 const PREWARM_MAX = 6;                 // polite concurrency — never stampede
 function prewarmImg(url, urgent) {
-  if (!url || prewarmed.has(url)) return;
+  if (!url) return;
+  if (prewarmed.has(url)) {
+    // ALREADY QUEUED is not ALREADY WARM: an urgent re-request must still
+    // jump the line — the old early-return made the carousel-focus urgency
+    // a silent no-op for every boot-flooded url (queue audit, 23 Jul)
+    if (urgent) {
+      prewarmUrgent.add(url);
+      const qi = prewarmQueue.indexOf(url);
+      if (qi > 0) { prewarmQueue.splice(qi, 1); prewarmQueue.unshift(url); }
+    }
+    return;
+  }
   prewarmed.add(url);
-  if (urgent) prewarmQueue.unshift(url); else prewarmQueue.push(url);
+  if (urgent) { prewarmUrgent.add(url); prewarmQueue.unshift(url); }
+  else prewarmQueue.push(url);
   pumpPrewarm();
 }
 function pumpPrewarm() {
@@ -7544,7 +7559,10 @@ function pumpPrewarm() {
     prewarmActive++;
     const im = new Image();
     im.decoding = 'async';
-    const done = () => { prewarmActive--; pumpPrewarm(); };
+    // one origin, HTTP/2: the boot flood permanently LOSES priority contests
+    // against tap-time page images and urgent warms (harmless no-op pre-17.2)
+    try { im.fetchPriority = prewarmUrgent.has(url) ? 'high' : 'low'; } catch (_) {}
+    const done = () => { prewarmActive--; prewarmUrgent.delete(url); pumpPrewarm(); };
     im.onload = done; im.onerror = done;
     im.src = url;                      // lands in the HTTP + SW cache for reuse
   }
@@ -7564,7 +7582,11 @@ function prewarmCategory(cityId, catId, n) {
    gaps. So eagerly warm EVERY city hero into cache (idle, after first paint,
    so the visible cards still load first). */
 function prewarmDestinations() {
-  const cs = (typeof CITIES !== 'undefined' && CITIES) || [];
+  // GEO order, not data order — the warm queue's front must match the front
+  // of the rail he actually sees (queue audit: a member in New York watched
+  // Marbella/London/Dubai warm first while his own coast sat last)
+  const cs = (typeof geoOrderedCities === 'function' ? (geoOrderedCities().cities || []) :
+              (typeof CITIES !== 'undefined' && CITIES) || []);
   cs.forEach(c => { if (c && c.hero) prewarmImg(c.hero); });
 }
 
@@ -7608,14 +7630,15 @@ function wireCityFocus() {
       cityFocusObserver.unobserve(e.target);
       prewarmCityFocus(e.target.dataset.city);
     }
-  }, { threshold: 0.35 });
+  }, { threshold: 0.35, rootMargin: '0px 300px 0px 300px' });   // fire one card early
   cards.forEach(c => cityFocusObserver.observe(c));
 }
 /* Every city's tile screen, warmed on app open — a fresh tap into any city
    lands on fully-painted tiles. ~1 photo per category per city (small set). */
 function prewarmAllCityTiles() {
-  const cs = (typeof CITIES !== 'undefined' && CITIES) || [];
-  cs.forEach(c => prewarmCityTiles(c.id));
+  const cs = (typeof geoOrderedCities === 'function' ? (geoOrderedCities().cities || []) :
+              (typeof CITIES !== 'undefined' && CITIES) || []);
+  cs.forEach(c => prewarmCityTiles(c.id));   // geo order — nearest cities warm first
 }
 
 let prewarmObserver = null;
@@ -8139,20 +8162,37 @@ function captureOldLayer(departingScroll) {
    to a hero fading in mid-slide rather than a stuck transition. */
 function decodeIncoming(root) {
   const vh = innerHeight;
-  // Vertical band ONLY. During the fence the incoming layer rests off-screen to
-  // the right (translateX ~100%), so a horizontal check wrongly excludes inset
-  // photos (venue cards) and leaves them black mid-slide — every column lands
-  // on-screen once it slides in, so above-the-fold is a vertical question.
+  // Landing pose for every layer species is the resting layout at IDENTITY
+  // transform (push flies to translate(0), pop-y ends at scale(1), pop rests
+  // there). So the landing-space child rect = measured rect minus the layer's
+  // own resting TRANSLATION. History demands pose-proof math both ways: the
+  // x-park once made a horizontal check exclude inset photos (5c7011c), and
+  // the y-park of the RISE made this viewport-space check exclude EVERY city
+  // tile — they flew src-less and landed black (23 Jul, five-agent sweep).
+  // Read ty from the computed matrix: pose-agnostic, 0 for transform:none —
+  // which also keeps the $app call site (map Ascent) exact. No animation runs
+  // during the fence, so the matrix is the pure resting pose.
+  let dy = 0;
+  const tf = getComputedStyle(root).transform;
+  if (tf && tf !== 'none') { try { dy = new DOMMatrixReadOnly(tf).m42; } catch (_) { try { dy = new WebKitCSSMatrix(tf).m42; } catch (_) {} } }
   const imgs = [...root.querySelectorAll('img.heroimg')].filter(i => {
     const r = i.getBoundingClientRect();
-    return r.bottom > 0 && r.top < vh;
+    return (r.bottom - dy) > 0 && (r.top - dy) < vh;
   });
   imgs.forEach(i => loadLazy(i, true));   // promote NOW + snap solid (no fade in-slide)
+  window.__fenceAdmitted = imgs.length;   // the gate asserts the ADMITTED SET —
+                                          // software WebKit can't see a no-op fence visually
   if (!imgs.length) return Promise.resolve();
-  return Promise.race([
-    Promise.all(imgs.map(i => i.decode ? i.decode().catch(() => {}) : Promise.resolve())),
-    new Promise(r => setTimeout(r, 600)),
-  ]);
+  const pending = new Set(imgs);
+  const all = Promise.all(imgs.map(i =>
+    (i.decode ? i.decode() : Promise.resolve()).catch(() => {}).then(() => pending.delete(i))));
+  return Promise.race([all, new Promise(r => setTimeout(r, 600))]).then(() => {
+    // Cap expired with losers (cold LTE): a later pop from black mid-flight
+    // is the retired black-flash class. Strip .instant so the decoded frame
+    // arrives as the 0.45s opacity fade on its own pre-painted sublayer —
+    // exactly what the paint law permits.
+    pending.forEach(i => i.classList.remove('instant'));
+  });
 }
 
 /* The mover for a push is NOT #app (a document-height tiled layer inside the
