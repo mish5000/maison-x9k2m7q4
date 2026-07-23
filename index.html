@@ -4071,8 +4071,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 July 2026 · 13:53 CEST';
-const APP_BUILD = 'v277';
+const COLLECTION_UPDATED = '23 July 2026 · 14:00 CEST';
+const APP_BUILD = 'v280';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7062,6 +7062,49 @@ function viewSaved() {
       <button class="pill small dayadd" id="dayadd">+ Add to this day</button>
     </div>`;
 
+  // YOUR WEEK — the whole itinerary under the grid (his 23 Jul ask): every
+  // upcoming day in one clean run, venues + travel on the time rail, made to
+  // be screenshotted and sent
+  const weekDays = [...new Set([...Object.keys(plans), ...Object.keys(trips)])]
+    .filter(iso => iso >= today).sort();
+  const weekList = weekDays.map(iso => {
+    const dt = new Date(iso + 'T12:00:00');
+    const dayRows = (plans[iso] || []).map(k => {
+      const [cityId, catId, idx] = k.split('|');
+      const city = CITY_BY_ID[cityId];
+      const v = city?.venues?.[catId]?.[+idx];
+      if (!v) return null;
+      const im = venueImg(cityId, catId, +idx, v);
+      const tm = planTimes[iso + '|' + k] || '';
+      return { tm, html: `
+        <div class="ag-item cal ro" data-open="${k}" data-iso="${iso}">
+          <span class="ag-when serif${tm ? '' : ' tbd'}">${tm || '·'}</span>
+          ${im ? `<span class="thumb" style="background-image:url('${im}')"></span>` : `<span class="thumb mono-mini serif">${v.n.charAt(0)}</span>`}
+          <span class="meta">
+            <span class="nm serif">${v.n}</span>
+            <span class="what">${CAT_SINGLE[catId] || catId} · ${city.name}</span>
+          </span>
+        </div>` };
+    }).filter(Boolean).concat((trips[iso] || []).map(tr => ({ tm: tr.tm || '', html: `
+        <div class="ag-item cal ro">
+          <span class="ag-when serif${tr.tm ? '' : ' tbd'}">${tr.tm || '·'}</span>
+          <span class="thumb mono-mini tripic">${tr.k === 'flight' ? I.plane : I.car}</span>
+          <span class="meta">
+            <span class="nm serif">${esc(tr.hl)}</span>
+            <span class="what">${esc(tr.sub || (tr.k === 'flight' ? 'Flight' : 'Car'))}</span>
+          </span>
+        </div>` })));
+    if (!dayRows.length) return '';
+    return `
+      <div class="ag-day">
+        <div class="ag-head">
+          <span class="d serif">${DAY_FULL[dt.getDay()]}</span>
+          <span class="dt">${dt.getDate()} ${MONTHS[dt.getMonth()]}${iso === today ? ' · Today' : ''}</span>
+        </div>
+        ${dayRows.sort((a, b) => (a.tm || '99:99').localeCompare(b.tm || '99:99')).map(r => r.html).join('')}
+      </div>`;
+  }).join('');
+
   $app.innerHTML = `
     <div class="pagegrab"><span></span></div>
     <button class="pagesearch" onclick="openSearch()" aria-label="Search">${I.search}</button>
@@ -7072,6 +7115,12 @@ function viewSaved() {
     <section class="agenda rise rise-1">
       ${agenda}
     </section>
+    ${weekList ? `
+    <section class="agenda rise rise-2">
+      <div class="section-head"><span class="display serif">Your Week</span>
+        <button class="pill small" onclick="shareWeek()">Send</button></div>
+      ${weekList}
+    </section>` : ''}
     ${(() => {
       if (!yearSet.size) return '';
       const nowM = new Date().getMonth() + 1;
@@ -7122,7 +7171,7 @@ function viewSaved() {
   $app.querySelectorAll('.ag-item[data-open]').forEach(el => el.addEventListener('click', () => {
     const [c, cat, i] = el.dataset.open.split('|');
     // edit mode: a tap re-opens the plan sheet ON that day — move it, retime it
-    if (viewSaved.edit && el.classList.contains('cal')) { openPlanSheet(c, cat, +i, viewSaved.sel); return; }
+    if (viewSaved.edit && el.classList.contains('cal')) { openPlanSheet(c, cat, +i, el.dataset.iso || viewSaved.sel); return; }
     openSheet(c, cat, +i);
   }));
   $app.querySelectorAll('.ag-item[data-goseason]').forEach(el => el.addEventListener('click', () =>
