@@ -4080,8 +4080,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 July 2026 · 14:34 CEST';
-const APP_BUILD = 'v295';
+const COLLECTION_UPDATED = '23 July 2026 · 14:48 CEST';
+const APP_BUILD = 'v299';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -8232,10 +8232,10 @@ addEventListener('pagehide', () => { if (activeSlide) activeSlide(); });
 function renderView(h) {
   const parts = (h || '#/').replace(/^#\//, '').split('/').filter(Boolean);
   document.body.classList.toggle('weekshare', parts[0] === 'week');
-  // the Calendar AND category pages rest at 90% like true sheets (Mishari
-  // 21:36 + 14:16) — the shell itself steps down, so every path that paints
-  // #app keeps the geometry honest
-  document.body.classList.toggle('calmodal', parts[0] === 'saved' || parts[0] === 'cat');
+  // the Calendar, category AND city pages rest at 90% like true sheets
+  // (Mishari 21:36 + 14:16 + 14:44) — the shell itself steps down, so every
+  // path that paints #app keeps the geometry honest. Home stays full.
+  document.body.classList.toggle('calmodal', parts[0] === 'saved' || parts[0] === 'cat' || parts[0] === 'city');
   if (parts.length === 0) { renderNav('home'); viewHome(); return; }
   switch (parts[0]) {
     case 'explore': renderNav('explore'); viewExplore(); break;
@@ -8320,9 +8320,9 @@ function renderRoute(soft = false, dir = 'fwd') {
       oldLayer.dataset.hash = lastRouteHash; slideKind = pendingSlide;
       // category pages and the Calendar rise like sheets: a push INTO them
       // ascends, a pop OUT descends — every other route keeps the lateral slide
-      slideAxis = /^#\/(cat\/|saved)/.test(slideKind === 'push' ? h : lastRouteHash) ? 'y' : 'x';
-      // a departing Calendar or category keeps its 90% geometry in the frozen layer
-      if (/^#\/(saved|cat\/)/.test(lastRouteHash)) oldLayer.classList.add('cal-strip');
+      slideAxis = /^#\/(cat\/|saved|city\/)/.test(slideKind === 'push' ? h : lastRouteHash) ? 'y' : 'x';
+      // a departing sheet-page keeps its 90% geometry in the frozen layer
+      if (/^#\/(saved|cat\/|city\/)/.test(lastRouteHash)) oldLayer.classList.add('cal-strip');
     }
   }
   pendingSlide = null;
@@ -8365,7 +8365,7 @@ function renderRoute(soft = false, dir = 'fwd') {
     // Instagram-style slide owns this navigation — no fade on top of it
     ++fadeSeq;
     $app.classList.remove('navfade', 'prefade');
-    runSlide(slideKind, oldLayer, slideAxis, slideKind === 'push' && /^#\/(saved|cat\/)/.test(h));
+    runSlide(slideKind, oldLayer, slideAxis, slideKind === 'push' && /^#\/(saved|cat\/|city\/)/.test(h));
   } else if (!soft && !nativeBack) {
     // Hold the fresh page at its from-state (prefade) synchronously with the
     // DOM swap, then start the animation across a paint boundary (double rAF)
@@ -8925,7 +8925,7 @@ if (STANDALONE && CUSTOM_BACK) {
     wireFocusGlow();
     clear(s);
   };
-  const pdRoute = (h) => /^#\/(saved|cat\/)/.test(h || '');
+  const pdRoute = (h) => /^#\/(saved|cat\/|city\/)/.test(h || '');
   document.addEventListener('touchstart', (e) => {
     if (d || pdActive || sbActive) return;
     if (!pdRoute(appHash) || !pdRoute(location.hash)) return;
@@ -8934,9 +8934,9 @@ if (STANDALONE && CUSTOM_BACK) {
     if ($shell.scrollTop > 0) return;
     const t = e.touches[0];
     // the floor this page sets down onto: the Calendar remembers its tab,
-    // a category goes home to its city (the chevron's own target)
+    // a category or city goes to the chevron's own target (city / home)
     const fromHash = appHash || '#/';
-    const floor = fromHash.startsWith('#/cat/') ? (curBack || '#/') : (calFrom || '#/');
+    const floor = fromHash.startsWith('#/saved') ? (calFrom || '#/') : (curBack || '#/');
     // a touch on a control needs a DELIBERATE pull before the page moves —
     // sloppy taps on +/Edit/day-cells were being eaten as micro-drags (23 Jul)
     const onControl = !!(e.target && e.target.closest && e.target.closest('button, a, input, .pc, .ag-item'));
