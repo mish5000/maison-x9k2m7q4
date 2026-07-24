@@ -1358,7 +1358,9 @@ body {
    repaint the blurred shadow on the main thread every frame for its duration,
    on both the gaining and losing tile, per scroll focus change). */
 .tile {
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.30);
+  /* the 1px gold rim is STATIC (plate-in-a-monograph framing; the .infocus
+     ::before ring at 0.4 now reads as a step-up, not an apparition) */
+  box-shadow: 0 0 0 1px rgba(200, 162, 75, 0.18), 0 8px 22px rgba(0, 0, 0, 0.30);
   transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .tile::before {
@@ -1436,12 +1438,15 @@ body {
 .cityhero .display { font-size: 44px; }
 .cityhero .tagline { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--ink-dim); margin-top: 8px; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6); }
 
-.tiles { padding: 22px; display: grid; gap: 16px; }
+/* 24 Jul expert consult ("messy/convoluted"): 24px matting between plates —
+   at 16px five saturated photos fused into a collage — and card edges on the
+   hero text's 26px axis so the page has ONE left line to travel down */
+.tiles { padding: 24px 26px 34px; display: grid; gap: 24px; }
 
 .tile {
   position: relative;
   height: 116px;
-  border-radius: 24px;
+  border-radius: var(--radius);
   /* overflow VISIBLE so the ::before focus glow can bloom outward (paint law:
      the glow fades via opacity, never a box-shadow transition); .bg and the
      ::after veil re-clip to the radius themselves */
@@ -1453,20 +1458,28 @@ body {
   isolation: isolate;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
+  /* label seat is bottom-left (citycard/hero grammar) — measured: the center
+     band of every tile photo spikes to p90 luminance 163-206 (tablecloths,
+     string lights) where the serif's hairlines dissolve; the bottom band is
+     the photo's calm zone AND the veil's existing floor */
+  align-items: flex-start;
+  justify-content: flex-end;
+  text-align: left;
+  gap: 5px;
+  padding: 0 20px 15px;
   background: var(--bg-raised);
   width: 100%;
 }
 
 .tile .bg { position: absolute; inset: 0; z-index: -2; background-size: cover; background-position: center; filter: saturate(1.1) brightness(1.09); border-radius: inherit; }
+/* bottom-anchored veil ONLY — the old 0.30 centre radial haze is DELETED
+   (never-darken law: this pass makes every photo's centre strictly brighter;
+   the bottom floor keeps its exact 0.46, deepened nowhere) */
 .tile::after { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background:
-  radial-gradient(120% 90% at 50% 50%, rgba(11, 10, 8, 0.30) 0%, rgba(11, 10, 8, 0.08) 60%, rgba(11, 10, 8, 0) 78%),
-  linear-gradient(180deg, rgba(11, 10, 8, 0.10) 0%, rgba(11, 10, 8, 0.07) 45%, rgba(11, 10, 8, 0.46) 100%); }
+  linear-gradient(180deg, rgba(11, 10, 8, 0) 0%, rgba(11, 10, 8, 0) 52%, rgba(11, 10, 8, 0.12) 72%, rgba(11, 10, 8, 0.46) 100%); }
 
-.tile .display { font-size: 26px; letter-spacing: 0.1em; text-transform: uppercase; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85); }
-.tile .count { font-size: 9.5px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-bright); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.75); }
+.tile .display { font-size: 22px; letter-spacing: 0.16em; text-transform: uppercase; text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7); }
+.tile .count { font-size: 9px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.75); }
 
 /* ---------- venue feed ---------- */
 
@@ -4102,8 +4115,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '24 July 2026 · 00:58 CEST';
-const APP_BUILD = 'v335';
+const COLLECTION_UPDATED = '24 July 2026 · 12:50 CEST';
+const APP_BUILD = 'v339';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6253,8 +6266,8 @@ function viewCity(cityId) {
       return `
       <button class="tile rise rise-${Math.min(i, 3)}" data-prewarm="${city.id}|${cat.id}" onclick="location.hash='#/cat/${city.id}/${cat.id}'">
         <span class="bg">${heroImg(tileBg)}</span>
-        <span class="display serif">${cat.label}</span>
         <span class="count">${n} ${n === 1 ? 'address' : 'addresses'}</span>
+        <span class="display serif">${cat.label}</span>
       </button>`;
     }).join('');
 
@@ -6271,8 +6284,8 @@ function viewCity(cityId) {
     </header>
     <div class="tiles">${tiles}${(typeof CONCIERGE !== 'undefined' && CONCIERGE[city.id]) ? `
       <button class="tile concierge-tile" onclick="location.hash='#/concierge/${city.id}'">
-        <span class="display serif">VIP Concierge</span>
         <span class="count">${CONCIERGE[city.id].length === 1 ? 'One call, handled' : CONCIERGE[city.id].length + ' fixers · no memberships'}</span>
+        <span class="display serif">VIP Concierge</span>
       </button>` : ''}</div>`;
   wireCards();
   $shell.scrollTo(0, 0);
