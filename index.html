@@ -2692,6 +2692,10 @@ body {
 .season-feed { display: flex; flex-direction: column; gap: 16px; padding: 4px 22px 30px; }
 .sevent {
   position: relative;
+  /* off-screen season cards are the app's costliest paint (4-layer glow,
+     ribbons, frosted panel) — skip them until they approach glass */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;   /* measured: 305px card */
   overflow: hidden;
   isolation: isolate;
   border-radius: var(--radius);
@@ -3178,7 +3182,8 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
    Marbella->Restaurants push. Force the flying layers to render their cards so
    the fence paints for real. The layers clip to the viewport (overflow:hidden),
    so only the ~1-2 on-fold cards actually cost anything. */
-.slide-enter .vcard:nth-of-type(-n+3), .slide-layer .vcard:nth-of-type(-n+3) { content-visibility: visible; }
+.slide-enter .vcard:nth-of-type(-n+3), .slide-layer .vcard:nth-of-type(-n+3),
+.slide-enter .sevent:nth-of-type(-n+3), .slide-layer .sevent:nth-of-type(-n+3) { content-visibility: visible; }
 .heroimg {
   position: absolute;
   inset: 0;
@@ -4124,8 +4129,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '24 July 2026 · 13:24 CEST';
-const APP_BUILD = 'v346';
+const COLLECTION_UPDATED = '24 July 2026 · 13:42 CEST';
+const APP_BUILD = 'v350';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7595,13 +7600,13 @@ function pumpPrewarm() {
     im.src = url;                      // lands in the HTTP + SW cache for reuse
   }
 }
-function prewarmCategory(cityId, catId, n) {
+function prewarmCategory(cityId, catId, n, urgent = true) {
   const city = CITY_BY_ID[cityId]; if (!city) return;
   const cat = CAT_BY_ID[displayCat(catId)]; if (!cat) return;
   let c = 0;
   for (const { part, v, i } of catVenueEntries(city, cat)) {
     const im = venueImg(cityId, part, i, v);
-    if (im) { prewarmImg(im, true); if (++c >= (n || 3)) break; }   // urgent: next tap
+    if (im) { prewarmImg(im, urgent); if (++c >= (n || 3)) break; }
   }
 }
 
@@ -7649,11 +7654,11 @@ document.addEventListener('pointerdown', (e) => {
   else prewarmCityFocus(t.dataset.city);
 }, { passive: true });
 
-function prewarmCityFocus(cityId) {
+function prewarmCityFocus(cityId, urgent = true) {
   const city = CITY_BY_ID[cityId]; if (!city) return;
-  if (city.hero) prewarmImg(city.hero, true);
-  prewarmCityTiles(cityId, true);
-  CATEGORIES.slice(0, 3).forEach(cat => prewarmCategory(cityId, cat.id, 2));
+  if (city.hero) prewarmImg(city.hero, urgent);
+  prewarmCityTiles(cityId, urgent);
+  CATEGORIES.slice(0, 3).forEach(cat => prewarmCategory(cityId, cat.id, 2, urgent));
 }
 let cityFocusObserver = null;
 function wireCityFocus() {
@@ -7663,7 +7668,10 @@ function wireCityFocus() {
   cityFocusObserver = new IntersectionObserver((entries) => {
     for (const e of entries) if (e.isIntersecting) {
       cityFocusObserver.unobserve(e.target);
-      prewarmCityFocus(e.target.dataset.city);
+      // CALM, not urgent: this fires mid-flick — an urgent burst here injects
+      // fetchPriority-high fetches against the images actually on screen
+      // (scroll audit, 24 Jul). Real intent (pointerdown) stays urgent.
+      prewarmCityFocus(e.target.dataset.city, false);
     }
   }, { threshold: 0.35, rootMargin: '0px 300px 0px 300px' });   // fire one card early
   cards.forEach(c => cityFocusObserver.observe(c));
@@ -7696,13 +7704,13 @@ function wirePrewarm() {
 }
 
 let cardObserver = null;
-let tileScrollHandler = null;
+let tileObserver = null;
 function wireFocusGlow() {
   observeLazy($app);   // (re)arm photo prefetch for whatever just rendered
   wireCityFocus();     // home rail: a card sliding into view warms its city
   wirePrewarm();       // and anticipatorily warm the next-tap category photos
   if (cardObserver) cardObserver.disconnect();
-  if (tileScrollHandler) { $shell.removeEventListener('scroll', tileScrollHandler); tileScrollHandler = null; }
+  if (tileObserver) { tileObserver.disconnect(); tileObserver = null; }
 
   // venue cards: exactly one in focus — the most visible
   const cards = [...$app.querySelectorAll('.vcard')];
@@ -7717,22 +7725,16 @@ function wireFocusGlow() {
     cards.forEach(c => cardObserver.observe(c));
   }
 
-  // category tiles: every tile inside the middle band glows — no single-pick
+  // category tiles: every tile inside the middle band glows — no single-pick.
+  // IO, NEVER a scroll listener: the old rAF handler ran getBoundingClientRect
+  // over every tile each momentum frame (the app's one true main-thread scroll
+  // cost — audit F5c, retired 24 Jul). -10% margins = the same mid-band.
   const tiles = [...$app.querySelectorAll('.tile')];
   if (tiles.length) {
-    let raf = null;
-    const update = () => {
-      raf = null;
-      const vh = $shell.clientHeight;
-      for (const el of tiles) {
-        const r = el.getBoundingClientRect();
-        const mid = r.top + r.height / 2;
-        el.classList.toggle('infocus', mid > vh * 0.1 && mid < vh * 0.9);
-      }
-    };
-    tileScrollHandler = () => { if (!raf) raf = requestAnimationFrame(update); };
-    $shell.addEventListener('scroll', tileScrollHandler, { passive: true });
-    update();
+    tileObserver = new IntersectionObserver((entries) => {
+      for (const e of entries) e.target.classList.toggle('infocus', e.isIntersecting);
+    }, { root: $shell, rootMargin: '-10% 0px -10% 0px', threshold: 0 });
+    tiles.forEach(t => tileObserver.observe(t));
   }
 }
 
