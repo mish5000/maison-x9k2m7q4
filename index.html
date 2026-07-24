@@ -4124,8 +4124,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '24 July 2026 · 13:02 CEST';
-const APP_BUILD = 'v342';
+const COLLECTION_UPDATED = '24 July 2026 · 13:24 CEST';
+const APP_BUILD = 'v346';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6168,7 +6168,7 @@ function viewHome() {
       ? `Closest to you${km < 500 ? ' · ' + (km < 10 ? km.toFixed(1) : Math.round(km)) + ' km' : ''}`
       : c.country;
     return `
-    <button class="citycard" data-city="${c.id}" onclick="location.hash='#/city/${c.id}'">
+    <button class="citycard" data-city="${c.id}" onclick="haptic();location.hash='#/city/${c.id}'">
       <span class="bg">${heroImg(c.hero)}</span>
       <span class="meta">
         <span class="eyebrow gold">${eyebrow}</span>
@@ -6265,7 +6265,7 @@ function viewCity(cityId) {
   // arriving in a city warms its leading categories AT ONCE (his 19:29 —
   // 'restaurants should be preloaded, cocktails, the first three') so the
   // next tap down paints from cache, not the network
-  CATEGORIES.slice(0, 3).forEach(cat => prewarmCategory(cityId, cat.id, 3));
+  setTimeout(() => CATEGORIES.slice(0, 3).forEach(cat => prewarmCategory(cityId, cat.id, 3)), 600);   // after the rise lands — never against the fence
 
   const tiles = CATEGORIES
     .filter(cat => catVenueEntries(city, cat).length)
@@ -6273,7 +6273,7 @@ function viewCity(cityId) {
       const n = catVenueEntries(city, cat).length;
       const tileBg = tileImg(city, cat.id);
       return `
-      <button class="tile rise rise-${Math.min(i, 3)}" data-prewarm="${city.id}|${cat.id}" onclick="location.hash='#/cat/${city.id}/${cat.id}'">
+      <button class="tile rise rise-${Math.min(i, 3)}" data-prewarm="${city.id}|${cat.id}" onclick="haptic();location.hash='#/cat/${city.id}/${cat.id}'">
         <span class="bg">${heroImg(tileBg)}</span>
         <span class="count">${n} ${n === 1 ? 'address' : 'addresses'}</span>
         <span class="display serif">${cat.label}</span>
@@ -6437,7 +6437,7 @@ function viewCategory(cityId, catId) {
   catId = displayCat(catId); // legacy #/cat/x/beach and /pools routes fold in
   // inside a category, warm the WHOLE first screenful-and-beyond urgently —
   // scrolling down must meet photos already in cache (his 19:29)
-  prewarmCategory(cityId, catId, 10);
+  setTimeout(() => prewarmCategory(cityId, catId, 10), 600);   // after the rise lands — never against the fence
   const city = CITY_BY_ID[cityId];
   const cat = CAT_BY_ID[catId];
   if (!city || !cat) { go('#/'); return; }
@@ -7642,6 +7642,13 @@ function prewarmCityTiles(cityId, urgent) {
    city's first paint starts downloading URGENTLY — hero, every category
    tile photo, and the first venues of the leading categories — jumping the
    ~200-image app-open warm queue instead of waiting behind it. */
+document.addEventListener('pointerdown', (e) => {
+  const t = e.target.closest && e.target.closest('[data-prewarm], .citycard[data-city]');
+  if (!t) return;
+  if (t.dataset.prewarm) { const [c, k] = t.dataset.prewarm.split('|'); prewarmCategory(c, k, 3); }
+  else prewarmCityFocus(t.dataset.city);
+}, { passive: true });
+
 function prewarmCityFocus(cityId) {
   const city = CITY_BY_ID[cityId]; if (!city) return;
   if (city.hero) prewarmImg(city.hero, true);
@@ -8190,7 +8197,8 @@ function captureOldLayer(departingScroll) {
    the decoded frames be available for those elements' next paint, so this is
    a real fence, not a cache-sharing gamble. Capped so a slow decode degrades
    to a hero fading in mid-slide rather than a stuck transition. */
-function decodeIncoming(root) {
+function decodeIncoming(root, cap = 600) {
+  window.__fenceCap = cap;   // asserted by the gate — the hold budget is a shipped invariant
   const vh = innerHeight;
   // Landing pose for every layer species is the resting layout at IDENTITY
   // transform (push flies to translate(0), pop-y ends at scale(1), pop rests
@@ -8216,7 +8224,7 @@ function decodeIncoming(root) {
   const pending = new Set(imgs);
   const all = Promise.all(imgs.map(i =>
     (i.decode ? i.decode() : Promise.resolve()).catch(() => {}).then(() => pending.delete(i))));
-  return Promise.race([all, new Promise(r => setTimeout(r, 600))]).then(() => {
+  return Promise.race([all, new Promise(r => setTimeout(r, cap))]).then(() => {
     // Cap expired with losers (cold LTE): a later pop from black mid-flight
     // is the retired black-flash class. Strip .instant so the decoded frame
     // arrives as the 0.45s opacity fade on its own pre-painted sublayer —
@@ -8333,7 +8341,7 @@ function runSlide(kind, oldLayer, axis = 'x', riseCal = false, destHash = '') {
     if (riseCal) enter.classList.add('rise-cal');    // the Calendar flies at its 90% geometry
     document.body.appendChild(enter);           // rests at calc(100% - 2px):
     document.body.appendChild(dim);             // 2px on glass = paint demand
-    decodeIncoming(enter).then(() => {
+    decodeIncoming(enter, 250).then(() => {
       if (activeSlide !== done) return;
       requestAnimationFrame(() => requestAnimationFrame(() => {
         if (activeSlide !== done) return;       // two presented frames let the
