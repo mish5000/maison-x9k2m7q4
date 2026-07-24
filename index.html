@@ -774,6 +774,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   --sage-ink: #2e4636;
   --scrim: linear-gradient(180deg, rgba(11, 10, 8, 0) 0%, rgba(11, 10, 8, 0.42) 52%, rgba(11, 10, 8, 0.93) 100%);
   --radius: 26px;
+  --sheet-r: 36px;   /* the sheet out-rounds its cards: hierarchy of curvature (24 Jul panel) */
   --nav-h: 84px;
   --serif: 'Cormorant Garamond', 'Times New Roman', serif;
   --sans: 'Jost', 'Helvetica Neue', sans-serif;
@@ -3072,7 +3073,8 @@ body {
 /* calendar pull-down: the dragged page reads as a sheet lifting off upward-lit */
 .slide-layer.pd-drag {
   box-shadow: 0 -12px 34px rgba(0, 0, 0, 0.45);
-  border-radius: 26px 26px 0 0;
+  border: 1px solid rgba(200, 162, 75, 0.55); border-bottom: 0;
+  border-radius: var(--sheet-r) var(--sheet-r) 0 0;
   will-change: transform;
 }
 /* the Calendar rests at 90% like a true sheet — a breath of the room stays
@@ -3080,8 +3082,12 @@ body {
 body.calmodal #shell {
   height: 90vh; height: 90dvh;
   margin-top: 10vh; margin-top: 10dvh;
-  border-radius: 26px 26px 0 0;
-  border-top: 1px solid rgba(200, 162, 75, 0.55);
+  border-radius: var(--sheet-r) var(--sheet-r) 0 0;
+  /* the gilt line traces the WHOLE shoulder arc — border-top alone terminates
+     dead at the vertical tangent and the gold evaporates mid-curve (his 12:51
+     arrows). A border travels with its layer; never an overlay mask. */
+  border: 1px solid rgba(200, 162, 75, 0.55);
+  border-bottom: 0;
   box-shadow: none;   /* halo lives on the fixed underlay below — a shadow on
                          the SCROLLER re-rasterizes on every container
                          invalidation, mid-transition included (audit F4) */
@@ -3094,9 +3100,10 @@ body.calmodal::before {
   left: 50%; transform: translateX(-50%);
   width: 100%; max-width: 520px;
   top: 10vh; top: 10dvh; bottom: 0;
-  border-radius: 26px 26px 0 0;
+  border-radius: var(--sheet-r) var(--sheet-r) 0 0;
   box-shadow: 0 -16px 60px rgba(0, 0, 0, 0.7),
-              0 -2px 22px rgba(232, 201, 128, 0.28),
+              0 -2px 18px rgba(232, 201, 128, 0.32),
+              0 0 9px rgba(232, 201, 128, 0.20),
               0 -1px 46px rgba(232, 201, 128, 0.12);
   pointer-events: none;
   z-index: 0;
@@ -3120,7 +3127,8 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
    (pd-drag alone stays full-height — category pages ride it too) */
 .slide-enter.rise-cal, .slide-layer.cal-strip {
   top: 10vh; top: 10dvh;
-  border-radius: 26px 26px 0 0;
+  border: 1px solid rgba(200, 162, 75, 0.55); border-bottom: 0;
+  border-radius: var(--sheet-r) var(--sheet-r) 0 0;
 }
 .slide-freeze {                        /* mirror #app's box so the frozen page keeps its
                                           full scroll range (scrollTop would clamp short) */
@@ -3156,7 +3164,8 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
 .slide-enter.rise {
   transform: translateY(calc(100% - 2px));
   box-shadow: 0 -12px 34px rgba(0, 0, 0, 0.45);
-  border-radius: 26px 26px 0 0;
+  border: 1px solid rgba(200, 162, 75, 0.55); border-bottom: 0;
+  border-radius: var(--sheet-r) var(--sheet-r) 0 0;
 }
 .slide-enter .home-topscrim { position: absolute; }  /* fixed jumps space under transform */
 .slide-enter .vcard, .slide-enter .tile { transition: none !important; }  /* nothing may
@@ -4115,8 +4124,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '24 July 2026 · 12:50 CEST';
-const APP_BUILD = 'v339';
+const COLLECTION_UPDATED = '24 July 2026 · 13:02 CEST';
+const APP_BUILD = 'v342';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
