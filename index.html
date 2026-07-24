@@ -3201,6 +3201,11 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
 /* a slide's incoming photos snap solid — no fade during the transition, so the
    new page slides in fully painted (the expert-panel anti-flicker invariant) */
 .heroimg.instant { transition: none; }
+/* fence losers ride the whole flight at the placeholder and are released by
+   done() one frame AFTER landing — a fade must never straddle the landing
+   reparent: WebKit cancels the transition there and the photo snaps (the
+   build-346 blink). Removing the class arms the 0.45s fade cleanly. */
+.heroimg.landing-hold { opacity: 0 !important; transition: none !important; }
 @media (prefers-reduced-motion: reduce) { .heroimg { transition: none; } }
 
 /* Placeholder behind any photo still loading: a warm dark sheen with a faint
@@ -4129,8 +4134,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '24 July 2026 · 13:42 CEST';
-const APP_BUILD = 'v350';
+const COLLECTION_UPDATED = '24 July 2026 · 14:22 CEST';
+const APP_BUILD = 'v355';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6161,9 +6166,26 @@ function observeLazy(root) {
   // generous margin on ALL sides: vertical feeds prefetch ~2 screens down,
   // horizontal rails (the city cards) prefetch several cards to the right.
   lazyObserver = new IntersectionObserver((entries) => {
-    for (const e of entries) if (e.isIntersecting) { lazyObserver.unobserve(e.target); loadLazy(e.target); }
+    for (const e of entries) if (e.isIntersecting) {
+      lazyObserver.unobserve(e.target);
+      if (e.target.matches('.vcard, .sevent')) e.target.querySelectorAll('img.heroimg[data-src]').forEach(loadLazy);
+      else loadLazy(e.target);
+    }
   }, { root: $shell, rootMargin: '1000px 1400px 1800px 1400px', threshold: 0.01 });
-  imgs.forEach(i => lazyObserver.observe(i));
+  // content-visibility:auto skips a card's CONTENTS until it nears the glass,
+  // and an IO watching the img INSIDE the skipped subtree only fires when the
+  // UA unskips it (~1 viewport out; measured -331..-1259px past the fold) —
+  // the 1800px lookahead never got a say, so photos fetched cold and faded ON
+  // glass (the swipe-up/down blink, 346-350). Observe the card's own box —
+  // it is laid out and observable at the true margin even while its contents
+  // are skipped. Rails and non-c-v species keep per-img observation.
+  const cvSeen = new Set();
+  imgs.forEach(i => {
+    const card = i.closest('.vcard, .sevent') || i;
+    if (cvSeen.has(card)) return;
+    cvSeen.add(card);
+    lazyObserver.observe(card);
+  });
 }
 
 function viewHome() {
@@ -8199,7 +8221,7 @@ function captureOldLayer(departingScroll) {
    the decoded frames be available for those elements' next paint, so this is
    a real fence, not a cache-sharing gamble. Capped so a slow decode degrades
    to a hero fading in mid-slide rather than a stuck transition. */
-function decodeIncoming(root, cap = 600) {
+function decodeIncoming(root, cap = 600, hold = true) {
   window.__fenceCap = cap;   // asserted by the gate — the hold budget is a shipped invariant
   const vh = innerHeight;
   // Landing pose for every layer species is the resting layout at IDENTITY
@@ -8227,11 +8249,24 @@ function decodeIncoming(root, cap = 600) {
   const all = Promise.all(imgs.map(i =>
     (i.decode ? i.decode() : Promise.resolve()).catch(() => {}).then(() => pending.delete(i))));
   return Promise.race([all, new Promise(r => setTimeout(r, cap))]).then(() => {
-    // Cap expired with losers (cold LTE): a later pop from black mid-flight
-    // is the retired black-flash class. Strip .instant so the decoded frame
-    // arrives as the 0.45s opacity fade on its own pre-painted sublayer —
-    // exactly what the paint law permits.
-    pending.forEach(i => i.classList.remove('instant'));
+    // Cap expired with losers (cold LTE). Stripping .instant HERE let the
+    // 0.45s fade start mid-flight — at cap 250 the fade ROUTINELY straddled
+    // the landing reparent, which cancels the transition and snaps the photo
+    // (the returned blink, builds 346-350; probe: 0.68->1.00 at done()).
+    // Losers now take .landing-hold: they ride the placeholder for the whole
+    // flight and done() releases their fade one frame AFTER landing, on
+    // stable DOM (stylist's contract: late imagery enters no earlier than
+    // the final third of the ride, ideally just after landing — and a fade
+    // must never straddle the reparent). Never hold a photo that already
+    // painted solid.
+    pending.forEach(i => {
+      if (i.classList.contains('ready')) return;   // painted solid — leave it
+      i.classList.remove('instant');
+      // hold=false (the map Ascent): no landing reparent exists there, so the
+      // plain fade is safe — and nothing would ever RELEASE a hold (review
+      // catch: a held Ascent photo stayed invisible until the next slide)
+      if (hold) i.classList.add('landing-hold');
+    });
   });
 }
 
@@ -8289,6 +8324,9 @@ function runSlide(kind, oldLayer, axis = 'x', riseCal = false, destHash = '') {
         // resets scroll positions, so re-apply in the SAME task)
         $shell.scrollTo(0, +enter.dataset.destScroll || 0);
         if (enter.dataset.destHash) restoreRails(enter.dataset.destHash);
+        // iOS can drop decoded image data on THIS reparent too (the oldest
+        // blink class) — same fire-and-forget re-decode as the capture paths
+        $app.querySelectorAll('img.heroimg').forEach(i => { if (i.decode) i.decode().catch(() => {}); });
       }
       enter.remove();
     }
@@ -8296,7 +8334,23 @@ function runSlide(kind, oldLayer, axis = 'x', riseCal = false, destHash = '') {
     oldLayer.remove();
     dim.remove();
     wireFocusGlow();     // deferred from renderRoute: observers must not
-  };                     // dirty a flying layer mid-animation
+                         // dirty a flying layer mid-animation
+    // release the fence losers ONE frame after landing: their 0.45s fade
+    // begins on the landed, stable DOM — it can never straddle the reparent.
+    // Two-frame handshake: dropping the class and changing opacity in ONE
+    // recalc starts NO transition in WebKit (the reparented element has no
+    // before-change style — measured: a 0.00->1.00 snap). Frame A pins
+    // opacity:0 inline while the class goes (arms the transition at no
+    // visible change); frame B clears the pin so 0->1 genuinely fades.
+    // Document-wide on purpose: interrupted slides must never leave a photo
+    // held at opacity 0.
+    requestAnimationFrame(() => {
+      const held = [...document.querySelectorAll('img.heroimg.landing-hold')];
+      if (!held.length) return;
+      held.forEach(i => { i.style.opacity = '0'; i.classList.remove('landing-hold'); });
+      requestAnimationFrame(() => held.forEach(i => { i.style.opacity = ''; }));
+    });
+  };
   activeSlide = done;
   const start = () => {
     if (activeSlide !== done) return;           // superseded mid-hold
@@ -8439,7 +8493,7 @@ function renderRoute(soft = false, dir = 'fwd') {
       wireFocusGlow();                     // arm lazy/prewarm for the freshly-built page
       appHash = h; lastRouteHash = h;
       $shell.scrollTop = Math.min(SCROLL_MEM[h] || 0, Math.max(0, $shell.scrollHeight - $shell.clientHeight));
-      decodeIncoming($app).then(() => requestAnimationFrame(() => requestAnimationFrame(() => {
+      decodeIncoming($app, 600, false).then(() => requestAnimationFrame(() => requestAnimationFrame(() => {
         const hero = $app.querySelector('.cityhero');
         if (hero) { hero.classList.add('arriving');
           hero.addEventListener('animationend', () => hero.classList.remove('arriving'), { once: true }); }
