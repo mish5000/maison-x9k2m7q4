@@ -1484,7 +1484,7 @@ body {
 
 /* ---------- venue feed ---------- */
 
-.feedhead { padding: 30px 26px 8px; }
+.feedhead { position: relative; padding: 30px 26px 8px; }
 .feedhead .display { font-size: 38px; }
 .feedhead .sub { font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--ink-dim); margin-top: 6px; }
 
@@ -2032,7 +2032,21 @@ body {
 
 /* ---------- saved / empty states ---------- */
 
-.pagehead { padding: 38px 26px 10px; text-align: center; }
+.pagehead { position: relative; padding: 38px 26px 10px; text-align: center; }
+/* THE ECHO CHEVRON (his pick, 25 Jul): the swipe-down cue — one chevron and
+   its ghost. Glow is PRE-PAINTED (static drop-shadow); only opacity/transform
+   animate (paint law). Lives in the header's dead air; scrolls away with it.
+   Retires forever after 3 proven pull-downs (privee_cue_pulls). */
+.sheetcue { position: absolute; top: 10px; left: 0; right: 0; display: flex; justify-content: center; pointer-events: none; z-index: 3; }
+.sheetcue svg { filter: drop-shadow(0 0 5px rgba(244, 239, 230, 0.28)); animation: cueBeckon 3.4s ease-in-out infinite; }
+@keyframes cueBeckon {
+  0%   { opacity: 0;    transform: translateY(-2px); }
+  18%  { opacity: 0.55; transform: translateY(0); }
+  55%  { opacity: 0.55; transform: translateY(3px); }
+  72%  { opacity: 0;    transform: translateY(4px); }
+  100% { opacity: 0;    transform: translateY(4px); }   /* the rest is what makes it beckon, not nag */
+}
+@media (prefers-reduced-motion: reduce) { .sheetcue svg { animation: none; opacity: 0.4; } }
 .pagehead .display { font-size: 40px; }
 .pagehead .sub { font-family: var(--serif); font-style: italic; color: var(--ink-dim); margin-top: 8px; font-size: 16px; }
 
@@ -4134,8 +4148,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '24 July 2026 · 17:28 CEST';
-const APP_BUILD = 'v358';
+const COLLECTION_UPDATED = '25 July 2026 · 13:40 CEST';
+const APP_BUILD = 'v362';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -8439,6 +8453,20 @@ addEventListener('pagehide', () => { if (activeSlide) activeSlide(); });
 /* Paint a route hash's content into #app — no slide, no history, no scroll
    bookkeeping. Used by renderRoute for the actual view, and by the interactive
    swipe-back to paint the previous page underneath the drag. */
+/* The Echo Chevron — the panel's swipe-down cue (25 Jul). One code path:
+   after any sheet paints, seat the cue in its header's dead air. Never on
+   home/week (full-bleed), never after the member has proven the gesture. */
+function seatSheetCue() {
+  if (!document.body.classList.contains('calmodal')) return;
+  if (+(localStorage.getItem('privee_cue_pulls') || 0) >= 3) return;
+  const head = $app.querySelector('.pagehead, .feedhead, .cityhero');
+  if (!head || head.querySelector('.sheetcue')) return;
+  head.insertAdjacentHTML('afterbegin', `<div class="sheetcue" aria-hidden="true">
+    <svg viewBox="0 0 18 16" width="18" height="16" fill="none">
+      <polyline points="2,3 9,8 16,3" stroke="rgba(244,239,230,0.35)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <polyline points="2,9 9,14 16,9" stroke="rgba(244,239,230,0.8)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg></div>`);
+}
 function renderView(h) {
   const parts = (h || '#/').replace(/^#\//, '').split('/').filter(Boolean);
   document.body.classList.toggle('weekshare', parts[0] === 'week');
@@ -8459,6 +8487,7 @@ function renderView(h) {
     case 'adopt': renderNav('saved'); viewAdopt(parts[1]); return;
     default: renderNav('home'); viewHome();
   }
+  seatSheetCue();
 }
 
 function renderRoute(soft = false, dir = 'fwd') {
@@ -9198,6 +9227,8 @@ if (STANDALONE && CUSTOM_BACK) {
     const fin = () => {
       if (done) return; done = true;
       if (commit) {
+        // the cue's tuition: three proven pull-downs and it retires for good
+        try { localStorage.setItem('privee_cue_pulls', String(+(localStorage.getItem('privee_cue_pulls') || 0) + 1)); } catch (_) {}
         // synchronous landing, the back engine's lesson: the floor is already
         // painted beneath — bookkeep now, let any late hashchange be a no-op
         const dest = s.floor || '#/';
