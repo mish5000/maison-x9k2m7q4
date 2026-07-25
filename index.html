@@ -2041,11 +2041,11 @@ body {
    animate (paint law). Lives in the header's dead air; scrolls away with it.
    Retires forever after 3 proven pull-downs (privee_cue_pulls). */
 .sheetcue { position: absolute; top: 10px; left: 0; right: 0; display: flex; justify-content: center; pointer-events: none; z-index: 3; }
-.sheetcue svg { filter: drop-shadow(0 0 5px rgba(244, 239, 230, 0.28)); animation: cueBeckon 3.4s ease-in-out infinite; }
+.sheetcue svg { filter: drop-shadow(0 0 6px rgba(244, 239, 230, 0.42)); animation: cueBeckon 3.4s ease-in-out infinite; }
 @keyframes cueBeckon {
   0%   { opacity: 0;    transform: translateY(-2px); }
-  18%  { opacity: 0.55; transform: translateY(0); }
-  55%  { opacity: 0.55; transform: translateY(3px); }
+  18%  { opacity: 0.85; transform: translateY(0); }
+  55%  { opacity: 0.85; transform: translateY(3px); }
   72%  { opacity: 0;    transform: translateY(4px); }
   100% { opacity: 0;    transform: translateY(4px); }   /* the rest is what makes it beckon, not nag */
 }
@@ -3132,6 +3132,32 @@ body.calmodal::before {
 }
 /* inside a 90% sheet the status bar lives ABOVE the card — the topbar's
    safe-area headroom became dead black space (his 14:50 'a little low') */
+/* THE STACK (his 13:57 Wallet ask): a depth-2 sheet (category) rides 12px
+   lower and the CITY sheet's shoulder peeks above it — a true navigation
+   stack, never decorative, never more than the route depth itself. */
+body.calmodal.stack2 #shell {
+  height: calc(90vh - 12px); height: calc(90dvh - 12px);
+  margin-top: calc(10vh + 12px); margin-top: calc(10dvh + 12px);
+}
+body.calmodal.stack2::before { top: calc(10vh + 12px); top: calc(10dvh + 12px); }
+/* the peeking city shoulder: inset, fainter gilt = "behind"; static paint */
+body.calmodal.stack2::after {
+  content: '';
+  position: fixed;
+  left: 50%; transform: translateX(-50%);
+  width: calc(100% - 22px); max-width: 498px;
+  top: 10vh; top: 10dvh;
+  height: 48px;
+  border-radius: var(--sheet-r) var(--sheet-r) 0 0;
+  background: linear-gradient(180deg, rgba(38, 32, 22, 0.96), rgba(10, 9, 6, 0.9));
+  border: 1px solid rgba(200, 162, 75, 0.35);
+  border-bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.slide-enter.rise-cal.stack2, .slide-layer.cal-strip.stack2 {
+  top: calc(10vh + 12px); top: calc(10dvh + 12px);
+}
 body.calmodal .topbar {
   height: 52px; padding-top: 0;
   /* separation from the void behind the 90% card (his 00:50 arrow): the top
@@ -4152,8 +4178,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '25 July 2026 · 16:11 CEST';
-const APP_BUILD = 'v364';
+const COLLECTION_UPDATED = '25 July 2026 · 19:41 CEST';
+const APP_BUILD = 'v365';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -8414,6 +8440,7 @@ function runSlide(kind, oldLayer, axis = 'x', riseCal = false, destHash = '') {
     enter = captureEnterLayer();
     if (axis === 'y') enter.classList.add('rise');   // rests BELOW the glass instead of beside it
     if (riseCal) enter.classList.add('rise-cal');    // the Calendar flies at its 90% geometry
+    if (/^#\/cat\//.test(destHash)) enter.classList.add('stack2');   // depth-2: parks 12px lower
     document.body.appendChild(enter);           // rests at calc(100% - 2px):
     document.body.appendChild(dim);             // 2px on glass = paint demand
     decodeIncoming(enter, 250).then(() => {
@@ -8431,6 +8458,7 @@ function runSlide(kind, oldLayer, axis = 'x', riseCal = false, destHash = '') {
     enter = captureEnterLayer();
     enter.classList.add('pop');                  // natural pose — no offscreen park
     if (SHEET_ROUTE.test(destHash)) enter.classList.add('rise-cal');   // dest is itself a 90% sheet
+    if (/^#\/cat\//.test(destHash)) enter.classList.add('stack2');
     enter.dataset.destScroll = destScroll;
     enter.dataset.destHash = destHash;
     document.body.appendChild(enter);
@@ -8462,13 +8490,13 @@ addEventListener('pagehide', () => { if (activeSlide) activeSlide(); });
    home/week (full-bleed), never after the member has proven the gesture. */
 function seatSheetCue() {
   if (!document.body.classList.contains('calmodal')) return;
-  if (+(localStorage.getItem('privee_cue_pulls') || 0) >= 3) return;
+  if (+(localStorage.getItem('privee_cue_pulls') || 0) >= 7) return;
   const head = $app.querySelector('.pagehead, .feedhead, .cityhero');
   if (!head || head.querySelector('.sheetcue')) return;
   head.insertAdjacentHTML('afterbegin', `<div class="sheetcue" aria-hidden="true">
     <svg viewBox="0 0 18 16" width="18" height="16" fill="none">
-      <polyline points="2,3 9,8 16,3" stroke="rgba(244,239,230,0.35)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-      <polyline points="2,9 9,14 16,9" stroke="rgba(244,239,230,0.8)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <polyline points="2,3 9,8 16,3" stroke="rgba(244,239,230,0.55)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <polyline points="2,9 9,14 16,9" stroke="rgba(244,239,230,1)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
     </svg></div>`);
 }
 function renderView(h) {
@@ -8477,6 +8505,10 @@ function renderView(h) {
   // the whole sheet family rests at 90% (Mishari 21:36 → 14:52) — the shell
   // itself steps down, so every path that paints #app keeps geometry honest
   document.body.classList.toggle('calmodal', SHEET_ROUTE.test('#/' + parts.join('/')));
+  // Wallet-true stacking (his 13:57 ask): a category rides 12px lower so the
+  // CITY sheet's gilt shoulder stays peeking above it — depth is real route
+  // depth, capped by the architecture (city > category > venue card, never more)
+  document.body.classList.toggle('stack2', /^#\/cat\//.test('#/' + parts.join('/')));
   if (parts.length === 0) { renderNav('home'); viewHome(); return; }
   switch (parts[0]) {
     case 'explore': renderNav('explore'); viewExplore(); break;
@@ -8566,6 +8598,7 @@ function renderRoute(soft = false, dir = 'fwd') {
       slideAxis = SHEET_ROUTE.test(slideKind === 'push' ? h : lastRouteHash) ? 'y' : 'x';
       // a departing sheet-page keeps its 90% geometry in the frozen layer
       if (SHEET_ROUTE.test(lastRouteHash)) oldLayer.classList.add('cal-strip');
+      if (/^#\/cat\//.test(lastRouteHash)) oldLayer.classList.add('stack2');
     }
   }
   pendingSlide = null;
@@ -9198,6 +9231,7 @@ if (STANDALONE && CUSTOM_BACK) {
       const layer = captureOldLayer(d.departing);  // the departing page, frozen, on top
       if (!layer) { d = null; return; }
       layer.classList.add('ontop', 'pd-drag', 'cal-strip');   // saved AND cat ride at 90% now
+      if (/^#\/cat\//.test(d.fromHash)) layer.classList.add('stack2');
       renderView(d.floor);                         // its floor, live beneath
       $app.querySelectorAll('img.heroimg[data-src]').forEach(loadLazy);
       const dim = document.createElement('div');
