@@ -1032,14 +1032,19 @@ body {
 
 .hero {
   position: relative;
-  min-height: 58vh;
+  min-height: 52vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 26px 26px 40px;
+  padding: 26px 26px 30px;
   isolation: isolate;
   z-index: 40; /* keep the search dropdown above the sections below */
 }
+/* home only: the seam under the search lost its furniture (386) — 74px of
+   double padding read as an empty lobby (his 22:09 arrow; both designers
+   converged on the cut). Scoped: the global .section seam stays 34px. */
+.hero + .section { padding-top: 24px; }
+
 
 .hero .bg,
 .cityhero .bg {
@@ -4219,8 +4224,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '26 July 2026 · 21:01 CEST';
-const APP_BUILD = 'v386';
+const COLLECTION_UPDATED = '27 July 2026 · 00:06 CEST';
+const APP_BUILD = 'v390';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
