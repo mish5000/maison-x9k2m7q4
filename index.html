@@ -23,7 +23,7 @@ html,body{margin:0;background:#0b0a08}
 <title>PRIVÉE — The Marafie Collection</title>
 </head>
 <body>
-<div id="boot"><div class="bm">M</div><div class="bt"><div class="bf" id="bootfill"></div></div><div class="bl">Summoning the collection</div></div>
+<div id="boot"><div class="bm">M</div><div class="bt"><div class="bf" id="bootfill"></div></div><div class="bl">À votre service</div></div>
 <script>
 (function(){var f=document.getElementById('bootfill'),p=8,dn=false;f.style.width=p+'%';
 var t=setInterval(function(){if(dn)return;p+=(94-p)*0.045+0.35;if(p>94)p=94;f.style.width=p.toFixed(1)+'%';},280);
@@ -78,7 +78,7 @@ var b=document.getElementById('boot');setTimeout(function(){if(b)b.classList.add
       <svg viewBox="0 0 120 120"><circle class="rf-track" cx="60" cy="60" r="54"/><circle class="rf-prog" cx="60" cy="60" r="54"/></svg>
       <span class="rf-mono serif">M</span>
     </div>
-    <div class="rf-label">Refreshing the collection</div>
+    <div class="rf-label">À votre service</div>
   </div>
 </div>
 <div id="toast"></div>
@@ -769,10 +769,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
   --ink-faint: rgba(244, 239, 230, 0.5);
   --gold: #d4ad52;
   --gold-bright: #f0d391;
-  --gold-dim: rgba(200, 162, 75, 0.55);
+  --gold-dim: rgba(200, 162, 75, 0.55);   /* decorative lines/borders ONLY — below the text contrast floor */
+  --gold-soft: rgba(200, 162, 75, 0.78);  /* gold as TEXT: the 0.55 tint failed the contrast floor (audit E3) */
+  --muted: rgba(244, 239, 230, 0.55);     /* was referenced but never defined — .mapcard/.cgrow .meta rendered fallback-less (audit E1) */
   --sage: #dfe9df;
   --sage-ink: #2e4636;
-  --scrim: linear-gradient(180deg, rgba(11, 10, 8, 0) 0%, rgba(11, 10, 8, 0.42) 52%, rgba(11, 10, 8, 0.93) 100%);
   --radius: 26px;
   --sheet-r: 36px;   /* the sheet out-rounds its cards: hierarchy of curvature (24 Jul panel) */
   --nav-h: 84px;
@@ -781,6 +782,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+/* buttons do NOT inherit font by default — every <button> that never set its
+   own family (.tile's .count kicker, each ✕ close) leaked the system font
+   into the house type (audit C) */
+button { font: inherit; }
 
 /* NO scroll-behavior:smooth anywhere — scrollTop setters honor it and the
    back-pop 'paint once at the remembered pixel' invariant dies (audit F6) */
@@ -1022,13 +1028,6 @@ body {
   margin-left: -10px;
 }
 
-.grating-line {
-  font-size: 11.5px;
-  letter-spacing: 0.08em;
-  color: var(--ink-faint);
-  margin: -6px 0 12px;
-}
-
 /* ---------- home ---------- */
 
 .hero {
@@ -1157,33 +1156,6 @@ body {
 }
 .heroprofile:active { transform: scale(0.94); }
 
-/* discreet taxi pill — Uber with pickup at the member's current location */
-.herotaxi {
-  position: absolute;
-  /* services stack on the right, beneath the Concierge pill (Mishari 13:4x:
-     "the Uber should be moved") */
-  top: calc(74px + env(safe-area-inset-top, 0px));
-  right: 18px;
-  left: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 16px;
-  border-radius: 999px;
-  border: 1px solid rgba(200, 162, 75, 0.55);
-  background: rgba(11, 10, 8, 0.45);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: var(--ink);
-  font-family: var(--sans);
-  font-size: 10px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-.herotaxi svg { width: 16px; height: 16px; color: var(--gold-bright); }
-.herotaxi:active { background: rgba(200, 162, 75, 0.2); }
-
 /* gold section marker inside a merged category feed (Beach Clubs / Pools) */
 .feed-subhead {
   display: flex;
@@ -1242,8 +1214,9 @@ body {
   z-index: 30;
   border-radius: 22px;
   overflow: hidden;
-  background: rgba(16, 14, 11, 0.96);
-  backdrop-filter: blur(20px);
+  /* OPAQUE raised surface (audit L): the translucent frost tangled with the
+     hero photo behind it and the rows read against noise */
+  background: var(--bg-raised);
   border: 1px solid rgba(200, 162, 75, 0.3);
   display: none;
   max-height: min(430px, 52dvh);
@@ -1400,7 +1373,8 @@ body {
 
 .citycard .meta { padding: 18px; }
 .citycard .meta .eyebrow, .citycard .meta .display { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7); }
-.citycard .meta .eyebrow { font-size: 9px; margin-bottom: 6px; }
+/* 9px gold eyebrow rides ON the photo — same contrast floor as .tile .count */
+.citycard .meta .eyebrow { font-size: 9px; margin-bottom: 6px; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85); }
 .citycard .meta .display { font-size: 25px; }
 
 .statement {
@@ -1480,7 +1454,9 @@ body {
   linear-gradient(180deg, rgba(11, 10, 8, 0) 0%, rgba(11, 10, 8, 0) 52%, rgba(11, 10, 8, 0.10) 72%, rgba(11, 10, 8, 0.38) 100%); }
 
 .tile .display { font-size: 22px; letter-spacing: 0.16em; text-transform: uppercase; text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7); }
-.tile .count { font-size: 9px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.75); }
+/* contrast floor over photos (audit C): bright gold + a deeper smoke halo —
+   the mid-gold kicker dissolved on sunlit tile photography */
+.tile .count { font-size: 9px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold-bright); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85); }
 
 /* swipe-to-remove (his 18:14 ask): slider + bordeaux action past the edge */
 .ag-item[data-del] { position: relative; overflow: hidden; }
@@ -1608,30 +1584,11 @@ body {
 .vcard .save svg { width: 18px; height: 18px; }
 .vcard .save.on { color: var(--gold-bright); border-color: var(--gold); }
 
-/* our-map globe: the save button's quiet twin, riding beneath it — opens
-   PRIVÉE cartography landed on this venue (Mishari 17:14, circled corner) */
-.vcard .onmap {
-  position: absolute;
-  top: 68px;              /* save's 16px top + 42px + 10px breath */
-  right: 16px;
-  z-index: 3;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: 1px solid rgba(232, 201, 128, 0.4);
-  background: rgba(11, 10, 8, 0.45);   /* light tint — never darken the imagery */
-  color: var(--gold-bright);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-.vcard .onmap svg { width: 18px; height: 18px; }
-
-/* the gold + — third in the photo-edge stack: lock this venue into a day */
+/* the gold + — second of the card's ONLY two actions (audit A: bookmark and
+   plan; the corner globe moved into the sheet's Contact & Explore) */
 .vcard .plan-add {
   position: absolute;
-  top: 120px;             /* save 16 + 42 + 10, globe + 42 + 10 */
+  top: 68px;              /* save's 16px top + 42px + 10px breath */
   right: 16px;
   z-index: 3;
   width: 42px; height: 42px;
@@ -1719,8 +1676,6 @@ body {
 .ag-time { color: var(--gold-bright); font-weight: 600; font-style: normal; }
 
 
-.vcard .tags { position: absolute; top: 18px; left: 18px; z-index: 3; display: flex; gap: 8px; flex-wrap: wrap; max-width: 70%; }
-
 .vcard .body {
   position: absolute;
   left: 0;
@@ -1735,7 +1690,9 @@ body {
   display: inline-block;
   max-width: 100%;
   margin: 4px -12px 14px;
-  padding: 8px 12px 10px;
+  /* right padding holds the copy clear of the mask's fade span — the last
+     word was dissolving into the transparent tail (audit E6) */
+  padding: 8px 26px 10px 12px;
   border-radius: 14px;
   /* lighter frost so the photo reads through it; the photo scrim + text-shadow
      already guarantee legibility. Right edge dissolves so it isn't a hard slab. */
@@ -1786,14 +1743,6 @@ body {
 }
 .vcard .stars { display: block; margin-bottom: 10px; }
 .vcard .blurb { font-size: 13.5px; line-height: 1.55; color: var(--ink); font-weight: 300; margin-bottom: 16px; }
-
-.vcard .actions { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
-.vcard .actions .pill { flex: none; }
-.vcard .actions .spacer { flex: 1; }
-.vcard .actions .iconbtn { width: 38px; height: 38px; }
-.vcard .actions .iconbtn svg { width: 17px; height: 17px; }
-/* the Uber wordmark badge — brand letterforms, house gold (icon spec A) */
-.iconbtn .ub { font-family: var(--sans); font-size: 9.5px; font-weight: 700; letter-spacing: 0.02em; }
 
 .mono {
   position: relative;
@@ -1881,7 +1830,8 @@ body {
   visibility: hidden;
   pointer-events: none;
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.5s;
-  border-radius: 30px 30px 0 0;
+  /* the curvature law (audit E5): every sheet shoulder rides --sheet-r */
+  border-radius: var(--sheet-r) var(--sheet-r) 0 0;
   background: var(--bg-raised);
   border: 1px solid rgba(200, 162, 75, 0.55);
   border-bottom: none;
@@ -2085,7 +2035,9 @@ body {
 }
 
 .statbox .num { font-family: var(--serif); font-size: 30px; color: var(--gold-bright); }
-.statbox .lbl { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-bright); margin-top: 4px; }
+/* fixed two-line label slot (audit E7): a wrapping label no longer makes its
+   box taller than its neighbours, so the numerals share one baseline */
+.statbox .lbl { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-bright); margin-top: 4px; min-height: 2.4em; min-height: 2lh; }
 
 .emptystate { padding: 26px 40px 40px; text-align: center; }
 .emptystate p { font-size: 14px; line-height: 1.7; color: var(--ink-dim); margin-bottom: 26px; }
@@ -2170,7 +2122,7 @@ body {
 #nav button span { white-space: nowrap; }
 #nav button svg { width: 22px; height: 22px; }
 #nav button.active { color: var(--gold-bright); }
-/* the AI Concierge — always gold, the house's brightest key */
+/* the Concierge — always gold, the house's brightest key */
 #nav button.cgnav { color: var(--gold-bright); }
 #nav button.cgnav svg { filter: drop-shadow(0 0 6px rgba(232, 201, 128, 0.45)); }
 #nav button.cgnav::after { display: none; }
@@ -2410,7 +2362,7 @@ body {
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(244, 239, 230, 0.22);
+  color: rgba(244, 239, 230, 0.62);   /* contrast floor (audit E3) — 0.22 was a ghost */
   padding: 2px 0 10px;
 }
 .ag-item {
@@ -2444,7 +2396,7 @@ body {
   font-size: 9px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--gold-dim);
+  color: var(--gold-soft);   /* gold as TEXT rides the 0.78 floor (audit E3) */
 }
 .ag-item .ag-x {
   flex: 0 0 auto;
@@ -2509,7 +2461,7 @@ body {
   width: 22px;
   text-align: center;
   font-size: 17px;
-  color: var(--gold-dim);
+  color: var(--gold-soft);   /* gold as TEXT rides the 0.78 floor (audit E3) */
 }
 
 /* pulse podium — the top three sit larger, gilt-edged; the field steps back */
@@ -2581,7 +2533,7 @@ body {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   line-height: 1.9;
-  color: rgba(244, 239, 230, 0.3);
+  color: rgba(244, 239, 230, 0.62);   /* contrast floor (audit E3) */
   text-align: center;
 }
 
@@ -2950,6 +2902,11 @@ body {
   font-size: 15px;
   cursor: pointer;
   flex: 0 0 auto;
+  /* 44pt tap floor (audit E4): the bare ✕ measured 12x18px on device. No
+     visible box, so the button itself can grow to the floor at no visual cost. */
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  margin: -8px -12px -8px -8px;   /* reclaim the bar's padding so layout doesn't widen */
 }
 #gsearch .gs-results { flex: 1; overflow-y: auto; padding: 4px 6px 40px; }
 #gsearch .gs-results button {
@@ -3044,8 +3001,6 @@ body {
 .vcard .djtag svg { width: 15px; height: 15px; flex: 0 0 auto; }
 .vcard .djtag span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vcard .djtag.soft { background: linear-gradient(100deg, rgba(232, 201, 128, 0.9), rgba(200, 162, 75, 0.8)); }
-/* when a badge is present the venue chips step down out of its way */
-.vcard .djtag + .tags { top: 60px; }
 
 /* full bill inside the venue sheet */
 .djbill {
@@ -3085,16 +3040,6 @@ body {
 .ts-item b { font-family: var(--serif); font-weight: 600; font-size: 15px; line-height: 1; color: var(--gold-bright); }
 .ts-item span { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-dim); }
 .ts-item.soft b { color: var(--ink); }
-
-/* homepage build stamp — date, minute and version of the current refresh */
-.statement .buildstamp {
-  font-family: var(--sans);
-  font-style: normal;
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
 
 /* ---------- Instagram-style page slide ---------- */
 .slide-layer {
@@ -3318,7 +3263,7 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
 .inv-tx .pill { align-self: flex-start; }
 .inv-url {
   font-family: var(--sans); font-size: 8.5px; letter-spacing: 0.14em;
-  color: rgba(244, 239, 230, 0.45);
+  color: rgba(244, 239, 230, 0.62);   /* contrast floor (audit E3) */
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
@@ -3472,7 +3417,10 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
 /* the home pill — a lovely one-tap return from the map to the city's page */
 .map-home {
   position: absolute; left: 14px; z-index: 620;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 26px);
+  /* clear of the floating dock's envelope (audit J): the dock sits at
+     bottom 14px + 66px tall + safe-area — at +26px the pill hid halfway
+     behind it on 390x844. 96px = 14 + 66 + 16px breath. */
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 96px);
   display: inline-flex; align-items: center; gap: 9px;
   padding: 11px 17px 11px 13px; border-radius: 999px;
   background: rgba(19, 17, 9, 0.72); border: 1px solid rgba(232, 201, 128, 0.42);
@@ -3728,22 +3676,8 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
   .vpin, .vpin .lbl, #mapcard { transition: none; }
 }
 
-/* ---------- THE CONCIERGE ---------- */
-.cgpill {
-  position: absolute;
-  top: calc(22px + env(safe-area-inset-top, 0px));
-  right: 18px;
-  z-index: 3;
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 10px 17px; border-radius: 999px;
-  background: linear-gradient(120deg, rgba(200, 162, 75, 0.95), rgba(232, 201, 128, 0.92));
-  border: 1px solid rgba(232, 201, 128, 0.65);
-  color: #131109; cursor: pointer;
-  font-family: var(--sans); font-size: 11px; font-weight: 500;
-  letter-spacing: 0.22em; text-transform: uppercase;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 18px rgba(232, 201, 128, 0.3);
-}
-.cgpill svg { width: 17px; height: 17px; }
+/* ---------- THE CONCIERGE ----------
+   (the hero's gold pill is gone — audit D: the dock's CONCIERGE tab is the door) */
 #concierge { position: fixed; inset: 0; z-index: 90; pointer-events: none; }
 #concierge .cg-backdrop {
   position: absolute; inset: 0; background: rgba(5, 4, 3, 0.55);
@@ -3754,7 +3688,8 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
   max-width: 520px; height: 78dvh; display: flex; flex-direction: column;
   background: var(--bg-raised);
   border: 1px solid rgba(200, 162, 75, 0.55);
-  border-bottom: none; border-radius: 30px 30px 0 0;
+  /* the curvature law (audit E5): every sheet shoulder rides --sheet-r */
+  border-bottom: none; border-radius: var(--sheet-r) var(--sheet-r) 0 0;
   box-shadow: 0 -14px 70px rgba(0, 0, 0, 0.75), 0 0 34px rgba(200, 162, 75, 0.16);
   transform-origin: 50% 100%;
   transform: translateY(104%) scale(0.94);
@@ -3911,14 +3846,13 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
 .cg-book-btn.reserve, .cg-book-btn.call { background: transparent; border: 1px solid rgba(200,162,75,.5); color: var(--ink); }
 .cg-book-btn.reserve svg, .cg-book-btn.call svg { color: var(--gold-bright); }
 
-/* ---------- Book indicator ---------- */
-.vcard .tags .bookchip, .cg-book-flag {
+/* ---------- Book indicator (concierge rows — the card's chip row is gone, audit A) ---------- */
+.cg-book-flag {
   display: inline-flex; align-items: center; gap: 4px;
   background: linear-gradient(120deg, rgba(200,162,75,.95), rgba(232,201,128,.92));
   color: #131109; border: none;
   font-weight: 600; letter-spacing: 0.14em;
 }
-.vcard .tags .bookchip svg { width: 12px; height: 12px; }
 .cg-book-flag {
   margin-left: 8px; padding: 2px 8px; border-radius: 10px;
   font-family: var(--sans); font-size: 8px; text-transform: uppercase; vertical-align: middle;
@@ -4021,7 +3955,7 @@ body.weekshare #nav { display: none; }
 .weekhead { padding-top: calc(40px + env(safe-area-inset-top, 0px)); }
 .weekfoot {
   text-align: center; letter-spacing: 0.5em; font-size: 12px;
-  color: var(--gold-dim); padding: 30px 0 70px;
+  color: var(--gold-soft); padding: 30px 0 70px;   /* gold as TEXT — 0.78 floor (audit E3) */
 }
 
 /* ---------- My Calendar: the month grid on My List ---------- */
@@ -4040,11 +3974,21 @@ body.weekshare #nav { display: none; }
 .pc[data-cd] { transition: transform 0.12s ease; }
 .pc[data-cd]:active { transform: scale(0.9); }
 
+/* MY CALENDAR wears no red (audit G): the chosen day — today by default — is
+   dressed from the gold family. The plan sheet keeps its carmine "this one"
+   cell; that red is a picking gesture, not a resting page. */
+.mycal .pc.on {
+  background: linear-gradient(135deg, #e8c980, #c8a24b 55%, #b08a38);
+  border-color: rgba(240, 211, 145, 0.85);
+  color: #1c1710; font-weight: 600;
+}
+.mycal .pc.on .dotp { background: #1c1710; }
+
 /* My Calendar's grid runs LARGER than the plan-sheet's (his 22 Jul ask) */
 .mycal .pmonth { margin-bottom: 14px; }
 .mycal .pm-name { font-size: 23px; }
 .mycal .pdow { gap: 7px; font-size: 10px; }
-.mycal .pdow span:nth-child(6), .mycal .pdow span:nth-child(7) { color: var(--gold-dim); }
+.mycal .pdow span:nth-child(6), .mycal .pdow span:nth-child(7) { color: var(--gold-soft); }   /* text, not a line (audit E3) */
 .mycal .pgrid { gap: 7px; }
 .mycal .pc { font-size: 16.5px; border-radius: 14px; }
 .mycal .pc .dotp { bottom: 6px; }
@@ -4092,7 +4036,7 @@ body.weekshare #nav { display: none; }
 .srcsheet .srcrow .tx b { font-weight: 500; font-size: 17px; }
 .srcsheet .srcrow .tx i {
   font-style: normal; font-family: var(--sans); font-size: 9.5px;
-  letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-dim);
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-soft);   /* text floor (audit E3) */
 }
 
 /* the day's bill reads as an itinerary: time rail, generous photo */
@@ -4111,6 +4055,58 @@ body.weekshare #nav { display: none; }
 /* travel rows: flight / chauffeur glyphs in the venue-thumb slot */
 .ag-item .thumb.tripic { color: var(--gold-bright); }
 .ag-item .thumb.tripic svg { width: 26px; height: 26px; }
+
+/* ---------- 44pt tap floor WITHOUT visual growth (audit E4) ----------
+   The drawn circles stay their size (the ring is the design); an invisible,
+   centred ::after extends each control's hit box to Apple's 44pt floor.
+   Clicks on the pseudo belong to its element, so no JS changes anywhere. */
+.calplus, .ag-uber, .iconbtn, .pm-nav, .ag-x { position: relative; }
+/* .sheet-close is NOT in the relative list — it is position:absolute (top-right
+   of the sheet) and equal-specificity relative later in the file WON, dropping
+   the X into flow at the sheet's left edge (review catch). Its ::after
+   hit-area works on the absolute element as-is. */
+.calplus::after, .ag-uber::after, .iconbtn::after,
+.sheet-close::after, .pm-nav::after, .ag-x::after {
+  content: '';
+  position: absolute; left: 50%; top: 50%;
+  width: 44px; height: 44px;
+  min-width: 100%; min-height: 100%;   /* never SHRINK a control already past the floor */
+  transform: translate(-50%, -50%);
+}
+
+/* ---------- the paste sheet (audit K: the raw prompt() retired) ---------- */
+.pastesheet textarea {
+  width: 100%; min-height: 132px; margin-top: 4px;
+  padding: 14px; border-radius: 16px; resize: vertical;
+  background: rgba(244, 239, 230, 0.05);
+  border: 1px solid rgba(232, 201, 128, 0.35);
+  color: var(--ink);
+  font-family: var(--sans); font-size: 15px; font-weight: 300; line-height: 1.5;
+}
+.pastesheet textarea:focus { outline: none; border-color: var(--gold); }
+.pastesheet textarea::placeholder { color: var(--ink-faint); }
+.pastesheet #pasteread { margin-top: 16px; width: 100%; }
+
+/* ---------- the global-search day banner (audit F) ---------- */
+.gs-day {
+  display: none;
+  margin: calc(14px + env(safe-area-inset-top, 0px)) 18px -4px;
+  font-family: var(--sans); font-size: 10px; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--gold-bright);
+  text-align: center;
+}
+.gs-day.show { display: block; }
+/* the banner already carries the safe-area headroom — the bar yields its own */
+.gs-day.show + .gs-bar { margin-top: 10px; }
+
+/* ---------- The Club colophon (audit H): the one edition stamp left ---------- */
+.colophon {
+  padding: 8px 26px 34px;
+  text-align: center;
+  font-family: var(--sans); font-size: 9px; letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(244, 239, 230, 0.62);   /* the contrast floor holds here too */
+}
 
 .sp-field.f1{box-shadow:231px 886px rgba(232,201,128,0.9), 231px 520px rgba(232,201,128,0.5), 94px 823px rgba(232,201,128,0.9), 322px 628px rgba(232,201,128,0.5), 48px 457px rgba(232,201,128,0.7), 72px 92px rgba(232,201,128,0.35), 304px 405px rgba(232,201,128,0.9), 334px 756px rgba(232,201,128,0.5), 319px 15px rgba(232,201,128,0.35), 30px 36px rgba(232,201,128,0.5), 450px 247px rgba(232,201,128,0.35), 398px 475px rgba(232,201,128,0.7), 225px 605px rgba(232,201,128,0.5), 265px 239px rgba(232,201,128,0.7), 255px 4px rgba(232,201,128,0.35), 234px 670px rgba(232,201,128,0.7), 208px 564px rgba(232,201,128,0.35), 362px 260px rgba(232,201,128,0.7), 388px 235px rgba(232,201,128,0.7), 15px 71px rgba(232,201,128,0.35), 205px 110px rgba(232,201,128,0.7), 197px 68px rgba(232,201,128,0.35), 433px 701px rgba(232,201,128,0.35), 109px 214px rgba(232,201,128,0.35), 240px 384px rgba(232,201,128,0.9), 214px 74px rgba(232,201,128,0.5), 398px 691px rgba(232,201,128,0.7), 172px 89px rgba(232,201,128,0.7), 170px 15px rgba(232,201,128,0.9), 388px 944px rgba(232,201,128,0.35), 68px 252px rgba(232,201,128,0.35), 5px 61px rgba(232,201,128,0.9), 408px 498px rgba(232,201,128,0.5), 349px 572px rgba(232,201,128,0.5), 229px 521px rgba(232,201,128,0.5), 374px 787px rgba(232,201,128,0.5), 214px 659px rgba(232,201,128,0.9), 59px 404px rgba(232,201,128,0.9), 108px 0px rgba(232,201,128,0.7), 442px 994px rgba(232,201,128,0.7), 453px 20px rgba(232,201,128,0.5), 95px 403px rgba(232,201,128,0.35), 21px 149px rgba(232,201,128,0.5), 226px 264px rgba(232,201,128,0.35), 395px 624px rgba(232,201,128,0.7), 425px 303px rgba(232,201,128,0.9), 37px 76px rgba(232,201,128,0.35), 106px 596px rgba(232,201,128,0.5), 7px 615px rgba(232,201,128,0.7), 190px 637px rgba(232,201,128,0.9), 65px 982px rgba(232,201,128,0.9), 426px 588px rgba(232,201,128,0.5), 443px 395px rgba(232,201,128,0.5), 321px 157px rgba(232,201,128,0.7), 116px 837px rgba(232,201,128,0.5), 371px 194px rgba(232,201,128,0.5), 378px 644px rgba(232,201,128,0.5), 351px 972px rgba(232,201,128,0.9), 451px 494px rgba(232,201,128,0.35), 215px 48px rgba(232,201,128,0.35), 55px 39px rgba(232,201,128,0.7), 122px 757px rgba(232,201,128,0.9), 131px 430px rgba(232,201,128,0.9), 150px 532px rgba(232,201,128,0.5), 368px 1000px rgba(232,201,128,0.35), 64px 233px rgba(232,201,128,0.9), 286px 669px rgba(232,201,128,0.35), 143px 217px rgba(232,201,128,0.5), 383px 16px rgba(232,201,128,0.35), 137px 421px rgba(232,201,128,0.9), 127px 61px rgba(232,201,128,0.35), 90px 288px rgba(232,201,128,0.7), 271px 585px rgba(232,201,128,0.5), 47px 370px rgba(232,201,128,0.5), 456px 461px rgba(232,201,128,0.7), 336px 750px rgba(232,201,128,0.5), 302px 35px rgba(232,201,128,0.35), 243px 932px rgba(232,201,128,0.7), 358px 319px rgba(232,201,128,0.35), 10px 612px rgba(232,201,128,0.35), 246px 68px rgba(232,201,128,0.7), 163px 139px rgba(232,201,128,0.35), 38px 463px rgba(232,201,128,0.7), 377px 45px rgba(232,201,128,0.5), 406px 986px rgba(232,201,128,0.7), 180px 86px rgba(232,201,128,0.9), 39px 892px rgba(232,201,128,0.9), 404px 30px rgba(232,201,128,0.9), 293px 14px rgba(232,201,128,0.9), 194px 596px rgba(232,201,128,0.35);}.sp-field.f2{box-shadow:71px 248px rgba(232,201,128,0.35), 313px 457px rgba(232,201,128,0.5), 359px 123px rgba(232,201,128,0.7), 405px 910px rgba(232,201,128,0.35), 118px 275px rgba(232,201,128,0.35), 163px 999px rgba(232,201,128,0.5), 282px 701px rgba(232,201,128,0.9), 362px 904px rgba(232,201,128,0.35), 295px 902px rgba(232,201,128,0.35), 301px 270px rgba(232,201,128,0.7), 215px 194px rgba(232,201,128,0.5), 435px 114px rgba(232,201,128,0.35), 357px 334px rgba(232,201,128,0.7), 132px 188px rgba(232,201,128,0.9), 159px 922px rgba(232,201,128,0.5), 143px 845px rgba(232,201,128,0.7), 341px 708px rgba(232,201,128,0.5), 221px 50px rgba(232,201,128,0.7), 272px 922px rgba(232,201,128,0.35), 214px 947px rgba(232,201,128,0.7), 259px 291px rgba(232,201,128,0.9), 203px 676px rgba(232,201,128,0.5), 157px 576px rgba(232,201,128,0.7), 203px 596px rgba(232,201,128,0.35), 152px 589px rgba(232,201,128,0.9), 387px 689px rgba(232,201,128,0.9), 45px 92px rgba(232,201,128,0.9), 182px 100px rgba(232,201,128,0.9), 399px 412px rgba(232,201,128,0.35), 430px 975px rgba(232,201,128,0.5), 262px 244px rgba(232,201,128,0.9), 3px 98px rgba(232,201,128,0.9), 458px 198px rgba(232,201,128,0.5), 15px 559px rgba(232,201,128,0.9), 178px 183px rgba(232,201,128,0.7), 182px 644px rgba(232,201,128,0.5), 227px 37px rgba(232,201,128,0.35), 274px 137px rgba(232,201,128,0.5), 335px 710px rgba(232,201,128,0.35), 26px 199px rgba(232,201,128,0.9), 62px 847px rgba(232,201,128,0.5), 300px 471px rgba(232,201,128,0.35), 433px 122px rgba(232,201,128,0.9), 362px 536px rgba(232,201,128,0.5), 299px 291px rgba(232,201,128,0.9);}.sp-field.f3{box-shadow:292px 171px rgba(232,201,128,0.5), 418px 860px rgba(232,201,128,0.7), 245px 667px rgba(232,201,128,0.5), 333px 926px rgba(232,201,128,0.7), 351px 540px rgba(232,201,128,0.9), 227px 288px rgba(232,201,128,0.35), 154px 423px rgba(232,201,128,0.7), 265px 508px rgba(232,201,128,0.35), 380px 622px rgba(232,201,128,0.9), 417px 866px rgba(232,201,128,0.7), 163px 568px rgba(232,201,128,0.5), 60px 885px rgba(232,201,128,0.35), 163px 908px rgba(232,201,128,0.7), 109px 918px rgba(232,201,128,0.35), 383px 374px rgba(232,201,128,0.35), 334px 329px rgba(232,201,128,0.5), 262px 279px rgba(232,201,128,0.7), 3px 362px rgba(232,201,128,0.7), 284px 403px rgba(232,201,128,0.9), 94px 703px rgba(232,201,128,0.35);}
 </style>
@@ -4223,8 +4219,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '26 July 2026 · 19:02 CEST';
-const APP_BUILD = 'v376';
+const COLLECTION_UPDATED = '26 July 2026 · 21:01 CEST';
+const APP_BUILD = 'v386';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5649,7 +5645,7 @@ const $gzoom = (() => {
    app answers the finger. */
 document.addEventListener('pointerdown', (e) => {
   if (e.target.closest && e.target.closest(
-    '.tile, .citycard, .gcity, .smonth, .season-banner, .vcard, .ag-item, .dchip, .pulsebtn, .sevent, #nav button, .vpin, .mapcard, .map-back, .map-locate, .map-world, .fchip, .heroclub, .cgpill, .cg-chip, .cgrow')) haptic();
+    '.tile, .citycard, .gcity, .smonth, .season-banner, .vcard, .ag-item, .dchip, .pulsebtn, .sevent, #nav button, .vpin, .mapcard, .map-back, .map-locate, .map-world, .fchip, .heroclub, .cg-chip, .cgrow')) haptic();
 }, { passive: true });
 /* The World map lives in a body-level overlay — page gestures must yield */
 const mapIsOpen = () => { const m = document.getElementById('mapview'); return !!(m && m.classList.contains('open')); };
@@ -5862,12 +5858,10 @@ const venueTags = (key, v) => {
   return out;
 };
 
-/* Subtle Google rating beside the brand stars. */
+/* Independent rating data (js/venue-ratings.js). One line only — the
+   "Google · N reviews" duplicate was cut (audit B): the ★ badge already
+   carries score AND review count, and the house names no suppliers. */
 const venueRating = (key) => (typeof VENUE_RATING !== 'undefined' && VENUE_RATING[key]) || null;
-const ratingLine = (key) => {
-  const r = venueRating(key);
-  return r ? `<div class="grating-line">Google · ${r[1].toLocaleString()} reviews</div>` : '';
-};
 /* Numeral-first rating: the NUMBER is the signal (Mishari 15:26 — a row of
    tiny stars "doesn't tell us much"); one gold star as the unit mark, the
    score large and unmissable, review count for trust. */
@@ -6298,8 +6292,6 @@ function viewHome() {
     <div class="home-topscrim"></div>
     <header class="hero">
       <span class="bg">${heroImg(UNSPLASH('1414235077428-338989a2e8c0', 1600))}</span>
-      <button class="cgpill" onclick="openConcierge()" aria-label="The Concierge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg><span>AI Concierge</span></button>
-      <a class="herotaxi" href="https://m.uber.com/ul/?action=setPickup&pickup=my_location" target="_blank" rel="noopener" aria-label="Uber from my current location">${I.car}<span>Uber</span></a>
       <a class="heroprofile" href="#/club" aria-label="My profile"><span class="serif">M</span></a>
       <a class="greeting-block rise" href="#/club" aria-label="My Club">
         <div class="eyebrow">${greeting()}</div>
@@ -6336,12 +6328,7 @@ function viewHome() {
       <span class="tease">${SEASON[m].slice(0, 2).map(e => e.n).join(' · ')} — this month</span>
       <span class="go">${I.chev}</span>
     </button>`;
-    })()}
-
-    <div class="statement rise rise-3">
-      <div class="rule"></div>
-      <p class="buildstamp" onclick="bbTap()">Refreshed ${COLLECTION_UPDATED} &nbsp;·&nbsp; ${APP_BUILD}</p>
-    </div>`;
+    })()}`;
   wireSearch();
   $shell.scrollTo(0, 0);   // Home must open at the top like every other view
   // after first paint, warm the whole browse tree into cache so nothing
@@ -6536,31 +6523,14 @@ function viewConcierge(cityId) {
   $shell.scrollTo(0, 0);
 }
 
+/* THE CALLING CARD (audit batch, 26 Jul — unanimous #1): the feed card is
+   photo + one line of type + two quiet circles. Every utility that used to
+   crowd it — website pill, maps pin, Uber, booking icons, WhatsApp, phone,
+   the chip row, the corner globe — lives in the venue SHEET's Contact &
+   Explore panel (see openSheet), which the whole card opens with one tap. */
 function venueCard(city, catId, v, idx) {
   const key = vkey(city.id, catId, idx);
   const on = savedSet.has(key);
-  const tags = bpBadge(key, catId) + venueTags(key, v).map(t => `<span class="chip">${t}</span>`).join('');
-  // bookability: a direct reservation channel — the gold Book chip signals it
-  const bookable = !!(bookUrl(key) || hasResy(city, catId, v) || hasOpenTable(city, catId) || venueWa(key, v) || v.e);
-  const bookchip = bookable ? `<span class="chip bookchip">${I.book}Book</span>` : '';
-  const waNum = venueWa(key, v);
-  const wa = waNum ? `<a class="iconbtn" href="https://wa.me/${waNum.replace(/\D/g, '')}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="WhatsApp">${I.whatsapp}</a>` : '';
-  const ph = venuePhone(key, v);
-  const tel = ph ? `<a class="iconbtn" href="tel:${ph.replace(/\s/g, '')}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Call">${I.phone}</a>` : '';
-  // one booking icon on the card to keep the row uncrowded — the venue's
-  // own booking engine first, else Resy, else OpenTable
-  const resy = bookUrl(key)
-    ? `<a class="iconbtn" href="${bookUrl(key)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Book now">${I.book}</a>`
-    : (hasResy(city, catId, v)
-      ? `<a class="iconbtn" href="${resyUrl(v, city)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Book on Resy">${I.resy}</a>`
-      : (hasOpenTable(city, catId)
-        ? `<a class="iconbtn" href="${otUrl(v, city)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Book on OpenTable">${I.opentable}</a>`
-        : ''));
-  // the row keeps the original Google Maps pin (Mishari 17:14); OUR map
-  // rides as the subtle globe in the photo's corner, under the bookmark
-  const map = `<a class="iconbtn" href="${mapsUrl(v, city, key)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Directions">${I.pin}</a>`;
-  // Uber by its own letterforms, dressed in house gold (icon row spec A)
-  const uber = `<a class="iconbtn" href="${uberUrl(v, city, key)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Uber"><span class="ub">Uber</span></a>`;
 
   const dj = catId === 'nightclubs' ? djTonight(key) : null;
   const djtag = dj ? `<div class="djtag ${dj.conf === 'med' ? 'soft' : ''}">${I.disc}<span>Tonight · ${esc(dj.hl)}</span></div>` : '';
@@ -6572,11 +6542,9 @@ function venueCard(city, catId, v, idx) {
         if (im) screenSeen.add(im);
         return im ? `<div class="photo">${heroImg(im)}</div>` : monogram(v, 'photo'); })()}
       ${djtag}
-      <div class="tags">${bookchip}${tags}</div>
       <button class="save ${on ? 'on' : ''}" data-save="${key}" aria-label="Save">
         ${on ? I.bookmarkFill : I.bookmark}
       </button>
-      <button type="button" class="onmap" onclick="event.stopPropagation();openMapAtVenue('${city.id}','${catId}',${idx})" aria-label="Show on our map">${I.globe}</button>
       <button type="button" class="plan-add" onclick="event.stopPropagation();openPlanSheet('${city.id}','${catId}',${idx})" aria-label="Plan this venue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
       <div class="body">
         <div class="area">${v.a} · ${city.name}</div>
@@ -6585,11 +6553,6 @@ function venueCard(city, catId, v, idx) {
         <div class="txt">
           ${hoursLine(key)}
           <p class="blurb">${v.b}</p>
-        </div>
-        <div class="actions">
-          <a class="pill small" href="${v.w}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Website</a>
-          <span class="spacer"></span>
-          ${map}${uber}${resy}${wa}${tel}
         </div>
       </div>
     </article>`;
@@ -6862,8 +6825,10 @@ async function shareWeek() {
     .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   const url = await tinyify(APP_URL + '#/week/' + b64);
   if (navigator.share) { navigator.share({ title: `${MEMBER.name}'s week`, url }).catch(() => {}); return; }
+  // never toast the raw URL (audit G) — it stays on the clipboard only
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject())
-    .then(() => toast('Link copied'), () => toast(url));
+    .then(() => toast('The week is sealed — the link is on your clipboard'),
+          () => toast('The link couldn’t be copied — try Share again'));
 }
 /* the adopt link: reservations travel INTO the calendar — same encoding as
    the shared week, but it WRITES (merges) into this device's plans. Used by
@@ -7163,18 +7128,40 @@ function addTravel(tr) {
   return true;
 }
 
+/* the paste sheet — the house's own dark card in place of the browser's raw
+   prompt() (audit K): serif title, a textarea, one gold Read-it pill feeding
+   the SAME parse path; cancel is the standard sheet dismiss (backdrop/flick). */
+function openPasteSheet() {
+  $sheet.innerHTML = `
+    <div class="sheet-grab"><span></span></div>
+    <div class="plansheet pastesheet">
+      <div class="eyebrow gold">Import a booking</div>
+      <h2 class="serif">Paste the confirmation</h2>
+      <textarea id="pastein" rows="6" placeholder="The booking link, code, or the text of the email…"></textarea>
+      <button class="pill solid" id="pasteread">Read it</button>
+    </div>`;
+  $sheet.querySelector('#pasteread').onclick = () => {
+    const raw = ($sheet.querySelector('#pastein') || {}).value || '';
+    closeSheet();
+    if (raw.trim()) importParse(raw);
+  };
+  $backdrop.classList.add('open');
+  $sheet.scrollTop = 0;
+  requestAnimationFrame(() => requestAnimationFrame(() => $sheet.classList.add('open')));
+}
 async function importBookings() {
   // one tap: read the clipboard directly (iOS shows its paste banner);
-  // fall back to a paste box. Takes an adopt link/code OR the plain text of
-  // a confirmation. Whitespace stripped on the code path — a chat-wrapped
-  // link silently truncated the code (22 Jul).
+  // fall back to the house paste sheet. Takes an adopt link/code OR the plain
+  // text of a confirmation. Whitespace stripped on the code path — a
+  // chat-wrapped link silently truncated the code (22 Jul).
   let raw = '';
   try { raw = await navigator.clipboard.readText(); } catch (_) {}
   raw = String(raw || '');
   const isCode = (s) => { const c = s.replace(/\s+/g, ''); return /adopt\//.test(c) || (/^[A-Za-z0-9\-_]+$/.test(c) && c.length > 40); };
-  if (!raw.trim() || (!isCode(raw) && !parseBookingText(raw) && !parseTravelText(raw)))
-    raw = prompt('Paste the booking link, code, or the text of your confirmation') || '';
-  if (!raw.trim()) return;
+  if (!raw.trim() || (!isCode(raw) && !parseBookingText(raw) && !parseTravelText(raw))) { openPasteSheet(); return; }
+  importParse(raw);
+}
+function importParse(raw) {
   const compact = raw.replace(/\s+/g, '');
   const m = compact.match(/adopt\/([A-Za-z0-9\-_]+)/);
   if (m) { viewAdopt(m[1]); return; }
@@ -7342,7 +7329,7 @@ function viewSaved() {
         <button class="pill small${viewSaved.edit ? ' solid' : ''}" id="caledit">${viewSaved.edit ? 'Done' : 'Edit'}</button>
         <button class="calplus" id="calplus" aria-label="Add a plan">+</button>
       </div>
-      <button class="cal-import" onclick="importBookings()">Have a booking code? Import</button>
+      <button class="cal-import" onclick="importBookings()">Forward a confirmation — the house will place it</button>
       <div class="pmonth">
         <button class="pm-nav" data-cm="-1" ${curYM <= nowYM ? 'disabled' : ''}>‹</button>
         <span class="serif pm-name">${MONTH_NAMES[cm]} ${cy}</span>
@@ -7356,7 +7343,7 @@ function viewSaved() {
         <span class="d serif">${DAY_FULL[selDt.getDay()]}</span>
         <span class="dt">${selDt.getDate()} ${MONTHS[selDt.getMonth()]}${selIso === today ? ' · Today' : ''}</span>
       </div>
-      ${selItems || '<div class="ag-empty">Nothing planned</div>'}
+      ${selItems || '<div class="ag-empty">The evening is open.</div>'}
       <button class="pill small dayadd" id="dayadd">+ Add to this day</button>
     </div>`;
 
@@ -7413,6 +7400,17 @@ function viewSaved() {
     <section class="agenda rise rise-1">
       ${agenda}
     </section>
+    <div class="section-head rise rise-1"><span class="display serif">My List</span></div>
+    <div class="statrow rise rise-1">
+      <div class="statbox"><div class="num serif">${entries.length}</div><div class="lbl">Saved</div></div>
+      <div class="statbox"><div class="num serif">${cityCount}</div><div class="lbl">Cities</div></div>
+    </div>
+    ${entries.length
+      ? `<div class="feed">${entries.map(e => venueCard(e.city, e.catId, e.v, e.idx)).join('')}</div>`
+      : `<div class="emptystate rise rise-2">
+           <p>You have no saved addresses in your list.<br/>Mark the exceptional as you explore.</p>
+           <button class="pill" onclick="location.hash='#/'">Explore</button>
+         </div>`}
     ${weekList ? `
     <section class="agenda rise rise-2">
       <div class="section-head"><span class="display serif">Your Week</span>
@@ -7454,18 +7452,7 @@ function viewSaved() {
         <div class="section-head"><span class="display serif">The Year Ahead</span></div>
         ${blocks}
       </section>` : '';
-    })()}
-    <div class="section-head rise rise-1"><span class="display serif">My List</span></div>
-    <div class="statrow rise rise-1">
-      <div class="statbox"><div class="num serif">${entries.length}</div><div class="lbl">Saved</div></div>
-      <div class="statbox"><div class="num serif">${cityCount}</div><div class="lbl">Cities</div></div>
-    </div>
-    ${entries.length
-      ? `<div class="feed">${entries.map(e => venueCard(e.city, e.catId, e.v, e.idx)).join('')}</div>`
-      : `<div class="emptystate rise rise-2">
-           <p>You have no saved addresses in your list.<br/>Mark the exceptional as you explore.</p>
-           <button class="pill" onclick="location.hash='#/'">Explore</button>
-         </div>`}`;
+    })()}`;
   $app.querySelectorAll('.ag-item[data-open]').forEach(el => el.addEventListener('click', () => {
     const [c, cat, i] = el.dataset.open.split('|');
     // edit mode: a tap re-opens the plan sheet ON that day — move it, retime it
@@ -7561,8 +7548,17 @@ function viewClub() {
       </div>
     </div>
     <div class="logoutwrap rise rise-3">
-      <button class="pill ghost" onclick="document.getElementById('toast').dispatchEvent(new Event('logout'))" id="logoutbtn">Log out</button>
-    </div>`;
+      <button class="pill ghost" onclick="document.getElementById('toast').dispatchEvent(new Event('logout'))" id="logoutbtn">À votre service</button>
+    </div>
+    ${(() => {
+      // THE COLOPHON (audit H): the edition stamp left every member surface —
+      // this single line at the foot of The Club is the one place it survives.
+      // Triple-tap still opens the black box (bbTap), so the verification
+      // affordance moved here with it.
+      const p = String(COLLECTION_UPDATED).split(' ');
+      const ed = (p[1] && p[2]) ? `${p[1]} ${p[2]}` : COLLECTION_UPDATED;
+      return `<div class="colophon" onclick="bbTap()">This edition: ${ed} · ${APP_BUILD.toUpperCase()}</div>`;
+    })()}`;
   document.getElementById('logoutbtn').onclick = () => toast('Toujours à votre service');
   $shell.scrollTo(0, 0);
 }
@@ -7576,12 +7572,19 @@ function openSheet(cityId, catId, idx) {
   const rows = [];
   if (bookUrl(key)) rows.push(`<a href="${bookUrl(key)}" target="_blank" rel="noopener">
       ${I.book.replace('<svg', '<svg class="lead"')}<span class="label">Book now</span>${I.chev}</a>`);
+  // house voice, no supplier names (audit B): the maps deep-link keeps its
+  // quiet G mark but reads "The address", never "Google Maps"
   rows.push(`<a href="${mapsUrl(v, city, key)}" target="_blank" rel="noopener">
-      <span class="lead gmark serif">G</span><span class="label">${v.ad || v.a + ', ' + city.name}</span>${I.chev}</a>`);
+      <span class="lead gmark serif">G</span><span class="label">The address</span>${I.chev}</a>`);
+  // OUR cartography — the card's corner globe moved here when the calling
+  // card was stripped to two actions (audit A): nothing the card lost may
+  // vanish from the house
+  rows.push(`<button type="button" data-onmap="1">
+      ${I.globe.replace('<svg', '<svg class="lead"')}<span class="label">See it on our map</span>${I.chev}</button>`);
   rows.push(`<a href="${uberUrl(v, city, key)}" target="_blank" rel="noopener">
       ${I.car.replace('<svg', '<svg class="lead"')}<span class="label">Uber to ${v.n}</span>${I.chev}</a>`);
-  rows.push(`<a href="${v.w}" target="_blank" rel="noopener">
-      ${I.globe.replace('<svg', '<svg class="lead"')}<span class="label">${v.w.replace(/^https?:\/\/(www\.)?/, '')}</span>${I.chev}</a>`);
+  if (v.w) rows.push(`<a href="${v.w}" target="_blank" rel="noopener">
+      ${I.globe.replace('<svg', '<svg class="lead"')}<span class="label">${v.w.replace(/^https?:\/\/(www\.)?/, '')}</span>${I.chev}</a>`);   // no website: no dead row (review catch — the sheet is now the only door)
   const waNum = venueWa(key, v);
   if (waNum) rows.push(`<a href="https://wa.me/${waNum.replace(/\D/g, '')}" target="_blank" rel="noopener">
       ${I.whatsapp.replace('<svg', '<svg class="lead"')}<span class="label">WhatsApp</span>${I.chev}</a>`);
@@ -7617,7 +7620,6 @@ function openSheet(cityId, catId, idx) {
     <div class="sheet-body">
       <div class="area">${v.a} · ${city.name}</div>
       <h2 class="name serif">${v.n}</h2>
-      ${ratingLine(key)}
       ${hoursLine(key)}
       <span class="stars">${ratingBadge(key)}</span>
       ${djBill}
@@ -7677,6 +7679,9 @@ function openSheet(cityId, catId, idx) {
   $sheet.querySelector('.sheet-close').onclick = closeSheet;
   const shp = $sheet.querySelector('.sheet-plan');
   if (shp) shp.onclick = () => openPlanSheet(cityId, catId, idx);
+  // the our-map row: close the card first so the map doesn't rise beneath it
+  const om = $sheet.querySelector('[data-onmap]');
+  if (om) om.onclick = () => { closeSheet(); openMapAtVenue(cityId, catId, idx); };
   $sheet.querySelector('#sheetsave').onclick = (e) => {
     toggleSave(key);
     const nowOn = savedSet.has(key);
@@ -8003,11 +8008,14 @@ const $gsearch = (() => {
   const d = document.createElement('div');
   d.id = 'gsearch';
   d.innerHTML = `
+    <div class="gs-day" id="gsday"></div>
     <div class="gs-bar">${I.search}<input id="gsinput" type="text" placeholder="City, restaurant, club…" autocomplete="off" />
       <button class="gs-close" aria-label="Close">✕</button></div>
     <div class="gs-results" id="gsresults"></div>`;
   document.body.appendChild(d);
-  d.querySelector('.gs-close').onclick = () => d.classList.remove('open');
+  // ANY close of the overlay abandons a pending day-add (audit F): the stale
+  // dayAddFor otherwise hijacked the NEXT search pick into the old day
+  d.querySelector('.gs-close').onclick = () => { d.classList.remove('open'); dayAddFor = null; };
   const input = d.querySelector('#gsinput');
   const res = d.querySelector('#gsresults');
   const render = () => {
@@ -8035,8 +8043,13 @@ const $gsearch = (() => {
       const venues = findVenues(input.value);
       const cities = findCities(input.value);
       d.classList.remove('open');
-      if (cities.length) go(`#/city/${cities[0].id}`);
-      else if (venues.length) goVenue(venues[0].city.id, venues[0].part, venues[0].idx);
+      if (cities.length) { dayAddFor = null; go(`#/city/${cities[0].id}`); }
+      else if (venues.length) {
+        // Enter honours a pending day-add exactly like a tapped row
+        if (dayAddFor) { const iso = dayAddFor; dayAddFor = null; openPlanSheet(venues[0].city.id, venues[0].part, venues[0].idx, iso); }
+        else goVenue(venues[0].city.id, venues[0].part, venues[0].idx);
+      }
+      else dayAddFor = null;   // closed empty-handed — the pending add dies with it
     }
   });
   return d;
@@ -8046,6 +8059,16 @@ function openSearch() {
   const i = $gsearch.querySelector('#gsinput');
   i.value = '';
   $gsearch.querySelector('#gsresults').innerHTML = '';
+  // when this search is an "add to this day", say so above the input —
+  // otherwise the member has no way to know which day the pick lands on
+  const gd = $gsearch.querySelector('#gsday');
+  if (gd) {
+    if (dayAddFor) {
+      const dt = new Date(dayAddFor + 'T12:00:00');
+      gd.textContent = `Adding to ${DAY_FULL[dt.getDay()]} ${dt.getDate()} ${MONTHS[dt.getMonth()]}`;
+      gd.classList.add('show');
+    } else gd.classList.remove('show');
+  }
   setTimeout(() => i.focus(), 60);
 }
 
@@ -8199,7 +8222,8 @@ function openSeasonSheet(m, i) {
 /* ---------- pulse: live city ranking from Google data ---------- */
 function viewPulse(cityId) {
   const city = CITY_BY_ID[cityId];
-  if (!city) { go('#/'); return; }
+  // an unknown city must never bounce home in silence (audit L) — say why
+  if (!city) { toast('Not yet curated — the concierge is on it'); go('#/'); return; }
 
   // city-local hour from any venue with hours data
   const refKey = (() => {
@@ -8278,9 +8302,9 @@ function viewPulse(cityId) {
         <span class="dt">quieter at this hour</span></div>
       ${offHours.map((e, i) => row(e, i, false)).join('')}` : ''}
     </section>
-    <div class="pulse-note">Live at the moment you open it — real Google opening hours at ${city.name} local
-      time, ranked by Google rating weighted by review volume. “Usually busy” is our own estimate from each
-      venue’s typical rhythm — Google no longer shares its crowd histogram outside the Maps app.</div>`;
+    <div class="pulse-note">Live at the moment you open it — live opening hours at ${city.name} local
+      time, ranked by standing weighted by review volume. “Usually busy” is the house’s own estimate
+      from each venue’s typical rhythm.</div>`;
   $app.querySelectorAll('.ag-item').forEach(el => el.addEventListener('click', () => {
     const [c, cat, i] = el.dataset.open.split('|');
     openSheet(c, cat, +i);
@@ -8835,7 +8859,9 @@ document.addEventListener('click', (e) => {
 
 /* ---------- pull-to-refresh ---------- */
 const $ptr = document.getElementById('ptr');
-$ptr.querySelector('.lbl').textContent = `Updated ${COLLECTION_UPDATED} · ${APP_BUILD}`;
+// no version ribbon on member surfaces (audit H) — the edition stamp lives
+// only in The Club's colophon; the pull ring speaks the house greeting
+$ptr.querySelector('.lbl').textContent = 'À votre service';
 
 /* The shooting-stars refresh layer — a translucent veil OVER the live app,
    never a black screen. Shows while we pull fresh data; reveals the app in
@@ -8902,7 +8928,7 @@ document.addEventListener('touchmove', (e) => {
   // gentle pull = peek at the last refresh; a deep pull arms the actual refresh
   ptrReady = dy > 210;
   $ptr.classList.toggle('armed', ptrReady);
-  $ptr.querySelector('.lbl').textContent = ptrReady ? 'Release to refresh' : `Updated ${COLLECTION_UPDATED} · ${APP_BUILD}`;
+  $ptr.querySelector('.lbl').textContent = ptrReady ? 'Release to refresh' : 'À votre service';
 }, { passive: true });
 document.addEventListener('touchend', () => {
   if (ptrStart !== null && ptrReady) { doRefresh(); }
@@ -9515,6 +9541,16 @@ window.addEventListener('hashchange', () => {
     pendingSlide = 'pop';    // leaving any sheet for a full-bleed tab sets it down
   chevronPop = false;
   renderRoute(false, dir);
+});
+/* The greeting must match the hour whenever home is on glass again. Most
+   returns rebuild home (viewHome re-runs greeting()), but the map-close
+   early-return in renderRoute leaves the page beneath UNTOUCHED — a home
+   built in the morning could greet "Good morning" at dusk. Patch the one
+   text node in place on every arrival at #/ (audit D). */
+window.addEventListener('hashchange', () => {
+  if ((location.hash || '#/') !== '#/') return;
+  const g = $app.querySelector('.greeting-block .eyebrow');
+  if (g) g.textContent = greeting();
 });
 renderRoute();
 
@@ -10865,6 +10901,16 @@ const CG_MOODS = [
 
 const cgPick = (arr, q) => arr[(q.length + new Date().getMinutes()) % arr.length];
 
+/* time-of-day salutation — single source of truth is app.js's greeting()
+   (home header used it while the concierge hardcoded "Good evening";
+   afternoon visits read as two different clocks). Strip its trailing
+   comma; thresholds mirrored as fallback only. */
+function cgGreeting() {
+  if (typeof greeting === 'function') return greeting().replace(/,\s*$/, '');
+  const h = new Date().getHours();
+  return h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+}
+
 function cgLocalHour(cityId) {
   const idx = buildCityIndex();
   for (const e of idx[cityId].entries) {
@@ -10928,9 +10974,9 @@ function cgBooking(e, party, whenText) {
   const n = party || 2;
   const when = whenText || 'this evening';
   const subject = `Reservation request — ${e.v.n}`;
-  const body = `Good evening,\n\nI would like to request a table for ${n} ${when} at ${e.v.n}` +
+  const body = `${cgGreeting()},\n\nI would like to request a table for ${n} ${when} at ${e.v.n}` +
     `. Could you kindly confirm availability?\n\nWith thanks,\n${who}`;
-  const short = `Good evening — I'd like a table for ${n} ${when} at ${e.v.n}. Could you kindly confirm availability? Thank you${who ? ', ' + who : ''}.`;
+  const short = `${cgGreeting()} — I'd like a table for ${n} ${when} at ${e.v.n}. Could you kindly confirm availability? Thank you${who ? ', ' + who : ''}.`;
   const wa = venueWa(e.key, e.v);
   const email = e.v.e || null;
   const book = bookUrl(e.key);
@@ -11091,7 +11137,7 @@ async function cgAnswer(q) {
   // ---- pleasantries and identity
   if (p.greeting && cgNorm(q).trim().split(' ').length <= 3) {
     return { text: cgPick([
-      'Good evening. What are we in the mood for — a table, a terrace, or trouble?',
+      cgGreeting() + '. What are we in the mood for — a table, a terrace, or trouble?',
       'At your service. Name a craving or a city.',
       'Welcome back. Shall I read the night for you?'], q) };
   }
@@ -11304,7 +11350,7 @@ function ensureConcierge() {
       <div class="cg-grab"><span></span></div>
       <div class="cg-head">
         <span class="eyebrow gold">Privée</span>
-        <span class="ttl serif">AI Concierge</span>
+        <span class="ttl serif">Concierge</span>
         <button class="cg-close" aria-label="Close">${I.back}</button>
       </div>
       <div class="cg-log"></div>
@@ -11397,26 +11443,17 @@ function cgPush(cls, html) {
 async function cgAsk(q) {
   ensureConcierge();
   cgPush('me', esc(q));
-  const think = cgPush('house thinking', '<span class="dots"><i></i><i></i><i></i></span>');
   const t0 = Date.now();
   const a = await cgAnswer(q);
-  // the concierge considers before speaking — a pause weighted by the answer
-  const pause = Math.min(600 + a.text.length * 5 + (a.venues ? 300 : 0), 1700) - (Date.now() - t0);
+  // one short beat, then the whole answer lands at once — the staged
+  // thinking bubble + word-by-word typing read as fake latency (audit
+  // 26 Jul: "text arrives, then a large blank area waits ~2s"). Nothing
+  // renders before the content is ready.
+  const pause = 400 - (Date.now() - t0);
   if (pause > 0) await new Promise(r => setTimeout(r, pause));
-  think.classList.remove('thinking');
-  // …then writes, never dumps: word-by-word, the whole line inside ~a second
-  const words = a.text.split(' ');
-  const log = cgDom.querySelector('.cg-log');
-  const perWord = Math.max(24, Math.min(70, 950 / words.length));
-  think.innerHTML = '';
-  for (let i = 0; i < words.length; i++) {
-    think.textContent = words.slice(0, i + 1).join(' ');
-    log.scrollTop = log.scrollHeight;
-    await new Promise(r => setTimeout(r, perWord));
-  }
-  think.innerHTML = esc(a.text)
+  cgPush('house', esc(a.text)
     + (a.booking ? cgBookingHtml(a.booking) : '')
-    + (a.venues ? `<div class="cg-venues">${a.venues.map((e, i) => cgRow(e, a.dists ? a.dists[i] : null, a.notes ? a.notes[i] : null)).join('')}</div>` : '');
+    + (a.venues ? `<div class="cg-venues">${a.venues.map((e, i) => cgRow(e, a.dists ? a.dists[i] : null, a.notes ? a.notes[i] : null)).join('')}</div>` : ''));
   if (a.venues && a.venues.length) cgLastVenue = a.venues[0];   // "book it" targets the lead
 }
 
@@ -11428,7 +11465,7 @@ function openConcierge() {
     cgDom.classList.add('open');
   });
   if (!cgDom.querySelector('.cg-log').children.length) {
-    cgPush('house', 'Good evening. Ask me for the best of any city — or what is happening tonight.');
+    cgPush('house', cgGreeting() + '. Ask me for the best of any city — or what is happening tonight.');
   }
   setTimeout(() => { try { cgDom.querySelector('.cg-in').focus({ preventScroll: true }); } catch (_) {} }, 350);
 }
