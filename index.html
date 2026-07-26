@@ -3432,6 +3432,23 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
 .fchip.on svg { color: #131109; }
 .leaflet-marker-icon.hid { display: none; }
 .leaflet-marker-icon.clustered { display: none; }
+/* GL twin: MapLibre markers carry .maplibregl-marker, not .leaflet-marker-icon —
+   the filter/cluster hide must reach them too */
+.maplibregl-marker.hid { display: none; }
+.maplibregl-marker.clustered { display: none; }
+/* Mirror .leaflet-marker-pane's stacking slot: markers carry big JS-set
+   z-indexes (projected-y + 400/800/900 offsets) and MapLibre leaves its
+   canvas container un-stacked, so without this pane the seals would win the
+   z war against the map chrome (head 620 / card 640). Confined at 600 they
+   ride over the vignette (500) and under everything else — Leaflet-true. */
+#mapview .maplibregl-canvas-container { position: absolute; inset: 0; z-index: 600; }
+/* the GL accuracy halo — a screen-space disc, sized in JS from ground
+   resolution (the Leaflet path draws an L.circle instead) */
+.me-halo-gl {
+  border-radius: 50%;
+  background: rgba(200, 162, 75, 0.07);
+  pointer-events: none;
+}
 .cpin-wrap { background: none !important; border: none !important; }
 .vpin.cpin .disc {
   width: 38px; height: 38px;
@@ -3697,6 +3714,13 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
   letter-spacing: 0.08em; color: rgba(244, 239, 230, 0.35) !important;
 }
 .leaflet-bottom.leaflet-right { bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 2px); right: 8px; z-index: 600; }
+/* the same colophon treatment for the GL engine's attribution control */
+#mapview .maplibregl-ctrl-attrib, #mapview .maplibregl-ctrl-attrib a {
+  background: transparent !important;
+  font-family: var(--sans) !important; font-size: 9px !important;
+  letter-spacing: 0.08em; color: rgba(244, 239, 230, 0.35) !important;
+}
+#mapview .maplibregl-ctrl-bottom-right { bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 2px); right: 8px; z-index: 600; }
 
 @media (prefers-reduced-motion: reduce) {
   #mapview { transition: opacity 0.2s ease; transform: none; }
@@ -4199,8 +4223,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '26 July 2026 · 18:26 CEST';
-const APP_BUILD = 'v371';
+const COLLECTION_UPDATED = '26 July 2026 · 19:02 CEST';
+const APP_BUILD = 'v376';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -9511,14 +9535,28 @@ renderRoute();
 /* ============================================================
    THE WORLD — PRIVÉE's interactive venue map.
    A body-level overlay over the live app (never routed through
-   #app), Leaflet + Carto dark cartography warm-graded into the
-   house palette, every plotted venue a gold seal.
+   #app). TWO ENGINES, one surface:
+   · 'gl'      — MapLibre GL vector tiles (assets/maplibre/, house
+                 chart privee-chart.json, OpenFreeMap — keyless),
+                 lazy-loaded on first open. Fluid pitch-and-bank
+                 camera; the chart is pre-graded to the palette.
+   · 'leaflet' — the original raster path, compiled-in and fully
+                 reachable. THE SAFETY STORY: software/old WebKit,
+                 a failed script load, or a refused WebGL context
+                 must still get the old map, untouched.
+   Structure: engine-touching code lives in _L / _GL twins; thin
+   dispatchers keep the public names (openMapView, closeMapView,
+   openMapAtVenue, mapHomeReturn callers, #mapview classes) exactly
+   as app.js knows them. Every plotted venue is a gold seal.
    ============================================================ */
 
 const MAP_TILES = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png';
 const MAP_LABEL_TILES = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png';
 const MAP_TILES_FALLBACK = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 const MAP_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
+const GL_DIR = 'assets/maplibre/';           // ships beside index.html, like every asset
+const GL_STYLE = GL_DIR + 'privee-chart.json';
+const GL_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://openfreemap.org">OpenFreeMap</a>';
 const BAND_MID = 12.5, BAND_NEAR = 15;      // FAR < 12.5 <= MID < 15 <= NEAR
 const MEDALLION_CAP = 16;                    // decoded photo thumbs at street zoom
 const IDLE_DESTROY_MS = 120000;              // keep the map warm 2min after close
@@ -9550,16 +9588,53 @@ if (typeof L !== 'undefined') {
   L.GridLayer.include({ _clampZoom: function (z) { return Math.round(origClamp.call(this, z)); } });
 }
 
+/* ---------- engine state ---------- */
+/* ENGINE is decided ONCE, on first open: 'gl' when the MapLibre script
+   loads AND WebGL answers; 'leaflet' otherwise. The decision is the whole
+   safety story — everything below dispatches on it. */
+let ENGINE = null;                 // null until the first open decides
+let GL_LOAD = null;                // lazy asset load promise (script + css)
+let GLMAP = null;                  // the MapLibre map (ENGINE === 'gl')
 let LMAP = null, mapDom = null, pinLayer = null, worldLayer = null, labelTiles = null, clusterLayer = null;
 let meMarker = null, meHalo = null, geoWatch = null;
 let mapCityId = null, mapIdleTimer = null, mapRanks = {}, mapGroups = null;
 let cityIndex = null, tileErrors = [], onOsmFallback = false, baseLayer = null;
 let mapFilter = null;   // active category chip (raw part name) — null = all
+let openSeq = 0;        // guards the async engine decision against a close-while-loading
 
 function mapHaversine(a, b, c, d) {
   const R = 6371, p = Math.PI / 180;
   const x = Math.sin((c - a) * p / 2) ** 2 + Math.cos(a * p) * Math.cos(c * p) * Math.sin((d - b) * p / 2) ** 2;
   return 2 * R * Math.asin(Math.sqrt(x));
+}
+
+/* ---------- the [lat,lng] / [lng,lat] boundary ----------
+   VENUE_LL, city centres and every ll in this file store [lat,lng]
+   (Leaflet order). MapLibre speaks [lng,lat]. The DATA never flips —
+   glLL() converts at the exact call sites that hand coordinates to GL. */
+const glLL = (ll) => [ll[1], ll[0]];
+
+function theMap() { return ENGINE === 'gl' ? GLMAP : LMAP; }
+function mapZoom() { return ENGINE === 'gl' ? GLMAP.getZoom() : LMAP.getZoom(); }
+function mapSizeXY() {
+  if (ENGINE === 'gl') { const c = GLMAP.getContainer(); return { x: c.clientWidth, y: c.clientHeight }; }
+  const s = LMAP.getSize(); return { x: s.x, y: s.y };
+}
+/* screen-space projection for the clustering/label math — MapLibre wants
+   [lng,lat], Leaflet [lat,lng]; both return container-pixel {x,y} */
+function toScreen(ll) {
+  return ENGINE === 'gl' ? GLMAP.project(glLL(ll)) : LMAP.latLngToContainerPoint(ll);
+}
+/* padded-viewport membership test, built once per applyBands pass */
+function viewTester(padFrac) {
+  if (ENGINE === 'gl') {
+    const b = GLMAP.getBounds();
+    const dLat = (b.getNorth() - b.getSouth()) * padFrac, dLng = (b.getEast() - b.getWest()) * padFrac;
+    const s = b.getSouth() - dLat, n = b.getNorth() + dLat, w = b.getWest() - dLng, e = b.getEast() + dLng;
+    return (ll) => ll[0] >= s && ll[0] <= n && ll[1] >= w && ll[1] <= e;
+  }
+  const b = LMAP.getBounds().pad(padFrac);
+  return (ll) => b.contains(ll);
 }
 
 /* Everything the map knows about a city, computed once from data
@@ -9622,7 +9697,8 @@ function ensureMapDom() {
   mapDom.querySelector('.map-back').addEventListener('click', () => { history.length > 1 ? history.back() : (location.hash = appHash); });
   mapDom.querySelector('.map-home').addEventListener('click', () => { if (mapCityId) mapHomeReturn(mapCityId); });
   mapDom.querySelector('.map-locate').addEventListener('click', () => {
-    if (meMarker) LMAP.flyTo(meMarker.getLatLng(), Math.max(LMAP.getZoom(), 15.5), { duration: 0.9, easeLinearity: 0.2 });
+    if (!theMap()) return;              // engine still deciding (review gap 1)
+    if (meMarker) camFlyLL(meMarker.ll, Math.max(mapZoom(), 15.5), 900);
     else startGeo(true);
   });
   mapDom.querySelector('.map-world').addEventListener('click', () => {
@@ -9645,8 +9721,84 @@ function ensureMapDom() {
   return mapDom;
 }
 
+/* ---------- lazy GL load + the fallback ladder ---------- */
+/* MapLibre (≈800KB) loads on FIRST map open only — the app's boot payload
+   never carries it. Any failure on this ladder lands on Leaflet:
+     1. no WebGL context from a probe canvas   → leaflet
+     2. script/css fail to load (offline, 404) → leaflet
+     3. maplibregl missing after load          → leaflet
+     4. new maplibregl.Map() throws            → leaflet (caught in ensureMap)
+   Software WebKit in containers exercises exactly this path. */
+function glProbe() {
+  try {
+    const c = document.createElement('canvas');
+    return !!(window.WebGLRenderingContext &&
+      (c.getContext('webgl2') || c.getContext('webgl') || c.getContext('experimental-webgl')));
+  } catch (_) { return false; }
+}
+function loadGLAssets() {
+  if (GL_LOAD) return GL_LOAD;
+  GL_LOAD = new Promise((resolve) => {
+    let settled = false, waiting = 2;
+    const ok = () => { if (!settled && --waiting <= 0) { settled = true; resolve(true); } };
+    const fail = () => { if (!settled) { settled = true; resolve(false); } };
+    // the css must arrive too: maplibre positions markers/attribution via
+    // its stylesheet — without it every seal piles up at the origin
+    const link = document.createElement('link');
+    link.rel = 'stylesheet'; link.href = GL_DIR + 'maplibre-gl.css';
+    link.onload = ok; link.onerror = fail;
+    document.head.appendChild(link);
+    const s = document.createElement('script');
+    s.src = GL_DIR + 'maplibre-gl.js';
+    s.onload = ok; s.onerror = fail;
+    document.head.appendChild(s);
+    setTimeout(fail, 12000);   // a wedged fetch must not hold the map hostage
+  });
+  return GL_LOAD;
+}
+function decideEngine() {
+  if (ENGINE) return Promise.resolve(ENGINE);
+  if (!glProbe()) {
+    ENGINE = 'leaflet';                        // rung 1: no WebGL at all
+    window.__mapEngine = ENGINE;
+    return Promise.resolve(ENGINE);
+  }
+  return loadGLAssets().then((loaded) => {
+    if (ENGINE) return ENGINE;                 // a parallel open already decided
+    ENGINE = (loaded && typeof maplibregl !== 'undefined') ? 'gl' : 'leaflet';
+    window.__mapEngine = ENGINE;
+    return ENGINE;
+  });
+}
+
+/* ---------- map creation: the twins ---------- */
 function ensureMap() {
   ensureMapDom();
+  if (theMap()) return theMap();
+  if (ENGINE === 'gl') {
+    try {
+      ensureMap_GL();
+    } catch (err) {
+      // rung 4: the WebGL context itself was refused (old GPU, blocked
+      // canvas). Demote PERMANENTLY for this session and raise Leaflet —
+      // the member sees a map either way, never an error.
+      GLMAP = null;
+      ENGINE = 'leaflet';
+      window.__mapEngine = ENGINE;
+      const holder = document.getElementById('lmap');
+      if (holder) { holder.innerHTML = ''; holder.className = ''; }
+      ensureMap_L();
+    }
+  } else {
+    ensureMap_L();
+  }
+  pinLayer = newLayerGroup();
+  clusterLayer = newLayerGroup();
+  worldLayer = newLayerGroup();
+  return theMap();
+}
+
+function ensureMap_L() {
   if (LMAP) return LMAP;
   LMAP = L.map('lmap', {
     zoomControl: false, attributionControl: true,
@@ -9675,11 +9827,6 @@ function ensureMap() {
   });
   addEventListener('online', () => { if (LMAP) LMAP.eachLayer(l => l.redraw && l.redraw()); });
   LMAP.on('zoomend moveend', onMapSettle);
-  // continuous medallion growth: 1x at the street threshold, 2x fully pinched
-  const medscale = () => {
-    const z = LMAP.getZoom();
-    mapDom.style.setProperty('--medscale', Math.max(1, Math.min(2, 1 + (z - BAND_NEAR) * 0.34)).toFixed(3));
-  };
   LMAP.on('zoom zoomend', medscale);
   medscale();
   LMAP.on('moveend zoomend', () => {
@@ -9689,27 +9836,138 @@ function ensureMap() {
     }, 700);
   });
   LMAP.on('click', hideMapCard);
-  pinLayer = L.layerGroup().addTo(LMAP);
-  clusterLayer = L.layerGroup().addTo(LMAP);
-  worldLayer = L.layerGroup().addTo(LMAP);
-  mapDom.classList.add('tile-warm');
+  mapDom.classList.add('tile-warm');   // the raster invert grade — Leaflet only
   return LMAP;
 }
 
+function ensureMap_GL() {
+  if (GLMAP) return GLMAP;
+  GLMAP = new maplibregl.Map({
+    container: 'lmap',
+    style: GL_STYLE,                   // the house chart — already palette-graded, no CSS filter needed
+    attributionControl: false,         // we mount our own, styled as the colophon
+    // GL zoom ≈ Leaflet − 1 (512px tiles): min 2 / max 17 mirror the raster 3/18
+    minZoom: 2, maxZoom: 17,
+    // rotation gestures stay ON (the two-finger twist is part of the fluidity);
+    // the PITCH gesture stays OFF — a two-finger vertical drag fights the
+    // app's own gesture grammar. Pitch is the camera's to give, never the thumb's.
+    touchPitch: false, pitchWithRotate: false, dragRotate: true,
+  });
+  // the vignette rides inside the canvas container: canvas (z auto) <
+  // vignette < markers (inline 1000+) — outside it, the z600 pane rule put
+  // the imagery ABOVE the scrims and the grade silently vanished in GL
+  const vg = mapDom.querySelector('.map-vignette');
+  if (vg) GLMAP.getCanvasContainer().appendChild(vg);
+  // equivalent attribution line — legally required, aesthetically tamed in CSS
+  GLMAP.addControl(new maplibregl.AttributionControl({
+    compact: false, customAttribution: GL_ATTR,
+  }), 'bottom-right');
+  addEventListener('online', () => {
+    // tiles that failed offline are stamped errored in the source cache;
+    // re-setting the style is the supported way to refetch the world.
+    // DOM markers (every seal) live outside the style and survive untouched.
+    if (GLMAP && ENGINE === 'gl') { try { GLMAP.setStyle(GL_STYLE); } catch (_) {} }
+  });
+  GLMAP.on('zoomend', onMapSettle);
+  GLMAP.on('moveend', onMapSettle);
+  // rotation/pitch move seals in screen space — the cluster math must re-run
+  GLMAP.on('rotateend', onMapSettle);
+  GLMAP.on('pitchend', onMapSettle);
+  GLMAP.on('zoom', medscale);
+  GLMAP.on('zoom', sizeHalo);
+  medscale();
+  GLMAP.on('click', (e) => {
+    // a tap on a seal bubbles up to the canvas container and would fire this
+    // too — only the true void-tap hides the card
+    const t = e.originalEvent && e.originalEvent.target;
+    if (t && t.closest && t.closest('.maplibregl-marker')) return;
+    hideMapCard();
+  });
+  return GLMAP;
+}
+
+// continuous medallion growth: 1x at the street threshold, 2x fully pinched
+function medscale() {
+  if (!mapDom || !theMap()) return;
+  const z = mapZoom();
+  mapDom.style.setProperty('--medscale', Math.max(1, Math.min(2, 1 + (z - BAND_NEAR) * 0.34)).toFixed(3));
+}
+
+/* ---------- marker + layer facade ---------- */
+/* One handle shape for both engines: { ll, el, setLL, setZ, remove }.
+   Leaflet wraps L.Marker/divIcon; GL wraps maplibregl.Marker around the
+   SAME inner HTML, so every .vpin/.citydot/.me-dot CSS rule applies as-is. */
+function newLayerGroup() {
+  if (ENGINE === 'gl') {
+    return { ms: [], clearLayers() { this.ms.forEach(h => h.remove()); this.ms.length = 0; } };
+  }
+  return L.layerGroup().addTo(LMAP);
+}
+
+function addPin(layer, ll, opts) {
+  return ENGINE === 'gl' ? addPin_GL(layer, ll, opts) : addPin_L(layer, ll, opts);
+}
+
+function addPin_L(layer, ll, opts) {
+  const m = L.marker(ll, {
+    keyboard: false,
+    interactive: opts.interactive !== false,
+    riseOnHover: !!opts.riseOnHover,
+    zIndexOffset: opts.z || 0,
+    icon: L.divIcon({ className: opts.className, iconSize: [opts.w, opts.h], iconAnchor: [opts.ax, opts.ay], html: opts.html }),
+  });
+  if (opts.onClick) m.on('click', opts.onClick);
+  if (layer) layer.addLayer(m); else m.addTo(LMAP);
+  return {
+    ll, _m: m,
+    get el() { return m.getElement(); },
+    setLL(l2) { this.ll = l2; m.setLatLng(l2); },
+    setZ(off) { m.setZIndexOffset(off); },
+    remove() { layer ? layer.removeLayer(m) : m.remove(); },
+  };
+}
+
+function addPin_GL(layer, ll, opts) {
+  const el = document.createElement('div');
+  el.className = opts.className;
+  el.style.width = opts.w + 'px'; el.style.height = opts.h + 'px';
+  el.innerHTML = opts.html;
+  if (opts.interactive === false) el.style.pointerEvents = 'none';
+  else if (opts.onClick) el.style.cursor = 'pointer';
+  // anchor 'top-left' + negative offset reproduces Leaflet's iconAnchor
+  // exactly: pixel (ax,ay) of the icon sits on the coordinate
+  const m = new maplibregl.Marker({ element: el, anchor: 'top-left', offset: [-opts.ax, -opts.ay] })
+    .setLngLat(glLL(ll)).addTo(GLMAP);
+  if (opts.onClick) el.addEventListener('click', (ev) => { ev.stopPropagation(); opts.onClick(); });
+  const h = {
+    ll, _m: m, el, zoff: opts.z || 0,
+    setLL(l2) { this.ll = l2; m.setLngLat(glLL(l2)); this.syncZ(); },
+    setZ(off) { this.zoff = off; this.syncZ(); },
+    // Leaflet stacks markers by projected y + zIndexOffset; MapLibre leaves
+    // z to us. Mirror the rule so southern seals overlap northern ones and
+    // the 400/800/900 offsets keep their meaning. Re-synced on every settle.
+    syncZ() {
+      if (!GLMAP) return;
+      const p = GLMAP.project(glLL(this.ll));
+      this.el.style.zIndex = String(Math.round(1000 + p.y + this.zoff));
+    },
+    remove() { m.remove(); },
+  };
+  h.syncZ();
+  if (layer) layer.ms.push(h);
+  return h;
+}
+
 /* ---------- pins ---------- */
-function sealIcon(group) {
+function sealHtml(group) {
   const lead = group.entries[0];
   const name = lead.v.n;
   const glyph = MAP_GLYPH[lead.cat] || MAP_GLYPH.dayout;
   const badge = group.entries.length > 1 ? `<span class="badge">${group.entries.length}</span>` : '';
-  return L.divIcon({
-    className: 'vpin-wrap',
-    iconSize: [44, 62], iconAnchor: [22, 52],
-    html: `<div class="vpin" data-rank="${group.rank}" data-key="${lead.key}">
-      <span class="pinbody"><span class="disc">${glyph}${badge}</span><span class="tip"></span></span>
-      <span class="lbl"><b>${esc(name)}</b></span>
-    </div>`,
-  });
+  return `<div class="vpin" data-rank="${group.rank}" data-key="${lead.key}">
+    <span class="pinbody"><span class="disc">${glyph}${badge}</span><span class="tip"></span></span>
+    <span class="lbl"><b>${esc(name)}</b></span>
+  </div>`;
 }
 
 function showCityPins(cityId) {
@@ -9728,23 +9986,22 @@ function showCityPins(cityId) {
     entries.sort((a, b) => a.rank - b.rank);
     const group = { entries, rank: entries[0].rank, ll: entries[0].ll };
     mapGroups.push(group);
-    const m = L.marker(group.ll, { icon: sealIcon(group), riseOnHover: true, keyboard: false });
-    m.on('click', () => selectPin(m, group));
-    group.marker = m;
-    pinLayer.addLayer(m);
+    group.marker = addPin(pinLayer, group.ll, {
+      className: 'vpin-wrap', w: 44, h: 62, ax: 22, ay: 52,
+      html: sealHtml(group), riseOnHover: true,
+      onClick: () => selectPin(group.marker, group),
+    });
   }
   // neighbouring destinations render as quiet gold dots
   for (const c of CITIES) {
     if (c.id === cityId) continue;
     const ci = buildCityIndex()[c.id];
     if (!ci) continue;
-    const dot = L.marker(ci.center, {
-      interactive: true, keyboard: false,
-      icon: L.divIcon({ className: 'citydot-wrap', iconSize: [120, 40], iconAnchor: [60, 20],
-        html: `<div class="citydot"><span class="pt"></span><span class="nm serif">${esc(c.name)}</span></div>` }),
+    addPin(worldLayer, ci.center, {
+      className: 'citydot-wrap', w: 120, h: 40, ax: 60, ay: 20,
+      html: `<div class="citydot"><span class="pt"></span><span class="nm serif">${esc(c.name)}</span></div>`,
+      onClick: () => diveToCity(c.id, true),
     });
-    dot.on('click', () => diveToCity(c.id, true));
-    worldLayer.addLayer(dot);
   }
   applyBands(true);
 }
@@ -9780,7 +10037,7 @@ function applyFilter() {
   hideMapCard();
   for (const g of mapGroups) {
     g.hidden = !!mapFilter && !g.entries.some(e => e.cat === mapFilter);
-    const el = g.marker.getElement();
+    const el = g.marker.el;
     if (el) el.classList.toggle('hid', g.hidden);
   }
   applyBands(false);
@@ -9789,17 +10046,25 @@ function applyFilter() {
 let selectedPin = null, selectedGroup = null;
 function selectPin(marker, group, preferKey, noPan) {
   if (selectedPin) selectedPin.classList.remove('sel');
-  if (selectedGroup && selectedGroup.marker) selectedGroup.marker.setZIndexOffset(0);
+  if (selectedGroup && selectedGroup.marker) selectedGroup.marker.setZ(0);
   selectedGroup = group;
-  marker.setZIndexOffset(900);              // above any cluster disc
+  marker.setZ(900);                         // above any cluster disc
   reclusterPins();                          // re-gather WITHOUT the selected seal
-  const el = marker.getElement()?.querySelector('.vpin');
+  const el = marker.el && marker.el.querySelector('.vpin');
   if (el) { el.classList.add('sel'); el.classList.remove('clustered'); selectedPin = el; }
-  if (!noPan) {
-    const target = LMAP.project(marker.getLatLng(), LMAP.getZoom()).subtract([0, LMAP.getSize().y * 0.12]);
+  if (!noPan) camPanToPin(group.ll);
+  showMapCard(group, preferKey);
+}
+
+/* pan-with-offset: the card owns the bottom of the glass, so the camera
+   settles the chosen seal off the true centre by 12% of the height */
+function camPanToPin(ll) {
+  if (ENGINE === 'gl') {
+    GLMAP.easeTo({ center: glLL(ll), offset: [0, -Math.round(mapSizeXY().y * 0.12)], duration: 450 });
+  } else {
+    const target = LMAP.project(ll, LMAP.getZoom()).subtract([0, LMAP.getSize().y * 0.12]);
     LMAP.panTo(LMAP.unproject(target, LMAP.getZoom()), { animate: true, duration: 0.45, easeLinearity: 0.25 });
   }
-  showMapCard(group, preferKey);
 }
 
 /* Card pin → OUR cartography: open the map landed on this exact venue —
@@ -9815,7 +10080,7 @@ function openMapAtVenue(cityId, part, idx) {
   }
 }
 function landOnPendingVenue() {
-  if (!pendingVenueKey || !LMAP || !mapGroups) return;
+  if (!pendingVenueKey || !theMap() || !mapGroups) return;
   const key = pendingVenueKey;
   pendingVenueKey = null;
   const g = mapGroups.find(gr => gr.entries.some(e => e.key === key));
@@ -9829,7 +10094,12 @@ function landOnPendingVenue() {
   applyFilter();
   // district framing, not street level: the venue in its neighbourhood with
   // the coast and its named neighbours in view (Mishari 17:37, example two)
-  LMAP.setView(g.ll, BAND_MID + 0.1, { animate: false });
+  if (ENGINE === 'gl') {
+    // same pose the dive arrives in — pitched, level bearing
+    GLMAP.jumpTo({ center: glLL(g.ll), zoom: BAND_MID + 0.1, pitch: 42, bearing: 0 });
+  } else {
+    LMAP.setView(g.ll, BAND_MID + 0.1, { animate: false });
+  }
   applyBands(false);
   selectPin(g.marker, g, key);
 }
@@ -9842,7 +10112,7 @@ function landOnPendingVenue() {
 function reclusterPins() {
   if (!mapGroups || !clusterLayer) return;
   clusterLayer.clearLayers();
-  const z = LMAP.getZoom();
+  const z = mapZoom();
   const R = z >= BAND_NEAR ? 44 : z >= BAND_MID ? 38 : 32;   // px between centres
   const pts = [];
   for (const g of mapGroups) {
@@ -9852,7 +10122,7 @@ function reclusterPins() {
     // must stay visible at any zoom (Mishari 07:31: BACK and the spa were
     // swallowed by the "4" and "5" discs, so no red showed at all)
     if (g === selectedGroup) continue;
-    pts.push({ g, pt: LMAP.latLngToContainerPoint(g.ll) });
+    pts.push({ g, pt: toScreen(g.ll) });
   }
   pts.sort((a, b) => a.g.rank - b.g.rank);
   const taken = new Set();
@@ -9869,19 +10139,26 @@ function reclusterPins() {
     members.forEach(m => { m.g.clustered = true; });
     const count = members.reduce((n, m) => n + m.g.entries.length, 0);
     const lls = members.map(m => m.g.ll);
-    const m = L.marker(members[0].g.ll, {
-      keyboard: false, zIndexOffset: 400,
-      icon: L.divIcon({ className: 'cpin-wrap', iconSize: [48, 60], iconAnchor: [24, 50],
-        html: `<div class="vpin cpin"><span class="pinbody"><span class="disc"><b>${count}</b></span><span class="tip"></span></span></div>` }),
+    addPin(clusterLayer, members[0].g.ll, {
+      className: 'cpin-wrap', w: 48, h: 60, ax: 24, ay: 50, z: 400,
+      html: `<div class="vpin cpin"><span class="pinbody"><span class="disc"><b>${count}</b></span><span class="tip"></span></span></div>`,
+      onClick: () => camClusterZoom(lls),
     });
-    m.on('click', () => {
-      LMAP.flyToBounds(L.latLngBounds(lls).pad(0.35), { maxZoom: 18, duration: 0.7, easeLinearity: 0.25 });
-    });
-    clusterLayer.addLayer(m);
   }
   for (const g of mapGroups) {
-    const el = g.marker.getElement();
+    const el = g.marker.el;
     if (el) el.classList.toggle('clustered', !!g.clustered);
+    if (ENGINE === 'gl') g.marker.syncZ();   // keep the y-stacking honest as the camera moves
+  }
+}
+
+function camClusterZoom(lls) {
+  if (ENGINE === 'gl') {
+    const b = new maplibregl.LngLatBounds();
+    lls.forEach(ll => b.extend(glLL(ll)));
+    GLMAP.fitBounds(b, { padding: 70, maxZoom: 17, duration: 700 });
+  } else {
+    LMAP.flyToBounds(L.latLngBounds(lls).pad(0.35), { maxZoom: 18, duration: 0.7, easeLinearity: 0.25 });
   }
 }
 
@@ -9889,32 +10166,27 @@ function reclusterPins() {
 function bandOf(z) { return z >= BAND_NEAR ? 'near' : z >= BAND_MID ? 'mid' : 'far'; }
 
 function onMapSettle() {
-  if (!LMAP || !mapDom.classList.contains('open')) return;
+  if (!theMap() || !mapDom.classList.contains('open')) return;
   applyBands(false);
 }
 
 function applyBands(initial) {
-  const z = LMAP.getZoom();
+  const z = mapZoom();
   mapDom.dataset.z = bandOf(z);
   mapDom.classList.toggle('world-wide', z < 6);
-  // street-name tiles join at NEAR only
-  if (z >= BAND_NEAR && !labelTiles) {
-    labelTiles = L.tileLayer(MAP_LABEL_TILES, {
-      subdomains: 'abcd', maxZoom: 18, pane: 'shadowPane',
-      updateWhenIdle: true, updateWhenZooming: false, keepBuffer: 1, errorTileUrl: DARK_TILE, opacity: 0,
-    }).addTo(LMAP);
-    setTimeout(() => labelTiles && labelTiles.setOpacity(0.85), 60);
-  } else if (labelTiles) labelTiles.setOpacity(z >= BAND_NEAR && !onOsmFallback ? 0.85 : 0);
+  if (ENGINE === 'leaflet') bandLabels_L(z);
+  // GL: no label overlay exists — the vector chart carries its own typography,
+  // zoom-staged inside privee-chart.json
 
   if (!mapGroups) return;
   reclusterPins();
   const band = mapDom.dataset.z;
-  const bounds = LMAP.getBounds().pad(0.12);
+  const within = viewTester(0.12);
   // label budget per band: FAR = flagships only, MID = top 20 with grid
   // collision cull, NEAR = everyone (density is naturally low)
   const claimed = [];   // true label-rect collision, rank order wins
   const labelFits = (ll) => {
-    const p = LMAP.latLngToContainerPoint(ll);
+    const p = toScreen(ll);
     const r = { l: p.x - 62, r: p.x + 62, t: p.y + 4, b: p.y + 26 };
     for (const c of claimed)
       if (r.l < c.r && r.r > c.l && r.t < c.b && r.b > c.t) return false;
@@ -9923,10 +10195,11 @@ function applyBands(initial) {
   };
   let medallions = 0;
   for (const g of mapGroups.slice().sort((a, b) => a.rank - b.rank)) {
-    const el = g.marker.getElement()?.querySelector('.vpin');
+    const wrap = g.marker.el;
+    const el = wrap && wrap.querySelector('.vpin');
     if (!el) continue;
     if (g.hidden || g.clustered) { el.classList.remove('named'); continue; }
-    const visible = bounds.contains(g.marker.getLatLng());
+    const visible = within(g.ll);
     // collision is the only gate: flagships (lower rank, iterated first)
     // claim their space; everyone else speaks wherever room remains
     let label = visible && (band === 'near' || labelFits(g.ll));
@@ -9942,20 +10215,62 @@ function applyBands(initial) {
   }
 }
 
+/* street-name tiles join at NEAR only — a raster-overlay mechanism, Leaflet only */
+function bandLabels_L(z) {
+  if (z >= BAND_NEAR && !labelTiles) {
+    labelTiles = L.tileLayer(MAP_LABEL_TILES, {
+      subdomains: 'abcd', maxZoom: 18, pane: 'shadowPane',
+      updateWhenIdle: true, updateWhenZooming: false, keepBuffer: 1, errorTileUrl: DARK_TILE, opacity: 0,
+    }).addTo(LMAP);
+    setTimeout(() => labelTiles && labelTiles.setOpacity(0.85), 60);
+  } else if (labelTiles) labelTiles.setOpacity(z >= BAND_NEAR && !onOsmFallback ? 0.85 : 0);
+}
+
 /* ---------- me ---------- */
 function placeMe(lat, lng, accuracy) {
   const ll = [lat, lng];
   if (!meMarker) {
-    meMarker = L.marker(ll, {
-      interactive: false, keyboard: false, zIndexOffset: 800,
-      icon: L.divIcon({ className: 'me-wrap', iconSize: [64, 64], iconAnchor: [32, 32],
-        html: '<div class="me-dot"><span class="halo"></span><span class="core"></span><span class="you">You</span></div>' }),
-    }).addTo(LMAP);
-  } else meMarker.setLatLng(ll);
-  if (accuracy > 150) {
-    if (!meHalo) meHalo = L.circle(ll, { radius: accuracy, weight: 0, fillColor: '#c8a24b', fillOpacity: 0.07 }).addTo(LMAP);
-    else meHalo.setLatLng(ll).setRadius(accuracy);
-  } else if (meHalo) { meHalo.remove(); meHalo = null; }
+    meMarker = addPin(null, ll, {
+      className: 'me-wrap', w: 64, h: 64, ax: 32, ay: 32, z: 800, interactive: false,
+      html: '<div class="me-dot"><span class="halo"></span><span class="core"></span><span class="you">You</span></div>',
+    });
+  } else meMarker.setLL(ll);
+  if (accuracy > 150) placeMeHalo(ll, accuracy);
+  else if (meHalo) { meHalo.remove(); meHalo = null; }
+}
+
+function placeMeHalo(ll, accuracy) {
+  if (ENGINE === 'gl') placeMeHalo_GL(ll, accuracy);
+  else placeMeHalo_L(ll, accuracy);
+}
+function placeMeHalo_L(ll, accuracy) {
+  if (!meHalo) {
+    const c = L.circle(ll, { radius: accuracy, weight: 0, fillColor: '#c8a24b', fillOpacity: 0.07 }).addTo(LMAP);
+    meHalo = { _c: c, remove() { c.remove(); } };
+  } else meHalo._c.setLatLng(ll).setRadius(accuracy);
+}
+/* GL twin: a screen-space disc sized from ground resolution — no style
+   layer, so it survives the online style re-set for free */
+function placeMeHalo_GL(ll, accuracy) {
+  if (!meHalo) {
+    const el = document.createElement('div');
+    el.className = 'me-halo-gl';
+    const m = new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat(glLL(ll)).addTo(GLMAP);
+    meHalo = { _m: m, el, ll, acc: accuracy, remove() { m.remove(); } };
+  } else { meHalo.ll = ll; meHalo.acc = accuracy; meHalo._m.setLngLat(glLL(ll)); }
+  sizeHalo();
+}
+function sizeHalo() {
+  if (!meHalo || ENGINE !== 'gl' || !GLMAP) return;
+  // metres-per-pixel at this latitude/zoom (512px world tiles)
+  const mpp = 40075016.686 * Math.cos(meHalo.ll[0] * Math.PI / 180) / (512 * Math.pow(2, GLMAP.getZoom()));
+  const d = Math.max(0, 2 * meHalo.acc / mpp);
+  meHalo.el.style.width = meHalo.el.style.height = d.toFixed(1) + 'px';
+}
+
+function camFlyLL(ll, zoom, ms) {
+  if (ENGINE === 'gl') GLMAP.flyTo({ center: glLL(ll), zoom, duration: ms });
+  else LMAP.flyTo(ll, zoom, { duration: ms / 1000, easeLinearity: 0.2 });
 }
 
 function startGeo(fly) {
@@ -9967,7 +10282,7 @@ function startGeo(fly) {
   navigator.geolocation.getCurrentPosition((pos) => {
     localStorage.setItem(GEO_KEY, JSON.stringify({ la: pos.coords.latitude, lo: pos.coords.longitude, t: Date.now() }));
     placeMe(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy || 0);
-    if (fly) LMAP.flyTo([pos.coords.latitude, pos.coords.longitude], Math.max(LMAP.getZoom(), 15.5), { duration: 0.9 });
+    if (fly) camFlyLL([pos.coords.latitude, pos.coords.longitude], Math.max(mapZoom(), 15.5), 900);
     if (geoWatch === null && mapDom.classList.contains('open')) {
       let last = 0;
       geoWatch = navigator.geolocation.watchPosition((p) => {
@@ -9990,7 +10305,7 @@ function stopGeo() {
    the router is slow, down, or we're offline, the km reading simply stays. */
 const DRIVE_ETA = Object.create(null);       // "key@~1km-position" -> "14 min"
 function geoNow() {
-  if (meMarker) { const m = meMarker.getLatLng(); return { la: m.lat, lo: m.lng }; }
+  if (meMarker) { const m = meMarker.ll; return { la: m[0], lo: m[1] }; }
   try {
     const c = JSON.parse(localStorage.getItem(GEO_KEY) || 'null');
     if (c && Date.now() - c.t < 6 * 3600 * 1000) return { la: c.la, lo: c.lo };
@@ -10029,8 +10344,8 @@ function showMapCard(group, preferKey) {
   const dj = e.cat === 'nightclubs' ? djTonight(e.key) : null;
   let dist = '';
   if (meMarker) {
-    const m = meMarker.getLatLng();
-    const km = mapHaversine(e.ll[0], e.ll[1], m.lat, m.lng);
+    const m = meMarker.ll;
+    const km = mapHaversine(e.ll[0], e.ll[1], m[0], m[1]);
     dist = km < 1 ? ` · ${Math.round(km * 1000)} m from you` : km < 100 ? ` · ${km.toFixed(1)} km from you` : '';
   }
   const chooser = group.entries.length > 1 ? `<div class="mc-choose">${group.entries.map((x, i) =>
@@ -10115,9 +10430,14 @@ function stepVenue(dir) {
   const prefer = mapFilter ? ((g.entries.find(e => e.cat === mapFilter) || g.entries[0]).key) : null;
   if (typeof haptic === 'function') haptic();
   stepDir = dir;
-  const Z = Math.max(14.1, LMAP.getZoom());
-  const pt = LMAP.project(g.ll, Z).subtract([0, LMAP.getSize().y * 0.12]);
-  LMAP.flyTo(LMAP.unproject(pt, Z), Z, { duration: 0.55, easeLinearity: 0.25 });
+  const Z = Math.max(14.1, mapZoom());
+  if (ENGINE === 'gl') {
+    // same 12%-above-the-card offset as camPanToPin, flown instead of eased
+    GLMAP.flyTo({ center: glLL(g.ll), zoom: Z, offset: [0, -Math.round(mapSizeXY().y * 0.12)], duration: 550 });
+  } else {
+    const pt = LMAP.project(g.ll, Z).subtract([0, LMAP.getSize().y * 0.12]);
+    LMAP.flyTo(LMAP.unproject(pt, Z), Z, { duration: 0.55, easeLinearity: 0.25 });
+  }
   selectPin(g.marker, g, prefer, true);   // the fly owns the camera
 }
 function hideMapCard() {
@@ -10126,9 +10446,9 @@ function hideMapCard() {
   if (mapDom) mapDom.classList.remove('card-open');   // the home pill may return
   if (selectedPin) { selectedPin.classList.remove('sel'); selectedPin = null; }
   if (selectedGroup) {
-    if (selectedGroup.marker) selectedGroup.marker.setZIndexOffset(0);
+    if (selectedGroup.marker) selectedGroup.marker.setZ(0);
     selectedGroup = null;
-    if (LMAP && mapGroups) reclusterPins();   // the freed seal may gather again
+    if (theMap() && mapGroups) reclusterPins();   // the freed seal may gather again
   }
 }
 
@@ -10145,17 +10465,18 @@ function renderWorldDots() {
   for (const c of CITIES) {
     const ci = buildCityIndex()[c.id];
     if (!ci) continue;
-    const dot = L.marker(ci.center, {
-      keyboard: false,
-      icon: L.divIcon({ className: 'citydot-wrap', iconSize: [140, 44], iconAnchor: [70, 22],
-        html: `<div class="citydot big"><span class="pt"></span><span class="nm serif">${esc(c.name)}</span></div>` }),
+    addPin(worldLayer, ci.center, {
+      className: 'citydot-wrap', w: 140, h: 44, ax: 70, ay: 22,
+      html: `<div class="citydot big"><span class="pt"></span><span class="nm serif">${esc(c.name)}</span></div>`,
+      onClick: () => diveToCity(c.id, true),
     });
-    dot.on('click', () => diveToCity(c.id, true));
-    worldLayer.addLayer(dot);
   }
 }
 
 function showWorldStage(animate) {
+  if (!theMap() || !pinLayer) return;   // engine still deciding (review gap 1):
+                                        // a dead tap beats a TypeError; the open
+                                        // sequence re-stages the world itself
   ++diveToken;
   mapCityId = null;
   setMapHome(null);
@@ -10164,9 +10485,18 @@ function showWorldStage(animate) {
   renderFilterRail(null);
   renderWorldDots();
   setPlaque('Choose a destination', 'The World');
-  const target = [34, 8], z = 3.4;
-  if (animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) LMAP.flyTo(target, z, { duration: 1.4, easeLinearity: 0.2 });
-  else LMAP.setView(target, z);
+  const target = [34, 8];
+  const noMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (ENGINE === 'gl') {
+    // world stage flattens: pitch and bearing both return to 0 so the globe
+    // reads as the chart, not a tilted horizon. z 2.4 ≈ raster 3.4 (512px tiles).
+    const cam = { center: glLL(target), zoom: 2.4, pitch: 0, bearing: 0 };
+    if (animate && !noMotion) GLMAP.flyTo({ ...cam, duration: 1400 });
+    else GLMAP.jumpTo(cam);
+  } else {
+    if (animate && !noMotion) LMAP.flyTo(target, 3.4, { duration: 1.4, easeLinearity: 0.2 });
+    else LMAP.setView(target, 3.4);
+  }
   const card = mapDom.querySelector('#mapcard');
   card.innerHTML = `<div class="mc-world">
     <div class="eyebrow gold">Where shall we begin?</div>
@@ -10199,6 +10529,25 @@ function cityFrame(cityId) {
   return { bounds: b, maxZoom: 14 };
 }
 
+/* the dive camera — the twins share one motion brief: "sexy and fluid".
+   GL banks in with pitch; Leaflet keeps its bounds flight. */
+function camDive(cityId, animate) {
+  const noMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (ENGINE === 'gl') {
+    const ci = buildCityIndex()[cityId];
+    // BAND_MID+0.1 lands in the same district framing landOnPendingVenue
+    // uses; pitch 42 tilts the city up to meet you, bearing straightens —
+    // the city must always arrive level.
+    const cam = { center: glLL(ci.center), zoom: BAND_MID + 0.1, pitch: 42, bearing: 0 };
+    if (animate && !noMotion) GLMAP.flyTo({ ...cam, speed: 0.9, curve: 1.6 });
+    else GLMAP.jumpTo(cam);
+  } else {
+    const f = cityFrame(cityId);
+    if (animate && !noMotion) LMAP.flyToBounds(f.bounds, { maxZoom: f.maxZoom, duration: 1.2, easeLinearity: 0.18 });
+    else LMAP.fitBounds(f.bounds, { maxZoom: f.maxZoom });
+  }
+}
+
 function diveToCity(cityId, animate) {
   const ci = buildCityIndex()[cityId];
   if (!ci) return;
@@ -10211,11 +10560,8 @@ function diveToCity(cityId, animate) {
   renderFilterRail(cityId);
   setPlaque(ci.name, `The World · ${ci.country || ''}`);
   showCityPins(cityId);
-  const f = cityFrame(cityId);
-  if (animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    LMAP.flyToBounds(f.bounds, { maxZoom: f.maxZoom, duration: 1.2, easeLinearity: 0.18 });
-    bloomPins();
-  } else LMAP.fitBounds(f.bounds, { maxZoom: f.maxZoom });
+  camDive(cityId, animate);
+  if (animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) bloomPins();
 }
 
 /* The arrival: a fresh open holds one breath on the dark globe — the whole
@@ -10234,12 +10580,22 @@ function cinematicDive(cityId) {
   renderFilterRail(null);
   renderWorldDots();
   setPlaque(ci.name, `The World · ${ci.country || ''}`);
-  LMAP.setView([Math.max(8, Math.min(45, ci.center[0] - 6)), ci.center[1]], 3.2, { animate: false });
-  const f = cityFrame(cityId);
+  const perch = [Math.max(8, Math.min(45, ci.center[0] - 6)), ci.center[1]];
+  if (ENGINE === 'gl') {
+    // the breath on the globe starts flat; the dive itself banks in
+    GLMAP.jumpTo({ center: glLL(perch), zoom: 2.2, pitch: 0, bearing: 0 });
+  } else {
+    LMAP.setView(perch, 3.2, { animate: false });
+  }
   setTimeout(() => {
     if (token !== diveToken || !mapDom.classList.contains('open')) return;
-    LMAP.flyToBounds(f.bounds, { maxZoom: f.maxZoom, duration: 2.0, easeLinearity: 0.22 });
-    LMAP.once('moveend', () => {
+    if (ENGINE === 'gl') {
+      GLMAP.flyTo({ center: glLL(ci.center), zoom: BAND_MID + 0.1, pitch: 42, bearing: 0, speed: 0.9, curve: 1.6 });
+    } else {
+      const f = cityFrame(cityId);
+      LMAP.flyToBounds(f.bounds, { maxZoom: f.maxZoom, duration: 2.0, easeLinearity: 0.22 });
+    }
+    theMap().once('moveend', () => {
       if (token !== diveToken || !mapDom.classList.contains('open')) return;
       worldLayer.clearLayers();
       mapFilter = null;
@@ -10254,7 +10610,8 @@ function bloomPins() {
   // radial stagger from the frame centre — the arrival flourish
   requestAnimationFrame(() => {
     const pins = [...mapDom.querySelectorAll('.vpin')];
-    const c = LMAP.getSize().divideBy(2);
+    const sz = mapSizeXY();
+    const c = { x: sz.x / 2, y: sz.y / 2 };
     pins.map(el => {
       const r = el.getBoundingClientRect();
       const d = Math.hypot(r.left + r.width / 2 - c.x, r.top + r.height / 2 - c.y);
@@ -10277,40 +10634,57 @@ function nearestCity(la, lo) {
 }
 
 function openMapView(cityId) {
-  ensureMap();
+  // the overlay opens INSTANTLY on the old synchronous contract — only the
+  // engine decision (first ever open: lazy GL load) is async behind it
+  ensureMapDom();
   clearTimeout(mapIdleTimer);
   mapDom.classList.add('open');
-  requestAnimationFrame(() => LMAP.invalidateSize());
   document.body.classList.add('map-under');
+  const seq = ++openSeq;
+  decideEngine().then(() => {
+    // closed (or re-opened) while the script was still arriving — stand down
+    if (seq !== openSeq || !mapDom || !mapDom.classList.contains('open')) return;
+    ensureMap();
+    requestAnimationFrame(() => {
+      if (!theMap()) return;
+      if (ENGINE === 'gl') GLMAP.resize(); else LMAP.invalidateSize();
+    });
 
-  let target = cityId;
-  if (!target && mapCityId) target = null;      // reopen: resume where we were
-  if (!target && !mapCityId) {
-    let cached = null;
-    try { cached = JSON.parse(localStorage.getItem(GEO_KEY) || 'null'); } catch (_) {}
-    if (cached && Date.now() - cached.t < 6 * 3600 * 1000) {
-      const near = nearestCity(cached.la, cached.lo);
-      if (near.km <= WORLD_KM) {
-        target = near.id;
-        if (near.km > CITY_RADIUS_KM) setTimeout(() =>
-          setPlaque(buildCityIndex()[near.id].name, `Nearest destination · ${Math.round(near.km)} km`), 1400);
+    let target = cityId;
+    if (!target && mapCityId) target = null;      // reopen: resume where we were
+    if (!target && !mapCityId) {
+      let cached = null;
+      try { cached = JSON.parse(localStorage.getItem(GEO_KEY) || 'null'); } catch (_) {}
+      if (cached && Date.now() - cached.t < 6 * 3600 * 1000) {
+        const near = nearestCity(cached.la, cached.lo);
+        if (near.km <= WORLD_KM) {
+          target = near.id;
+          if (near.km > CITY_RADIUS_KM) setTimeout(() =>
+            setPlaque(buildCityIndex()[near.id].name, `Nearest destination · ${Math.round(near.km)} km`), 1400);
+        }
       }
     }
-  }
-  if (target) {
-    if (cityId) {                     // deep link (city-page Map chip): direct dive
-      LMAP.setView(buildCityIndex()[target].center, Math.max(LMAP.getZoom() || 0, 9.5), { animate: false });
-      diveToCity(target, true);
-    } else cinematicDive(target);     // fresh geo-resolved open: the arrival
-  } else if (!mapCityId) {
-    showWorldStage(false);
-  } else {
-    // resuming a previous session's camera — just repaint bands
-    applyBands(false);
-  }
-  // a card pin queued an exact venue: land on it once the city's pins exist
-  if (pendingVenueKey) setTimeout(landOnPendingVenue, 40);
-  startGeo(false);
+    if (target) {
+      if (cityId) {                     // deep link (city-page Map chip): direct dive
+        if (ENGINE === 'gl') {
+          // pre-perch so the dive is a local flight, not a cross-globe one
+          // (8.5 ≈ raster 9.5 — the 512px-tile offset again)
+          GLMAP.jumpTo({ center: glLL(buildCityIndex()[target].center), zoom: Math.max(GLMAP.getZoom() || 0, 8.5) });
+        } else {
+          LMAP.setView(buildCityIndex()[target].center, Math.max(LMAP.getZoom() || 0, 9.5), { animate: false });
+        }
+        diveToCity(target, true);
+      } else cinematicDive(target);     // fresh geo-resolved open: the arrival
+    } else if (!mapCityId) {
+      showWorldStage(false);
+    } else {
+      // resuming a previous session's camera — just repaint bands
+      applyBands(false);
+    }
+    // a card pin queued an exact venue: land on it once the city's pins exist
+    if (pendingVenueKey) setTimeout(landOnPendingVenue, 40);
+    startGeo(false);
+  });
 }
 
 function closeMapView() {
@@ -10319,11 +10693,17 @@ function closeMapView() {
   document.body.classList.remove('map-under');
   stopGeo();
   hideMapCard();
+  // the camera never keeps a twist across sessions: whatever the fingers
+  // left behind, the next open starts level
+  if (GLMAP) { try { GLMAP.setBearing(0); } catch (_) {} }
   clearTimeout(mapIdleTimer);
   mapIdleTimer = setTimeout(() => {
-    if (mapDom && !mapDom.classList.contains('open') && LMAP) {
-      LMAP.remove(); LMAP = null; pinLayer = worldLayer = labelTiles = null;
+    if (mapDom && !mapDom.classList.contains('open') && theMap()) {
+      if (LMAP) { LMAP.remove(); LMAP = null; }
+      if (GLMAP) { GLMAP.remove(); GLMAP = null; }   // frees the WebGL context too
+      pinLayer = worldLayer = clusterLayer = labelTiles = null;
       meMarker = null; meHalo = null; mapGroups = null;
+      mapCityId = null;   // a fresh instance must geo-target, never 'resume' a camera it never had
       mapDom.remove(); mapDom = null;
     }
   }, IDLE_DESTROY_MS);
