@@ -1482,6 +1482,27 @@ body {
 .tile .display { font-size: 22px; letter-spacing: 0.16em; text-transform: uppercase; text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7); }
 .tile .count { font-size: 9px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.75); }
 
+/* swipe-to-remove (his 18:14 ask): slider + bordeaux action past the edge */
+.ag-item[data-del] { position: relative; overflow: hidden; }
+.swipe-wrap {
+  position: relative; display: flex; align-items: center; gap: 14px;   /* mirrors .ag-item */
+  width: 100%;
+  transition: transform 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform;
+}
+.swipedel {
+  position: absolute; right: -106px; top: -8px; bottom: -8px; width: 96px;   /* bleeds over the row padding to fill full height */
+  border: none; cursor: pointer;
+  background: linear-gradient(180deg, #7a2020, #5c1616);
+  color: rgba(244, 239, 230, 0.95);
+  font-family: var(--sans); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  border-radius: 0 17px 17px 0;
+}
+.ag-item.collapsing {
+  transition: max-height 0.24s ease, opacity 0.2s ease, margin 0.24s ease, padding 0.24s ease;
+  opacity: 0; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;
+}
+
 /* ---------- venue feed ---------- */
 
 .feedhead { position: relative; padding: 30px 26px 8px; }
@@ -2779,7 +2800,7 @@ body {
   background: rgba(11, 10, 8, 0.45);
   -webkit-backdrop-filter: blur(9px);
   backdrop-filter: blur(9px);
-  border-radius: 0 14px 14px 0;
+  border-radius: 0 17px 17px 0;
   border-left: 2px solid rgba(200, 162, 75, 0.55);
   padding: 10px 14px;
   margin-bottom: 16px;
@@ -4178,8 +4199,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '25 July 2026 · 19:41 CEST';
-const APP_BUILD = 'v365';
+const COLLECTION_UPDATED = '26 July 2026 · 18:26 CEST';
+const APP_BUILD = 'v371';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6372,6 +6393,95 @@ function viewCity(cityId) {
   $shell.scrollTo(0, 0);
 }
 
+/* Swipe-left to remove (his 18:14 ask): the iOS gesture, in the house voice.
+   Each deletable row gets its content wrapped in a slider; a bordeaux Remove
+   action waits past the right edge. Horizontal-dominant left drags only —
+   vertical scroll, the pull-down engine and edge-back all keep their lanes.
+   Transform/opacity only while dragging (paint law); the collapse on commit
+   is a one-off max-height ease on a single row. */
+let openSwipeRow = null;
+function closeSwipeRow() {
+  if (!openSwipeRow) return;
+  const w = openSwipeRow.querySelector('.swipe-wrap');
+  if (w) w.style.transform = '';
+  openSwipeRow.classList.remove('swiped');
+  openSwipeRow = null;
+}
+function swipeDelete(row) {
+  const [kind, iso, payload] = row.dataset.del.split('§');
+  row.style.maxHeight = row.offsetHeight + 'px';
+  row.classList.add('collapsing');
+  requestAnimationFrame(() => { row.style.maxHeight = '0px'; });
+  setTimeout(() => {
+    if (kind === 'plan') {
+      const d = new Date(iso + 'T12:00:00');
+      togglePlan(iso, payload, `${DAY_FULL[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]}`);
+    } else if (kind === 'trip') {
+      const gone = (trips[iso] || []).splice(+payload, 1)[0];
+      if (trips[iso] && !trips[iso].length) delete trips[iso];
+      persistTrips();
+      toast(gone ? `${gone.hl} removed` : 'Removed');
+    }
+    openSwipeRow = null;
+    renderRoute(true);
+  }, 240);
+}
+function wireSwipeDelete() {
+  openSwipeRow = null;
+  $app.querySelectorAll('.ag-item[data-del]').forEach(row => {
+    const wrap = document.createElement('div');
+    wrap.className = 'swipe-wrap';
+    while (row.firstChild) wrap.appendChild(row.firstChild);
+    const del = document.createElement('button');
+    del.className = 'swipedel';
+    del.textContent = 'Remove';
+    del.addEventListener('click', (e) => { e.stopPropagation(); haptic(); swipeDelete(row); });
+    wrap.appendChild(del);
+    row.appendChild(wrap);
+    let sx = 0, sy = 0, dx = 0, armed = false, alive = false;
+    row.addEventListener('touchstart', (e) => {
+      if (openSwipeRow && openSwipeRow !== row) closeSwipeRow();
+      const t = e.touches[0]; sx = t.clientX; sy = t.clientY;
+      dx = row.classList.contains('swiped') ? -96 : 0;
+      armed = false; alive = true;
+      wrap.style.transition = 'none';
+    }, { passive: true });
+    row.addEventListener('touchmove', (e) => {
+      if (!alive) return;
+      const t = e.touches[0];
+      const mx = t.clientX - sx, my = t.clientY - sy;
+      if (!armed) {
+        if (Math.abs(my) > Math.abs(mx)) { alive = false; wrap.style.transition = ''; return; }  // a scroll — not ours
+        if (Math.abs(mx) < 10) return;
+        armed = true;
+      }
+      const x = Math.max(-140, Math.min(0, dx + mx));
+      wrap.style.transform = `translateX(${x}px)`;
+      if (e.cancelable) e.preventDefault();
+    }, { passive: false });
+    const settle = (e) => {
+      if (!alive) return;
+      alive = false;
+      wrap.style.transition = '';
+      const t = (e.changedTouches || [])[0];
+      const mx = t ? t.clientX - sx : 0;
+      const x = dx + mx;
+      if (!armed) return;
+      if (x < -Math.min(200, row.offsetWidth * 0.55)) { haptic(); swipeDelete(row); return; }  // full swipe commits
+      if (x < -56) { wrap.style.transform = 'translateX(-96px)'; row.classList.add('swiped'); openSwipeRow = row; }
+      else { wrap.style.transform = ''; row.classList.remove('swiped'); if (openSwipeRow === row) openSwipeRow = null; }
+    };
+    row.addEventListener('touchend', settle, { passive: true });
+    row.addEventListener('touchcancel', settle, { passive: true });
+    // an open row swallows its own tap (close instead of navigating)
+    row.addEventListener('click', (e) => {
+      if (e.target.closest && e.target.closest('.swipedel')) return;   // the action itself
+      if (row.classList.contains('swiped')) { e.stopPropagation(); e.preventDefault(); closeSwipeRow(); }
+    }, true);
+  });
+  $shell.addEventListener('scroll', closeSwipeRow, { passive: true, once: true });
+}
+
 function viewConcierge(cityId) {
   const city = CITY_BY_ID[cityId];
   const list = (typeof CONCIERGE !== 'undefined' && CONCIERGE[cityId]) || [];
@@ -7181,7 +7291,7 @@ function viewSaved() {
     const im = venueImg(cityId, catId, +idx, v);
     const tm = planTimes[selIso + '|' + k] || '';
     return { tm, html: `
-      <div class="ag-item cal" data-open="${k}">
+      <div class="ag-item cal" data-open="${k}" data-del="plan§${selIso}§${k}">
         <span class="ag-when serif${tm ? '' : ' tbd'}">${tm || '·'}</span>
         ${im ? `<span class="thumb" style="background-image:url('${im}')"></span>` : `<span class="thumb mono-mini serif">${v.n.charAt(0)}</span>`}
         <span class="meta">
@@ -7191,7 +7301,7 @@ function viewSaved() {
         <button class="ag-x" data-unplan="${selIso}|${k}" aria-label="Remove">✕</button>
       </div>` };
   }).filter(Boolean).concat((trips[selIso] || []).map((tr, i) => ({ tm: tr.tm || '', html: `
-      <div class="ag-item cal trip">
+      <div class="ag-item cal trip" data-del="trip§${selIso}§${i}">
         <span class="ag-when serif${tr.tm ? '' : ' tbd'}">${tr.tm || '·'}</span>
         <span class="thumb mono-mini tripic">${tr.k === 'flight' ? I.plane : I.car}</span>
         <span class="meta">
@@ -7241,7 +7351,7 @@ function viewSaved() {
       const im = venueImg(cityId, catId, +idx, v);
       const tm = planTimes[iso + '|' + k] || '';
       return { tm, html: `
-        <div class="ag-item cal ro" data-open="${k}" data-iso="${iso}">
+        <div class="ag-item cal ro" data-open="${k}" data-iso="${iso}" data-del="plan§${iso}§${k}">
           <span class="ag-when serif${tm ? '' : ' tbd'}">${tm || '·'}</span>
           ${im ? `<span class="thumb" style="background-image:url('${im}')"></span>` : `<span class="thumb mono-mini serif">${v.n.charAt(0)}</span>`}
           <span class="meta">
@@ -7249,8 +7359,8 @@ function viewSaved() {
             <span class="what">${CAT_SINGLE[catId] || catId} · ${city.name}</span>
           </span>
         </div>` };
-    }).filter(Boolean).concat((trips[iso] || []).map(tr => ({ tm: tr.tm || '', html: `
-        <div class="ag-item cal ro">
+    }).filter(Boolean).concat((trips[iso] || []).map((tr, i) => ({ tm: tr.tm || '', html: `
+        <div class="ag-item cal ro" data-del="trip§${iso}§${i}">
           <span class="ag-when serif${tr.tm ? '' : ' tbd'}">${tr.tm || '·'}</span>
           <span class="thumb mono-mini tripic">${tr.k === 'flight' ? I.plane : I.car}</span>
           <span class="meta">
@@ -7379,6 +7489,7 @@ function viewSaved() {
     toggleYear(id, ev ? ev.n : 'Event');
     renderRoute(true);
   }));
+  wireSwipeDelete();
   wireCards();
   $shell.scrollTo(0, 0);
 }
