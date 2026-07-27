@@ -1024,10 +1024,10 @@ body {
 }
 /* over card photos the badge wears the same smoked ribbon as name/eyebrow */
 .vcard .stars .rbadge {
-  background: rgba(12, 10, 7, 0.55);
-  border-radius: 8px;
-  padding: 4px 10px 5px;
-  margin-left: -10px;
+  /* on the black plate a chip is furniture — the line stands naked */
+  background: none;
+  padding: 0;
+  margin: 2px 0 0;
 }
 
 /* ---------- home ---------- */
@@ -1678,7 +1678,7 @@ body {
   position: relative;
   z-index: 2;
   padding: 14px 18px 16px;
-  background: #16130b;
+  background: #0d0b07;   /* black minimalist (his 27 Jul note) — near-void plate */
   border-radius: 0 0 var(--radius) var(--radius);
 }
 
@@ -1711,7 +1711,7 @@ body {
   
 }
 .vcard .stars { display: block; margin-bottom: 10px; }
-.vcard .blurb { font-size: 13px; line-height: 1.5; color: var(--ink-dim); font-weight: 300; margin-bottom: 2px; }
+.vcard .blurb { font-size: 13.5px; line-height: 1.55; color: var(--ink); font-weight: 300; margin-bottom: 2px; }
 
 .mono {
   position: relative;
@@ -4188,8 +4188,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '27 July 2026 · 16:23 CEST';
-const APP_BUILD = 'v397';
+const COLLECTION_UPDATED = '27 July 2026 · 16:29 CEST';
+const APP_BUILD = 'v400';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
