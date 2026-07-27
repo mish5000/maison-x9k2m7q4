@@ -1520,7 +1520,7 @@ body {
   /* below-fold cards aren't painted until scrolled near — the single biggest
      paint cost when a category page is freshly built mid-slide */
   content-visibility: auto;
-  contain-intrinsic-size: auto 470px;
+  contain-intrinsic-size: auto 390px;   /* measured: 368px Board 2 card + gap breath */
   /* Resting drop only — STATIC. The scroll-focus gold glow is a separate ::after
      layer cross-faded with opacity (compositor-only). box-shadow is NOT a
      compositable property in WebKit, so transitioning it repainted a 54px-blur,
@@ -1551,7 +1551,8 @@ body {
   border-radius: var(--radius) var(--radius) 0 0 !important;
   filter: saturate(1.07) brightness(1.06);
   position: relative;
-  aspect-ratio: 4 / 3.1;   /* the split card: photo is the top ~3/4, clean */
+  aspect-ratio: 16 / 10;   /* his Board 2 (28 Jul): the split card breathes tighter —
+                              photo drops from 4/3.1, card ~368px, everything kept */
   background-size: cover;
   background-position: center;
   /* re-establish the rounded clip the card gave up (overflow:visible) so the
@@ -1685,7 +1686,7 @@ body {
      word reads on solid dark, nothing fights the photograph (his sketch) */
   position: relative;
   z-index: 2;
-  padding: 14px 18px 16px;
+  padding: 11px 16px 13px;   /* Board 2: the plate tightens with the photo */
   background: #191509;   /* a tone OFF the canvas — the plate must read as the card's lower half, not the page (his 15:31: 'it should look like cards') */
   border-radius: 0 0 var(--radius) var(--radius);
 }
@@ -1719,7 +1720,11 @@ body {
   
 }
 .vcard .stars { display: block; margin-bottom: 10px; }
-.vcard .blurb { font-size: 13.5px; line-height: 1.55; color: var(--ink); font-weight: 300; margin-bottom: 2px; }
+.vcard .blurb {
+  font-size: 13.5px; line-height: 1.55; color: var(--ink); font-weight: 300; margin-bottom: 2px;
+  /* Board 2: one line on the card — the full blurb lives on the venue sheet */
+  display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+}
 
 .mono {
   position: relative;
@@ -4196,8 +4201,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '27 July 2026 · 23:43 CEST';
-const APP_BUILD = 'v416';
+const COLLECTION_UPDATED = '28 July 2026 · 01:07 CEST';
+const APP_BUILD = 'v419';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
