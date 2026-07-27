@@ -1519,7 +1519,7 @@ body {
      3-layer shadow into each card's backing store on the main thread every frame
      for 0.5s on both the card gaining AND losing focus — the measured ~3fps feed
      scroll. opacity on a pre-painted layer costs zero per-frame paint. */
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.34);
+  box-shadow: 0 0 0 1px rgba(200, 162, 75, 0.22), 0 12px 32px rgba(0, 0, 0, 0.34);   /* the rim binds photo + plate into ONE card (his 15:31) */
 }
 
 /* the gold focus halo — pre-painted, faded in on the GPU via opacity, never a
@@ -1678,7 +1678,7 @@ body {
   position: relative;
   z-index: 2;
   padding: 14px 18px 16px;
-  background: #0d0b07;   /* black minimalist (his 27 Jul note) — near-void plate */
+  background: #191509;   /* a tone OFF the canvas — the plate must read as the card's lower half, not the page (his 15:31: 'it should look like cards') */
   border-radius: 0 0 var(--radius) var(--radius);
 }
 
@@ -4188,8 +4188,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '27 July 2026 · 16:29 CEST';
-const APP_BUILD = 'v400';
+const COLLECTION_UPDATED = '27 July 2026 · 16:36 CEST';
+const APP_BUILD = 'v403';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
