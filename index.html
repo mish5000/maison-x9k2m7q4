@@ -1293,8 +1293,6 @@ body {
     radial-gradient(130% 130% at 50% 0%, #241d10 0%, #14100a 65%, #0e0b07 100%);
 }
 
-.concierge-tile .display { text-shadow: none; }
-
 .fixlist { padding: 6px 22px 10px; display: grid; gap: 16px; }
 
 .fixcard {
@@ -1339,15 +1337,15 @@ body {
    repaint the blurred shadow on the main thread every frame for its duration,
    on both the gaining and losing tile, per scroll focus change). */
 .tile {
-  /* the 1px gold rim is STATIC (plate-in-a-monograph framing; the .infocus
-     ::before ring at 0.4 now reads as a step-up, not an apparition) */
-  box-shadow: 0 0 0 1px rgba(200, 162, 75, 0.18), 0 8px 22px rgba(0, 0, 0, 0.30);
+  /* the same gold thread + drop the venue cards carry (27 Jul joint ruling:
+     the tile is a miniature of the split card — one grammar everywhere) */
+  box-shadow: 0 0 0 1.5px rgba(200, 162, 75, 0.45), 0 12px 32px rgba(0, 0, 0, 0.34);
   transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .tile::before {
   content: ''; position: absolute; inset: 0; z-index: -3; pointer-events: none;
   border-radius: inherit;
-  box-shadow: 0 0 0 1px rgba(200, 162, 75, 0.4), 0 16px 40px rgba(0, 0, 0, 0.42);
+  box-shadow: 0 0 0 1px rgba(200, 162, 75, 0.5), 0 0 30px rgba(200, 162, 75, 0.14), 0 20px 54px rgba(0, 0, 0, 0.5);
   opacity: 0;
   transition: opacity 0.5s ease;
 }
@@ -1427,43 +1425,53 @@ body {
 
 .tile {
   position: relative;
-  height: 116px;
+  height: 148px;
   border-radius: var(--radius);
   /* overflow VISIBLE so the ::before focus glow can bloom outward (paint law:
-     the glow fades via opacity, never a box-shadow transition); .bg and the
-     ::after veil re-clip to the radius themselves */
+     the glow fades via opacity, never a box-shadow transition); .bg re-clips
+     its own top corners */
   overflow: visible;
   min-width: 0;   /* overflow:visible re-arms the grid automatic-minimum (560px lesson) */
   border: none;
   padding: 0;
   cursor: pointer;
   isolation: isolate;
-  display: flex;
-  flex-direction: column;
-  /* label seat is bottom-left (citycard/hero grammar) — measured: the center
-     band of every tile photo spikes to p90 luminance 163-206 (tablecloths,
-     string lights) where the serif's hairlines dissolve; the bottom band is
-     the photo's calm zone AND the veil's existing floor */
-  align-items: flex-start;
-  justify-content: flex-end;
+  /* THE SPLIT TILE (27 Jul joint ruling — "I find this very hard to read",
+     LA tiles): the label never rides the photograph again. Photo clean on
+     top, ink on the black plate below — the tile is a miniature of the
+     approved venue card. Text-on-photo dissolved on p90-luminance imagery
+     and the 0.38 veil floor could not deepen (never-darken law). */
+  background: #191509;
   text-align: left;
-  gap: 5px;
-  padding: 0 20px 15px;
-  background: var(--bg-raised);
   width: 100%;
 }
 
-.tile .bg { position: absolute; inset: 0; z-index: -2; background-size: cover; background-position: center; filter: saturate(1.1) brightness(1.09); border-radius: inherit; }
-/* bottom-anchored veil ONLY — the old 0.30 centre radial haze is DELETED
-   (never-darken law: this pass makes every photo's centre strictly brighter;
-   the bottom floor keeps its exact 0.46, deepened nowhere) */
-.tile::after { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background:
-  linear-gradient(180deg, rgba(11, 10, 8, 0) 0%, rgba(11, 10, 8, 0) 52%, rgba(11, 10, 8, 0.10) 72%, rgba(11, 10, 8, 0.38) 100%); }
+/* photo band: stops 34px short of the bottom — that strip IS the plate */
+.tile .bg {
+  position: absolute; inset: 0 0 34px 0; z-index: -2;
+  background-size: cover; background-position: center;
+  filter: saturate(1.1) brightness(1.09);
+  border-radius: var(--radius) var(--radius) 0 0;
+  /* clip + own stacking context: without isolation WebKit lets the composited
+     img escape a rounded overflow clip while the tile animates (.rise) — the
+     vcard .photo lesson */
+  overflow: hidden;
+  isolation: isolate;
+}
 
-.tile .display { font-size: 22px; letter-spacing: 0.16em; text-transform: uppercase; text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7); }
-/* contrast floor over photos (audit C): bright gold + a deeper smoke halo —
-   the mid-gold kicker dissolved on sunlit tile photography */
-.tile .count { font-size: 9px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold-bright); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85); }
+.tile::after { content: none; }   /* split tile: veil deleted — zero ink on the photo */
+
+/* the plate line: RESTAURANTS · 23 — one line, absolute legibility on black */
+.tile .plate {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 34px;
+  display: flex; align-items: center; gap: 9px;
+  padding: 0 16px;
+}
+.tile .display { font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; }
+.tile .count { font-size: 9px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--gold-bright); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-top: 2px; }
+/* the concierge plaque has no photo band — its one line sits centred, not
+   sunk (must outrank .tile .plate's 34px seat or top/height win the box) */
+.tile.concierge-tile .plate { top: 0; bottom: 0; height: auto; justify-content: center; }
 
 /* swipe-to-remove (his 18:14 ask): slider + bordeaux action past the edge */
 .ag-item[data-del] { position: relative; overflow: hidden; }
@@ -4188,8 +4196,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '27 July 2026 · 23:27 CEST';
-const APP_BUILD = 'v412';
+const COLLECTION_UPDATED = '27 July 2026 · 23:43 CEST';
+const APP_BUILD = 'v416';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6348,8 +6356,7 @@ function viewCity(cityId) {
       return `
       <button class="tile rise rise-${Math.min(i, 3)}" data-prewarm="${city.id}|${cat.id}" onclick="haptic();location.hash='#/cat/${city.id}/${cat.id}'">
         <span class="bg">${heroImg(tileBg)}</span>
-        <span class="count">${n} ${n === 1 ? 'address' : 'addresses'}</span>
-        <span class="display serif">${cat.label}</span>
+        <span class="plate"><span class="display serif">${cat.label}</span><span class="count">· ${n}</span></span>
       </button>`;
     }).join('');
 
@@ -6366,8 +6373,7 @@ function viewCity(cityId) {
     </header>
     <div class="tiles">${tiles}${(typeof CONCIERGE !== 'undefined' && CONCIERGE[city.id]) ? `
       <button class="tile concierge-tile" onclick="location.hash='#/concierge/${city.id}'">
-        <span class="count">${CONCIERGE[city.id].length === 1 ? 'One call, handled' : CONCIERGE[city.id].length + ' fixers · no memberships'}</span>
-        <span class="display serif">VIP Concierge</span>
+        <span class="plate"><span class="display serif">VIP Concierge</span><span class="count">· ${CONCIERGE[city.id].length === 1 ? 'One call, handled' : CONCIERGE[city.id].length + ' fixers'}</span></span>
       </button>` : ''}</div>`;
   wireCards();
   $shell.scrollTo(0, 0);
@@ -7963,10 +7969,9 @@ function viewExplore() {
     </div>
     <div class="tiles">
       ${CITIES.map((c, i) => `
-        <button class="tile rise rise-${Math.min(i, 3)}" onclick="location.hash='#/city/${c.id}'" style="height:132px">
+        <button class="tile rise rise-${Math.min(i, 3)}" onclick="location.hash='#/city/${c.id}'">
           <span class="bg">${heroImg(c.hero)}</span>
-          <span class="display serif">${c.name}</span>
-          <span class="count">${c.tagline}</span>
+          <span class="plate"><span class="display serif">${c.name}</span><span class="count">· ${c.tagline}</span></span>
         </button>`).join('')}
     </div>`;
   $shell.scrollTo(0, 0);
