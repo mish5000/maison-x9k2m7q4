@@ -1496,7 +1496,7 @@ body {
    widths — with overflow:visible on .vcard (needed for the glow) the grid's
    automatic-minimum rule kicks in and contain-intrinsic-size's 560px phantom
    width blew every card past the viewport (the out-of-proportion screenshot). */
-.feed { padding: 16px 53px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }   /* cards 20% smaller, centered (his 27 Jul ask) */
+.feed { padding: 16px 26px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }   /* 338px: the designers' joint ruling — one step off full-bleed reads as a mounted card; 53px entombed it */
 
 .vcard {
   position: relative;
@@ -1519,7 +1519,7 @@ body {
      3-layer shadow into each card's backing store on the main thread every frame
      for 0.5s on both the card gaining AND losing focus — the measured ~3fps feed
      scroll. opacity on a pre-painted layer costs zero per-frame paint. */
-  box-shadow: 0 0 0 2px rgba(200, 162, 75, 0.5), 0 12px 32px rgba(0, 0, 0, 0.34);   /* a thicker, DEFINED band — the border must be unmistakable (his 27 Jul) */
+  box-shadow: 0 0 0 1.5px rgba(200, 162, 75, 0.45), 0 12px 32px rgba(0, 0, 0, 0.34);   /* the band at 338: a gold thread, present in every light, never a drawn border (joint ruling) */
 }
 
 /* the gold focus halo — pre-painted, faded in on the GPU via opacity, never a
@@ -4188,8 +4188,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '27 July 2026 · 18:19 CEST';
-const APP_BUILD = 'v406';
+const COLLECTION_UPDATED = '27 July 2026 · 18:33 CEST';
+const APP_BUILD = 'v409';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
