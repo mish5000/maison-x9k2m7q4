@@ -4201,8 +4201,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '28 July 2026 · 04:02 CEST';
-const APP_BUILD = 'v428';
+const COLLECTION_UPDATED = '28 July 2026 · 04:11 CEST';
+const APP_BUILD = 'v431';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -5789,10 +5789,16 @@ const catVenueEntries = (city, cat) =>
   catParts(cat).flatMap(part => (city.venues[part] || []).map((v, i) => ({ part, v, i })));
 
 /* Category tiles aren't venue claims — use the first real venue photo,
-   else a neutral category texture. */
+   else a neutral category texture. The override map exists because the
+   first venue's hero can be right for its card and wrong as a category
+   lead (his 28 Jul: Somni's caviar board read as "sushi board" on the LA
+   Restaurants tile — Mother Wolf's room says "dining in LA" instead). */
+const TILE_OVERRIDE = { 'losangeles|restaurants': 'losangeles|restaurants|11' };
 let screenSeen = new Set();
 const tileImg = (city, catId) => {
   const cat = CAT_BY_ID[catId];
+  const ov = TILE_OVERRIDE[`${city.id}|${catId}`];
+  if (ov && typeof VENUE_IMG !== 'undefined' && VENUE_IMG[ov]) return VENUE_IMG[ov];
   for (const { part, v, i } of catVenueEntries(city, cat)) {
     const im = venueImg(city.id, part, i, v);
     if (im && !screenSeen.has(im)) { screenSeen.add(im); return im; }
