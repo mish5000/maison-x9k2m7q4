@@ -4201,8 +4201,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '28 July 2026 · 02:00 CEST';
-const APP_BUILD = 'v425';
+const COLLECTION_UPDATED = '28 July 2026 · 04:02 CEST';
+const APP_BUILD = 'v428';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -8348,7 +8348,7 @@ const SLIDE = {
 /* THE SHEET FAMILY — every routed page that presents as a 90% halo card
    and moves vertically (rise in, set down out, pull-down to dismiss).
    Home, Destinations and the chrome-less shared week stay full-bleed. */
-const SHEET_ROUTE = /^#\/(saved|cat\/|city\/|pulse|season|club)/;
+const SHEET_ROUTE = /^#\/(saved|cat\/|city\/|pulse|season|club|concierge\/)/;
 let pendingSlide = null;   // 'push' | 'pop' — set by the hashchange handler
 let chevronPop = false;    // goBack() marks its history.back() so the pop animates
 let sbActive = false;      // an interactive swipe-back drag is live (guards re-renders)
@@ -8578,7 +8578,7 @@ function runSlide(kind, oldLayer, axis = 'x', riseCal = false, destHash = '') {
     enter = captureEnterLayer();
     if (axis === 'y') enter.classList.add('rise');   // rests BELOW the glass instead of beside it
     if (riseCal) enter.classList.add('rise-cal');    // the Calendar flies at its 90% geometry
-    if (/^#\/cat\//.test(destHash)) enter.classList.add('stack2');   // depth-2: parks 12px lower
+    if (/^#\/(cat|concierge)\//.test(destHash)) enter.classList.add('stack2');   // depth-2: parks 12px lower
     document.body.appendChild(enter);           // rests at calc(100% - 2px):
     document.body.appendChild(dim);             // 2px on glass = paint demand
     decodeIncoming(enter, 250).then(() => {
@@ -8596,7 +8596,7 @@ function runSlide(kind, oldLayer, axis = 'x', riseCal = false, destHash = '') {
     enter = captureEnterLayer();
     enter.classList.add('pop');                  // natural pose — no offscreen park
     if (SHEET_ROUTE.test(destHash)) enter.classList.add('rise-cal');   // dest is itself a 90% sheet
-    if (/^#\/cat\//.test(destHash)) enter.classList.add('stack2');
+    if (/^#\/(cat|concierge)\//.test(destHash)) enter.classList.add('stack2');
     enter.dataset.destScroll = destScroll;
     enter.dataset.destHash = destHash;
     document.body.appendChild(enter);
@@ -8646,7 +8646,7 @@ function renderView(h) {
   // Wallet-true stacking (his 13:57 ask): a category rides 12px lower so the
   // CITY sheet's gilt shoulder stays peeking above it — depth is real route
   // depth, capped by the architecture (city > category > venue card, never more)
-  document.body.classList.toggle('stack2', /^#\/cat\//.test('#/' + parts.join('/')));
+  document.body.classList.toggle('stack2', /^#\/(cat|concierge)\//.test('#/' + parts.join('/')));
   if (parts.length === 0) { renderNav('home'); viewHome(); return; }
   switch (parts[0]) {
     case 'explore': renderNav('explore'); viewExplore(); break;
@@ -8736,7 +8736,7 @@ function renderRoute(soft = false, dir = 'fwd') {
       slideAxis = SHEET_ROUTE.test(slideKind === 'push' ? h : lastRouteHash) ? 'y' : 'x';
       // a departing sheet-page keeps its 90% geometry in the frozen layer
       if (SHEET_ROUTE.test(lastRouteHash)) oldLayer.classList.add('cal-strip');
-      if (/^#\/cat\//.test(lastRouteHash)) oldLayer.classList.add('stack2');
+      if (/^#\/(cat|concierge)\//.test(lastRouteHash)) oldLayer.classList.add('stack2');
     }
   }
   pendingSlide = null;
@@ -9371,7 +9371,7 @@ if (STANDALONE && CUSTOM_BACK) {
       const layer = captureOldLayer(d.departing);  // the departing page, frozen, on top
       if (!layer) { d = null; return; }
       layer.classList.add('ontop', 'pd-drag', 'cal-strip');   // saved AND cat ride at 90% now
-      if (/^#\/cat\//.test(d.fromHash)) layer.classList.add('stack2');
+      if (/^#\/(cat|concierge)\//.test(d.fromHash)) layer.classList.add('stack2');
       renderView(d.floor);                         // its floor, live beneath
       $app.querySelectorAll('img.heroimg[data-src]').forEach(loadLazy);
       const dim = document.createElement('div');
