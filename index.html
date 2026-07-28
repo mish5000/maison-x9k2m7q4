@@ -1376,10 +1376,11 @@ body {
    killing the meta margin (Delacroix-Stern M1) */
 .citycard .meta .eyebrow, .citycard .meta .display { display: block; }
 
-.citycard .meta { padding: 18px; }
+.citycard .meta { padding: 18px 18px 26px; }   /* designers' 8px lift (28 Jul, "a little bit low") — deeper INTO the veil, never darker */
 .citycard .meta .eyebrow, .citycard .meta .display { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7); }
-/* 9px gold eyebrow rides ON the photo — same contrast floor as .tile .count */
-.citycard .meta .eyebrow { font-size: 9px; margin-bottom: 6px; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85); }
+/* 9px gold eyebrow rides ON the photo — same contrast floor as .tile .count.
+   nowrap is the permanent guard: a wrapped whisper sank the LA name (28 Jul) */
+.citycard .meta .eyebrow { font-size: 9px; margin-bottom: 6px; text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85); white-space: nowrap; }
 .citycard .meta .display { font-size: 25px; }
 
 .statement {
@@ -4201,8 +4202,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '28 July 2026 · 04:11 CEST';
-const APP_BUILD = 'v431';
+const COLLECTION_UPDATED = '28 July 2026 · 04:19 CEST';
+const APP_BUILD = 'v435';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6264,7 +6265,9 @@ function viewHome() {
   const { cities: ordered, near, km } = geoOrderedCities();
   const rail = ordered.map((c, i) => {
     const eyebrow = near && i === 0
-      ? `Closest to you${km < 500 ? ' · ' + (km < 10 ? km.toFixed(1) : Math.round(km)) + ' km' : ''}`
+      /* designers' ruling (28 Jul, his circle): the house does not say "to
+         you" — and the long copy wrapped at 200px, sinking the name */
+      ? `Closest${km < 500 ? ' · ' + (km < 10 ? km.toFixed(1) : Math.round(km)) + ' km' : ''}`
       : c.country;
     return `
     <button class="citycard" data-city="${c.id}" onclick="haptic();location.hash='#/city/${c.id}'">
