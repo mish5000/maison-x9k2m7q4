@@ -1,5 +1,5 @@
 {
- "generated": "2026-07-31T05:52:16Z",
+ "generated": "2026-07-31T06:11:11Z",
  "venues": {
   "london|restaurants|0": {
    "dishes": [
@@ -4701,6 +4701,522 @@
    "checked": "2026-07-31",
    "status": "thin"
   },
+  "marbella|restaurants|1": {
+   "dishes": [
+    {
+     "n": "Steak tartar hecho en mesa",
+     "why": "Chopped and dressed at your table; the most-named plate in the room.",
+     "src": [
+      "sluurpy",
+      "restaurantguru",
+      "tripadvisor"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Foie para untar y ajetes aliñados",
+     "why": "Foie built like a stuffed apple, spread on toast. Named nearly as often as the steaks.",
+     "src": [
+      "sluurpy",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Croquetas de pollo asado",
+     "why": "A whole roast chicken folded into a croqueta.",
+     "src": [
+      "restaurantguru",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "La burger que le dio sentido a todo",
+     "why": "Two baby burgers on pretzel bun — the version from his three-star dining room.",
+     "src": [
+      "sluurpy",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Burrata ahumada y ensalada de pimientos asados",
+     "why": "Smoked to order over the coals; the starter regulars repeat.",
+     "src": [
+      "restaurantguru",
+      "sluurpy"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "ok"
+  },
+  "marbella|restaurants|2": {
+   "dishes": [
+    {
+     "n": "Ceviche de Atún Chifa",
+     "why": "Spicy yellowfin with rice crackers; the ceviche named most by name.",
+     "src": [
+      "sluurpy",
+      "gastroranking"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Ceviche de Lubina Clásica",
+     "why": "The plain one, and the one diners keep coming back to.",
+     "src": [
+      "sluurpy",
+      "gastroranking"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Chicharrones de Pollo",
+     "why": "Crisp chicken with chipotle and spicy guava — the sleeper on the aperitivos list.",
+     "src": [
+      "sluurpy",
+      "gastroranking"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "thin"
+  },
+  "marbella|restaurants|3": {
+   "dishes": [
+    {
+     "n": "Black Cod Miso",
+     "why": "The dish the room is built on; named in more reviews than anything else here.",
+     "src": [
+      "sluurpy",
+      "restaurantguru",
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 4
+    },
+    {
+     "n": "Rock Shrimp Tempura",
+     "why": "Take it with creamy spicy; it lands on nearly every table.",
+     "src": [
+      "sluurpy",
+      "restaurantguru"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Chilean Sea Bass Dashi Ponzu",
+     "why": "The quieter cousin of the black cod. Regulars order both.",
+     "src": [
+      "restaurantguru",
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Japanese Wagyu Tacos",
+     "why": "A5 wagyu in two bites — the thing a first-timer walks past.",
+     "src": [
+      "sluurpy",
+      "restaurantguru"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Yellowtail Jalapeño",
+     "why": "Cold and sharp; the dish diners name when asked for one favourite.",
+     "src": [
+      "restaurantguru",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "ok"
+  },
+  "marbella|restaurants|5": {
+   "dishes": [
+    {
+     "n": "Tartar de atún picante",
+     "why": "The one a la carte plate reviewers name unprompted.",
+     "src": [
+      "sluurpy",
+      "gastroranking"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Milhojas de papa frita",
+     "why": "Crisp potato mille-feuille; recurs across reviews despite reading as a side.",
+     "src": [
+      "sluurpy",
+      "gastroranking"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "thin"
+  },
+  "marbella|restaurants|6": {
+   "dishes": [
+    {
+     "n": "Brioche de rabo de toro® con salsa Bull original",
+     "why": "The signature of the whole group; ordered at almost every table.",
+     "src": [
+      "sluurpy",
+      "gastroranking",
+      "google",
+      "blog"
+     ],
+     "n_src": 4
+    },
+    {
+     "n": "Ceviche amarillo de corvina con maíz fresco, manzana y jalapeños",
+     "why": "The dish that stops the meal being only brioches and tartare.",
+     "src": [
+      "sluurpy",
+      "gastroranking",
+      "blog"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Tartar ahumado o'toro de Barbate al estilo DG",
+     "why": "Smoked bluefin belly; the tuna plate reviewers single out.",
+     "src": [
+      "sluurpy",
+      "gastroranking",
+      "blog"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Brioche cojonudo® chorizo, chipotle y huevo de codorniz",
+     "why": "The second brioche. Order both and skip a starter.",
+     "src": [
+      "sluurpy",
+      "blog"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Croquetas en tempura de jamón",
+     "why": "Tempura shell instead of breadcrumb — the detail people write about.",
+     "src": [
+      "gastroranking",
+      "blog"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "ok"
+  },
+  "marbella|restaurants|7": {
+   "dishes": [
+    {
+     "n": "Vanilla Meringue Cake",
+     "why": "The house cake, and the single most-named thing on the table.",
+     "src": [
+      "sluurpy",
+      "gastroranking",
+      "google"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Pistachio Ice Cream",
+     "why": "Named by more reviewers than any savoury plate here.",
+     "src": [
+      "sluurpy",
+      "gastroranking",
+      "google"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Tuna Tartare",
+     "why": "Light and clean; the starter that survives the mixed reviews.",
+     "src": [
+      "sluurpy",
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Fusilli alla Nerano",
+     "why": "The pasta ordered when the table wants one plate to share.",
+     "src": [
+      "sluurpy",
+      "gastroranking"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "thin"
+  },
+  "marbella|restaurants|9": {
+   "dishes": [
+    {
+     "n": "Croqueta de carabinero",
+     "why": "The croqueta the whole room talks about; comes alongside the prawn itself.",
+     "src": [
+      "sluurpy",
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Buñuelos de queso payoyo",
+     "why": "Payoyo cheese fritters — the opener regulars order without looking.",
+     "src": [
+      "sluurpy",
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Chicle de foie micuit",
+     "why": "Foie served as a chewy 'gum'; the trick people write home about.",
+     "src": [
+      "sluurpy",
+      "google"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "thin"
+  },
+  "marbella|restaurants|10": {
+   "dishes": [
+    {
+     "n": "Tortilla de patatas",
+     "why": "The benchmark plate here; ordered more than anything else on the list.",
+     "src": [
+      "sluurpy",
+      "gastroranking"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Croquetas de puchero",
+     "why": "Made from the stew; the tapa that separates this from a normal tapas bar.",
+     "src": [
+      "sluurpy",
+      "gastroranking"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Huevos fritos con gambas al ajillo",
+     "why": "Fried eggs broken over garlic prawns. Order it to share.",
+     "src": [
+      "sluurpy",
+      "gastroranking"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Ensaladilla rusa",
+     "why": "Recurs across reviews as the thing to start with.",
+     "src": [
+      "sluurpy",
+      "gastroranking"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Tarta de queso de cabra",
+     "why": "Goat's cheese cheesecake; the dessert named by name.",
+     "src": [
+      "sluurpy",
+      "gastroranking"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "ok"
+  },
+  "marbella|restaurants|11": {
+   "dishes": [
+    {
+     "n": "Ensaladilla rusa de anguila ahumada y piparra",
+     "why": "Smoked eel in the potato salad — the tapa the bar runs on.",
+     "src": [
+      "sluurpy",
+      "gastroranking",
+      "google"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Carpaccio de chuletón",
+     "why": "Bluefin tuna, not beef. Take it with the fried eggs and garlic.",
+     "src": [
+      "tripadvisor",
+      "google",
+      "gastroranking"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Arroz seco negro de rape y calamar",
+     "why": "Two people minimum; the rice reviewers come back for.",
+     "src": [
+      "sluurpy",
+      "gastroranking",
+      "tripadvisor"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Guacamole terminado en mesa con gambas cristal crujientes",
+     "why": "Finished at the table, crisp glass prawns on top.",
+     "src": [
+      "gastroranking",
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Croquetas de gambas",
+     "why": "The one fryer item that recurs across reviews.",
+     "src": [
+      "sluurpy",
+      "gastroranking"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "ok"
+  },
+  "marbella|restaurants|21": {
+   "dishes": [
+    {
+     "n": "Tartar de atún trufado",
+     "why": "Truffle over bluefin tartare; the single most-named plate in the room.",
+     "src": [
+      "sluurpy",
+      "gastroranking",
+      "google"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Tempura de verduras",
+     "why": "Reviewers who order the sushi still write about the tempura.",
+     "src": [
+      "sluurpy",
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Sashimi moriwase",
+     "why": "The mixed plate that shows what the fish is actually like.",
+     "src": [
+      "sluurpy",
+      "gastroranking"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Falso helado de lima y chocolate blanco",
+     "why": "The dessert people name; it is not ice cream.",
+     "src": [
+      "sluurpy",
+      "gastroranking"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "thin"
+  },
+  "ibiza|restaurants|6": {
+   "dishes": [
+    {
+     "n": "Bullit de peix",
+     "why": "The reason the place exists — fish poached in saffron, then the rice in that broth.",
+     "src": [
+      "tripadvisor",
+      "press",
+      "google",
+      "blog"
+     ],
+     "n_src": 4
+    },
+    {
+     "n": "Fideuà",
+     "why": "The alternative to the bullit, and the one locals order instead.",
+     "src": [
+      "press",
+      "sluurpy"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "thin"
+  },
+  "ibiza|restaurants|7": {
+   "dishes": [
+    {
+     "n": "Bluefin Tuna Tartare",
+     "why": "The starter that recurs across both the press and the diner corpus.",
+     "src": [
+      "press",
+      "sluurpy"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Baklava",
+     "why": "Pistachio namelaka and baklava ice cream; the Greek roots showing.",
+     "src": [
+      "press",
+      "sluurpy"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "thin"
+  },
+  "ibiza|restaurants|8": {
+   "dishes": [
+    {
+     "n": "Steak Colonial",
+     "why": "The house steak; the plate the long-time regulars order.",
+     "src": [
+      "sluurpy",
+      "restaurantguru"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Tataki de atún",
+     "why": "Made in house and named across both review corpora.",
+     "src": [
+      "sluurpy",
+      "restaurantguru"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "thin"
+  },
   "mykonos|restaurants|0": {
    "dishes": [
     {
@@ -5333,6 +5849,308 @@
      "src": [
       "mesprestiges",
       "tripadvisor"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "thin"
+  },
+  "sttropez|restaurants|2": {
+   "dishes": [
+    {
+     "n": "Bouillabaisse du Girelier",
+     "why": "The house version: loup, Saint-Pierre and daurade, saffron broth, rouille.",
+     "src": [
+      "tripadvisor",
+      "google",
+      "pudlowski"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Plateau de fruits de mer",
+     "why": "Fifty years of live tanks on the quay; the shellfish is the reason to book.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Paëlla aux fruits de mer",
+     "why": "The other house speciality, and the one first-timers walk past.",
+     "src": [
+      "tripadvisor",
+      "pudlowski"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Sole meunière",
+     "why": "Plainly cooked and repeatedly singled out; the kitchen's control shows here.",
+     "src": [
+      "google",
+      "pudlowski"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Tarte tropézienne",
+     "why": "The local classic made in house; what the room finishes on.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "ok"
+  },
+  "sttropez|restaurants|3": {
+   "dishes": [
+    {
+     "n": "Ravioles de chèvre frais, tomates cerises, basilic et pignons de pin",
+     "why": "The plate that survives the price complaints; two diners named it unprompted.",
+     "src": [
+      "google"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "thin"
+  },
+  "sttropez|restaurants|4": {
+   "dishes": [
+    {
+     "n": "Plancha royale (pour 2)",
+     "why": "Blue lobster, langoustines, calamar and gambas off the plancha, for two.",
+     "src": [
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Gambas grillées",
+     "why": "Cooked and seasoned right; the dish diners call a must here.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Rouleaux de printemps aux crevettes",
+     "why": "An odd starter for a Riviera fish house, and the one people rave about.",
+     "src": [
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Ceviche de daurade",
+     "why": "Cut from the house tanks; the cleanest thing on the menu.",
+     "src": [
+      "google"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "thin"
+  },
+  "sttropez|restaurants|5": {
+   "dishes": [
+    {
+     "n": "Risotto aux truffes",
+     "why": "Diners come back for it by name; truffle is what this kitchen does.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Œufs cocotte aux truffes",
+     "why": "The starter regulars order on every visit.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Les 7 gratins d’escargots au beurre d’ail",
+     "why": "Seven pots of garlic butter; named more often than any other starter.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Filet de bœuf Charolais sauce aux truffes",
+     "why": "The truffle sauce is the point; take it over the grilled nature version.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Cannelonis de crabe au coulis de homard",
+     "why": "Crab cannelloni under a lobster coulis; the starter that surprises.",
+     "src": [
+      "google"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "ok"
+  },
+  "stbarths|restaurants|0": {
+   "dishes": [
+    {
+     "n": "Cacio e Pepe",
+     "why": "Homemade tonnarelli, pecorino, black pepper; the pasta people return for.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Parmigiana di Melanzane",
+     "why": "Named a standout by more diners than anything else on the antipasti.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Fettuccine Bolognese",
+     "why": "Homemade fettuccine, traditional ragù; ordered as a main, not a filler.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "thin"
+  },
+  "stbarths|restaurants|1": {
+   "dishes": [
+    {
+     "n": "Dégustation de cévichés et tiraditos",
+     "why": "What the room is known for, in one plate; the raw bar outranks the mains.",
+     "src": [
+      "google",
+      "tripadvisor",
+      "frommers"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Tacos Bonito (thon)",
+     "why": "Called the most-ordered thing on the menu; tuna, guacamole, mango criolla.",
+     "src": [
+      "google",
+      "press"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "thin"
+  },
+  "stbarths|restaurants|2": {
+   "dishes": [
+    {
+     "n": "Ravioles Langouste",
+     "why": "Named in review after review; a small portion, and still the order.",
+     "src": [
+      "tripadvisor",
+      "google",
+      "wanderlog"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Bœuf Wellington, jus à la truffe & foie gras",
+     "why": "The main diners single out; truffle jus and foie gras inside.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Tartare de Thon",
+     "why": "Guacamole and passionfruit; the starter people describe first.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "L’Aubergine",
+     "why": "The starter everyone mentions — most love it, some don't. Order it knowing that.",
+     "src": [
+      "google"
+     ],
+     "n_src": 3
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "thin"
+  },
+  "courchevel|restaurants|0": {
+   "dishes": [
+    {
+     "n": "Plateau de fruits de mer",
+     "why": "The middle size feeds two; the one thing the reviews agree on.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Pizza à la truffe",
+     "why": "Expensive, and still the plate this terrace is named for.",
+     "src": [
+      "google",
+      "wanderlog"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-07-31",
+   "status": "thin"
+  },
+  "courchevel|restaurants|4": {
+   "dishes": [
+    {
+     "n": "Le buffet de desserts",
+     "why": "Dozens of tarts and pastries; the part of lunch nobody criticises.",
+     "src": [
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Le buffet de fruits de mer",
+     "why": "Oysters, langoustines and king crab on the terrace; the highlight of the meal.",
+     "src": [
+      "google",
+      "wanderlog"
      ],
      "n_src": 2
     }
