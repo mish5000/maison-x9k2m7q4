@@ -1163,6 +1163,25 @@ body {
 }
 .heroprofile:active { transform: scale(0.94); }
 
+/* Call a car now — the mirror of the crest, same disc, same glass, right
+   corner (his 30 Jul mark). Identity keeps the prime corner; the car takes
+   the other one. Transform on :active only — the paint law forbids
+   animating backdrop-filter, and this disc sits over the hero photograph. */
+.herouber { position: absolute;
+  top: calc(22px + env(safe-area-inset-top, 0px));
+  right: 22px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(11, 10, 8, 0.45);
+  border: 1px solid rgba(232, 201, 128, 0.55);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  color: var(--gold-bright);
+  text-decoration: none;
+  z-index: 4; }
+.herouber svg { width: 22px; height: 22px; }
+.herouber:active { transform: scale(0.94); }
+
 /* gold section marker inside a merged category feed (Beach Clubs / Pools) */
 .feed-subhead {
   display: flex;
@@ -1700,6 +1719,29 @@ body {
 
 /* a slim smoked ribbon hugging just the name text itself */
 .vcard .name .nm { display: inline; }
+
+/* The Reserve chip on the name row (30 Jul). The name row becomes a baseline
+   flex so a long name wraps against the chip instead of shoving it off the
+   plate; the chip never shrinks and never wraps. Static border + wash only —
+   the paint law forbids animating box-shadow, and this sits on a card that
+   transforms during the push. */
+.vcard .name { display: flex; align-items: baseline; gap: 10px; }
+.vcard .name .nm { flex: 1 1 auto; min-width: 0; }
+.vcard .resv {
+  flex: 0 0 auto;
+  align-self: center;
+  font-family: var(--sans);
+  font-size: 9.5px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--gold-bright);
+  text-decoration: none;
+  padding: 8px 13px;
+  border: 1px solid rgba(200, 162, 75, 0.55);
+  border-radius: 999px;
+  background: rgba(200, 162, 75, 0.09); }
+.vcard .resv:active { background: rgba(200, 162, 75, 0.22); }
 
 .vcard .body .area, .vcard .body .blurb, .vcard .body .stars,
 .vcard .body .hours-line { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65); }
@@ -4211,8 +4253,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '30 July 2026 · 03:32 CEST';
-const APP_BUILD = 'v459';
+const COLLECTION_UPDATED = '31 July 2026 · 04:03 CEST';
+const APP_BUILD = 'v465';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6076,6 +6118,14 @@ const uberUrl = (v, city, key) => {
   return u;
 };
 
+/* Call a car NOW — the hero's top-right corner, mirroring the crest at
+   top-left (his 30 Jul mark). Pickup only: the home screen has no venue in
+   hand, so it opens Uber standing at the door with the pickup already set
+   and the destination left to him. Guessing a dropoff from saved venues
+   would be a car sent to the wrong address — the venue's own Uber row and
+   the agenda's car icon are where a destination is actually known. */
+const UBER_NOW = 'https://m.uber.com/ul/?action=setPickup&pickup=my_location';
+
 /* Beach & Pools: unmistakable badge for what the venue actually offers. */
 const bpBadge = (key, catId) => {
   if (catId !== 'beach' && catId !== 'pools') return '';
@@ -6253,8 +6303,15 @@ const hasOpenTable = (city, catId) => OT_CITIES[city.id] && catId === 'restauran
 const venueWa = (key, v) =>
   ((typeof VENUE_WA !== 'undefined') && VENUE_WA[key]) || v.wa || null;
 
-/* Book now: a direct booking-engine URL scraped from the venue's own
-   site (straight into the date picker). */
+/* Book now: a direct booking-engine URL reached from the venue's OWN Reserve
+   button (straight into its date picker).
+
+   Never a search URL. The old Resy/OpenTable rows were generated from the
+   city alone — every London/NY/Miami/LA restaurant was handed a
+   `resy.com/search?query=<name>` link whether or not the venue was on Resy,
+   so a room that books on Tock sent the guest to an empty result page. That
+   is the "broken link" Mishari found on Somni (30 Jul). A link we cannot
+   name the venue on is not a booking link. */
 const bookUrl = (key) =>
   ((typeof VENUE_BOOK !== 'undefined') && VENUE_BOOK[key]) || null;
 
@@ -6536,6 +6593,8 @@ function viewHome() {
     <header class="hero">
       <span class="bg">${heroImg(UNSPLASH('1414235077428-338989a2e8c0', 1600))}</span>
       <a class="heroprofile" href="#/club" aria-label="My profile"><span class="serif">M</span></a>
+      <a class="herouber" href="${UBER_NOW}" target="_blank" rel="noopener"
+         aria-label="Call a car now">${I.car}</a>
       <a class="greeting-block rise" href="#/club" aria-label="My Club">
         <div class="eyebrow">${greeting()}</div>
         <span class="prefix serif">${MEMBER.prefix}</span>
@@ -6769,6 +6828,18 @@ function viewConcierge(cityId) {
    crowd it — website pill, maps pin, Uber, booking icons, WhatsApp, phone,
    the chip row, the corner globe — lives in the venue SHEET's Contact &
    Explore panel (see openSheet), which the whole card opens with one tap. */
+/* The Reserve chip that sits on the venue's name — one tap from the shelf
+   into the room's own date picker, no sheet in between (his 30 Jul ask).
+   Rendered ONLY where a verified venue-specific URL exists: a chip that
+   opens an empty search is the fault we are repairing, not a feature.
+   stopPropagation keeps the card's own tap-to-open from firing underneath. */
+function reserveChip(key) {
+  const u = bookUrl(key);
+  if (!u) return '';
+  return `<a class="resv" href="${u}" target="_blank" rel="noopener"
+     onclick="event.stopPropagation()" aria-label="Reserve a table">Reserve</a>`;
+}
+
 function venueCard(city, catId, v, idx) {
   const key = vkey(city.id, catId, idx);
   const on = savedSet.has(key);
@@ -6789,7 +6860,7 @@ function venueCard(city, catId, v, idx) {
       <button type="button" class="plan-add" onclick="event.stopPropagation();openPlanSheet('${city.id}','${catId}',${idx})" aria-label="Plan this venue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
       <div class="body">
         <div class="area">${v.a} · ${city.name}</div>
-        <h2 class="name"><span class="nm">${v.n}</span></h2>
+        <h2 class="name"><span class="nm">${v.n}</span>${reserveChip(key)}</h2>
         <span class="stars">${ratingBadge(key)}</span>
         <div class="txt">
           ${hoursLine(key)}
