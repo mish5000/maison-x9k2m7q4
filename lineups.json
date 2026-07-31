@@ -1,16 +1,8 @@
 {
- "generated": "2026-07-30T03:15:11Z",
+ "generated": "2026-07-31T03:11:14Z",
  "venues": {
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-07-29": {
-     "hl": "MEDUZA & James Hype",
-     "party": "Our House",
-     "line": "Mind Against · Alok",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-07-30": {
      "hl": "HUGEL",
      "line": [
@@ -93,19 +85,41 @@
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-05": {
+     "hl": "Meduza",
+     "line": [
+      "Meduza",
+      "James Hype",
+      "Olive F",
+      "Henri Bergmann",
+      "Jonas Blue",
+      "Harry Romero B2B Cinthie",
+      "Makèz"
+     ],
+     "party": "Our House",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-08-06": {
+     "hl": "HUGEL",
+     "line": [
+      "HUGEL",
+      "Aaron Sevilla",
+      "Miss Monique",
+      "Nora En Pure",
+      "Paradoks"
+     ],
+     "party": "Make The Girls Dance",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-07-29": {
-     "hl": "Dimitri Vegas",
-     "line": "Dimitri Vegas · Steve Aoki · Brina Knauss · Bhaskar",
-     "party": "Tomorrowland",
-     "doors": "17:00",
-     "src": "theushuaiaexperience.com",
-     "conf": "high"
-    },
     "2026-07-30": {
      "hl": "Martin Garrix",
      "line": [
@@ -182,19 +196,36 @@
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-05": {
+     "hl": "Dimitri Vegas & Like Mike",
+     "line": [
+      "Dimitri Vegas & Like Mike",
+      "Alok",
+      "Gabry Ponte"
+     ],
+     "party": "Tomorrowland",
+     "doors": "17:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-08-06": {
+     "hl": "Martin Garrix",
+     "line": [
+      "Martin Garrix",
+      "Belters Only",
+      "Younotus",
+      "Vluarr"
+     ],
+     "party": "",
+     "doors": "17:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-07-29": {
-     "hl": "BLOND:ISH",
-     "party": "Abracadabra Closing",
-     "line": "Adam Ten · Mita Gami",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-07-30": {
      "hl": "Purple Disco Machine",
      "line": [
@@ -269,19 +300,34 @@
      "doors": "23:15",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-05": {
+     "hl": "Mau P",
+     "line": [
+      "Mau P"
+     ],
+     "party": "Baddest Behaviour Opening",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-08-06": {
+     "hl": "Purple Disco Machine",
+     "line": [
+      "Purple Disco Machine",
+      "Disco Dom (Dombresky)",
+      "Breakbot & Irfane",
+      "Blu DeTiger"
+     ],
+     "party": "Pure Pacha",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-07-29": {
-     "hl": "Adam Beyer b2b Ilario Alicante",
-     "line": "Adam Beyer b2b Ilario Alicante · ARTBAT · Joris Voorn b2b Korolova",
-     "party": "Resistance",
-     "doors": "23:00",
-     "src": "amnesia.es",
-     "conf": "high"
-    },
     "2026-07-30": {
      "hl": "Josh Baker",
      "line": [
@@ -360,21 +406,37 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-05": {
+     "hl": "Adam Beyer",
+     "line": [
+      "Adam Beyer",
+      "Eric Prydz",
+      "Maceo Plex",
+      "Yulia Niko B2B Airrica"
+     ],
+     "party": "RESISTANCE Ibiza",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-08-06": {
+     "hl": "Josh Baker",
+     "line": [
+      "Josh Baker B2B Joseph Capriati",
+      "Saiorse",
+      "M-High B2B Marlie",
+      "Local Dub"
+     ],
+     "party": "You&Me (Terraza)",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "marbella|nightclubs|0": {
    "nights": {
-    "2026-07-29": {
-     "hl": "Carlita",
-     "line": [
-      "Carlita"
-     ],
-     "party": "",
-     "doors": "23:45",
-     "src": "mandalatickets.com",
-     "conf": "high"
-    },
     "2026-07-30": {
      "hl": "Kaz James",
      "line": [
@@ -419,14 +481,6 @@
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-07-29": {
-     "hl": "Cloonee",
-     "line": "Cloonee · Yero",
-     "party": "Full Moon Night",
-     "doors": "23:00",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
     "2026-07-30": {
      "hl": "Dom Dolla",
      "line": [
@@ -521,14 +575,6 @@
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-07-29": {
-     "hl": "Zeus",
-     "line": "Zeus",
-     "party": "",
-     "doors": "23:00",
-     "src": "11miami.com",
-     "conf": "high"
-    },
     "2026-07-30": {
      "hl": "Joe Maz",
      "line": "Joe Maz",
@@ -650,21 +696,29 @@
      "doors": "20:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-05": {
+     "hl": "Toy Room",
+     "line": [],
+     "party": "Toy Room",
+     "doors": "20:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-08-06": {
+     "hl": "Nomis",
+     "line": [
+      "Nomis"
+     ],
+     "party": "Tiempo",
+     "doors": "20:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-07-29": {
-     "hl": "David Morales",
-     "line": [
-      "David Morales"
-     ],
-     "party": "David Morales & More",
-     "doors": "21:00",
-     "src": "pikesibiza.com",
-     "conf": "high"
-    },
     "2026-07-30": {
      "hl": "Leftfield (DJ set)",
      "line": [
@@ -822,14 +876,6 @@
   },
   "aspen|nightclubs|1": {
    "nights": {
-    "2026-07-29": {
-     "hl": "Lyle Lovett",
-     "line": "Lyle Lovett",
-     "party": "An Evening With",
-     "doors": "",
-     "src": "bellyupaspen.com",
-     "conf": "high"
-    },
     "2026-07-30": {
      "hl": "Lukas Nelson",
      "line": "Lukas Nelson",
@@ -866,14 +912,6 @@
   },
   "hamptons|nightclubs|0": {
    "nights": {
-    "2026-07-29": {
-     "hl": "The Englishtown Project",
-     "line": "The Englishtown Project",
-     "party": "",
-     "doors": "20:00",
-     "src": "stephentalkhouse.com",
-     "conf": "high"
-    },
     "2026-07-30": {
      "hl": "Larry Campbell & Teresa Williams",
      "line": "Larry Campbell & Teresa Williams · Simmerr · Nicolls Road",
@@ -885,6 +923,22 @@
     "2026-07-31": {
      "hl": "West 22nd",
      "line": "West 22nd: Places To Be · Rubix Kube",
+     "party": "",
+     "doors": "20:00",
+     "src": "stephentalkhouse.com",
+     "conf": "high"
+    },
+    "2026-08-01": {
+     "hl": "Cimafunk",
+     "line": "Cimafunk · Rated Fresh",
+     "party": "",
+     "doors": "20:00",
+     "src": "stephentalkhouse.com",
+     "conf": "high"
+    },
+    "2026-08-02": {
+     "hl": "Fai Laci",
+     "line": "Fai Laci",
      "party": "",
      "doors": "20:00",
      "src": "stephentalkhouse.com",
