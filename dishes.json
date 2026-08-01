@@ -1,5 +1,5 @@
 {
- "generated": "2026-07-31T06:11:11Z",
+ "generated": "2026-08-01T19:10:58Z",
  "venues": {
   "london|restaurants|0": {
    "dishes": [
@@ -119,6 +119,11 @@
    "checked": "2026-07-31",
    "status": "thin"
   },
+  "london|restaurants|4": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
   "london|restaurants|5": {
    "dishes": [
     {
@@ -144,6 +149,11 @@
    "checked": "2026-07-31",
    "status": "thin"
   },
+  "london|restaurants|6": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
   "london|restaurants|7": {
    "dishes": [
     {
@@ -168,6 +178,11 @@
    ],
    "checked": "2026-07-31",
    "status": "thin"
+  },
+  "london|restaurants|8": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
   },
   "london|restaurants|9": {
    "dishes": [
@@ -435,6 +450,11 @@
    "checked": "2026-07-31",
    "status": "thin"
   },
+  "london|restaurants|18": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
   "london|restaurants|19": {
    "dishes": [
     {
@@ -628,6 +648,11 @@
    "checked": "2026-07-31",
    "status": "thin"
   },
+  "london|restaurants|26": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
   "london|whatsnew|2": {
    "dishes": [
     {
@@ -732,6 +757,26 @@
    ],
    "checked": "2026-07-31",
    "status": "ok"
+  },
+  "losangeles|restaurants|0": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
+  "losangeles|restaurants|1": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
+  "losangeles|restaurants|2": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
+  "losangeles|restaurants|3": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
   },
   "losangeles|restaurants|4": {
    "dishes": [
@@ -1277,6 +1322,21 @@
    "checked": "2026-07-31",
    "status": "ok"
   },
+  "losangeles|restaurants|16": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
+  "losangeles|restaurants|17": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
+  "losangeles|restaurants|18": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
   "losangeles|restaurants|20": {
    "dishes": [
     {
@@ -1486,6 +1546,11 @@
    ],
    "checked": "2026-07-31",
    "status": "ok"
+  },
+  "lasvegas|restaurants|1": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
   },
   "lasvegas|restaurants|2": {
    "dishes": [
@@ -2213,6 +2278,21 @@
    "checked": "2026-07-31",
    "status": "thin"
   },
+  "newyork|restaurants|1": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
+  "newyork|restaurants|2": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
+  "newyork|restaurants|3": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
   "newyork|restaurants|4": {
    "dishes": [
     {
@@ -2610,6 +2690,11 @@
    ],
    "checked": "2026-07-31",
    "status": "thin"
+  },
+  "newyork|restaurants|14": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
   },
   "newyork|restaurants|15": {
    "dishes": [
@@ -3225,6 +3310,16 @@
    "checked": "2026-07-31",
    "status": "thin"
   },
+  "dubai|restaurants|0": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
+  "dubai|restaurants|1": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
   "dubai|restaurants|4": {
    "dishes": [
     {
@@ -3283,6 +3378,11 @@
    ],
    "checked": "2026-07-31",
    "status": "thin"
+  },
+  "dubai|restaurants|6": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
   },
   "dubai|restaurants|7": {
    "dishes": [
@@ -3690,6 +3790,11 @@
    "checked": "2026-07-31",
    "status": "ok"
   },
+  "dubai|restaurants|18": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
   "dubai|whatsnew|0": {
    "dishes": [
     {
@@ -3993,6 +4098,16 @@
    "checked": "2026-07-31",
    "status": "thin"
   },
+  "madrid|restaurants|6": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
+  "madrid|restaurants|7": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
   "madrid|restaurants|8": {
    "dishes": [
     {
@@ -4077,6 +4192,11 @@
    ],
    "checked": "2026-07-31",
    "status": "ok"
+  },
+  "madrid|restaurants|11": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
   },
   "paris|restaurants|0": {
    "dishes": [
@@ -4215,6 +4335,21 @@
    ],
    "checked": "2026-07-31",
    "status": "ok"
+  },
+  "paris|restaurants|3": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
+  "paris|restaurants|4": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
+  "paris|restaurants|6": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
   },
   "paris|restaurants|7": {
    "dishes": [
@@ -4393,6 +4528,11 @@
    ],
    "checked": "2026-07-31",
    "status": "thin"
+  },
+  "paris|restaurants|13": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
   },
   "paris|restaurants|14": {
    "dishes": [
@@ -4686,6 +4826,11 @@
    "checked": "2026-07-31",
    "status": "thin"
   },
+  "milan|restaurants|6": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
   "milan|restaurants|7": {
    "dishes": [
     {
@@ -4700,6 +4845,11 @@
    ],
    "checked": "2026-07-31",
    "status": "thin"
+  },
+  "marbella|restaurants|0": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
   },
   "marbella|restaurants|1": {
    "dishes": [
@@ -4838,6 +4988,11 @@
    ],
    "checked": "2026-07-31",
    "status": "ok"
+  },
+  "marbella|restaurants|4": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
   },
   "marbella|restaurants|5": {
    "dishes": [
@@ -5100,6 +5255,11 @@
    "checked": "2026-07-31",
    "status": "ok"
   },
+  "marbella|restaurants|12": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
   "marbella|restaurants|21": {
    "dishes": [
     {
@@ -5142,6 +5302,16 @@
    ],
    "checked": "2026-07-31",
    "status": "thin"
+  },
+  "ibiza|restaurants|0": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
+  "ibiza|restaurants|3": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
   },
   "ibiza|restaurants|6": {
    "dishes": [
@@ -5856,6 +6026,11 @@
    "checked": "2026-07-31",
    "status": "thin"
   },
+  "sttropez|restaurants|0": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
   "sttropez|restaurants|2": {
    "dishes": [
     {
@@ -6134,6 +6309,16 @@
    ],
    "checked": "2026-07-31",
    "status": "thin"
+  },
+  "courchevel|restaurants|1": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
+  },
+  "courchevel|restaurants|3": {
+   "dishes": [],
+   "checked": "2026-07-31",
+   "status": "tasting_only"
   },
   "courchevel|restaurants|4": {
    "dishes": [
