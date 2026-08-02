@@ -1,0 +1,53 @@
+{
+  "name": "auralis",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Auralis — universal audio discovery engine. Find the sound. Verify the file.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "engines": {
+    "node": ">=22.6.0"
+  },
+  "workspaces": [
+    "packages/core",
+    "packages/server",
+    "packages/web"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace @auralis/core && npm run build --workspace @auralis/server && npm run build --workspace @auralis/web",
+    "dev": "node scripts/dev.mjs",
+    "start": "node --experimental-sqlite packages/server/dist/main.js",
+    "fixtures:serve": "node --experimental-sqlite packages/server/dist/fixtures/origin-cli.js",
+    "db:migrate": "node --experimental-sqlite packages/server/dist/db/migrate-cli.js",
+    "typecheck": "tsc -b packages/core packages/server packages/web --pretty false",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,css,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,css,json,md}\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:live": "AURALIS_LIVE_TESTS=1 vitest run --config vitest.live.config.ts",
+    "e2e": "playwright test",
+    "e2e:install": "playwright install chromium",
+    "audit": "npm audit --omit=dev --audit-level=high",
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run e2e"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@eslint/js": "^9.17.0",
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^22.10.5",
+    "@types/react": "^19.0.4",
+    "@types/react-dom": "^19.0.2",
+    "@vitejs/plugin-react": "^5.2.0",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0",
+    "jsdom": "^25.0.1",
+    "prettier": "^3.4.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.19.0",
+    "vite": "^7.3.6",
+    "vitest": "^4.1.10"
+  }
+}
