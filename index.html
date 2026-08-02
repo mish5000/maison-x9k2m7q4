@@ -4326,8 +4326,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '1 August 2026 · 21:15 CEST';
-const APP_BUILD = 'v476';
+const COLLECTION_UPDATED = '2 August 2026 · 04:34 CEST';
+const APP_BUILD = 'v481';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -4411,9 +4411,16 @@ const MONTH_NAMES = ['January','February','March','April','May','June','July','A
 
 const CATEGORIES = [
   { id: 'restaurants', label: 'Restaurants', sub: 'Tables worth travelling for' },
-  { id: 'lounges',     label: 'Cocktails',   sub: 'Artisan bars, lounges & salons' },
+  { id: 'lounges',     label: 'Sundown',     sub: 'Bars, salons & the golden hour' },
   { id: 'wine',        label: 'Wine',        sub: 'Cellars & bars à vins' },
-  { id: 'nightclubs',  label: 'Nightclubs',  sub: 'After dark' },
+  /* 'Nightclubs' was a lie the schema told (1 Aug). Las Vegas held six
+     speakeasies and cocktail rooms under it and nothing else, because the
+     cocktail slot was empty and this one was open; Los Angeles held five
+     members' and supper rooms; London holds Oswald's and Mark's Club. The
+     house has been filing by occasion for months. The label now says so.
+     Only the LABEL moves — the id stays `nightclubs`, so every image,
+     hours, coords, gallery, tag and dish key is untouched. */
+  { id: 'nightclubs',  label: 'After Dark',  sub: 'Members’ rooms, supper clubs & late doors' },
   /* Display category: beach + pools present as one screen; venues stay in
      their own arrays underneath so all generated data keys keep working. */
   { id: 'beachpools',  label: 'Beach & Pools', sub: 'Legendary beach clubs & iconic pools', parts: ['beach', 'pools'] },
@@ -6105,7 +6112,11 @@ function toggleYear(id, name) {
 const DAY_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const DAY_FULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const CAT_SINGLE = { restaurants: 'Restaurant', lounges: 'Cocktail Bar', wine: 'Wine Bar', nightclubs: 'Nightclub', beach: 'Beach Club', pools: 'Pool', spas: 'Spa', dayout: 'Day Out', resorts: 'Resort' };
+/* Singular descriptors for agenda and plan rows. These stay literal —
+   the CHAPTER is the occasion ('After Dark'), the venue is still what it
+   is. 'Nightclub' was the one false entry: Delilah and San Vicente
+   Bungalows are late rooms, not nightclubs. */
+const CAT_SINGLE = { restaurants: 'Restaurant', lounges: 'Cocktail Bar', wine: 'Wine Bar', nightclubs: 'Late Room', beach: 'Beach Club', pools: 'Pool', spas: 'Spa', dayout: 'Day Out', resorts: 'Resort' };
 const persistSaved = () => localStorage.setItem(SAVED_KEY, JSON.stringify([...savedSet]));
 const vkey = (cityId, catId, idx) => `${cityId}|${catId}|${idx}`;
 
