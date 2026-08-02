@@ -41,6 +41,7 @@ edit another agent's module.
 Run this against any change with a network or credential surface.
 
 **Egress**
+
 - [ ] Every outbound request goes through `createSafeFetch`. No raw `fetch`/`axios`/`node:http`/
       `node:https` outside `packages/core/src/net/`.
 - [ ] The URL passes `assertUrlAllowed` before any socket is opened, and again for each redirect hop.
@@ -51,6 +52,7 @@ Run this against any change with a network or credential surface.
 - [ ] A new allowed host has a stated reason and is added to policy, not hard-coded at a call site.
 
 **Access and downloads**
+
 - [ ] `classifyAccess` is the only thing that authorises a download.
 - [ ] The server re-derives the classification on download intent; the client's copy is advisory.
 - [ ] A provider claim cannot upgrade a candidate past its verification evidence.
@@ -58,16 +60,19 @@ Run this against any change with a network or credential surface.
       `contentDispositionAttachment`.
 
 **Tenancy and cache**
+
 - [ ] Cache keys are `shared:` or `ws:<workspaceId>:`. A private provider cannot produce a shared key.
 - [ ] Connector data is reachable only through the owning workspace.
 - [ ] Signed URLs are never cached beyond their own validity.
 
 **Secrets and logging**
+
 - [ ] No secret in source, fixtures, tests or committed config.
 - [ ] Connector credentials are encrypted at rest and never returned by the API.
 - [ ] Nothing logs an `Authorization` header, a cookie, a credential, a signed URL or raw query text.
 
 **Untrusted input**
+
 - [ ] Media bytes, XML, tags and provider payloads are bounded and never eval'd or interpolated into
       a path, a URL, or markup.
 - [ ] No shell invocation is constructed from any external value.

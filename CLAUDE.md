@@ -12,13 +12,16 @@ Auralis does not know something, it says so.
 
 ## Two applications live in this repository
 
-| Path | What it is | Rules |
-|---|---|---|
-| `auralis/` | The Auralis monorepo (npm workspaces). Everything in this file applies to it. | Active development. |
-| Repo root: `index.html`, `sw.js`, `assets/`, `dishes.json`, `lineups.json`, `manifest.json`, `version.json`, `icon-*.png`, `README.md` | **PRIVÉE** — an unrelated, self-contained static PWA. | **Preserved. Never edit, move, reformat or lint these.** They are not part of Auralis and share no code with it. |
+| Path                                                                                                                      | What it is                                                                    | Rules                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `auralis/`                                                                                                                | The Auralis monorepo (npm workspaces). Everything in this file applies to it. | Active development.                                                                                              |
+| Repo root: `index.html`, `sw.js`, `assets/`, `dishes.json`, `lineups.json`, `manifest.json`, `version.json`, `icon-*.png` | **PRIVÉE** — an unrelated, self-contained static PWA.                         | **Preserved. Never edit, move, reformat or lint these.** They are not part of Auralis and share no code with it. |
 
 Nothing under `auralis/` imports from the PRIVÉE files, and nothing in PRIVÉE imports from Auralis.
 If a tool wants to "clean up" the root files, the tool is wrong.
+
+The root `README.md` belongs to neither application — it is the index that points at both, and it is
+the only root file that may be edited. `CLAUDE.md`, `.claude/` and `docs/` are Auralis's.
 
 ## Source-access boundaries
 
@@ -36,23 +39,23 @@ definitive list plus the eight access classifications.
 
 ## Architectural map
 
-| Package / module | Responsibility |
-|---|---|
-| `@auralis/core` `domain/` | Pure types and vocabularies. No I/O, no logic that can fail. |
-| `@auralis/core` `net/` | The **only** outbound HTTP path: URL safety, IP classification, `createSafeFetch`. |
-| `@auralis/core` `media/` | In-house pure parsers (MP3, FLAC, RIFF/WAVE, AIFF, MP4/M4A/ALAC, Ogg, ID3, Vorbis comments) + `probeMedia`. |
-| `@auralis/core` `access/` | `classifyAccess` — the sole authority on whether a download may be offered. |
-| `@auralis/core` `compat/` | Versioned device profiles (data) and the single compatibility evaluator (logic). |
-| `@auralis/core` `dedupe/` | Progressive fingerprinting and incremental duplicate grouping. |
-| `@auralis/core` `scoring/` | Transparent quality, relevance and ranking scores with published breakdowns. |
-| `@auralis/core` `query/` | Query normalisation, operator parsing, bounded variant generation. |
-| `@auralis/core` `cache/` | `CacheStore` interface, bounded in-process LRU, scope-safe key construction. |
-| `@auralis/core` `observability/` | Redacting logger and privacy-safe metrics. |
-| `@auralis/core` `orchestrate/` | Circuit breakers, budgets, the search pipeline, verification. |
-| `@auralis/core` `providers/` | Source adapters + registry. Adapters implement `SearchProvider` and nothing else. |
-| `@auralis/core` `api/contract.ts` | Zod schemas — one source of truth for server validation and client types. |
-| `@auralis/server` | Fastify HTTP layer, SSE event stream, SQLite persistence, connector storage, download-intent enforcement. |
-| `@auralis/web` | React 19 + Vite client. Progressive result rendering, accessibility, design tokens. |
+| Package / module                  | Responsibility                                                                                              |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `@auralis/core` `domain/`         | Pure types and vocabularies. No I/O, no logic that can fail.                                                |
+| `@auralis/core` `net/`            | The **only** outbound HTTP path: URL safety, IP classification, `createSafeFetch`.                          |
+| `@auralis/core` `media/`          | In-house pure parsers (MP3, FLAC, RIFF/WAVE, AIFF, MP4/M4A/ALAC, Ogg, ID3, Vorbis comments) + `probeMedia`. |
+| `@auralis/core` `access/`         | `classifyAccess` — the sole authority on whether a download may be offered.                                 |
+| `@auralis/core` `compat/`         | Versioned device profiles (data) and the single compatibility evaluator (logic).                            |
+| `@auralis/core` `dedupe/`         | Progressive fingerprinting and incremental duplicate grouping.                                              |
+| `@auralis/core` `scoring/`        | Transparent quality, relevance and ranking scores with published breakdowns.                                |
+| `@auralis/core` `query/`          | Query normalisation, operator parsing, bounded variant generation.                                          |
+| `@auralis/core` `cache/`          | `CacheStore` interface, bounded in-process LRU, scope-safe key construction.                                |
+| `@auralis/core` `observability/`  | Redacting logger and privacy-safe metrics.                                                                  |
+| `@auralis/core` `orchestrate/`    | Circuit breakers, budgets, the search pipeline, verification.                                               |
+| `@auralis/core` `providers/`      | Source adapters + registry. Adapters implement `SearchProvider` and nothing else.                           |
+| `@auralis/core` `api/contract.ts` | Zod schemas — one source of truth for server validation and client types.                                   |
+| `@auralis/server`                 | Fastify HTTP layer, SSE event stream, SQLite persistence, connector storage, download-intent enforcement.   |
+| `@auralis/web`                    | React 19 + Vite client. Progressive result rendering, accessibility, design tokens.                         |
 
 Dependency direction is one-way: `web → core`, `server → core`. Core never imports from server or web.
 
@@ -111,15 +114,15 @@ A change is done when **all** of these hold:
 
 ## Testing requirements
 
-| Layer | Expectation |
-|---|---|
-| Pure logic (probe, parsers, scoring, dedupe, classify, normalise) | Unit tests with fixtures. Table-driven where the input space is enumerable. |
-| Media parsers | Fixture files per format **plus** hostile inputs: truncated, oversized declared lengths, wrong magic bytes, deep nesting. |
-| `net/` | Tests use an injected `DnsResolver` and the local fixture origin. Never the public internet. |
-| Providers | Must pass the shared contract-test suite (see `.claude/rules/provider-adapters.md`). |
-| API | Schema validation tests for every endpoint, including rejection cases. |
-| UI | Accessibility assertions via `@axe-core/playwright`; keyboard-only paths for every action. |
-| Live tests | Only under `npm run test:live`, gated by `AURALIS_LIVE_TESTS=1`. Never in `verify`'s unit run. |
+| Layer                                                             | Expectation                                                                                                               |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Pure logic (probe, parsers, scoring, dedupe, classify, normalise) | Unit tests with fixtures. Table-driven where the input space is enumerable.                                               |
+| Media parsers                                                     | Fixture files per format **plus** hostile inputs: truncated, oversized declared lengths, wrong magic bytes, deep nesting. |
+| `net/`                                                            | Tests use an injected `DnsResolver` and the local fixture origin. Never the public internet.                              |
+| Providers                                                         | Must pass the shared contract-test suite (see `.claude/rules/provider-adapters.md`).                                      |
+| API                                                               | Schema validation tests for every endpoint, including rejection cases.                                                    |
+| UI                                                                | Accessibility assertions via `@axe-core/playwright`; keyboard-only paths for every action.                                |
+| Live tests                                                        | Only under `npm run test:live`, gated by `AURALIS_LIVE_TESTS=1`. Never in `verify`'s unit run.                            |
 
 ## Security invariants
 
@@ -143,7 +146,7 @@ These are short on purpose. Memorise them.
 
 ## The provider-adapter contract
 
-A provider is a source of *claims*, never a source of *truth*. It implements `SearchProvider` from
+A provider is a source of _claims_, never a source of _truth_. It implements `SearchProvider` from
 `packages/core/src/domain/provider.ts`: an `id`, a `displayName`, a static `capabilities` object that
 the orchestrator reads without calling the provider, an async-iterable `search()` that yields
 `RawSearchCandidate`s as it finds them, and a `healthCheck()`. It receives a `SearchContext` carrying
@@ -165,16 +168,16 @@ mandatory contract-test suite: `.claude/rules/provider-adapters.md`.
 
 ## File ownership
 
-| Owner | Paths |
-|---|---|
-| `architecture-lead` | `CLAUDE.md`, `.claude/**`, `docs/**` |
-| `experience-design` | `auralis/packages/web/**` |
-| `source-integrations` | `auralis/packages/core/src/providers/**`, `docs/providers/*` (content) |
-| `media-forensics` | `auralis/packages/core/src/media/**`, `auralis/packages/core/src/compat/**` |
-| `security-and-platform` | `auralis/packages/core/src/net/**`, `auralis/packages/core/src/access/**`, `auralis/packages/core/src/util/filenames.ts` |
-| `verification-performance` | test files, fixtures, `auralis/e2e/**` |
-| `coordinator` | `auralis/packages/core/**` (unclaimed), `auralis/packages/server/**`, root configs |
-| **nobody** | PRIVÉE root files. Preserved. |
+| Owner                      | Paths                                                                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `architecture-lead`        | `CLAUDE.md`, `.claude/**`, `docs/**`                                                                                     |
+| `experience-design`        | `auralis/packages/web/**`                                                                                                |
+| `source-integrations`      | `auralis/packages/core/src/providers/**`, `docs/providers/*` (content)                                                   |
+| `media-forensics`          | `auralis/packages/core/src/media/**`, `auralis/packages/core/src/compat/**`                                              |
+| `security-and-platform`    | `auralis/packages/core/src/net/**`, `auralis/packages/core/src/access/**`, `auralis/packages/core/src/util/filenames.ts` |
+| `verification-performance` | test files, fixtures, `auralis/e2e/**`                                                                                   |
+| `coordinator`              | `auralis/packages/core/**` (unclaimed), `auralis/packages/server/**`, root configs                                       |
+| **nobody**                 | PRIVÉE root files. Preserved.                                                                                            |
 
 Editing outside your ownership is a hand-off, not a commit.
 
@@ -214,4 +217,6 @@ Then confirm, explicitly:
 - [ ] Docs updated: ADR for a decision, `docs/providers/` page for a new adapter, threat-model row for
       a new attack surface.
 - [ ] No files outside your ownership were modified.
-- [ ] The PRIVÉE root files are untouched (`git status` shows nothing at the repo root).
+- [ ] The PRIVÉE root files are untouched:
+      `git diff --stat HEAD -- index.html sw.js manifest.json version.json dishes.json lineups.json assets/ 'icon-*.png'`
+      prints nothing.

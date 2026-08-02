@@ -37,6 +37,7 @@ Test configuration (`vitest*.config.*`, `playwright.config.*`) is `coordinator`'
 ## Review checklist
 
 **Gate — run in this order, stop at the first failure**
+
 ```sh
 cd auralis && npm run format:check
 cd auralis && npm run lint
@@ -46,9 +47,11 @@ cd auralis && npm run build
 cd auralis && npm run e2e
 cd auralis && npm run audit
 ```
+
 (`npm run verify` runs the first six as one command; run `audit` separately.)
 
 **Coverage**
+
 - [ ] New behaviour has a test that fails without the change.
 - [ ] New failure modes have a test asserting the failure, its error code and its user-facing message.
 - [ ] Boundary cases exist for anything with a numeric bound.
@@ -57,6 +60,7 @@ cd auralis && npm run audit
 - [ ] Accessibility assertions run on every route.
 
 **Isolation**
+
 - [ ] No unit or e2e test reaches the public internet. Network tests use an injected `DnsResolver`
       or the local fixture origin.
 - [ ] Network-touching tests are confined to `npm run test:live` behind `AURALIS_LIVE_TESTS=1`.
@@ -64,6 +68,7 @@ cd auralis && npm run audit
 - [ ] No test writes outside a temporary directory.
 
 **Performance**
+
 - [ ] A search's wall-clock budget is respected even when a provider hangs.
 - [ ] Cancellation propagates: aborting the client stream stops provider work and probing.
 - [ ] Verification fetches a bounded sample, not the file.

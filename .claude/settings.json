@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/block-secrets.sh" },
+          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/protect-generated.sh" },
+          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/network-guard.sh" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/post-edit-checks.sh" }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": "AURALIS_HOOK_EVENT=subagent-stop $CLAUDE_PROJECT_DIR/.claude/hooks/agent-events.sh" }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(cd auralis && npm run build)",
+      "Bash(cd auralis && npm run typecheck)",
+      "Bash(cd auralis && npm run lint)",
+      "Bash(cd auralis && npm run lint:fix)",
+      "Bash(cd auralis && npm run format)",
+      "Bash(cd auralis && npm run format:check)",
+      "Bash(cd auralis && npm test)",
+      "Bash(cd auralis && npm run test:watch)",
+      "Bash(cd auralis && npm run e2e)",
+      "Bash(cd auralis && npm run audit)",
+      "Bash(cd auralis && npm run verify)",
+      "Bash(cd auralis && npm run db:migrate)",
+      "Bash(cd auralis && npx tsc -b:*)",
+      "Bash(cd auralis && npx vitest run:*)",
+      "Bash(cd auralis && npx eslint:*)",
+      "Bash(cd auralis && npx prettier:*)",
+      "Bash(cd auralis && npx playwright test:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git branch:*)"
+    ],
+    "deny": [
+      "Read(./auralis/.env)",
+      "Read(./auralis/.env.*)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Write(./auralis/**/dist/**)",
+      "Write(./index.html)",
+      "Write(./sw.js)",
+      "Write(./manifest.json)",
+      "Write(./dishes.json)",
+      "Write(./lineups.json)",
+      "Write(./version.json)",
+      "Write(./assets/**)"
+    ]
+  }
+}
