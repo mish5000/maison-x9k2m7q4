@@ -6,6 +6,21 @@
    ~50MB shell must not stall the page). Online always works; offline
    works once the shell has been cached by one good online load. */
 const CACHE = 'privee-shell-v2';
+
+/* Cache key = the URL WITHOUT its query string.
+   The app fetches lineups.json, dishes.json and version.json with
+   `?ts=' + Date.now()` to defeat the HTTP cache. The Cache API keys on the
+   FULL url, so every launch stored a new, permanently unreachable entry —
+   dishes.json alone is ~138KB, roughly 15MB of garbage per 100 launches
+   against the ~50MB iOS quota this file's own header names as the
+   constraint. It also silently broke offline for exactly these files: the
+   timestamp at read never equals the one at write, so the fallback
+   `caches.match(req)` could never hit and offline fell through to `{}`.
+   The baked seeds masked it. Normalise on BOTH put and match. */
+const keyFor = (req) => {
+  try { const u = new URL(req.url); u.search = ''; return u.toString(); }
+  catch (_) { return req; }
+};
 const SHELL = './';
 const OFFLINE_HTML =
   '<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1">' +
@@ -22,6 +37,7 @@ self.addEventListener('activate', (e) => {
     // purge any older (possibly incomplete) cache from a prior worker
     for (const k of await caches.keys()) if (k !== CACHE) await caches.delete(k);
     await self.clients.claim();
+    await sweepTimestamped();        // clean what earlier versions leaked
     await cacheShellOnce();          // grab the shell the moment we take control
   })());
 });
@@ -33,6 +49,22 @@ self.addEventListener('message', (e) => {
     if (e.source) e.source.postMessage('flushed');
   })());
 });
+
+/* One-time cleanup for installs that ran the leaking version: drop every
+   entry carrying a query string. Bounded — it walks the existing key list
+   once and deletes only what it matched, so a huge cache cannot stall
+   activation into a loop. */
+async function sweepTimestamped() {
+  try {
+    const c = await caches.open(CACHE);
+    const keys = await c.keys();
+    let n = 0;
+    for (const req of keys) {
+      if (n >= 500) break;                       // hard bound on one activation
+      try { if (new URL(req.url).search) { await c.delete(req); n++; } } catch (_) {}
+    }
+  } catch (_) { /* quota or unsupported — never block activation */ }
+}
 
 /* cache the whole shell in the background, at most once, reusing the copy
    the browser already downloaded (force-cache) so it costs no extra data.
@@ -52,7 +84,12 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET' || url.origin !== location.origin) return;
 
   const isNav = req.mode === 'navigate' || url.pathname.endsWith('/') || url.pathname.endsWith('index.html');
-  const isSidecar = url.pathname.endsWith('version.json') || url.pathname.endsWith('lineups.json');
+  // dishes.json was missing here, so the largest of the three fell through to
+  // the CACHE-FIRST generic branch — worst case: never a hit, a new entry every
+  // launch, and a stale list served forever once one was stored.
+  const isSidecar = url.pathname.endsWith('version.json')
+    || url.pathname.endsWith('lineups.json')
+    || url.pathname.endsWith('dishes.json');
 
   if (isNav) {
     e.respondWith((async () => {
@@ -76,10 +113,10 @@ self.addEventListener('fetch', (e) => {
     e.respondWith((async () => {
       try {
         const net = await fetch(req, { cache: 'no-store' });
-        (await caches.open(CACHE)).put(req, net.clone());
+        (await caches.open(CACHE)).put(keyFor(req), net.clone());
         return net;
       } catch (_) {
-        return (await caches.match(req)) ||
+        return (await caches.match(keyFor(req))) ||
           new Response('{}', { headers: { 'Content-Type': 'application/json' } });
       }
     })());
@@ -90,14 +127,14 @@ self.addEventListener('fetch', (e) => {
   // any image you've actually looked at is available offline. Bounded by what
   // you browse — never a full precache, which would blow the iOS ~50MB quota.
   e.respondWith((async () => {
-    const cached = await caches.match(req);
+    const cached = await caches.match(keyFor(req));
     if (cached) return cached;
     try {
       const net = await fetch(req);
       if (net && net.ok && /\.(jpg|jpeg|png|json|webmanifest)$/.test(url.pathname)) {
         const copy = net.clone();
         e.waitUntil((async () => {
-          try { await (await caches.open(CACHE)).put(req, copy); } catch (_) {}
+          try { await (await caches.open(CACHE)).put(keyFor(req), copy); } catch (_) {}
         })());
       }
       return net;
