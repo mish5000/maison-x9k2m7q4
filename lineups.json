@@ -1,22 +1,8 @@
 {
- "generated": "2026-08-01T19:22:28Z",
+ "generated": "2026-08-02T03:12:15Z",
  "venues": {
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-07-31": {
-     "hl": "Dom Dolla",
-     "line": [
-      "Dom Dolla",
-      "KI/KI",
-      "Dean Turnley",
-      "Tyson O’Brien",
-      "Ewan McVicar B2B Dart"
-     ],
-     "party": "BBC Radio 1 Dance X",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-01": {
      "hl": "Black Coffee",
      "line": [
@@ -130,24 +116,24 @@
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-09": {
+     "hl": "CamelPhat",
+     "line": [
+      "CamelPhat",
+      "Butch",
+      "Indira Paganotto",
+      "Azyr"
+     ],
+     "party": "Summer Of Love",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-07-31": {
-     "hl": "Calvin Harris",
-     "line": [
-      "Calvin Harris",
-      "MK",
-      "Weiss",
-      "Tyson O’Brien"
-     ],
-     "party": "",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-01": {
      "hl": "Cloonee",
      "line": [
@@ -250,25 +236,23 @@
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-09": {
+     "hl": "Swedish House Mafia",
+     "line": [
+      "Swedish House Mafia",
+      "Bea Sylvan",
+      "Nosefine"
+     ],
+     "party": "",
+     "doors": "17:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-07-31": {
-     "hl": "Marco Carola",
-     "line": [
-      "Marco Carola",
-      "The Martinez Brothers",
-      "Luke Dean",
-      "Jean Pierre",
-      "Jesse Calosso"
-     ],
-     "party": "Music On",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-01": {
      "hl": "Roger Sanchez",
      "line": [
@@ -366,26 +350,21 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-09": {
+     "hl": "Solomun",
+     "line": [
+      "Solomun"
+     ],
+     "party": "",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-07-31": {
-     "hl": "David Morales",
-     "line": [
-      "David Morales",
-      "Michael Gray",
-      "Todd Terry",
-      "Inner City",
-      "Jellybean Benitez",
-      "Myd"
-     ],
-     "party": "Glitterbox",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-02": {
      "hl": "Richie Hawtin",
      "line": [
@@ -484,21 +463,25 @@
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-09": {
+     "hl": "Interplanetary Criminal",
+     "line": [
+      "Interplanetary Criminal",
+      "Luke Dean B2B Sidney Charles",
+      "Silva Bumpa",
+      "Héctor Oaks",
+      "999999999"
+     ],
+     "party": "Pyramid",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "marbella|nightclubs|0": {
    "nights": {
-    "2026-07-31": {
-     "hl": "Summerians",
-     "line": [
-      "Summerians"
-     ],
-     "party": "",
-     "doors": "23:45",
-     "src": "mandalatickets.com",
-     "conf": "high"
-    },
     "2026-08-01": {
      "hl": "Macarena",
      "line": [
@@ -523,18 +506,6 @@
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-07-31": {
-     "hl": "Richie Hawtin",
-     "line": [
-      "Richie Hawtin",
-      "Sama’ Abdulhadi",
-      "Egmond"
-     ],
-     "party": "",
-     "doors": "23:59",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
     "2026-08-01": {
      "hl": "Joel Corry",
      "line": [
@@ -605,14 +576,6 @@
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-07-31": {
-     "hl": "Tyga",
-     "line": "Tyga",
-     "party": "Live at E11EVEN",
-     "doors": "23:00",
-     "src": "11miami.com",
-     "conf": "high"
-    },
     "2026-08-01": {
      "hl": "Laidback Luke",
      "line": "Laidback Luke",
@@ -689,16 +652,6 @@
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-07-31": {
-     "hl": "Sebastian Gamboa",
-     "line": [
-      "Sebastian Gamboa"
-     ],
-     "party": "Vintage",
-     "doors": "20:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-01": {
      "hl": "Kōdō",
      "line": [],
@@ -768,26 +721,19 @@
      "doors": "20:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-09": {
+     "hl": "Travieso",
+     "line": [],
+     "party": "Travieso",
+     "doors": "20:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-07-31": {
-     "hl": "Cinthie",
-     "line": [
-      "Cinthie",
-      "Ryan O Gorman",
-      "Willie Graff",
-      "Mina",
-      "Corbi",
-      "Rhythm & Bliss"
-     ],
-     "party": "Pikes Sessions",
-     "doors": "21:00",
-     "src": "pikesibiza.com",
-     "conf": "high"
-    },
     "2026-08-01": {
      "hl": "PBR Streetgang",
      "line": [
@@ -909,14 +855,6 @@
   },
   "miami|nightclubs|0": {
    "nights": {
-    "2026-07-31": {
-     "hl": "Galantis",
-     "line": [],
-     "party": "",
-     "doors": "23:30",
-     "src": "livnightclub.com",
-     "conf": "high"
-    },
     "2026-08-01": {
      "hl": "Laszewo",
      "line": [],
@@ -935,32 +873,8 @@
     }
    }
   },
-  "miami|nightclubs|2": {
-   "nights": {
-    "2026-07-31": {
-     "hl": "Vintage Culture",
-     "line": [
-      "Vintage Culture",
-      "Doozie",
-      "GABS"
-     ],
-     "party": "",
-     "doors": "23:00",
-     "src": "dice.fm",
-     "conf": "med"
-    }
-   }
-  },
   "aspen|nightclubs|1": {
    "nights": {
-    "2026-07-31": {
-     "hl": "Melissa Etheridge",
-     "line": "Melissa Etheridge",
-     "party": "RISE",
-     "doors": "",
-     "src": "bellyupaspen.com",
-     "conf": "high"
-    },
     "2026-08-01": {
      "hl": "Easy Jim",
      "line": "Easy Jim",
@@ -981,14 +895,6 @@
   },
   "hamptons|nightclubs|0": {
    "nights": {
-    "2026-07-31": {
-     "hl": "West 22nd",
-     "line": "West 22nd: Places To Be · Rubix Kube",
-     "party": "",
-     "doors": "20:00",
-     "src": "stephentalkhouse.com",
-     "conf": "high"
-    },
     "2026-08-01": {
      "hl": "Cimafunk",
      "line": "Cimafunk · Rated Fresh",
@@ -1025,16 +931,6 @@
   },
   "monaco|nightclubs|0": {
    "nights": {
-    "2026-07-31": {
-     "hl": "Monolink",
-     "line": [
-      "Monolink"
-     ],
-     "party": "Monolink Night",
-     "doors": "",
-     "src": "montecarlosbm.com",
-     "conf": "high"
-    },
     "2026-08-06": {
      "hl": "Vintage Culture",
      "line": [
