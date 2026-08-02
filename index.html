@@ -4326,8 +4326,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '2 August 2026 · 04:34 CEST';
-const APP_BUILD = 'v481';
+const COLLECTION_UPDATED = '2 August 2026 · 04:42 CEST';
+const APP_BUILD = 'v484';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -4411,8 +4411,12 @@ const MONTH_NAMES = ['January','February','March','April','May','June','July','A
 
 const CATEGORIES = [
   { id: 'restaurants', label: 'Restaurants', sub: 'Tables worth travelling for' },
-  { id: 'lounges',     label: 'Sundown',     sub: 'Bars, salons & the golden hour' },
-  { id: 'wine',        label: 'Wine',        sub: 'Cellars & bars à vins' },
+  /* Wine folded in (2 Aug). 27 venues across 22 cities — ABSENT in 13, real
+     (5+) in exactly two, London and Paris. A tile that three venues cannot
+     fill still shouts as loudly as the 249-venue Restaurants tile, because
+     the grammar has no way to express weight. It keeps its own sub-heading
+     INSIDE the chapter, so nothing is buried; only the front door closes. */
+  { id: 'sundown',     label: 'Sundown',     sub: 'Bars, cellars & the golden hour', parts: ['lounges', 'wine'] },
   /* 'Nightclubs' was a lie the schema told (1 Aug). Las Vegas held six
      speakeasies and cocktail rooms under it and nothing else, because the
      cocktail slot was empty and this one was open; Los Angeles held five
@@ -4424,9 +4428,16 @@ const CATEGORIES = [
   /* Display category: beach + pools present as one screen; venues stay in
      their own arrays underneath so all generated data keys keep working. */
   { id: 'beachpools',  label: 'Beach & Pools', sub: 'Legendary beach clubs & iconic pools', parts: ['beach', 'pools'] },
-  { id: 'spas',        label: 'Spas',        sub: 'Sanctuaries of wellness' },
-  { id: 'dayout',      label: 'Day Out',     sub: 'Extraordinary days' },
-  { id: 'resorts',     label: 'Resorts',     sub: 'Stay exceptional' },
+  /* Spas + Day Out merged (2 Aug). The number that settles it: they are
+     empty in the SAME nine cities, so the merge creates no new blank, and
+     in all thirteen cities where either exists the merged tile is 4 or more.
+     Two tiles thin in ten cities become one thin in none. 'Day Out' also
+     read faintly downmarket — in British English it is a coach trip. */
+  { id: 'byday',       label: 'By Day',      sub: 'Spas, sport & extraordinary days', parts: ['spas', 'dayout'] },
+  /* 'Resorts' is wrong in twelve of twenty-two cities — Milan, Madrid,
+     London, New York and Paris have none. Calling The Connaught a resort
+     loses exactly the reader who knows. Label only; the id stays. */
+  { id: 'resorts',     label: 'Hotels',      sub: 'Stay exceptional' },
   /* His 29 Jul ask: the buzz tab — brand-new, high-visibility rooms.
      Sits LAST so it lands immediately before the Concierge tile. */
   { id: 'whatsnew',    label: "What's New",   sub: 'Just opened, already the room' },
@@ -6199,7 +6210,16 @@ const monogram = (v, cls) => `
 /* Display categories can bundle several venue arrays (parts) — e.g. Beach &
    Pools — while venues stay under their real category keys underneath. */
 const catParts = (cat) => cat.parts || [cat.id];
-const displayCat = (catId) => (catId === 'beach' || catId === 'pools') ? 'beachpools' : catId;
+/* Storage key -> the display chapter that now contains it. Built FROM
+   CATEGORIES rather than hardcoded, so every merge folds its old deep links
+   in automatically: #/cat/london/wine still resolves after Wine moved inside
+   Sundown, and a saved link from before the merge keeps working. */
+const PART_TO_DISPLAY = (() => {
+  const m = {};
+  for (const c of CATEGORIES) for (const p of (c.parts || [])) m[p] = c.id;
+  return m;
+})();
+const displayCat = (catId) => PART_TO_DISPLAY[catId] || catId;
 const catVenueEntries = (city, cat) =>
   catParts(cat).flatMap(part => (city.venues[part] || []).map((v, i) => ({ part, v, i })));
 
@@ -7096,7 +7116,7 @@ function viewCategory(cityId, catId) {
   const cat = CAT_BY_ID[catId];
   if (!city || !cat) { go('#/'); return; }
 
-  const PART_HEAD = { beach: 'Beach Clubs', pools: 'Pools' };
+  const PART_HEAD = { beach: 'Beach Clubs', pools: 'Pools', lounges: 'Cocktail Bars', wine: 'Wine', spas: 'Spas', dayout: 'Days Out' };
   const groups = catParts(cat)
     .map(part => ({ part, list: city.venues[part] || [] }))
     .filter(g => g.list.length);
