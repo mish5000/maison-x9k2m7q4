@@ -196,6 +196,28 @@ searched locally. Setting it with `NODE_ENV=production` is refused at start-up.
 
 ---
 
+## Deploying
+
+One container, one persistent volume, one instance — Node's SQLite is
+single-process, so this deliberately does not autoscale. `Dockerfile` and
+`fly.toml` are here; the Render blueprint is `render.yaml` at the repository
+root.
+
+```bash
+cd auralis
+fly launch --no-deploy --copy-config
+fly volumes create auralis_data --size 1
+fly secrets set AURALIS_SECRET_KEY="$(openssl rand -base64 32)" \
+                AURALIS_SESSION_SECRET="$(openssl rand -hex 32)"
+fly deploy
+```
+
+Full notes, including why an HTTP egress proxy is incompatible with IP pinning
+and what a fresh deployment can search before anything is configured:
+[`../docs/operations/deployment.md`](../docs/operations/deployment.md).
+
+---
+
 ## Testing
 
 ```bash

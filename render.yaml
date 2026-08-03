@@ -1,0 +1,46 @@
+# Render blueprint.
+#
+# Equivalent to auralis/fly.toml for Render. One instance with a persistent disk;
+# see docs/operations/deployment.md for why it does not scale horizontally.
+#
+# This file sits at the repository root because that is where Render looks for a
+# blueprint, but the application is the auralis/ subdirectory — hence the
+# explicit dockerContext.
+#
+# The two generateValue secrets are created by Render on first deploy and are
+# never shown in the dashboard as plain text after that. If you would rather
+# supply your own, change them to `sync: false` and set them manually.
+
+services:
+  - type: web
+    name: auralis
+    runtime: docker
+    dockerfilePath: ./auralis/Dockerfile
+    dockerContext: ./auralis
+    plan: starter
+    region: frankfurt
+    healthCheckPath: /health
+    numInstances: 1
+    disk:
+      name: auralis-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: AURALIS_PORT
+        value: 8080
+      - key: AURALIS_HOST
+        value: 0.0.0.0
+      - key: AURALIS_SERVE_WEB
+        value: true
+      - key: AURALIS_WEB_DIST
+        value: packages/web/dist
+      - key: AURALIS_DATABASE_PATH
+        value: /data/auralis.db
+      - key: AURALIS_LOG_LEVEL
+        value: info
+      - key: AURALIS_SECRET_KEY
+        generateValue: true
+      - key: AURALIS_SESSION_SECRET
+        generateValue: true
