@@ -40,6 +40,21 @@ Search for `tone` to see the pipeline end to end.
 Requires **Node 22.6 or newer**. There is no database server, no native build
 step, and no external media tool to install.
 
+### No computer to hand?
+
+Open the repository in a GitHub Codespace — it runs entirely in a browser,
+including a mobile one. `.devcontainer/devcontainer.json` installs and builds on
+first start, so the only thing left is:
+
+```bash
+npm run dev
+```
+
+Codespaces forwards port 5174 and gives it a URL you can open from any device.
+It is a development environment, not a deployment: it sleeps when idle and stops
+when you delete it. For something permanent, see
+[deploying](#deploying).
+
 ### Commands
 
 | Command                  | What it does                                                  |

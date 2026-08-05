@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json",
+  "name": "Auralis",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}/auralis",
+
+  // Installs and builds on first start, so the only command left to run is
+  // `npm run dev`. Node 22.6+ is required for node:sqlite.
+  "onCreateCommand": "cd /workspaces/${localWorkspaceFolderBasename}/auralis && npm install && npm run build",
+
+  "forwardPorts": [5174, 5175],
+  "portsAttributes": {
+    "5174": { "label": "Auralis (open this one)", "onAutoForward": "openBrowser" },
+    "5175": { "label": "Auralis API", "onAutoForward": "silent" },
+    "5176": { "label": "Fixture origin", "onAutoForward": "silent" }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+    }
+  }
+}
