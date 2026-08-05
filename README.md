@@ -1,5 +1,7 @@
 # PRIVÉE — The Marafie Collection
 
+[![CI](https://github.com/mish5000/maison-x9k2m7q4/actions/workflows/ci.yml/badge.svg)](https://github.com/mish5000/maison-x9k2m7q4/actions/workflows/ci.yml)
+
 A private, offline-capable travel and dining guide, shipped as an installable
 progressive web app. It covers 22 cities, 213 curated restaurants and 14
 nightclubs, with per-venue signature dishes and nightly DJ line-ups.

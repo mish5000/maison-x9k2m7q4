@@ -1,0 +1,11 @@
+version: 2
+updates:
+  # Neither app has a package manager — the only moving dependency is the set
+  # of GitHub Actions the workflow pins. Those go stale and occasionally carry
+  # security fixes, and nothing else would tell us.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "ci"

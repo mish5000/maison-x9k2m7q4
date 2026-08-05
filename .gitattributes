@@ -1,0 +1,13 @@
+# Normalise line endings on commit. Verified no tracked text file currently
+# contains CRLF, so this introduces no renormalisation diff.
+* text=auto eol=lf
+
+# index.html is a ~1.5 MB generated artifact, not hand-written source. Marking
+# it collapses it in diffs and stops it dominating the repository's language
+# stats — it is not representative of any code anyone here writes.
+index.html linguist-generated=true
+
+# Photography is binary; never try to diff or merge it.
+*.jpg  binary
+*.jpeg binary
+*.png  binary
