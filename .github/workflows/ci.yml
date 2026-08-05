@@ -1,0 +1,38 @@
+name: CI
+
+# Every push to main publishes to the live site and reaches installed devices
+# on their next launch. These checks are the only thing standing between a bad
+# commit and a broken app on someone's home screen, so they run on both the
+# push and the pull request.
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify the site is safe to publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # assets/ is ~113 MB; history is not needed to validate a snapshot.
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Parse-check the shell and the service worker
+        run: python3 tools/check_syntax.py
+
+      - name: Validate data files, manifest and asset references
+        run: python3 tools/validate.py
