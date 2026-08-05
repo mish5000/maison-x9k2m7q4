@@ -679,7 +679,9 @@
    "nights": {
     "2026-08-04": {
      "hl": "CX",
-     "line": "CX",
+     "line": [
+      "CX"
+     ],
      "party": "",
      "doors": "23:00",
      "src": "11miami.com",
@@ -687,7 +689,9 @@
     },
     "2026-08-05": {
      "hl": "Suttun",
-     "line": "Suttun",
+     "line": [
+      "Suttun"
+     ],
      "party": "",
      "doors": "23:00",
      "src": "11miami.com",
@@ -695,7 +699,9 @@
     },
     "2026-08-06": {
      "hl": "A-Train",
-     "line": "A-Train",
+     "line": [
+      "A-Train"
+     ],
      "party": "",
      "doors": "23:00",
      "src": "11miami.com",
@@ -703,7 +709,9 @@
     },
     "2026-08-07": {
      "hl": "Ruckus",
-     "line": "Ruckus",
+     "line": [
+      "Ruckus"
+     ],
      "party": "",
      "doors": "23:00",
      "src": "11miami.com",
@@ -711,7 +719,9 @@
     },
     "2026-08-08": {
      "hl": "Eric Dlux",
-     "line": "Eric Dlux",
+     "line": [
+      "Eric Dlux"
+     ],
      "party": "",
      "doors": "23:00",
      "src": "11miami.com",
@@ -719,7 +729,9 @@
     },
     "2026-08-09": {
      "hl": "Damaged Goods",
-     "line": "Damaged Goods",
+     "line": [
+      "Damaged Goods"
+     ],
      "party": "",
      "doors": "23:00",
      "src": "11miami.com",
@@ -727,7 +739,9 @@
     },
     "2026-08-10": {
      "hl": "Emkay",
-     "line": "Emkay",
+     "line": [
+      "Emkay"
+     ],
      "party": "",
      "doors": "23:00",
      "src": "11miami.com",
@@ -735,7 +749,9 @@
     },
     "2026-08-11": {
      "hl": "LIVITUP",
-     "line": "LIVITUP",
+     "line": [
+      "LIVITUP"
+     ],
      "party": "",
      "doors": "23:00",
      "src": "11miami.com",
@@ -743,7 +759,9 @@
     },
     "2026-08-12": {
      "hl": "ZEUS",
-     "line": "ZEUS",
+     "line": [
+      "ZEUS"
+     ],
      "party": "",
      "doors": "23:00",
      "src": "11miami.com",
@@ -960,7 +978,9 @@
    "nights": {
     "2026-08-06": {
      "hl": "Arden Jones",
-     "line": "Arden Jones",
+     "line": [
+      "Arden Jones"
+     ],
      "party": "Up In The Sky Pre-Show",
      "doors": "",
      "src": "bellyupaspen.com",
@@ -968,7 +988,9 @@
     },
     "2026-08-07": {
      "hl": "Elderbrook",
-     "line": "Elderbrook",
+     "line": [
+      "Elderbrook"
+     ],
      "party": "Up In The Sky Official After Show",
      "doors": "",
      "src": "bellyupaspen.com",
@@ -976,7 +998,9 @@
     },
     "2026-08-11": {
      "hl": "Chevy Metal",
-     "line": "Chevy Metal",
+     "line": [
+      "Chevy Metal"
+     ],
      "party": "",
      "doors": "",
      "src": "bellyupaspen.com",
@@ -984,7 +1008,9 @@
     },
     "2026-08-12": {
      "hl": "La Luz",
-     "line": "La Luz",
+     "line": [
+      "La Luz"
+     ],
      "party": "",
      "doors": "",
      "src": "bellyupaspen.com",
@@ -996,7 +1022,9 @@
    "nights": {
     "2026-08-04": {
      "hl": "North Mississippi Allstars",
-     "line": "North Mississippi Allstars",
+     "line": [
+      "North Mississippi Allstars"
+     ],
      "party": "",
      "doors": "20:00",
      "src": "stephentalkhouse.com",
@@ -1004,7 +1032,9 @@
     },
     "2026-08-05": {
      "hl": "The Revivalists",
-     "line": "The Revivalists",
+     "line": [
+      "The Revivalists"
+     ],
      "party": "",
      "doors": "20:00",
      "src": "songkick.com",
@@ -1012,7 +1042,9 @@
     },
     "2026-08-07": {
      "hl": "Nancy Atlas",
-     "line": "Nancy Atlas",
+     "line": [
+      "Nancy Atlas"
+     ],
      "party": "",
      "doors": "20:00",
      "src": "songkick.com",
@@ -1020,7 +1052,9 @@
     },
     "2026-08-08": {
      "hl": "Paul Cauthen",
-     "line": "Paul Cauthen",
+     "line": [
+      "Paul Cauthen"
+     ],
      "party": "",
      "doors": "20:00",
      "src": "songkick.com",
@@ -1028,7 +1062,9 @@
     },
     "2026-08-09": {
      "hl": "Joan Osborne",
-     "line": "Joan Osborne",
+     "line": [
+      "Joan Osborne"
+     ],
      "party": "",
      "doors": "20:00",
      "src": "songkick.com",
