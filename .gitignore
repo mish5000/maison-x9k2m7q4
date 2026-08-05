@@ -37,3 +37,21 @@ venv/
 # Never publish a working copy of the shell — index.html is the deployed artifact
 index.html.bak
 index.local.html
+
+# Claude Code — machine-local, never commit
+.claude/settings.local.json
+CLAUDE.local.md
+
+# Secrets
+secrets/
+
+# node
+dist/
+coverage/
+.next/
+.nuxt/
+.turbo/
+*.tsbuildinfo
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
