@@ -55,7 +55,8 @@
     ],
     "deny": [
       "Read(./auralis/.env)",
-      "Read(./auralis/.env.*)",
+      "Read(./auralis/.env.local)",
+      "Read(./auralis/.env.production)",
       "Read(./**/*.pem)",
       "Read(./**/*.key)",
       "Write(./auralis/**/dist/**)",

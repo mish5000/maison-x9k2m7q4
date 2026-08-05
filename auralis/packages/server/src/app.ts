@@ -40,6 +40,7 @@ import {
   WorkspaceRepository,
 } from './db/repositories.js';
 import { RateLimiter } from './http/rate-limit.js';
+import { AccessGate, ACCESS_PATH, unlockPage } from './http/access-gate.js';
 import { assertCsrf, resolveSession, type SessionContext } from './http/session.js';
 import { registerConnectorRoutes } from './routes/connectors.js';
 import { registerProviderRoutes } from './routes/providers.js';
@@ -238,6 +239,49 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
   app.addHook('onRequest', async (_request, reply) => {
     reply.header('x-correlation-id', newCorrelationId());
   });
+
+  // The private-instance gate, installed only when a password is configured.
+  // It runs before everything else so an unauthenticated request never reaches
+  // a route, a static asset, or the session handler.
+  if (config.accessPassword !== null) {
+    const gate = new AccessGate({
+      password: config.accessPassword,
+      secret: config.sessionSecret,
+      secureCookies: config.isProduction,
+    });
+
+    // The unlock form is the one place a urlencoded body is accepted.
+    app.addContentTypeParser(
+      'application/x-www-form-urlencoded',
+      { parseAs: 'string', bodyLimit: 4096 },
+      (_request, body, done) => {
+        const fields = new URLSearchParams(typeof body === 'string' ? body : '');
+        done(null, { password: fields.get('password') ?? '' });
+      },
+    );
+
+    app.post(ACCESS_PATH, async (request, reply) => {
+      const submitted = (request.body as { password?: unknown } | undefined)?.password;
+      const unlocked = await gate.submit(typeof submitted === 'string' ? submitted : '', reply);
+      if (!unlocked) {
+        return reply.status(401).type('text/html; charset=utf-8').send(unlockPage(true));
+      }
+      return reply.redirect('/', 303);
+    });
+
+    app.addHook('preHandler', async (request, reply) => {
+      if (request.url === '/health') return;
+      if (request.method === 'POST' && (request.url.split('?')[0] ?? '') === ACCESS_PATH) return;
+      if (gate.isUnlocked(request)) return;
+
+      if (request.url.startsWith('/api/')) {
+        return reply
+          .status(401)
+          .send({ error: { code: 'unauthorized', message: 'This instance is private.' } });
+      }
+      return reply.status(401).type('text/html; charset=utf-8').send(unlockPage(false));
+    });
+  }
 
   app.addHook('preHandler', async (request, reply) => {
     if (!request.url.startsWith('/api/')) return;

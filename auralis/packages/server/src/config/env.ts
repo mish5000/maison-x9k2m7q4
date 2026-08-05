@@ -28,6 +28,12 @@ const envSchema = z.object({
    */
   AURALIS_SECRET_KEY: z.string().optional(),
   AURALIS_SESSION_SECRET: z.string().optional(),
+  /**
+   * Optional single password gating the whole instance. When set, every
+   * request except the health check needs it. Intended for a private
+   * deployment on a public hostname; unset means no gate at all.
+   */
+  AURALIS_ACCESS_PASSWORD: z.string().min(8).optional(),
   /** Comma separated origins permitted to call the API from a browser. */
   AURALIS_CORS_ORIGINS: z.string().default('http://localhost:5174,http://127.0.0.1:5174'),
   /** Serves the built web client from the API process when true. */
@@ -65,6 +71,7 @@ export interface AppConfig {
   readonly secretKey: Buffer;
   readonly sessionSecret: string;
   readonly corsOrigins: readonly string[];
+  readonly accessPassword: string | null;
   readonly serveWeb: boolean;
   readonly webDist: string;
   readonly allowPrivateEgress: boolean;
@@ -139,6 +146,7 @@ export function loadConfig(source: NodeJS.ProcessEnv = process.env): AppConfig {
     corsOrigins: env.AURALIS_CORS_ORIGINS.split(',')
       .map((origin) => origin.trim())
       .filter((origin) => origin.length > 0),
+    accessPassword: env.AURALIS_ACCESS_PASSWORD ?? null,
     serveWeb: env.AURALIS_SERVE_WEB,
     webDist: env.AURALIS_WEB_DIST,
     allowPrivateEgress: env.AURALIS_ALLOW_PRIVATE_EGRESS,

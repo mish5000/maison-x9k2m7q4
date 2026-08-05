@@ -227,6 +227,10 @@ fly secrets set AURALIS_SECRET_KEY="$(openssl rand -base64 32)" \
 fly deploy
 ```
 
+A deployed address is public unless you close it. For a personal instance, set
+`AURALIS_ACCESS_PASSWORD` as well and every route except `/health` sits behind
+one password.
+
 Full notes, including why an HTTP egress proxy is incompatible with IP pinning
 and what a fresh deployment can search before anything is configured:
 [`../docs/operations/deployment.md`](../docs/operations/deployment.md).

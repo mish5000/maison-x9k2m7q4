@@ -71,6 +71,40 @@ Both secrets use `generateValue`, so Render creates them on first deploy and you
 never handle them. A persistent disk requires a paid instance type — the free
 tier has no durable storage, so the database would vanish on every restart.
 
+## Making it private
+
+A `fly.dev` or `onrender.com` address is reachable by anyone on the internet who
+knows it. Auralis has no accounts — a workspace is bound to an anonymous cookie
+— so a deployment with no further configuration is **open to whoever finds the
+URL**. Not being listed anywhere is not access control.
+
+Set one more secret and the whole instance closes behind a single password:
+
+```bash
+fly secrets set AURALIS_ACCESS_PASSWORD="$(openssl rand -base64 18)"
+```
+
+With it set, every request except `/health` requires the password. A browser
+gets a plain unlock page; an API call gets `401` and nothing else. Unlocking
+sets an HttpOnly, `SameSite=Lax`, `Secure` cookie that lasts a month.
+
+What it is and is not:
+
+- It is one shared password for one person's instance. It answers "only I can
+  reach this".
+- It is **not** a user system, and it is not multi-tenant authentication. Anyone
+  with the password has the whole instance.
+- The cookie value is derived from the password, so changing the password
+  invalidates every cookie already issued.
+- Comparison is constant-time over SHA-256 digests, so neither the length nor
+  the content of the password leaks through timing.
+- Failed attempts are throttled — a bounded number per minute, after which every
+  attempt is refused, correct or not, until the window passes.
+- `/health` stays open, because the platform's health check has to reach it.
+  It returns a status and a version and nothing else.
+
+Leave it unset for a local install, where the gate would only be in the way.
+
 ## Anywhere else
 
 Any host that runs a container with a persistent volume works. What it needs:

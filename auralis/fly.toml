@@ -10,6 +10,11 @@
 #   fly secrets set AURALIS_SECRET_KEY="$(openssl rand -base64 32)" \
 #                   AURALIS_SESSION_SECRET="$(openssl rand -hex 32)"
 #   fly deploy
+#
+# A fly.dev address is public. For a private instance, also set:
+#   fly secrets set AURALIS_ACCESS_PASSWORD="$(openssl rand -base64 18)"
+# which closes every route except /health behind one password. See
+# docs/operations/deployment.md.
 
 app = "auralis"
 primary_region = "lhr"

@@ -47,11 +47,12 @@ Three properties do most of the work:
 
 ### Spoofing
 
-| Threat                                                                              | Mitigation                                                                                                                                                                                                          | Where                          | Tested by                      |
-| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ | ------------------------------ |
-| Provider impersonation — a redirect to an attacker host that then serves "the file" | Every hop is revalidated; the final host is recorded on the verification record and shown on the card; TLS certificate validation is bound to the hostname via `servername` even though the connection is IP-pinned | `net/safe-fetch.ts`            | `safe-fetch.test.ts`           |
-| Forged session cookie                                                               | Session value is HMAC-signed and verified with a constant-time comparison                                                                                                                                           | `crypto/secrets.ts`            | `security-integration.test.ts` |
-| A client claiming a result is downloadable                                          | The classification is recomputed server-side from the stored verification record; the request body carries no access data                                                                                           | `services/download-control.ts` | `security-integration.test.ts` |
+| Threat                                                                              | Mitigation                                                                                                                                                                                                                 | Where                          | Tested by                      |
+| ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ | ------------------------------ |
+| Provider impersonation — a redirect to an attacker host that then serves "the file" | Every hop is revalidated; the final host is recorded on the verification record and shown on the card; TLS certificate validation is bound to the hostname via `servername` even though the connection is IP-pinned        | `net/safe-fetch.ts`            | `safe-fetch.test.ts`           |
+| Forged session cookie                                                               | Session value is HMAC-signed and verified with a constant-time comparison                                                                                                                                                  | `crypto/secrets.ts`            | `security-integration.test.ts` |
+| Reaching a private instance without the password                                    | When `AURALIS_ACCESS_PASSWORD` is set, a preHandler ahead of every route requires a gate cookie whose value is re-derived from the password rather than trusted from the cookie; a valid signature alone is not sufficient | `http/access-gate.ts`          | `access-gate.test.ts`          |
+| A client claiming a result is downloadable                                          | The classification is recomputed server-side from the stored verification record; the request body carries no access data                                                                                                  | `services/download-control.ts` | `security-integration.test.ts` |
 
 ### Tampering
 
@@ -94,6 +95,7 @@ Three properties do most of the work:
 | Playlist recursion                             | Depth and entry caps, plus a visited-set check that drops circular references                                                                          | `media/playlist.ts`                                | `media-probe.test.ts`                |
 | A directory listing that expands without limit | Depth, page-count and entry caps; links outside the configured root are discarded                                                                      | `providers/http-directory.ts`                      | contract suite                       |
 | One tenant exhausting the process              | Per-workspace rate limits on searches and downloads, plus a cap on concurrent searches                                                                 | `http/rate-limit.ts`, `services/search-service.ts` | `security-integration.test.ts`       |
+| Brute-forcing the access password              | Bounded failures per minute, after which every attempt is refused; a constant delay on failure so a wrong password is never the fast path              | `http/access-gate.ts`                              | `access-gate.test.ts`                |
 | A failing provider consuming the whole budget  | Circuit breaker per provider; deterministic 4xx never opens it                                                                                         | `orchestrate/breaker.ts`                           | —                                    |
 | An unhandled socket error crashing the process | A socket error listener is attached in the `socket` event, and the pinned DNS callback is deferred so the connect cannot happen before listeners exist | `net/safe-fetch.ts`                                | `safe-fetch.test.ts`                 |
 
@@ -137,6 +139,10 @@ Stated plainly, because an unstated accepted risk is an unmanaged one.
   not audio frames end to end. A file can be structurally valid and still
   contain silence or damage past the sampled region. Corruption signals report
   what was observed, not what was not looked at.
+- **The access gate is one shared password, not authentication.** It exists so a
+  personal deployment is not open to whoever finds the hostname. Anyone holding
+  the password holds the whole instance, and there is no per-user separation
+  behind it.
 - **Provider claims about licensing are carried verbatim.** Auralis displays a
   source's rights statement; it does not evaluate or vouch for it.
 - **The bundled fixture origin requires private-address egress.** That is why
