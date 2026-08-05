@@ -1,0 +1,39 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+credentials.json
+service-account*.json
+
+# OS noise
+.DS_Store
+._*
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Local dev servers and tooling
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Logs and scratch
+*.log
+/tmp/
+*.tmp
+*.bak
+*.orig
+
+# Never publish a working copy of the shell — index.html is the deployed artifact
+index.html.bak
+index.local.html
