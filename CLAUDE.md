@@ -2,8 +2,8 @@
 
 The live PRIVÉE app: an installable, offline-capable travel and dining guide
 covering 22 cities. **This repository is the build output, not the source.** The
-source is `apps/privee` in the `anthropic-daily` repository, on branch
-`claude/luxury-entertainment-app-h4chlk`.
+source is `apps/privee` in the [`privee`](https://github.com/mish5000/privee)
+repository.
 
 Stack: node (static web app — no build step, no package manager, no dependencies)
 
@@ -51,8 +51,8 @@ These have each already cost real time.
   icon would break. A custom domain is the prerequisite for ever changing it.
 - **Never make it private.** Pages is disabled for private repos on the free
   tier — the live site would go down. This is the one repo that must stay public.
-- **Don't hand-edit `index.html`.** It is generated from `apps/privee`; the next
-  rebuild silently discards the edit.
+- **Don't hand-edit `index.html`.** It is generated from `apps/privee` in the
+  `privee` repository; the next rebuild silently discards the edit.
 - **Don't hand-edit `dishes.json` or `lineups.json`.** Same reason — the pipeline
   overwrites them.
 - **Bump `version.json` when the shell changes.** The app polls it to notice a

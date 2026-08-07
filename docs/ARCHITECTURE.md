@@ -31,7 +31,7 @@ application in one file. This is deliberate, not laziness:
 
 The tradeoff is real: the file is hostile to line-level diffs and merges. Treat
 it as a build artifact that happens to be committed. Edit the source in
-`apps/privee` in the `anthropic-daily` repository and redeploy the whole file.
+`apps/privee` in the `privee` repository and redeploy the whole file.
 
 ## Data loading
 

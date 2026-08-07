@@ -9,9 +9,8 @@ nightclubs, with per-venue signature dishes and nightly DJ line-ups.
 This repository is the **deployed artifact**, not the source. It is the static
 site GitHub Pages serves and the PWA that installs from it. The application
 source, the curation pipeline and the scrapers that produce the data files live
-in the `apps/privee`, `curation/` and `scripts/lineups/` trees of the
-[`anthropic-daily`](https://github.com/mish5000/anthropic-daily) repository, on
-the `claude/luxury-entertainment-app-h4chlk` branch.
+in the [`privee`](https://github.com/mish5000/privee) repository, under
+`apps/privee`, `curation/` and `scripts/lineups/`.
 
 > **Read this before pushing:** every commit to `main` publishes to the live
 > site and reaches installed devices on their next launch. See
