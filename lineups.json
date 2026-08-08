@@ -1,22 +1,8 @@
 {
- "generated": "2026-08-07T03:11:13Z",
+ "generated": "2026-08-08T03:10:48Z",
  "venues": {
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-08-06": {
-     "hl": "HUGEL",
-     "line": [
-      "HUGEL",
-      "Aaron Sevilla",
-      "Miss Monique",
-      "Nora En Pure",
-      "Paradoks"
-     ],
-     "party": "Make The Girls Dance",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-07": {
      "hl": "Dom Dolla",
      "line": [
@@ -127,24 +113,26 @@
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-15": {
+     "hl": "Black Coffee",
+     "line": [
+      "Black Coffee",
+      "Ry X (DJ set)",
+      "Jaiime",
+      "Skepta (DJ set)",
+      "Ankhoï",
+      "Adam Ten"
+     ],
+     "party": "",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-08-06": {
-     "hl": "Martin Garrix",
-     "line": [
-      "Martin Garrix",
-      "Belters Only",
-      "Younotus",
-      "Vluarr"
-     ],
-     "party": "",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-07": {
      "hl": "Calvin Harris",
      "line": [
@@ -245,24 +233,25 @@
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-15": {
+     "hl": "Dennis Ferrer",
+     "line": [
+      "Dennis Ferrer",
+      "Gaskin",
+      "Salomé Le Chat",
+      "Candidate",
+      "Raul Rodriguez"
+     ],
+     "party": "ANTS",
+     "doors": "17:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-08-06": {
-     "hl": "Purple Disco Machine",
-     "line": [
-      "Purple Disco Machine",
-      "Dombresky",
-      "Breakbot & Irfane",
-      "Blu DeTiger"
-     ],
-     "party": "Pure Pacha",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-07": {
      "hl": "Marco Carola",
      "line": [
@@ -358,24 +347,24 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-15": {
+     "hl": "Roger Sanchez",
+     "line": [
+      "Roger Sanchez",
+      "Sam Divine B2B Low Steppa",
+      "Kristen Knight",
+      "Sam Oui"
+     ],
+     "party": "Flower Power",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-08-06": {
-     "hl": "Josh Baker",
-     "line": [
-      "Josh Baker B2B Joseph Capriati",
-      "Saoirse",
-      "M-High B2B Marlie",
-      "Local Dub"
-     ],
-     "party": "You&Me",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-07": {
      "hl": "Flight Facilities",
      "line": [
@@ -477,21 +466,21 @@
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-15": {
+     "hl": "Saiko",
+     "line": [
+      "Saiko"
+     ],
+     "party": "BRESH Ibiza",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "marbella|nightclubs|0": {
    "nights": {
-    "2026-08-06": {
-     "hl": "Franky Rizardo",
-     "line": [
-      "Franky Rizardo"
-     ],
-     "party": "",
-     "doors": "23:45",
-     "src": "mandalatickets.com",
-     "conf": "high"
-    },
     "2026-08-07": {
      "hl": "Lazare",
      "line": [
@@ -507,7 +496,7 @@
      "line": [
       "Macarena"
      ],
-     "party": "",
+     "party": "Utopic",
      "doors": "23:45",
      "src": "mandalatickets.com",
      "conf": "high"
@@ -571,22 +560,21 @@
      "doors": "23:45",
      "src": "mandalatickets.com",
      "conf": "high"
+    },
+    "2026-08-15": {
+     "hl": "Benja Francfala",
+     "line": [
+      "Benja Francfala"
+     ],
+     "party": "",
+     "doors": "23:45",
+     "src": "mandalatickets.com",
+     "conf": "high"
     }
    }
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-08-06": {
-     "hl": "Deborah De Luca",
-     "line": [
-      "Deborah De Luca",
-      "Mikee"
-     ],
-     "party": "",
-     "doors": "23:59",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
     "2026-08-09": {
      "hl": "Alok",
      "line": [
@@ -677,19 +665,22 @@
      "doors": "23:59",
      "src": "cavoparadiso.gr",
      "conf": "high"
+    },
+    "2026-08-15": {
+     "hl": "Meduza",
+     "line": [
+      "Meduza",
+      "G.Siras"
+     ],
+     "party": "",
+     "doors": "23:59",
+     "src": "cavoparadiso.gr",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-08-06": {
-     "hl": "A-Train",
-     "line": "A-Train",
-     "party": "",
-     "doors": "23:00",
-     "src": "11miami.com",
-     "conf": "high"
-    },
     "2026-08-07": {
      "hl": "Ruckus",
      "line": "Ruckus",
@@ -755,21 +746,19 @@
      "doors": "23:00",
      "src": "11miami.com",
      "conf": "high"
+    },
+    "2026-08-15": {
+     "hl": "Company B",
+     "line": "Company B (live)",
+     "party": "102 The Beach Miami",
+     "doors": "23:00",
+     "src": "11miami.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-08-06": {
-     "hl": "Nomis",
-     "line": [
-      "Nomis"
-     ],
-     "party": "Tiempo",
-     "doors": "20:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-07": {
      "hl": "Sebastian Gamboa",
      "line": [
@@ -841,24 +830,19 @@
      "doors": "20:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-15": {
+     "hl": "Kōdō",
+     "line": [],
+     "party": "Kōdō",
+     "doors": "20:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-08-06": {
-     "hl": "Melon Bomb",
-     "line": [
-      "Melon Bomb",
-      "Bastian Bux",
-      "Groove Division",
-      "John Jones"
-     ],
-     "party": "",
-     "doors": "21:00",
-     "src": "pikesibiza.com",
-     "conf": "high"
-    },
     "2026-08-07": {
      "hl": "James Lavelle",
      "line": [
@@ -948,19 +932,21 @@
      "doors": "23:30",
      "src": "songkick.com",
      "conf": "med"
+    },
+    "2026-08-15": {
+     "hl": "Nicky Romero",
+     "line": [
+      "Nicky Romero"
+     ],
+     "party": "",
+     "doors": "23:30",
+     "src": "songkick.com",
+     "conf": "med"
     }
    }
   },
   "aspen|nightclubs|1": {
    "nights": {
-    "2026-08-06": {
-     "hl": "Arden Jones",
-     "line": "Arden Jones",
-     "party": "Up In The Sky Pre-Show",
-     "doors": "",
-     "src": "bellyupaspen.com",
-     "conf": "high"
-    },
     "2026-08-07": {
      "hl": "Elderbrook",
      "line": "Elderbrook",
@@ -1005,6 +991,14 @@
      "hl": "FABBA",
      "line": "FABBA",
      "party": "The ABBA Tribute Show",
+     "doors": "",
+     "src": "bellyupaspen.com",
+     "conf": "high"
+    },
+    "2026-08-15": {
+     "hl": "City of the Sun",
+     "line": "City of the Sun",
+     "party": "",
      "doors": "",
      "src": "bellyupaspen.com",
      "conf": "high"
@@ -1057,20 +1051,20 @@
   },
   "monaco|nightclubs|0": {
    "nights": {
-    "2026-08-06": {
-     "hl": "Vintage Culture",
-     "line": [
-      "Vintage Culture"
-     ],
-     "party": "Vintage Culture Night",
-     "doors": "",
-     "src": "montecarlosbm.com",
-     "conf": "high"
-    },
     "2026-08-13": {
      "hl": "Made",
      "line": [
       "Made"
+     ],
+     "party": "",
+     "doors": "",
+     "src": "songkick.com",
+     "conf": "med"
+    },
+    "2026-08-15": {
+     "hl": "BLOND:ISH",
+     "line": [
+      "BLOND:ISH"
      ],
      "party": "",
      "doors": "",
@@ -1101,6 +1095,16 @@
       "Cid",
       "Monoky",
       "Bakke"
+     ],
+     "party": "",
+     "doors": "23:00",
+     "src": "jambase.com",
+     "conf": "med"
+    },
+    "2026-08-15": {
+     "hl": "Mochakk",
+     "line": [
+      "Mochakk"
      ],
      "party": "",
      "doors": "23:00",
