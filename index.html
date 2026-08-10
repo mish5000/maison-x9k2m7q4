@@ -4405,8 +4405,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '9 August 2026 · 04:25 CEST';
-const APP_BUILD = 'v502';
+const COLLECTION_UPDATED = '10 August 2026 · 04:38 CEST';
+const APP_BUILD = 'v504';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -4495,7 +4495,12 @@ const CATEGORIES = [
      fill still shouts as loudly as the 249-venue Restaurants tile, because
      the grammar has no way to express weight. It keeps its own sub-heading
      INSIDE the chapter, so nothing is buried; only the front door closes. */
-  { id: 'sundown',     label: 'Sundown',     sub: 'Bars, cellars & the golden hour', parts: ['lounges', 'wine'] },
+  /* Renamed Sundown -> Bars (9 Aug, Mishari). 'Sundown' named an HOUR, and so
+     did 'After Dark' — which is precisely why he could never tell the two
+     tabs apart. A tab has to name the ROOM. The id moves sundown -> bars, so
+     PART_TO_DISPLAY folds the old deep links automatically; the parts are
+     untouched, so all 125 lounges/wine sidecar keys keep working. */
+  { id: 'bars',        label: 'Bars',        sub: 'Long bars & serious cellars', parts: ['lounges', 'wine'] },
   /* 'Nightclubs' was a lie the schema told (1 Aug). Las Vegas held six
      speakeasies and cocktail rooms under it and nothing else, because the
      cocktail slot was empty and this one was open; Los Angeles held five
@@ -6315,7 +6320,12 @@ const PART_TO_DISPLAY = (() => {
   for (const c of CATEGORIES) for (const p of (c.parts || [])) m[p] = c.id;
   return m;
 })();
-const displayCat = (catId) => PART_TO_DISPLAY[catId] || catId;
+/* Retired DISPLAY ids. PART_TO_DISPLAY only folds parts, and a chapter id
+   that is renamed outright was never a part — so #/cat/london/sundown would
+   dead-end at the home screen. Renaming a chapter must never break a link a
+   member has already saved; add the old id here whenever one is retired. */
+const RETIRED_CAT = { sundown: 'bars' };
+const displayCat = (catId) => RETIRED_CAT[catId] || PART_TO_DISPLAY[catId] || catId;
 const catVenueEntries = (city, cat) =>
   catParts(cat).flatMap(part => (city.venues[part] || []).map((v, i) => ({ part, v, i })));
 
@@ -6551,7 +6561,14 @@ const CAT_RHYTHM = (() => {
   const build = pairs => { const a = new Array(24).fill(0); for (const [h, v] of pairs) a[h] = v; return a; };
   return {
     restaurants: build([[11, .12], [12, .45], [13, .66], [14, .5], [15, .28], [16, .18], [17, .24], [18, .45], [19, .72], [20, .92], [21, 1], [22, .82], [23, .48], [0, .2]]),
-    lounges: build([[17, .2], [18, .36], [19, .52], [20, .68], [21, .82], [22, .96], [23, 1], [0, .84], [1, .58], [2, .3], [3, .1]]),
+    /* BARS. Retuned 9 Aug: the old curve was a nightclub warm-up — it read
+       19:00 as "a little busy", which is wrong for the room this category is
+       actually for (professionals, straight from the office). The shoulder is
+       not invented: it is when these rooms schedule themselves to be full —
+       71Above golden hour 16-18, THE Blvd live music 18-21, Baltaire 19-22,
+       The Grill closing outright at 21 — while the late tail still carries
+       the rooms that run to 2am. Milan/Madrid aperitivo fits it better too. */
+    lounges: build([[16, .18], [17, .44], [18, .64], [19, .8], [20, .9], [21, .97], [22, 1], [23, .9], [0, .66], [1, .4], [2, .18]]),
     wine: build([[16, .2], [17, .34], [18, .56], [19, .76], [20, .92], [21, 1], [22, .8], [23, .5], [0, .2]]),
     nightclubs: build([[22, .16], [23, .4], [0, .66], [1, .9], [2, 1], [3, .86], [4, .46], [5, .12]]),
     beach: build([[10, .18], [11, .32], [12, .52], [13, .72], [14, .9], [15, 1], [16, .94], [17, .78], [18, .58], [19, .4], [20, .24], [21, .12]]),
@@ -7263,7 +7280,7 @@ function viewCategory(cityId, catId) {
   const cat = CAT_BY_ID[catId];
   if (!city || !cat) { go('#/'); return; }
 
-  const PART_HEAD = { beach: 'Beach Clubs', pools: 'Pools', lounges: 'Cocktail Bars', wine: 'Wine', spas: 'Spas', dayout: 'Days Out' };
+  const PART_HEAD = { beach: 'Beach Clubs', pools: 'Pools', lounges: 'Bars', wine: 'Wine', spas: 'Spas', dayout: 'Days Out' };
   const groups = catParts(cat)
     .map(part => ({ part, list: city.venues[part] || [] }))
     .filter(g => g.list.length);
