@@ -4424,8 +4424,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '13 August 2026 · 05:16 CEST';
-const APP_BUILD = 'v514';
+const COLLECTION_UPDATED = '13 August 2026 · 20:23 CEST';
+const APP_BUILD = 'v517';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6185,6 +6185,15 @@ const I = {
   cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="5.5" width="16" height="15" rx="2.5"/><path d="M8 3.5v4M16 3.5v4M4 10h16"/><circle cx="12" cy="15" r="1.6" fill="currentColor" stroke="none"/></svg>',
   plane: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 3 3 10.5l7 3 3 7L21 3z"/><path d="M10 13.5 21 3"/></svg>',
   bookmarkFill: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><path d="M7 4h10v16l-5-4-5 4z"/></svg>',
+  /* The card's favourite toggle (13 Aug, Mishari: "the icon for favourite
+     items sucks"). A heart, not a fork: this ONE button rides every card in
+     all seven chapters — a fork is a lie on Hï Ibiza and the Connaught — and
+     a restaurant card already carries the dishes FLAME and the cuisine chip,
+     so a fork would be the third food glyph on it and the only one that
+     isn't about food. Heart is the single glyph that says "favourite" in
+     every chapter and collides with nothing on the card. */
+  heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 20.4 4.9 13.3a4.5 4.5 0 0 1 6.4-6.3l.7.7.7-.7a4.5 4.5 0 0 1 6.4 6.3z"/></svg>',
+  heartFill: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 20.4 4.9 13.3a4.5 4.5 0 0 1 6.4-6.3l.7.7.7-.7a4.5 4.5 0 0 1 6.4 6.3z"/></svg>',
   member: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1.2-3.6 4-5 7-5s5.8 1.4 7 5"/></svg>',
   globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9S14.6 18.4 12 21c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3z"/></svg>',
   phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>',
@@ -7286,7 +7295,7 @@ function venueCard(city, catId, v, idx) {
         return im ? `<div class="photo">${heroImg(im)}</div>` : monogram(v, 'photo'); })()}
       ${djtag}${cuisinetag}
       <button class="save ${on ? 'on' : ''}" data-save="${key}" aria-label="Save">
-        ${on ? I.bookmarkFill : I.bookmark}
+        ${on ? I.heartFill : I.heart}
       </button>
       <button type="button" class="plan-add" onclick="event.stopPropagation();openBookingSheet('${key}')" aria-label="Book a table"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg></button>
       ${dishesFor(key) ? `<button type="button" class="dish-mark" onclick="event.stopPropagation();openDishes('${key}')" aria-label="Must-order dishes">${I.flame}</button>` : ''}
@@ -8706,7 +8715,7 @@ function wireCards() {
       // patch this one button in place — a full re-render made the focused
       // card dim then re-bloom over 0.6s on every save (a visible flash)
       btn.classList.toggle('on', on);
-      btn.innerHTML = on ? I.bookmarkFill : I.bookmark;
+      btn.innerHTML = on ? I.heartFill : I.heart;
     });
   });
 }
