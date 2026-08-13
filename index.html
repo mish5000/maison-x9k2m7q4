@@ -1816,6 +1816,23 @@ body {
   background: rgba(200, 162, 75, 0.09); }
 .vcard .resv:active { background: rgba(200, 162, 75, 0.22); }
 
+/* OPEN NOW (13 Aug). Lives INSIDE .nm, not beside it: the name row is a
+   baseline flex whose .nm is flex:1 1 auto, so a sibling would be pushed
+   across the gap and land against the Reserve chip. Inside, it hugs the last
+   word of the name and wraps with it.
+   The ring is a STATIC box-shadow — painted once with the layer. The paint
+   law forbids ANIMATING box-shadow, so this never pulses; a card that
+   transforms during the push must not repaint its shadow per frame. */
+.vcard .name .livedot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  margin-left: 9px;
+  border-radius: 50%;
+  vertical-align: 0.14em;          /* optical centre against the serif x-height */
+  background: #4fc98a;
+  box-shadow: 0 0 0 3px rgba(79, 201, 138, 0.16);
+}
+
 .vcard .body .area, .vcard .body .blurb, .vcard .body .stars,
 .vcard .body .hours-line { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65); }
 .vcard .area {
@@ -4424,8 +4441,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '13 August 2026 · 21:10 CEST';
-const APP_BUILD = 'v520';
+const COLLECTION_UPDATED = '13 August 2026 · 21:28 CEST';
+const APP_BUILD = 'v527';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6721,6 +6738,53 @@ function hoursLine(key) {
   return `<div class="hours-line">${strip}${badge}</div>`;
 }
 
+/* OPEN NOW — the green dot on the name (13 Aug, Mishari: "a little green
+   button next to the name that means it's open now, so it will automatically
+   adjust to open at the appropriate time").
+   It reads the SAME openState() the hours line reads, so the dot and the
+   words underneath can never disagree. Absent — not grey, not hollow — when
+   the room is shut: a card with no dot is already the closed state, and a
+   second permanent mark on every name would be noise on 877 cards.
+   "Automatically adjust" is the whole ask, and a value computed once at
+   render does not: leave the app open across 17:00 and the dot would still
+   be missing. openTick() below is what actually delivers it. */
+const openDot = (key) => {
+  const st = openState(key);
+  return (st && st.open) ? '<i class="livedot" role="img" aria-label="Open now"></i>' : '';
+};
+
+/* Repaint every visible card's open state. Runs on a timer, on return to the
+   foreground, and after any render.
+   TWO RULES, both load-bearing on iOS:
+   1. It writes NOTHING unless the computed HTML actually changed. A silent
+      minute touches no node, so momentum scrolling never meets a mutation.
+   2. It patches the dot and the hours line TOGETHER from one openState read.
+      Refreshing one without the other is how a card ends up wearing a green
+      dot above the words "CLOSED · OPENS 17:00".
+   iOS suspends timers in a backgrounded PWA, so the visibilitychange call is
+   not belt-and-braces — it is the path that actually fires for a member who
+   opens the app at 20:00 having last looked at lunchtime. */
+function openTick() {
+  document.querySelectorAll('#app [data-open]').forEach(card => {
+    const key = card.dataset.open;
+    const nm = card.querySelector('.name .nm');
+    if (nm) {
+      const want = openDot(key);
+      const has = nm.querySelector('.livedot');
+      if (want && !has) nm.insertAdjacentHTML('beforeend', want);
+      else if (!want && has) has.remove();
+    }
+    const line = card.querySelector('.hours-line');
+    if (line) {
+      const fresh = hoursLine(key);
+      const inner = fresh.replace(/^<div class="hours-line">/, '').replace(/<\/div>$/, '');
+      if (line.innerHTML !== inner) line.innerHTML = inner;
+    }
+  });
+}
+setInterval(openTick, 30000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) openTick(); });
+
 /* Resy quick booking — markets where Resy operates; the link is pinned to
    this exact venue (name + city in the query). */
 const RESY_CITIES = { london: 'London', newyork: 'New York', miami: 'Miami', losangeles: 'Los Angeles' };
@@ -7308,7 +7372,7 @@ function venueCard(city, catId, v, idx) {
       ${dishesFor(key) ? `<button type="button" class="dish-mark" onclick="event.stopPropagation();openDishes('${key}')" aria-label="Most popular dishes">${I.fork}</button>` : ''}
       <div class="body">
         <div class="area">${v.a} · ${city.name}</div>
-        <h2 class="name"><span class="nm">${v.n}</span>${reserveChip(key)}</h2>
+        <h2 class="name"><span class="nm">${v.n}${openDot(key)}</span>${reserveChip(key)}</h2>
         <span class="stars">${ratingBadge(key)}</span>
         <div class="txt">
           ${hoursLine(key)}
