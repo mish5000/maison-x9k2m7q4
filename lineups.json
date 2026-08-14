@@ -1,36 +1,8 @@
 {
- "generated": "2026-08-12T03:13:14Z",
+ "generated": "2026-08-14T03:16:45Z",
  "venues": {
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-08-11": {
-     "hl": "East End Dubs",
-     "line": [
-      "East End Dubs",
-      "Kolter",
-      "Paco Osuna",
-      "Jesse Calosso B2B Jean Pierre"
-     ],
-     "party": "Eastenderz",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
-    "2026-08-12": {
-     "hl": "Meduza",
-     "line": [
-      "Meduza",
-      "James Hype",
-      "TSHA",
-      "Carista",
-      "Jonas Blue",
-      "Coco & Breezy"
-     ],
-     "party": "Our House",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-13": {
      "hl": "HUGEL",
      "line": [
@@ -130,37 +102,26 @@
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-20": {
+     "hl": "HUGEL B2B Diplo",
+     "line": [
+      "HUGEL",
+      "Diplo",
+      "Crusy",
+      "Miss Monique",
+      "Genesi",
+      "Carl Bee"
+     ],
+     "party": "Make The Girls Dance",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-08-11": {
-     "hl": "Calvin Harris",
-     "line": [
-      "Calvin Harris",
-      "Diplo",
-      "Tyson O'Brien",
-      "Siân Owen"
-     ],
-     "party": "",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
-    "2026-08-12": {
-     "hl": "Bastian Bux",
-     "line": [
-      "Bastian Bux",
-      "Ilario Alicante",
-      "Melanie Ribbe",
-      "Paco Osuna"
-     ],
-     "party": "elrow Outdoors",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-13": {
      "hl": "Martin Garrix",
      "line": [
@@ -249,34 +210,24 @@
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-20": {
+     "hl": "Martin Garrix",
+     "line": [
+      "Martin Garrix",
+      "Tchami",
+      "Monki",
+      "Visionv"
+     ],
+     "party": "",
+     "doors": "17:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-08-11": {
-     "hl": "KAYTRANADA",
-     "line": [
-      "KAYTRANADA",
-      "Kitty Ca$h"
-     ],
-     "party": "",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
-    "2026-08-12": {
-     "hl": "Mau P",
-     "line": [
-      "Mau P",
-      "Seth Troxler",
-      "Ben Sterling"
-     ],
-     "party": "Baddest Behaviour",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-13": {
      "hl": "Purple Disco Machine",
      "line": [
@@ -362,38 +313,23 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-20": {
+     "hl": "Purple Disco Machine",
+     "line": [
+      "Purple Disco Machine",
+      "Flight Facilities",
+      "David Bay"
+     ],
+     "party": "Pure Pacha",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-08-11": {
-     "hl": "Joseph Capriati",
-     "line": [
-      "Joseph Capriati",
-      "WhoMadeWho (hybrid)",
-      "Luuk van Dijk",
-      "Fatima Hajji",
-      "Clara Cuvé"
-     ],
-     "party": "Metamorfosi",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
-    "2026-08-12": {
-     "hl": "Boris Brejcha",
-     "line": [
-      "Boris Brejcha",
-      "Adam Beyer",
-      "KOROLOVA",
-      "Kasia"
-     ],
-     "party": "RESISTANCE",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-13": {
      "hl": "Josh Baker",
      "line": [
@@ -482,31 +418,24 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-20": {
+     "hl": "Josh Baker B2B Kettama",
+     "line": [
+      "Josh Baker",
+      "Kettama",
+      "Silva Bumpa",
+      "Reeshy"
+     ],
+     "party": "You&Me",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "marbella|nightclubs|0": {
    "nights": {
-    "2026-08-11": {
-     "hl": "Vite",
-     "line": [
-      "Vite"
-     ],
-     "party": "",
-     "doors": "23:45",
-     "src": "mandalatickets.com",
-     "conf": "high"
-    },
-    "2026-08-12": {
-     "hl": "Vintage",
-     "line": [
-      "Vintage"
-     ],
-     "party": "",
-     "doors": "23:45",
-     "src": "mandalatickets.com",
-     "conf": "high"
-    },
     "2026-08-13": {
      "hl": "Artbat",
      "line": [
@@ -566,33 +495,21 @@
      "doors": "23:45",
      "src": "mandalatickets.com",
      "conf": "high"
+    },
+    "2026-08-20": {
+     "hl": "Rivo",
+     "line": [
+      "Rivo"
+     ],
+     "party": "",
+     "doors": "23:45",
+     "src": "mandalatickets.com",
+     "conf": "high"
     }
    }
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-08-11": {
-     "hl": "Ilario Alicante",
-     "line": [
-      "Ilario Alicante",
-      "Franky Rizardo",
-      "Manolaco"
-     ],
-     "party": "",
-     "doors": "23:59",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
-    "2026-08-12": {
-     "hl": "Mamacita",
-     "line": [
-      "Mamacita"
-     ],
-     "party": "",
-     "doors": "23:59",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
     "2026-08-13": {
      "hl": "Nina Kraviz",
      "line": [
@@ -673,27 +590,23 @@
      "doors": "23:59",
      "src": "cavoparadiso.gr",
      "conf": "high"
+    },
+    "2026-08-20": {
+     "hl": "B T R F L Y FX w/ Joezi",
+     "line": [
+      "Joezi",
+      "RBØR",
+      "Freespirit"
+     ],
+     "party": "",
+     "doors": "23:00",
+     "src": "cavoparadiso.gr",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-08-11": {
-     "hl": "LIVITUP",
-     "line": "LIVITUP",
-     "party": "",
-     "doors": "23:00",
-     "src": "11miami.com",
-     "conf": "high"
-    },
-    "2026-08-12": {
-     "hl": "ZEUS",
-     "line": "ZEUS",
-     "party": "",
-     "doors": "23:00",
-     "src": "11miami.com",
-     "conf": "high"
-    },
     "2026-08-13": {
      "hl": "Diplo",
      "line": [
@@ -751,29 +664,19 @@
      "doors": "23:00",
      "src": "11miami.com",
      "conf": "high"
+    },
+    "2026-08-20": {
+     "hl": "Leondis",
+     "line": "Leondis",
+     "party": "",
+     "doors": "23:00",
+     "src": "11miami.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-08-11": {
-     "hl": "Arkadyan",
-     "line": [
-      "Arkadyan"
-     ],
-     "party": "Voyage",
-     "doors": "20:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
-    "2026-08-12": {
-     "hl": "Toy Room",
-     "line": [],
-     "party": "Toy Room",
-     "doors": "20:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-13": {
      "hl": "Nomis",
      "line": [
@@ -835,34 +738,21 @@
      "doors": "20:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-20": {
+     "hl": "Nomis",
+     "line": [
+      "Nomis"
+     ],
+     "party": "Tiempo",
+     "doors": "23:45",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-08-11": {
-     "hl": "Fatboy Slim",
-     "line": [
-      "Fatboy Slim",
-      "CC:DISCO!",
-      "Erol Alkan"
-     ],
-     "party": "Pikes Presents",
-     "doors": "21:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
-    "2026-08-12": {
-     "hl": "DJ Harvey",
-     "line": [
-      "DJ Harvey",
-      "Camilo Miranda"
-     ],
-     "party": "Pikes Presents · Eclipse Special",
-     "doors": "21:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-16": {
      "hl": "FUSE × Brunch Electronik",
      "line": [
@@ -906,22 +796,6 @@
   },
   "aspen|nightclubs|0": {
    "nights": {
-    "2026-08-11": {
-     "hl": "Chevy Metal",
-     "line": "Chevy Metal",
-     "party": "",
-     "doors": "",
-     "src": "bellyupaspen.com",
-     "conf": "high"
-    },
-    "2026-08-12": {
-     "hl": "La Luz",
-     "line": "La Luz",
-     "party": "",
-     "doors": "",
-     "src": "bellyupaspen.com",
-     "conf": "high"
-    },
     "2026-08-14": {
      "hl": "FABBA",
      "line": "FABBA",
@@ -937,27 +811,27 @@
      "doors": "",
      "src": "bellyupaspen.com",
      "conf": "high"
+    },
+    "2026-08-18": {
+     "hl": "Billy Failing",
+     "line": "Billy Failing",
+     "party": "",
+     "doors": "",
+     "src": "bellyupaspen.com",
+     "conf": "high"
+    },
+    "2026-08-20": {
+     "hl": "Goth Babe",
+     "line": "Goth Babe",
+     "party": "Film & Folk tour w/ JW Francis",
+     "doors": "",
+     "src": "bellyupaspen.com",
+     "conf": "high"
     }
    }
   },
   "hamptons|nightclubs|0": {
    "nights": {
-    "2026-08-11": {
-     "hl": "Neal Francis",
-     "line": "Neal Francis",
-     "party": "",
-     "doors": "20:00",
-     "src": "songkick.com",
-     "conf": "med"
-    },
-    "2026-08-12": {
-     "hl": "Neal Francis",
-     "line": "Neal Francis",
-     "party": "",
-     "doors": "20:00",
-     "src": "songkick.com",
-     "conf": "med"
-    },
     "2026-08-13": {
      "hl": "Stereomatic",
      "line": "Stereomatic",
