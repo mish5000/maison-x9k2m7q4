@@ -1,22 +1,8 @@
 {
- "generated": "2026-08-14T03:16:45Z",
+ "generated": "2026-08-15T03:11:32Z",
  "venues": {
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-08-13": {
-     "hl": "HUGEL",
-     "line": [
-      "HUGEL",
-      "Murda Beat B2B Gatano",
-      "Miss Monique",
-      "Konstantin Sibold",
-      "Oliver Giacomotto B2B Kiko"
-     ],
-     "party": "Make The Girls Dance",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-14": {
      "hl": "Dom Dolla",
      "line": [
@@ -117,24 +103,38 @@
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-21": {
+     "hl": "Dom Dolla",
+     "line": [
+      "Dom Dolla",
+      "Tiga",
+      "Heidi",
+      "Ewan McVicar",
+      "Cinthie"
+     ],
+     "party": "Dom Dolla",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-08-22": {
+     "hl": "Black Coffee",
+     "line": [
+      "Black Coffee",
+      "Kerri Chandler",
+      "Joeski",
+      "Skepta"
+     ],
+     "party": "Black Coffee",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-08-13": {
-     "hl": "Martin Garrix",
-     "line": [
-      "Martin Garrix",
-      "Disciples",
-      "Ferreck Dawn",
-      "Nome"
-     ],
-     "party": "",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-14": {
      "hl": "Calvin Harris",
      "line": [
@@ -223,23 +223,36 @@
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-21": {
+     "hl": "Calvin Harris",
+     "line": [
+      "Calvin Harris",
+      "MK",
+      "Tyson O'Brien"
+     ],
+     "party": "",
+     "doors": "17:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-08-22": {
+     "hl": "ANTS",
+     "line": [
+      "Nic Fanciulli",
+      "Hot Since 82",
+      "Sally C",
+      "Late Replies"
+     ],
+     "party": "ANTS",
+     "doors": "17:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-08-13": {
-     "hl": "Purple Disco Machine",
-     "line": [
-      "Purple Disco Machine",
-      "Dombresky",
-      "DiOsa"
-     ],
-     "party": "Pure Pacha",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-14": {
      "hl": "Marco Carola",
      "line": [
@@ -325,24 +338,37 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-21": {
+     "hl": "Marco Carola",
+     "line": [
+      "Marco Carola",
+      "Rampa",
+      "Mimi x Fy",
+      "Frank Storm"
+     ],
+     "party": "Music On",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-08-22": {
+     "hl": "Roger Sanchez",
+     "line": [
+      "Roger Sanchez",
+      "The Shapeshifters",
+      "Disco Dom",
+      "Sam Oui"
+     ],
+     "party": "Flower Power",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-08-13": {
-     "hl": "Josh Baker",
-     "line": [
-      "Josh Baker B2B Luciano",
-      "Marco Faraone",
-      "Calvin Clarke B2B Mike Morrisey",
-      "Vanee"
-     ],
-     "party": "You&Me",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-14": {
      "hl": "Dan Shake",
      "line": [
@@ -431,21 +457,33 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-21": {
+     "hl": "Glitterbox",
+     "line": [
+      "Groove Armada",
+      "Cassius",
+      "Todd Terry",
+      "Busy P",
+      "Catz N' Dogz"
+     ],
+     "party": "Glitterbox",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-08-22": {
+     "hl": "BRESH Ibiza",
+     "line": [],
+     "party": "BRESH Ibiza",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "marbella|nightclubs|0": {
    "nights": {
-    "2026-08-13": {
-     "hl": "Artbat",
-     "line": [
-      "Artbat"
-     ],
-     "party": "",
-     "doors": "23:45",
-     "src": "mandalatickets.com",
-     "conf": "high"
-    },
     "2026-08-14": {
      "hl": "Maceo Plex",
      "line": [
@@ -505,22 +543,31 @@
      "doors": "23:45",
      "src": "mandalatickets.com",
      "conf": "high"
+    },
+    "2026-08-21": {
+     "hl": "Luke",
+     "line": [
+      "Luke"
+     ],
+     "party": "",
+     "doors": "23:45",
+     "src": "mandalatickets.com",
+     "conf": "high"
+    },
+    "2026-08-22": {
+     "hl": "Utopic Shimza",
+     "line": [
+      "Shimza"
+     ],
+     "party": "Utopic",
+     "doors": "23:45",
+     "src": "mandalatickets.com",
+     "conf": "high"
     }
    }
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-08-13": {
-     "hl": "Nina Kraviz",
-     "line": [
-      "Nina Kraviz",
-      "Manolaco"
-     ],
-     "party": "",
-     "doors": "23:59",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
     "2026-08-14": {
      "hl": "Afrojack",
      "line": [
@@ -602,21 +649,36 @@
      "doors": "23:00",
      "src": "cavoparadiso.gr",
      "conf": "high"
+    },
+    "2026-08-21": {
+     "hl": "David Morales",
+     "line": [
+      "David Morales",
+      "Entice",
+      "1drew"
+     ],
+     "party": "",
+     "doors": "23:00",
+     "src": "cavoparadiso.gr",
+     "conf": "high"
+    },
+    "2026-08-22": {
+     "hl": "Benny Benassi",
+     "line": [
+      "Benny Benassi",
+      "Essentia",
+      "Squ4re",
+      "Zyrak"
+     ],
+     "party": "",
+     "doors": "23:00",
+     "src": "cavoparadiso.gr",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-08-13": {
-     "hl": "Diplo",
-     "line": [
-      "Diplo"
-     ],
-     "party": "Twiga Porto Cervo × E11EVEN",
-     "doors": "23:00",
-     "src": "11miami.com",
-     "conf": "high"
-    },
     "2026-08-14": {
      "hl": "Fat Joe",
      "line": "Fat Joe",
@@ -672,21 +734,27 @@
      "doors": "23:00",
      "src": "11miami.com",
      "conf": "high"
+    },
+    "2026-08-21": {
+     "hl": "Vice",
+     "line": "Vice",
+     "party": "",
+     "doors": "23:00",
+     "src": "11miami.com",
+     "conf": "high"
+    },
+    "2026-08-22": {
+     "hl": "Don Toliver",
+     "line": "Don Toliver",
+     "party": "",
+     "doors": "23:00",
+     "src": "11miami.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-08-13": {
-     "hl": "Nomis",
-     "line": [
-      "Nomis"
-     ],
-     "party": "Tiempo",
-     "doors": "20:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-14": {
      "hl": "Sebastian Gamboa",
      "line": [
@@ -745,6 +813,24 @@
       "Nomis"
      ],
      "party": "Tiempo",
+     "doors": "23:45",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-08-21": {
+     "hl": "Sebastian Gamboa",
+     "line": [
+      "Sebastian Gamboa"
+     ],
+     "party": "Vintage",
+     "doors": "23:45",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-08-22": {
+     "hl": "Kōdō",
+     "line": [],
+     "party": "Kōdō",
      "doors": "23:45",
      "src": "ibiza-spotlight.com",
      "conf": "high"
@@ -830,30 +916,8 @@
     }
    }
   },
-  "hamptons|nightclubs|0": {
-   "nights": {
-    "2026-08-13": {
-     "hl": "Stereomatic",
-     "line": "Stereomatic",
-     "party": "",
-     "doors": "20:00",
-     "src": "songkick.com",
-     "conf": "med"
-    }
-   }
-  },
   "monaco|nightclubs|0": {
    "nights": {
-    "2026-08-13": {
-     "hl": "Made",
-     "line": [
-      "Made"
-     ],
-     "party": "",
-     "doors": "",
-     "src": "songkick.com",
-     "conf": "med"
-    },
     "2026-08-15": {
      "hl": "BLOND:ISH",
      "line": [
