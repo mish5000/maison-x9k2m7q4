@@ -1,23 +1,8 @@
 {
- "generated": "2026-08-16T03:10:35Z",
+ "generated": "2026-08-17T03:11:58Z",
  "venues": {
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-08-15": {
-     "hl": "Black Coffee",
-     "line": [
-      "Black Coffee",
-      "Ry X (DJ set)",
-      "Jaiime",
-      "Skepta (DJ set)",
-      "Ankhoï",
-      "Adam Ten"
-     ],
-     "party": "",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-16": {
      "hl": "CamelPhat",
      "line": [
@@ -130,25 +115,25 @@
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-24": {
+     "hl": "Francis Mercier",
+     "line": [
+      "Francis Mercier",
+      "Faul & Wad",
+      "Maesic",
+      "Andrea Oliva",
+      "Marten Lou"
+     ],
+     "party": "Solèy",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-08-15": {
-     "hl": "Dennis Ferrer",
-     "line": [
-      "Dennis Ferrer",
-      "Gaskin",
-      "Salomé Le Chat",
-      "Candidate",
-      "Raul Rodriguez"
-     ],
-     "party": "ANTS",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-16": {
      "hl": "Swedish House Mafia",
      "line": [
@@ -248,24 +233,24 @@
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-24": {
+     "hl": "David Guetta",
+     "line": [
+      "David Guetta",
+      "Disciples",
+      "Majestic",
+      "Paul Reynolds"
+     ],
+     "party": "F*** Me I'm Famous!",
+     "doors": "17:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-08-15": {
-     "hl": "Roger Sanchez",
-     "line": [
-      "Roger Sanchez",
-      "Sam Divine B2B Low Steppa",
-      "Kristen Knight",
-      "Sam Oui"
-     ],
-     "party": "Flower Power",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-16": {
      "hl": "Solomun",
      "line": [
@@ -362,21 +347,24 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-24": {
+     "hl": "Sonny Fodera",
+     "line": [
+      "Sonny Fodera",
+      "Eats Everything",
+      "Danny Howard",
+      "Laeet"
+     ],
+     "party": "",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-08-15": {
-     "hl": "Saiko",
-     "line": [
-      "Saiko"
-     ],
-     "party": "BRESH Ibiza",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-16": {
      "hl": "Ricardo Villalobos",
      "line": [
@@ -477,21 +465,23 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-24": {
+     "hl": "NRG",
+     "line": [
+      "Ben Hemsley",
+      "Black Traffic",
+      "Diffrent"
+     ],
+     "party": "NRG",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "marbella|nightclubs|0": {
    "nights": {
-    "2026-08-15": {
-     "hl": "Benja Francfala",
-     "line": [
-      "Benja Francfala"
-     ],
-     "party": "",
-     "doors": "23:45",
-     "src": "mandalatickets.com",
-     "conf": "high"
-    },
     "2026-08-16": {
      "hl": "Magic Carpet",
      "line": [
@@ -561,22 +551,21 @@
      "doors": "23:45",
      "src": "mandalatickets.com",
      "conf": "high"
+    },
+    "2026-08-24": {
+     "hl": "Alex Puche",
+     "line": [
+      "Alex Puche"
+     ],
+     "party": "",
+     "doors": "23:45",
+     "src": "mandalatickets.com",
+     "conf": "high"
     }
    }
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-08-15": {
-     "hl": "Meduza",
-     "line": [
-      "Meduza",
-      "G.Siras"
-     ],
-     "party": "",
-     "doors": "23:59",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
     "2026-08-16": {
      "hl": "Diplo",
      "line": [
@@ -668,19 +657,19 @@
      "doors": "",
      "src": "cavoparadiso.gr",
      "conf": "high"
+    },
+    "2026-08-24": {
+     "hl": "Mamacita",
+     "line": [],
+     "party": "Mamacita",
+     "doors": "23:00",
+     "src": "cavoparadiso.gr",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-08-15": {
-     "hl": "Company B",
-     "line": "Company B (live)",
-     "party": "102 The Beach Miami",
-     "doors": "23:00",
-     "src": "11miami.com",
-     "conf": "high"
-    },
     "2026-08-16": {
      "hl": "Fresko",
      "line": "Fresko",
@@ -744,19 +733,19 @@
      "doors": "23:00",
      "src": "11miami.com",
      "conf": "high"
+    },
+    "2026-08-24": {
+     "hl": "Chizzle",
+     "line": "Chizzle",
+     "party": "",
+     "doors": "23:00",
+     "src": "11miami.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-08-15": {
-     "hl": "Kōdō",
-     "line": [],
-     "party": "Kōdō",
-     "doors": "20:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-16": {
      "hl": "Travieso",
      "line": [],
@@ -848,30 +837,8 @@
     }
    }
   },
-  "miami|nightclubs|0": {
-   "nights": {
-    "2026-08-15": {
-     "hl": "Nicky Romero",
-     "line": [
-      "Nicky Romero"
-     ],
-     "party": "",
-     "doors": "23:30",
-     "src": "songkick.com",
-     "conf": "med"
-    }
-   }
-  },
   "aspen|nightclubs|0": {
    "nights": {
-    "2026-08-15": {
-     "hl": "City of the Sun",
-     "line": "City of the Sun",
-     "party": "",
-     "doors": "",
-     "src": "bellyupaspen.com",
-     "conf": "high"
-    },
     "2026-08-18": {
      "hl": "Billy Failing",
      "line": "Billy Failing",
@@ -887,34 +854,6 @@
      "doors": "",
      "src": "bellyupaspen.com",
      "conf": "high"
-    }
-   }
-  },
-  "monaco|nightclubs|0": {
-   "nights": {
-    "2026-08-15": {
-     "hl": "BLOND:ISH",
-     "line": [
-      "BLOND:ISH"
-     ],
-     "party": "",
-     "doors": "",
-     "src": "songkick.com",
-     "conf": "med"
-    }
-   }
-  },
-  "miami|nightclubs|2": {
-   "nights": {
-    "2026-08-15": {
-     "hl": "Mochakk",
-     "line": [
-      "Mochakk"
-     ],
-     "party": "",
-     "doors": "23:00",
-     "src": "jambase.com",
-     "conf": "med"
     }
    }
   }
