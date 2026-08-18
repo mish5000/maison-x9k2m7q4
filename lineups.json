@@ -1,22 +1,8 @@
 {
- "generated": "2026-08-17T03:11:58Z",
+ "generated": "2026-08-18T03:10:34Z",
  "venues": {
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-08-16": {
-     "hl": "CamelPhat",
-     "line": [
-      "CamelPhat",
-      "Maceo Plex",
-      "Indira Paganotto",
-      "Sam Paganini",
-      "Charlie Sparks"
-     ],
-     "party": "Summer Of Love",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-17": {
      "hl": "Francis Mercier",
      "line": [
@@ -129,23 +115,25 @@
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-25": {
+     "hl": "East End Dubs B2B Ilario Alicante",
+     "line": [
+      "East End Dubs",
+      "Ilario Alicante",
+      "Paco Osuna",
+      "Mason Collective",
+      "Evie"
+     ],
+     "party": "Eastenderz",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-08-16": {
-     "hl": "Swedish House Mafia",
-     "line": [
-      "Swedish House Mafia",
-      "Bea Sylvan",
-      "Nosefine"
-     ],
-     "party": "",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-17": {
      "hl": "David Guetta",
      "line": [
@@ -246,22 +234,24 @@
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-25": {
+     "hl": "Calvin Harris",
+     "line": [
+      "Calvin Harris",
+      "Romy",
+      "Tyson O'Brien",
+      "Siân Owen"
+     ],
+     "party": "Tuesday Closing Party",
+     "doors": "17:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-08-16": {
-     "hl": "Solomun",
-     "line": [
-      "Solomun",
-      "DJ Gigola"
-     ],
-     "party": "Solomun +1",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-17": {
      "hl": "Sonny Fodera",
      "line": [
@@ -360,24 +350,24 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-25": {
+     "hl": "Gordo",
+     "line": [
+      "Gordo",
+      "Vanjee",
+      "Wade",
+      "Gala"
+     ],
+     "party": "Taraka",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-08-16": {
-     "hl": "Ricardo Villalobos",
-     "line": [
-      "Ricardo Villalobos B2B Chris Stussy B2B Raresh",
-      "Sidney Charles B2B Mar-T",
-      "Deborah de Luca",
-      "Alan Fitzpatrick"
-     ],
-     "party": "Pyramid",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-17": {
      "hl": "Ben Hemsley",
      "line": [
@@ -477,21 +467,25 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-25": {
+     "hl": "Joseph Capriati",
+     "line": [
+      "Joseph Capriati",
+      "Enzo Siragusa",
+      "Archie Hamilton",
+      "Fleur Shore",
+      "Freddy K"
+     ],
+     "party": "Metamorfosi",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "marbella|nightclubs|0": {
    "nights": {
-    "2026-08-16": {
-     "hl": "Magic Carpet",
-     "line": [
-      "Magic Carpet"
-     ],
-     "party": "",
-     "doors": "23:45",
-     "src": "mandalatickets.com",
-     "conf": "high"
-    },
     "2026-08-18": {
      "hl": "Luke Garcia",
      "line": [
@@ -561,22 +555,21 @@
      "doors": "23:45",
      "src": "mandalatickets.com",
      "conf": "high"
+    },
+    "2026-08-25": {
+     "hl": "Vite",
+     "line": [
+      "Vite"
+     ],
+     "party": "",
+     "doors": "23:45",
+     "src": "mandalatickets.com",
+     "conf": "high"
     }
    }
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-08-16": {
-     "hl": "Diplo",
-     "line": [
-      "Diplo",
-      "Freespirit"
-     ],
-     "party": "",
-     "doors": "23:59",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
     "2026-08-17": {
      "hl": "James Hype",
      "line": [
@@ -665,19 +658,34 @@
      "doors": "23:00",
      "src": "cavoparadiso.gr",
      "conf": "high"
+    },
+    "2026-08-25": {
+     "hl": "Armand Van Helden",
+     "line": [
+      "Armand Van Helden",
+      "Egmond"
+     ],
+     "party": "",
+     "doors": "23:00",
+     "src": "cavoparadiso.gr",
+     "conf": "high"
+    },
+    "2026-08-26": {
+     "hl": "Gorgon City",
+     "line": [
+      "Gorgon City",
+      "Linska",
+      "Fused"
+     ],
+     "party": "",
+     "doors": "23:00",
+     "src": "cavoparadiso.gr",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-08-16": {
-     "hl": "Fresko",
-     "line": "Fresko",
-     "party": "",
-     "doors": "23:00",
-     "src": "11miami.com",
-     "conf": "high"
-    },
     "2026-08-17": {
      "hl": "EFX",
      "line": "EFX",
@@ -741,19 +749,19 @@
      "doors": "23:00",
      "src": "11miami.com",
      "conf": "high"
+    },
+    "2026-08-25": {
+     "hl": "Richard Fraioli",
+     "line": "Richard Fraioli",
+     "party": "",
+     "doors": "23:00",
+     "src": "11miami.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-08-16": {
-     "hl": "Travieso",
-     "line": [],
-     "party": "Travieso",
-     "doors": "20:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-17": {
      "hl": "Nasty Beats",
      "line": [],
@@ -815,25 +823,16 @@
      "doors": "23:45",
      "src": "ibiza-spotlight.com",
      "conf": "high"
-    }
-   }
-  },
-  "ibiza|nightclubs|6": {
-   "nights": {
-    "2026-08-16": {
-     "hl": "FUSE × Brunch Electronik",
+    },
+    "2026-08-25": {
+     "hl": "Arkadyan",
      "line": [
-      "Ben UFO",
-      "Enzo Siragusa",
-      "Sonja Moonear",
-      "Saoirse",
-      "Dr. Banana",
-      "Across Boundaries"
+      "Arkadyan"
      ],
-     "party": "FUSE × Brunch Electronik",
-     "doors": "21:00",
+     "party": "Voyage",
+     "doors": "23:45",
      "src": "ibiza-spotlight.com",
-     "conf": "med"
+     "conf": "high"
     }
    }
   },
