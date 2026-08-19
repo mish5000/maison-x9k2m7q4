@@ -1203,7 +1203,17 @@ body {
 .feed-subhead:first-child { margin-top: 4px; }
 
 /* ---------- category sort bar: The Edit / Hot now / Top rated ---------- */
-.sortbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 2px 22px 6px; }
+/* NOWRAP + scroll, not wrap. Measured in WebKit at 390px: the three original
+   chips already used 334 of 344 available px, so a fourth wrapped to a second
+   row and doubled this bar from 43px to 86px on every category screen. The
+   short labels fit all four inside 390px with 14px to spare; below that
+   (375px iPhone SE/mini misses by ONE pixel) it scrolls instead of reflowing.
+   Same pattern the Tonight strip already uses. */
+.sortbar { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap;
+  overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  padding: 2px 22px 6px; }
+.sortbar::-webkit-scrollbar { display: none; }
+.schip { flex: 0 0 auto; }
 .schip {
   font-family: var(--sans);
   font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
@@ -1221,7 +1231,13 @@ body {
 }
 .schip:active { transform: scale(0.96); }
 /* the honesty stamp — our model at this minute, tap to re-read it */
-.sortstamp {
+/* OUT of the scroller entirely. Leaving it inside with margin-left:auto put
+   it 99px beyond the right edge on a 390pt iPhone and 59px beyond on a Pro
+   Max — off-screen at EVERY phone width whenever Hot was lit, behind a
+   scrollbar that is deliberately invisible. The Pulse stamp is the honesty
+   stamp; it cannot be the one thing the member can never see. It now sits on
+   its own row under the chips. */
+.sortstamp { display: flex; margin: -2px 22px 6px auto;
   margin-left: auto;
   display: inline-flex; align-items: center; gap: 6px;
   font-family: var(--sans);
@@ -2654,6 +2670,21 @@ body {
 
 /* pulse row extras: distance + uber */
 .ag-item .pmeta { display: flex; align-items: baseline; gap: 12px; margin-top: 1px; }
+/* .ag-item .dist was scoped to the Pulse row; a bare .dist on a card
+   rendered completely unstyled. The card badge sits on its own line under
+   the hours, in the same faint sans as the rest of the meta. */
+.vcard .dist {
+  /* BLOCK, not inline-block. `.tasting` is inline-block and flowed onto the
+     same line beside it — measured side by side on Messina, Nintai and Skina
+     in Marbella alone. */
+  display: block;
+  margin-top: 5px;
+  font-family: var(--sans);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+}
 .ag-item .dist {
   font-family: var(--sans);
   font-size: 9px;
@@ -4449,8 +4480,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '13 August 2026 · 22:32 CEST';
-const APP_BUILD = 'v534';
+const COLLECTION_UPDATED = '19 August 2026 · 10:52 CEST';
+const APP_BUILD = 'v551';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7040,9 +7071,120 @@ function kmBetween(la, lo, vla, vlo) {
   const a = Math.sin(dLa / 2) ** 2 + Math.cos(la * rad) * Math.cos(vla * rad) * Math.sin(dLo / 2) ** 2;
   return 6371 * 2 * Math.asin(Math.sqrt(a));
 }
-function geoOrderedCities() {
+/* ---------- ONE position policy ----------------------------------------
+   Before this, the SAME cached fix was read under three different rules:
+   map.js trusted it for 6 hours, concierge.js for 30 minutes, and
+   geoOrderedCities() applied no expiry at all — so a fix from six months ago
+   still reordered the home rail. These constants are now the only answer.
+
+   PRINT_AGE (15 min): how old a fix may be and still be PRINTED as a number.
+   Worst realistic urban displacement in 15 minutes is ~10km on a motorway,
+   ~1.2km walking, and the ordering of a city's venues is stable at that
+   error. Between PRINT_AGE and HARD_TTL we show nothing and refresh in the
+   background rather than print a number we do not believe.
+
+   HARD_TTL (24 h): beyond a day a fix more likely describes the member's
+   PREVIOUS city than this one. Home-screen web apps are exempt from ITP's
+   7-day storage sweep, so nothing expires this key for us — we own it.
+
+   MAX_KM (250): larger than any single city's own sprawl (LA metro ~110km,
+   Dubai ~130km) and small enough that a transcontinental fix never prints.
+   Dubai->Abu Dhabi at 142km is honest and useful; LA->Ibiza at 9,124km is
+   not a stale number, it is a meaningless one, and no freshness saves it.
+
+   MAX_ACCURACY (50 km): the only detectable "success with a wrong number".
+   NOTE this is deliberately NOT triggered by iOS Precise Location being off
+   — that yields 1-20km and is still city-correct, which is exactly the
+   fidelity a distance badge needs. */
+const GEO_PRINT_AGE = 15 * 60 * 1000;
+const GEO_HARD_TTL = 24 * 60 * 60 * 1000;
+const GEO_MAX_KM = 250;
+const GEO_MAX_ACCURACY = 50000;
+
+/* A denial is FATAL for the lifetime of the document — WebKit's
+   Geolocation::startRequest short-circuits every later call once isDenied(),
+   with the comment "the permission state can not change again in the
+   lifetime of this page". So we get exactly ONE request per launch, and a
+   retry button would be a lie. Ask on the member's tap, never on render. */
+let geoDenied = false;
+let geoPending = null;
+let geoRefreshed = false;   // one-shot per launch — see viewCategory
+
+function geoRead() {
   let pos = null;
   try { pos = JSON.parse(localStorage.getItem(GEO_KEY)); } catch (_) {}
+  if (!pos || typeof pos.la !== 'number' || typeof pos.lo !== 'number') return null;
+  if (!pos.t || Date.now() - pos.t > GEO_HARD_TTL) {
+    try { localStorage.removeItem(GEO_KEY); } catch (_) {}
+    return null;
+  }
+  return pos;
+}
+/* A fix fresh enough to PRINT. Everything user-facing reads this one. */
+function geoFresh() {
+  const pos = geoRead();
+  return (pos && Date.now() - pos.t <= GEO_PRINT_AGE) ? pos : null;
+}
+/* Ask the platform. One in-flight promise: four independent
+   getCurrentPosition calls on one screen would race four prompts.
+   enableHighAccuracy stays FALSE — WebKit maps false to
+   kCLLocationAccuracyHundredMeters, which is ~1000x tighter than a badge
+   printed to 0.1km and never spins the GPS radio. The 6s timeout is safe
+   because WebKit does not start the notifier timer until AFTER permission
+   resolves, so time spent staring at the system prompt is not charged
+   against it. */
+function geoRequest() {
+  if (geoPending) return geoPending;
+  if (geoDenied || !navigator.geolocation) return Promise.resolve(null);
+  geoPending = new Promise((resolve) => {
+    navigator.geolocation.getCurrentPosition((p) => {
+      geoPending = null;
+      resolve(geoStore(p.coords, p.timestamp));
+    }, (err) => {
+      geoPending = null;
+      /* code 1 covers BOTH a tapped "Don't Allow" AND Location Services
+         being off system-wide or restricted by Screen Time/MDM — WebKit
+         routes kCLAuthorizationStatusDenied and Restricted to the same
+         PermissionDenied. They are indistinguishable, so the copy must
+         never accuse the member of refusing. */
+      if (err && err.code === 1) geoDenied = true;
+      resolve(null);
+    }, { enableHighAccuracy: false, timeout: 6000, maximumAge: 600000 });
+  });
+  return geoPending;
+}
+/* THE ONLY WRITER. Four call sites used to write GEO_KEY independently —
+   app.js, map.js, concierge.js and the home re-sort — each at raw 7-decimal
+   precision with no accuracy check. That defeated BOTH guarantees the policy
+   above claims: open the map once and the member's home address is back in
+   localStorage at centimetre precision, and a coarse fix written there is
+   read straight back out by geoFresh() and printed as a distance. Every
+   writer now goes through this. */
+function geoStore(coords, when) {
+  if (!coords || coords.accuracy > GEO_MAX_ACCURACY) return null;
+  const r = (n) => Math.round(n * 1000) / 1000;
+  /* Stamp the fix's OWN acquisition time, not now. getCurrentPosition may
+     hand back a platform-cached position up to maximumAge old, so stamping
+     Date.now() would let a 10-minute-old fix pass the 15-minute freshness
+     test for another 15 — certifying as "fresh" something up to 25 minutes
+     stale. p.timestamp is when the position was actually acquired. */
+  const fix = { la: r(coords.latitude), lo: r(coords.longitude), t: when || Date.now() };
+  try { localStorage.setItem(GEO_KEY, JSON.stringify(fix)); } catch (_) {}
+  return fix;
+}
+/* Distance to a venue, or null when we must not print one. */
+function geoKmTo(key) {
+  const pos = geoFresh();
+  const ll = (typeof VENUE_LL !== 'undefined') && VENUE_LL[key];
+  if (!pos || !ll) return null;
+  const km = kmBetween(pos.la, pos.lo, ll[0], ll[1]);
+  return km <= GEO_MAX_KM ? km : null;
+}
+const kmLabel = (km) => (Math.round(km * 1000) < 1000 ? Math.round(km * 1000) + ' m'
+  : km < 10 ? km.toFixed(1) + ' km' : Math.round(km) + ' km');
+
+function geoOrderedCities() {
+  const pos = geoRead();
   if (!pos) return { cities: CITIES, near: false };
   const scored = CITIES.map(c => {
     const ll = cityCenter(c.id);
@@ -7207,9 +7349,26 @@ function viewHome() {
 /* geo locator — the city you're in (or nearest to) leads the grid */
 function requestGeoSort() {
   if (!navigator.geolocation) return;
-  navigator.geolocation.getCurrentPosition((pos) => {
-    const before = geoOrderedCities();
-    localStorage.setItem(GEO_KEY, JSON.stringify({ la: pos.coords.latitude, lo: pos.coords.longitude, t: Date.now() }));
+  /* NO PROMPT ON RENDER. This used to call getCurrentPosition unconditionally
+     at the end of every home boot, which spent the document's single
+     permission request on a screen the member had not asked anything of.
+     permissions.query is usable here but ONLY one way: WebKit's
+     determineGeolocationPermissionState reports a stored DENIED as "prompt"
+     on a fresh document, so a 'granted' answer is trustworthy and nothing
+     else is. Granted means the fix costs no dialogue — take it. Anything
+     else waits for the member to tap Nearest. */
+  if (!navigator.permissions || !navigator.permissions.query) return;
+  navigator.permissions.query({ name: 'geolocation' })
+    .then((st) => { if (st.state === 'granted') geoSortNow(); })
+    .catch(() => {});
+}
+function geoSortNow() {
+  /* Through geoRequest, not around it: this used to call getCurrentPosition
+     directly, which skipped the accuracy gate, skipped the single-flight
+     guard, and swallowed a denial without ever setting geoDenied. */
+  const before = geoOrderedCities();
+  geoRequest().then((fix) => {
+    if (!fix) return;
     const next = geoOrderedCities();
     // Only rebuild when the rail would actually change — a fix that confirms
     // the rendered order must not blink the homepage (worst on return-to-home).
@@ -7221,7 +7380,7 @@ function requestGeoSort() {
       $shell.scrollTo(0, y);
       restoreRails('#/');
     }
-  }, () => {}, { timeout: 8000, maximumAge: 300000 });
+  });
 }
 
 function viewCity(cityId) {
@@ -7434,6 +7593,8 @@ function venueCard(city, catId, v, idx) {
         <span class="stars">${ratingBadge(key)}</span>
         <div class="txt">
           ${hoursLine(key)}
+          ${(() => { const km = geoKmTo(key);
+            return km === null ? '' : `<span class="dist">${kmLabel(km)} away</span>`; })()}
           ${tastingRoom(key) ? '<span class="tasting">Tasting menu only</span>' : ''}
           <p class="blurb">${v.b}</p>
         </div>
@@ -7450,7 +7611,11 @@ function venueCard(city, catId, v, idx) {
    'rated' = Google score weighted by review count (IMDb prior, m=200) so a
              5.0-from-12-reviews cannot outrank a 4.7-from-3,000. */
 let catSort = 'edit';
-try { catSort = localStorage.getItem('privee-catsort') || 'edit'; } catch (_) {}
+/* Validate, do not trust. A persisted 'near' survives permission being
+   revoked, and would render the chip lit while the list silently showed
+   collection order — the chip claiming a sort it is not performing. */
+const CAT_SORTS = ['edit', 'hot', 'rated', 'near'];
+try { const v = localStorage.getItem('privee-catsort'); if (CAT_SORTS.includes(v)) catSort = v; } catch (_) {}
 const venueStanding = (key) => {
   const r = venueRating(key);
   return r ? r[0] * Math.log10(Math.max(10, r[1])) : 8;
@@ -7498,22 +7663,95 @@ function viewCategory(cityId, catId) {
   const groups = catParts(cat)
     .map(part => ({ part, list: city.venues[part] || [] }))
     .filter(g => g.list.length);
-  const showHeads = groups.length > 1;
-  const feed = groups.map(g => {
-    let rows = g.list.map((v, i) => ({ v, i }));   // i = collection index — the
-    // per-venue dicts are keyed by it, so sorting must reorder DISPLAY only
-    if (catSort === 'hot') rows = rows.slice().sort((a, b) => hotScore(city.id, g.part, b.i) - hotScore(city.id, g.part, a.i));
-    if (catSort === 'rated') rows = rows.slice().sort((a, b) => ratedScore(vkey(city.id, g.part, b.i)) - ratedScore(vkey(city.id, g.part, a.i)));
-    return (showHeads ? `<div class="feed-subhead">${PART_HEAD[g.part] || ''}</div>` : '') +
-      rows.map(o => venueCard(city, g.part, o.v, o.i)).join('');
-  }).join('');
+  /* EVERY ROW CARRIES ITS OWN PART. Sorting used to run inside each group,
+     which is right for the Editor's List — the subheads ARE the structure —
+     and wrong for every other chip. On Beach & Pools it meant the sort
+     restarted at the Pools heading, so a pool 200m away could sit below a
+     beach club five kilometres further. Nobody who taps "Nearest" wants
+     that, and "Rated" had the same defect: two separately-ranked lists
+     stacked and presented as one ranking.
+     So a non-editorial sort FLATTENS across parts and drops the subheads.
+     The subheads describe an editorial arrangement; once the member has
+     asked for distance or rating, that arrangement is gone and the headings
+     would be describing a grouping that no longer exists. `i` still travels
+     with its own part, so every sidecar key resolves exactly as before. */
+  const flat = groups.flatMap(g => g.list.map((v, i) => ({ v, i, part: g.part })));
+  const K = (o) => vkey(city.id, o.part, o.i);
+
+  /* A CHIP MUST NEVER CLAIM A SORT IT IS NOT PERFORMING, and the only
+     question that settles it is asked of THE ROWS ABOUT TO RENDER.
+     An earlier attempt asked a proxy — "is the member within 250km of the
+     city" — using one arbitrary venue as the city's centre. Review found 86
+     (city, category) pairs where that proxy is true while every venue is
+     still out of range: stand 249km from Ibiza's centre venue and the
+     nearest actual Ibiza venue is 263km, so every badge is suppressed, the
+     comparator is all-Infinity, the sort is a no-op — and the gold chip says
+     Nearest over a list in collection order. The ring is 25km wide over
+     inhabited land, not a knife edge.
+     So: resolve every row's distance FIRST, and light `near` only if at
+     least one of them is a real number. */
+  const kmOf = flat.map(o => geoKmTo(K(o)));
+  const anyDistance = kmOf.some(d => d !== null);
+  const sortNow = (catSort === 'near' && !anyDistance) ? 'edit' : catSort;
+  const showHeads = groups.length > 1 && sortNow === 'edit';
+
+  /* Stale but present, and already granted? Refresh once and re-render.
+     THREE guards, each load-bearing:
+     - permissions.query === 'granted' is the only answer that API can be
+       trusted for, so this can never surface a dialogue on render;
+     - geoRefreshed is a ONE-SHOT latch. Without it this is an unbounded
+       loop: geoRequest resolves a fix in memory, but the re-arm condition
+       re-reads freshness from localStorage, so if the write ever fails —
+       quota, private mode — the identical condition fires again on the
+       render it just caused. Measured at 73 getCurrentPosition calls in six
+       seconds with a throwing setItem, each one a full feed rebuild;
+     - the re-render is gated on geoFresh(), not on the in-memory fix, so a
+       failed write cannot trigger a render that changes nothing. */
+  if (catSort === 'near' && !geoFresh() && !geoDenied && !geoRefreshed
+      && navigator.permissions && navigator.permissions.query) {
+    geoRefreshed = true;
+    const at = location.hash;
+    navigator.permissions.query({ name: 'geolocation' })
+      .then((st) => { if (st.state === 'granted') geoRequest().then(() => {
+        /* Only repaint the page that asked. A 6s fix can land after the
+           member has navigated on, and rebuilding an unrelated feed would
+           reorder it under their eyes while the scroll offset is held. */
+        if (geoFresh() && location.hash === at) renderRoute(true);
+      }); })
+      .catch(() => {});
+  }
+  let feed;
+  if (sortNow === 'edit') {
+    feed = groups.map(g => (showHeads ? `<div class="feed-subhead">${PART_HEAD[g.part] || ''}</div>` : '') +
+      g.list.map((v, i) => venueCard(city, g.part, v, i)).join('')).join('');
+  } else {
+    let rows = flat.slice();
+    if (sortNow === 'hot') rows.sort((a, b) => hotScore(city.id, b.part, b.i) - hotScore(city.id, a.part, a.i));
+    if (sortNow === 'rated') rows.sort((a, b) => ratedScore(K(b)) - ratedScore(K(a)));
+    /* Distance resolves through the ORIGINAL collection index, never a
+       re-derived one — the sidecars are keyed positionally. A venue with no
+       coordinate sinks via Infinity rather than producing NaN comparisons
+       and an implementation-defined shuffle (3 today: two adjacent Marbella
+       beach clubs and a Mykonos helicopter transfer). */
+    if (sortNow === 'near') {
+      const km = (o) => { const d = geoKmTo(K(o)); return d === null ? Infinity : d; };
+      rows.sort((a, b) => km(a) - km(b));
+    }
+    feed = rows.map(o => venueCard(city, o.part, o.v, o.i)).join('');
+  }
 
   const sortbar = `
     <div class="sortbar rise">
-      ${[['edit', 'Editor’s List'], ['hot', 'Hot now'], ['rated', 'Top rated']].map(([id, label]) =>
-        `<button class="schip ${catSort === id ? 'on' : ''}" data-sort="${id}">${label}</button>`).join('')}
-      ${catSort === 'hot' ? `<button class="sortstamp" data-sort="hot" aria-label="Refresh the pulse">${I.pulse}Pulse · ${cityClock(cityId)}</button>` : ''}
-    </div>`;
+      ${/* Labels are SHORT because a fourth chip does not otherwise fit.
+           Measured in WebKit: the three original labels already used 334 of
+           344 available px at 390px, and every four-chip set with the long
+           names wrapped to a second row, doubling the bar from 43px to 86px
+           on every category screen. 'The Edit' is what the stylesheet's own
+           section comment has always called it. */
+        [['edit', 'The Edit'], ['hot', 'Hot'], ['rated', 'Rated'], ['near', 'Nearest']].map(([id, label]) =>
+        `<button class="schip ${sortNow === id ? 'on' : ''}" data-sort="${id}">${label}</button>`).join('')}
+    </div>
+    ${sortNow === 'hot' ? `<button class="sortstamp" data-sort="hot" aria-label="Refresh the pulse">${I.pulse}Pulse · ${cityClock(cityId)}</button>` : ''}`;
 
   let ribbon = '';
   if (catId === 'nightclubs') {
@@ -7541,10 +7779,31 @@ function viewCategory(cityId, catId) {
     </div>`;
   // chip tap = set order and soft re-render in place (scroll held); tapping
   // the Pulse stamp re-reads the model at the new minute
-  $app.querySelectorAll('.sortbar [data-sort]').forEach(b => b.addEventListener('click', () => {
-    catSort = b.dataset.sort;
-    try { localStorage.setItem('privee-catsort', catSort); } catch (_) {}
+  /* The Pulse stamp now sits OUTSIDE .sortbar (it was off-screen inside the
+     scroller), so the selector must reach both. */
+  $app.querySelectorAll('.sortbar [data-sort], .sortstamp[data-sort]').forEach(b => b.addEventListener('click', () => {
+    const want = b.dataset.sort;
     haptic();
+    /* THE TAP IS THE PERMISSION REQUEST. iOS grants nothing before it and
+       WebKit gives us exactly one shot per document, so it is spent here —
+       on an explicit intent — and never on a render. A second reason not to
+       ask at load: in display:standalone the system alert sometimes does not
+       render at all and the call never returns, which at load time would be
+       an invisible hang on the first screen a member ever sees. */
+    if (want === 'near' && !geoFresh()) {
+      geoRequest().then(() => {
+        /* Same question the render asks, of the same rows: does ANY venue
+           on this screen resolve to a printable distance? */
+        const usable = catParts(cat).some(part =>
+          (city.venues[part] || []).some((_, i) => geoKmTo(vkey(city.id, part, i)) !== null));
+        catSort = usable ? 'near' : catSort;   // no usable distance, no lit chip
+        try { localStorage.setItem('privee-catsort', catSort); } catch (_) {}
+        renderRoute(true);
+      });
+      return;
+    }
+    catSort = want;
+    try { localStorage.setItem('privee-catsort', catSort); } catch (_) {}
     renderRoute(true);
   }));
   wireCards();
@@ -9194,17 +9453,18 @@ function viewPulse(cityId) {
     openSheet(c, cat, +i);
   }));
   // live distances from the member's position
-  if (navigator.geolocation) navigator.geolocation.getCurrentPosition((pos) => {
-    const la = pos.coords.latitude, lo = pos.coords.longitude;
-    const rad = Math.PI / 180;
-    $app.querySelectorAll('.dist[data-ll]').forEach(el => {
-      const [vla, vlo] = el.dataset.ll.split(',').map(Number);
-      const dLa = (vla - la) * rad, dLo = (vlo - lo) * rad;
-      const a = Math.sin(dLa / 2) ** 2 + Math.cos(la * rad) * Math.cos(vla * rad) * Math.sin(dLo / 2) ** 2;
-      const km = 6371 * 2 * Math.asin(Math.sqrt(a));
-      if (km < 500) el.textContent = (km < 10 ? km.toFixed(1) : Math.round(km)) + ' km';
-    });
-  }, () => {}, { timeout: 8000, maximumAge: 120000 });
+  /* NO PROMPT ON RENDER. This used to call getCurrentPosition unconditionally
+     whenever the Pulse opened, which spent the document's single permission
+     request on a screen the member had not asked distance of — and if they
+     declined, the Nearest chip was dead for the rest of the page's life
+     without the app even recording the refusal. It now paints from the
+     cached fix only; the tap on Nearest is the one place we ask. */
+  const pos = geoFresh();
+  if (pos) $app.querySelectorAll('.dist[data-ll]').forEach(el => {
+    const [vla, vlo] = el.dataset.ll.split(',').map(Number);
+    const km = kmBetween(pos.la, pos.lo, vla, vlo);
+    if (km <= GEO_MAX_KM) el.textContent = kmLabel(km);
+  });
   $shell.scrollTo(0, 0);
 }
 
@@ -11628,12 +11888,20 @@ function camFlyLL(ll, zoom, ms) {
 
 function startGeo(fly) {
   try {
-    const cached = JSON.parse(localStorage.getItem(GEO_KEY) || 'null');
-    if (cached && Date.now() - cached.t < 6 * 3600 * 1000) placeMe(cached.la, cached.lo, 999);
+    /* One TTL, app.js's. This read used its own 6-hour rule while the
+       concierge used 30 minutes and the home rail used none at all. */
+    const cached = geoRead();
+    if (cached) placeMe(cached.la, cached.lo, 999);
   } catch (_) {}
   if (!navigator.geolocation) return;
   navigator.geolocation.getCurrentPosition((pos) => {
-    localStorage.setItem(GEO_KEY, JSON.stringify({ la: pos.coords.latitude, lo: pos.coords.longitude, t: Date.now() }));
+    /* Through app.js's geoStore, never a raw write. A direct setItem here
+       put the member's position back at 7-decimal precision and with no
+       accuracy gate, defeating both guarantees the policy in app.js makes —
+       and this file is the one screen almost guaranteed to run. The MAP
+       still draws the live, unrounded position it was handed; only what is
+       PERSISTED is rounded. */
+    geoStore(pos.coords, pos.timestamp);
     placeMe(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy || 0);
     if (fly) camFlyLL([pos.coords.latitude, pos.coords.longitude], Math.max(mapZoom(), 15.5), 900);
     if (geoWatch === null && mapDom.classList.contains('open')) {
@@ -12249,9 +12517,9 @@ function cgGeo() {
     const finish = (v) => { if (!done) { done = true; res(v); } };
     setTimeout(() => finish(cached), 3500);
     navigator.geolocation.getCurrentPosition(pos => {
-      const v = { la: pos.coords.latitude, lo: pos.coords.longitude, t: Date.now() };
-      localStorage.setItem(GEO_KEY, JSON.stringify(v));
-      finish(v);
+      /* Through app.js's geoStore — see the note there. A raw write here
+         restored centimetre precision and skipped the accuracy gate. */
+      finish(geoStore(pos.coords, pos.timestamp) || cached);
     }, () => finish(cached), { timeout: 3000, maximumAge: 120000 });
   });
 }
