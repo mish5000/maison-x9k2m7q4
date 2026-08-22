@@ -4603,8 +4603,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 August 2026 · 21:16 CEST';
-const APP_BUILD = 'v588';
+const COLLECTION_UPDATED = '22 August 2026 · 21:39 CEST';
+const APP_BUILD = 'v591';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -6702,16 +6702,29 @@ const chapterOf = (cityId, part, idx) =>
    first venue's hero can be right for its card and wrong as a category
    lead (his 28 Jul: Somni's caviar board read as "sushi board" on the LA
    Restaurants tile — Mother Wolf's room says "dining in LA" instead). */
+/* KEYED BY CHAPTER ID, and every key is asserted live by the ship gate.
+   All three of these silently DIED in the four-chapter migration (22 Aug):
+   the keys still said `restaurants`, `bars`, `nightclubs` while the chapters
+   had become `dine` and `nights`, so every override missed and each tile
+   fell back to its index-0 default — which is to say, back to the two images
+   Mishari had already rejected on sight, in July and in August. He caught it
+   again from a phone. A lookup that misses is not an error, and that is
+   exactly why this now has a gate check: build/integrity.cjs assertion H
+   fails the build if a key does not name a live chapter or a value does not
+   resolve to a venue with a photograph. */
 const TILE_OVERRIDE = {
-  'losangeles|restaurants': 'losangeles|restaurants|11',
+  'losangeles|dine': 'losangeles|restaurants|11',
   /* 10 Aug, Mishari on sight: Bars led with a POOL DECK in midday sun and
      Nightclubs led with a garden lunch. Both were index-0 defaults — Bars
      inherited The Tower Bar's hero (which is the Sunset Tower pool, not the
      bar: see PENDING-IMAGERY) and Nightclubs inherited San Vicente's garden.
      A chapter tile has to say what the chapter IS. The Nice Guy is a literal
      long bar, lamplit; Delilah is a dark night room. Neither is a pool. */
-  'losangeles|bars': 'losangeles|lounges|10',
-  'losangeles|nightclubs': 'losangeles|nightclubs|0',
+  /* Bars and Nightclubs are ONE chapter now, so their two overrides collapse
+     to one. The Nice Guy takes it: Nights is 16 bars, 1 nightclub and 2
+     newcomers, and a literal lamplit long bar describes that better than
+     Delilah's club room does. Delilah stays one line away if he prefers it. */
+  'losangeles|nights': 'losangeles|lounges|10',
 };
 let screenSeen = new Set();
 const tileImg = (city, catId) => {
