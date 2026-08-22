@@ -4603,8 +4603,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 August 2026 · 19:02 CEST';
-const APP_BUILD = 'v582';
+const COLLECTION_UPDATED = '22 August 2026 · 20:49 CEST';
+const APP_BUILD = 'v585';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -4795,7 +4795,12 @@ const WN_CHAPTER = {
   'stbarths|whatsnew|0': 'dine',
   'stbarths|whatsnew|1': 'nights',
   'stbarths|whatsnew|2': 'nights',
-  'sttropez|whatsnew|0': 'days',
+  /* A 1914 Belle Epoque PALACE, reopened by COMO — it is a hotel that has a
+     beach club, not a beach club. Filed as `days` by the first pass because
+     the classifier tested beach-club before hotel; corrected on review.
+     The lesson, for whoever assigns the next one: order the tests by what
+     the member is booking, not by the order the tags happen to appear. */
+  'sttropez|whatsnew|0': 'stay',
   'sttropez|whatsnew|1': 'dine',
 };
 
