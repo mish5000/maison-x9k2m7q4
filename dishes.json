@@ -1,6 +1,1031 @@
 {
- "generated": "2026-08-01T19:10:58Z",
+ "generated": "2026-08-22T22:06:57Z",
  "venues": {
+  "losangeles|lunch|0": {
+   "dishes": [
+    {
+     "n": "The Best Crab Cakes",
+     "why": "The one plate reviewers name unprompted, forty years running.",
+     "src": [
+      "google",
+      "wikipedia",
+      "tripadvisor"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Lobster Ravioli with Ivy Pink Sauce",
+     "why": "The pink sauce is the point; ordered at most tables on the patio.",
+     "src": [
+      "google",
+      "tripadvisor",
+      "menu"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Spicy Fresh Corn Chowder",
+     "why": "A starter regulars order in full bowls, not cups.",
+     "src": [
+      "tripadvisor",
+      "menu"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Ricky's Fried Chicken",
+     "why": "House fried chicken that quietly outperforms the room's reputation.",
+     "src": [
+      "tripadvisor",
+      "menu"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|1": {
+   "dishes": [
+    {
+     "n": "Ding's Crispy Chicken Sandwich",
+     "why": "The most ordered plate in the Hillstone group, and the reason to walk in.",
+     "src": [
+      "infatuation",
+      "timeout",
+      "restaurantsforkings",
+      "tripadvisor"
+     ],
+     "n_src": 4
+    },
+    {
+     "n": "The Honor Burger",
+     "why": "Coleslaw on the patty is what separates it from every other Hillstone burger.",
+     "src": [
+      "infatuation",
+      "restaurantsforkings",
+      "tripadvisor"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Hand-Rolled Sushi",
+     "why": "Better than a Beverly Hills bar has any need to be; order it second.",
+     "src": [
+      "timeout",
+      "restaurantsforkings",
+      "tripadvisor"
+     ],
+     "n_src": 3
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|2": {
+   "dishes": [
+    {
+     "n": "Ding's Crispy Chicken Sandwich",
+     "why": "Arrives pre-cut in four because one hand will not manage it.",
+     "src": [
+      "gayot",
+      "google",
+      "yelp"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Cheeseburger",
+     "why": "The default order at the bar, and the kitchen never misses it.",
+     "src": [
+      "gayot",
+      "google"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|3": {
+   "dishes": [
+    {
+     "n": "Coliflor Frito",
+     "why": "Fried cauliflower under cashew nacho cheese — the one starter critics allow.",
+     "src": [
+      "infatuation",
+      "yelp"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Flautas De Camote",
+     "why": "Sweet potato flautas that diners return for and critics argue about.",
+     "src": [
+      "happycow",
+      "laweekly"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|5": {
+   "dishes": [
+    {
+     "n": "Ficelle",
+     "why": "A mini baguette of ham and fromage d'affinois; the counter's most-sold item.",
+     "src": [
+      "infatuation",
+      "lamag",
+      "menu"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Chicken Milanese",
+     "why": "Breaded chicken, arugula, aioli. The sandwich regulars never stop ordering.",
+     "src": [
+      "infatuation",
+      "tripadvisor",
+      "menu"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Short Rib",
+     "why": "Pickled onion and jack cheese on grilled country bread; the heaviest thing here.",
+     "src": [
+      "tripadvisor",
+      "menu"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Chinese Chicken Salad",
+     "why": "Crisp breaded chicken and wonton strips — the salad that outsells the rest.",
+     "src": [
+      "tripadvisor",
+      "menu"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Turkey Club",
+     "why": "Bacon, butter lettuce and mayonnaise on toasted country bread. The other go-to.",
+     "src": [
+      "infatuation",
+      "menu"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "ok"
+  },
+  "losangeles|lunch|6": {
+   "dishes": [
+    {
+     "n": "Grilled Octopus",
+     "why": "The dish diners name most, and the one item critics concede is well cooked.",
+     "src": [
+      "tripadvisor",
+      "yelp",
+      "infatuation"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Lavraki (Loup de Mer)",
+     "why": "Whole fish sold by the pound and filleted at the table; ask the day's weight.",
+     "src": [
+      "tripadvisor",
+      "menu"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|7": {
+   "dishes": [
+    {
+     "n": "Puff Pastry Chicken Pot Pie",
+     "why": "The forty-year signature, built large enough that two people share it.",
+     "src": [
+      "gayot",
+      "labornandbread",
+      "yelp"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Cobb Salad",
+     "why": "Bacon, avocado and blue cheese — the power-lunch order at half the tables.",
+     "src": [
+      "gayot",
+      "labornandbread",
+      "tripadvisor"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Caesar Salad",
+     "why": "Made the old way and still the benchmark in this room.",
+     "src": [
+      "gayot",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "New York Steak",
+     "why": "The steak the regulars order at midday; consistent to the degree requested.",
+     "src": [
+      "gayot",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|8": {
+   "dishes": [
+    {
+     "n": "Original Chopped Salad",
+     "why": "Salami, mozzarella and garbanzos in Leon Dressing. The room was built on it.",
+     "src": [
+      "infatuation",
+      "tripadvisor",
+      "menu"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Eggplant Parmigiana",
+     "why": "The dependable order once the salad is on the table.",
+     "src": [
+      "infatuation",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Spaghetti Bolognese",
+     "why": "The same meat sauce since 1956, and it still holds the room.",
+     "src": [
+      "infatuation",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|9": {
+   "dishes": [
+    {
+     "n": "Spaghetti Pomodoro",
+     "why": "Tomato, basil, olive oil. The plate the Brentwood regulars order by default.",
+     "src": [
+      "gayot",
+      "tripadvisor",
+      "menu"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Trancio Di Branzino",
+     "why": "Grilled Mediterranean sea bass on cucumber and tomato; the fish to order here.",
+     "src": [
+      "gayot",
+      "tripadvisor",
+      "menu"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "26oz Veal Chop",
+     "why": "Butter and sage, from the wood oven. Built for two, ordered by one.",
+     "src": [
+      "gayot",
+      "tripadvisor",
+      "menu"
+     ],
+     "n_src": 3
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|10": {
+   "dishes": [
+    {
+     "n": "The Best Crab Cakes",
+     "why": "The order that travels from Robertson and holds up over the water.",
+     "src": [
+      "gayot",
+      "tripadvisor",
+      "menu"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Ricky's Fried Chicken",
+     "why": "Fried chicken served in a room that looks like it should not bother.",
+     "src": [
+      "gayot",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Lobster Ravioli with Ivy Pink Sauce",
+     "why": "The pink sauce again, and the reason the pasta section exists.",
+     "src": [
+      "tripadvisor",
+      "menu"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|11": {
+   "dishes": [
+    {
+     "n": "Bone-In Ribeye",
+     "why": "The steak the room orders — well marbled, cooked to the number.",
+     "src": [
+      "timeout",
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Grilled California Artichokes",
+     "why": "Charred whole; the starter regulars order before they look at steak.",
+     "src": [
+      "timeout",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Lollipop Lamb Chops",
+     "why": "Romesco and shishito, and big enough that people call it a meal.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Ahi Tuna Poke",
+     "why": "Yuzu, macadamia, taro chips — the starter reviewers single out.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|12": {
+   "dishes": [
+    {
+     "n": "Pan Seared Chilean Sea Bass",
+     "why": "The dish named most often in the reviews, and it holds up.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Baked Brie in Puff Pastry",
+     "why": "The table's opener — pear chutney, beurre blanc, toasted pine nuts.",
+     "src": [
+      "timeout",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Sautéed Lump Crab Cakes",
+     "why": "Called the best crab cakes in town, and ordered like it.",
+     "src": [
+      "infatuation",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Sautéed Day Boat Sea Scallops",
+     "why": "Hard-seared, served with lobster risotto; the quiet pick here.",
+     "src": [
+      "gayot",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Herb Crusted Salmon",
+     "why": "Crisp crust, moist centre — the reliable order when the view distracts.",
+     "src": [
+      "google",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "ok"
+  },
+  "losangeles|lunch|13": {
+   "dishes": [
+    {
+     "n": "Enchiladas de Camarón",
+     "why": "Shrimp in tomatillo — the plate that survives every mixed review.",
+     "src": [
+      "labornandbread",
+      "tripadvisor"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Trio de Ceviche",
+     "why": "The starter critics and the room agree on; built for sharing.",
+     "src": [
+      "infatuation",
+      "yelp"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|14": {
+   "dishes": [
+    {
+     "n": "Spaghetti, Maine lobster, chili",
+     "why": "The pasta the lunch crowd orders, and the one that delivers.",
+     "src": [
+      "infatuation",
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Truffle burger, porchetta, fontina",
+     "why": "Porchetta and fontina; a bargain in the 3-6pm aperitivo window.",
+     "src": [
+      "infatuation",
+      "timeout"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Branzino, spinach, tomatoes, peppers, olives",
+     "why": "Whole fish off the wood grill; the main reviewers keep naming.",
+     "src": [
+      "google",
+      "menu"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Cavatelli lamb ragu, pecorino, mint",
+     "why": "The heavier pasta, and the one diners come back for.",
+     "src": [
+      "google",
+      "menu"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|15": {
+   "dishes": [
+    {
+     "n": "Oysters Rockefeller",
+     "why": "Glazed with fennel, spinach and parmesan — the dish diners rate first.",
+     "src": [
+      "google",
+      "menu"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Wild Ross Sea Chilean Sea Bass",
+     "why": "Cauliflower purée, candied lemon, brown butter; the standing order.",
+     "src": [
+      "gayot",
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Clam Chowder",
+     "why": "Applewood bacon, and the thing to start with before the raw bar.",
+     "src": [
+      "timeout",
+      "gayot"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Wild Alaskan Black Cod (Sablefish)",
+     "why": "Soba noodles in a spiced fish broth; the one first-timers walk past.",
+     "src": [
+      "google",
+      "menu"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|17": {
+   "dishes": [
+    {
+     "n": "Kimchi Fried Rice",
+     "why": "Short rib, pickled radish, poached eggs — the daytime plate to get.",
+     "src": [
+      "timeout",
+      "infatuation"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Mango and Passionfruit Cream Pie",
+     "why": "From the pastry case, and the one both critics single out. Goes early.",
+     "src": [
+      "infatuation",
+      "timeout"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Baguette with Rodolphe Le Meunier Butter",
+     "why": "A mountain of French butter and a proper crust; order it first.",
+     "src": [
+      "infatuation",
+      "google"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|18": {
+   "dishes": [
+    {
+     "n": "Parks Gal-Bi (박대감네 갈비)",
+     "why": "The house marinated short rib, scored in a diamond to stay tender.",
+     "src": [
+      "timeout",
+      "discoverlosangeles",
+      "infatuation",
+      "google"
+     ],
+     "n_src": 4
+    },
+    {
+     "n": "GGot Sal (꽃살)",
+     "why": "Flower cut — the marbled short rib the regulars order unmarinated.",
+     "src": [
+      "timeout",
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Ribeye Steak (생등심)",
+     "why": "Heavily marbled and undressed; the cut that shows what the beef is.",
+     "src": [
+      "timeout",
+      "infatuation"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Kimchi Pancake (김치전)",
+     "why": "Lands between rounds of meat; order it as the grill heats.",
+     "src": [
+      "timeout",
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Naengmyeon (비빔/물냉면)",
+     "why": "Cold buckwheat noodles to close the meal — the Korean full stop.",
+     "src": [
+      "timeout",
+      "google"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "ok"
+  },
+  "losangeles|lunch|19": {
+   "dishes": [
+    {
+     "n": "Portobello Fries",
+     "why": "Flash-fried strips with basil aioli — the one dish nobody argues about.",
+     "src": [
+      "infatuation",
+      "consumingla",
+      "google"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Macarons",
+     "why": "The patisserie case is the real draw; take a box on the way out.",
+     "src": [
+      "infatuation",
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Trenne",
+     "why": "Pan-sautéed crisp with braised beef rib and Tuscan kale.",
+     "src": [
+      "consumingla",
+      "google"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|20": {
+   "dishes": [
+    {
+     "n": "Polipo",
+     "why": "Grilled octopus, and the plate critics and regulars both name first.",
+     "src": [
+      "infatuation",
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Linguine Santa Barbara Sea Urchin",
+     "why": "Uni fresh and briny, noodles al dente; better than the famous one.",
+     "src": [
+      "infatuation",
+      "google"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Tagliolini Limone",
+     "why": "The lemon pasta reviewers keep returning to; simple and precise.",
+     "src": [
+      "google",
+      "menu"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Lasagna Verde 'Nonna Elvira'",
+     "why": "The house's famous lasagna; good, though the other pastas beat it.",
+     "src": [
+      "infatuation",
+      "google"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|21": {
+   "dishes": [
+    {
+     "n": "Fritto Misto Di Gamberoni E Calamari",
+     "why": "Prawns and calamari fried to order; the table's default opener.",
+     "src": [
+      "yelp",
+      "menu"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Branzino Al Vino Bianco E Carciofi",
+     "why": "White-wine branzino over baby artichokes, and the dish regulars repeat.",
+     "src": [
+      "yelp",
+      "menu"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Salmone Affumicato E Rafano",
+     "why": "House-smoked salmon under a brown-sugar glaze, with horseradish.",
+     "src": [
+      "yelp",
+      "menu"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Bigoli Alla Ca' Del Sole",
+     "why": "The house pasta, and the one the room orders by name.",
+     "src": [
+      "yelp",
+      "menu"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|22": {
+   "dishes": [
+    {
+     "n": "Blvd Burger",
+     "why": "Dry-aged bone marrow patty with the house secret sauce; the lunch order.",
+     "src": [
+      "yelp",
+      "menu"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|23": {
+   "dishes": [
+    {
+     "n": "Popovers with Strawberry Butter",
+     "why": "They arrive hot with the consommé, and they are why regulars book a table.",
+     "src": [
+      "gayot",
+      "google",
+      "yelp"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Lobster Bisque",
+     "why": "Chunks of lobster, not just stock — the dish reviewers name first.",
+     "src": [
+      "google",
+      "yelp"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "NM Lobster Cobb",
+     "why": "The store's own Cobb: lobster, and a sherry, honey and mustard vinaigrette.",
+     "src": [
+      "gayot",
+      "menu"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|24": {
+   "dishes": [
+    {
+     "n": "Chicken Schnitzel",
+     "why": "Hand breaded, yogurt-cucumber salad — the anchor of the brasserie menu.",
+     "src": [
+      "yelp",
+      "menu"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|lunch|26": {
+   "dishes": [
+    {
+     "n": "Chicago-Style Spinach Dip",
+     "why": "The dip people cross town for; on the table at most of them.",
+     "src": [
+      "google",
+      "yelp",
+      "menu"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Grilled Artichokes",
+     "why": "Heirloom Castroville artichokes off the grill — the sleeper on the menu.",
+     "src": [
+      "timeout",
+      "google",
+      "yelp"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "House-Made Veggie Burger",
+     "why": "Not a concession; regulars have ordered it over the beef for years.",
+     "src": [
+      "yelp",
+      "menu"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "French Dip Au Jus",
+     "why": "Thin-sliced beef and a proper jus, dispatched at speed.",
+     "src": [
+      "google",
+      "yelp",
+      "menu"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Kale Salad",
+     "why": "The salad that converted the sceptics, ordered as a main course.",
+     "src": [
+      "google",
+      "yelp"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "ok"
+  },
+  "losangeles|lunch|27": {
+   "dishes": [
+    {
+     "n": "The World's Greatest Garlic Bread",
+     "why": "Eighty years of the same cheesy, charred basket. Order two.",
+     "src": [
+      "infatuation",
+      "timeout",
+      "gayot",
+      "yelp"
+     ],
+     "n_src": 4
+    },
+    {
+     "n": "Steak Sinatra",
+     "why": "Filet sautéed with peppers and mushrooms over linguine, as he had it.",
+     "src": [
+      "timeout",
+      "blog",
+      "yelp"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Barbecued Baby Back Ribs",
+     "why": "The barbecue is the strongest thing this kitchen does.",
+     "src": [
+      "infatuation",
+      "gayot",
+      "yelp"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "The Smoke House Prime Rib",
+     "why": "Slow-roasted, au jus and horseradish — the 1946 order.",
+     "src": [
+      "infatuation",
+      "gayot",
+      "yelp"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "The Wedge",
+     "why": "Iceberg and blue cheese, generously dressed; the old-school starter.",
+     "src": [
+      "timeout",
+      "blog"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "ok"
+  },
+  "losangeles|lunch|28": {
+   "dishes": [
+    {
+     "n": "Wood Oven Roasted Hanger Steak",
+     "why": "Smoky char, pink centre — the best plate in the room, at lunch money.",
+     "src": [
+      "infatuation",
+      "yelp",
+      "google"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Rice Balls",
+     "why": "Mushroom risotto arancini, molten inside; the table's first order.",
+     "src": [
+      "infatuation",
+      "gayot",
+      "google"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Ricotta Cheese & Fresh Blueberry Pancakes",
+     "why": "Rich enough to share, and the reason the morning counter fills.",
+     "src": [
+      "timeout",
+      "gayot",
+      "google"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Meatball Sandwich",
+     "why": "Provolone on a toasted French roll — the neighbourhood's lunch.",
+     "src": [
+      "timeout",
+      "yelp",
+      "menu"
+     ],
+     "n_src": 3
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
+  "losangeles|restaurants|24": {
+   "dishes": [
+    {
+     "n": "Corn Crème Brûlée",
+     "why": "Creamed corn under a brûléed sugar crust; the side people talk about.",
+     "src": [
+      "infatuation",
+      "yelp",
+      "menu"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Chef's Cut Hanging Bacon",
+     "why": "Thick-cut bacon served hanging, glazed with local honey. Order it first.",
+     "src": [
+      "yelp",
+      "menu"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Bone-In Ribeye",
+     "why": "22oz, wet-aged 28 days, cut in house — the reason for the room.",
+     "src": [
+      "infatuation",
+      "yelp",
+      "menu"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "King Crab + Shrimp + Shells + Cheese",
+     "why": "The seafood mac; the side named alongside the steak more than any other.",
+     "src": [
+      "yelp",
+      "menu"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-08-22",
+   "status": "thin"
+  },
   "london|restaurants|0": {
    "dishes": [
     {
