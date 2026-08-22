@@ -4603,8 +4603,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 August 2026 · 20:49 CEST';
-const APP_BUILD = 'v585';
+const COLLECTION_UPDATED = '22 August 2026 · 21:16 CEST';
+const APP_BUILD = 'v588';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7873,6 +7873,12 @@ let catSort = 'edit';
    launch: a filter the member did not ask for, silently hiding rooms, is
    worse than no filter. */
 let openTonight = false;
+/* LUNCH — his 22 Aug ask, and it is a FILTER over Dine, not the chapter
+   coming back. The 30 venues the scouts built in August kept their own
+   `lunch` keys when the chapter was absorbed, so this narrows to exactly the
+   list he signed off; it does not re-derive "open at midday" from hours,
+   which would be a different and much weaker product. */
+let lunchOnly = false;
 /* True only while a category feed is actually rendering distance-sorted.
    The card reads it to decide whether the photograph carries a bubble. */
 let distMode = false;
@@ -7955,6 +7961,16 @@ function viewCategory(cityId, catId) {
        heading would put time of day back on screen as structure, which is
        the whole thing this migration removes.
      - STAY has one part, so the question never arises. */
+  /* THE CHIP EXISTS ONLY WHERE THE LIST DOES. Los Angeles is the only city
+     with a curated lunch list — the other 21 have no `lunch` array at all —
+     so everywhere else there is no chip, rather than a chip that would
+     either show nothing or quietly mean "open at noon".
+     The state is FORCED OFF the moment it is unavailable: without this, the
+     filter set in LA would survive into Paris's Dine, where no chip renders
+     to turn it off and the screen would simply be empty. */
+  const lunchAvailable = cat.id === 'dine' && (city.venues.lunch || []).length > 0;
+  if (!lunchAvailable) lunchOnly = false;
+
   const NIGHTCLUB_SECTION_MIN = 6;
   const sectioned = cat.id === 'days'
     || (cat.id === 'nights' && (city.venues.nightclubs || []).length >= NIGHTCLUB_SECTION_MIN);
@@ -7983,6 +7999,9 @@ function viewCategory(cityId, catId) {
      at all. Those venues are EXCLUDED while the filter is on, because a room
      we cannot prove is open must not be presented as open — and the number
      excluded is printed under the bar rather than swallowed. */
+  /* Lunch narrows FIRST, so the hours tally below describes the set the
+     member is actually looking at rather than the whole chapter. */
+  if (lunchOnly) rows = rows.filter(r => r.part === 'lunch');
   const unknownHours = openTonight
     ? rows.filter(r => !openState(vkey(city.id, r.part, r.i))).length : 0;
   if (openTonight) {
@@ -8073,6 +8092,7 @@ function viewCategory(cityId, catId) {
            can be no backend. "Tonight" would promise a table we cannot know
            is free, and one empty booking costs more trust than the filter
            earns. */''}
+      ${lunchAvailable ? `<button class="schip ${lunchOnly ? 'on' : ''}" data-filter="lunch">Lunch</button>` : ''}
       <button class="schip ${openTonight ? 'on' : ''}" data-filter="tonight">Open Tonight</button>
       <button class="schip ${sortNow === 'near' ? 'on' : ''}" data-sort="${sortNow === 'near' ? 'edit' : 'near'}">Nearest</button>
     </div>
@@ -8098,10 +8118,13 @@ function viewCategory(cityId, catId) {
       <div class="sub rise">${cat.sub} — ${city.name}</div>
     </div>
     ${sortbar}
-    ${openTonight ? `<div class="filternote">${flat.length ? `${flat.length} open now` : 'Nothing open now'}${unknownHours ? ` · ${unknownHours} with no published hours` : ''}</div>` : ''}
+    ${(openTonight || lunchOnly) ? `<div class="filternote">${
+        openTonight ? (flat.length ? `${flat.length} open now` : 'Nothing open now')
+                    : `${flat.length} lunch ${flat.length === 1 ? 'place' : 'places'}`
+      }${unknownHours ? ` · ${unknownHours} with no published hours` : ''}</div>` : ''}
     ${ribbon}
     <div class="feed${distMode ? ' nearmode' : ''}">
-      ${feed || `<div class="emptystate rise"><p>Nothing in ${esc(cat.label)} is open at this hour.</p><button class="pill" data-filter="tonight">Show everything</button></div>`}
+      ${feed || `<div class="emptystate rise"><p>${openTonight ? `Nothing in ${esc(cat.label)} is open at this hour.` : 'Nothing here yet.'}</p><button class="pill" data-filter="${openTonight ? 'tonight' : 'lunch'}">Show everything</button></div>`}
     </div>`;
   // chip tap = set order and soft re-render in place (scroll held); tapping
   // the Pulse stamp re-reads the model at the new minute
@@ -8110,9 +8133,10 @@ function viewCategory(cityId, catId) {
   /* The filter is a TOGGLE and never persists across launches — see the
      declaration. Its own handler, because it narrows rather than reorders
      and must not run any of the geolocation machinery below. */
-  $app.querySelectorAll('[data-filter="tonight"]').forEach(b => b.addEventListener('click', () => {
+  $app.querySelectorAll('[data-filter]').forEach(b => b.addEventListener('click', () => {
     haptic();
-    openTonight = !openTonight;
+    if (b.dataset.filter === 'lunch') lunchOnly = !lunchOnly;
+    else openTonight = !openTonight;
     renderRoute(true);
   }));
   $app.querySelectorAll('.sortbar [data-sort]').forEach(b => b.addEventListener('click', () => {
