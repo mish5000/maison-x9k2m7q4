@@ -45,7 +45,7 @@ var b=document.getElementById('boot');setTimeout(function(){if(b)b.classList.add
   <div class="sp-word">
     <span class="sp-rule"></span>
     <span class="sp-tag">Transporting you to the extraordinary</span>
-    <span class="sp-build">V618</span>
+    <span class="sp-build">V624</span>
   </div>
 </div>
 <div id="shell">
@@ -80,7 +80,7 @@ var b=document.getElementById('boot');setTimeout(function(){if(b)b.classList.add
       <span class="rf-mono serif">M</span>
     </div>
     <div class="rf-label">À votre service</div>
-    <div class="rf-build">V618</div>
+    <div class="rf-build">V624</div>
   </div>
 </div>
 <div id="toast"></div>
@@ -4620,8 +4620,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '23 August 2026 · 00:58 CEST';
-const APP_BUILD = 'v618';
+const COLLECTION_UPDATED = '23 August 2026 · 01:47 CEST';
+const APP_BUILD = 'v624';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7471,6 +7471,60 @@ function geoStore(coords, when) {
   return fix;
 }
 /* Distance to a venue, or null when we must not print one. */
+/* ---- ROAD DISTANCE ------------------------------------------------------
+   HIS 23 AUG REPORT, with both screenshots side by side: Google said 3.1 mi
+   to a pin by R+D Kitchen; we said 1.2 mi. Neither number was wrong — they
+   are different measurements. We drew a straight line; Google drove a car.
+   In Santa Monica the bluffs sit between the beach and Montana Avenue, so
+   the road doubles back inland and the driving distance is about twice the
+   crow-flies. Measured on his exact case: 1.5 mi straight, 2.6 mi by road.
+
+   "How far is it" means the road, so we now ask a routing engine.
+
+   OSRM's public router, which needs NO KEY, NO ACCOUNT AND NO PAYMENT — the
+   house law forbids all three in the shipped app, and this breaches none of
+   them. It is a third-party call at runtime, which the map already makes for
+   its tiles, and it is answered with `access-control-allow-origin: *`.
+
+   ONE REQUEST PER SCREEN, NOT ONE PER VENUE. The /table service takes one
+   source and many destinations, so a 57-venue chapter costs a single HTTP
+   GET — measured at 0.78s for all of Los Angeles Dine. Anything else would
+   be 57 requests against a courtesy server, which is not a thing to do.
+
+   IT NEVER BLOCKS AND IT NEVER LIES. The feed renders immediately on
+   straight-line distance; if the router answers, the screen repaints with
+   road distances and says so. If it does not answer, the straight line
+   stands and the line under the bar says which one is on screen — the
+   member is never shown a road number we did not receive. */
+const ROAD = Object.create(null);      // cache key -> {ok:bool, m:{venueKey: metres}}
+let roadPending = null;                // single-flight: the key being fetched
+const ROAD_MAX = 90;                   // courtesy cap on one table request
+const roadCacheKey = (cityId, catId, pos) =>
+  `${cityId}|${catId}|${pos.la.toFixed(3)}|${pos.lo.toFixed(3)}`;
+
+function roadFetch(cacheKey, rows, pos, done) {
+  if (roadPending || ROAD[cacheKey] || rows.length > ROAD_MAX) return;
+  roadPending = cacheKey;
+  const pairs = rows.map(o => ({ key: o.key, ll: o.ll }));
+  const coords = [`${pos.lo},${pos.la}`]
+    .concat(pairs.map(p => `${p.ll[1]},${p.ll[0]}`)).join(';');
+  const ctl = typeof AbortController === 'function' ? new AbortController() : null;
+  const bail = setTimeout(() => ctl && ctl.abort(), 7000);
+  fetch(`https://router.project-osrm.org/table/v1/driving/${coords}?sources=0&annotations=distance`,
+        ctl ? { signal: ctl.signal } : undefined)
+    .then(r => (r && r.ok) ? r.json() : null)
+    .then(j => {
+      clearTimeout(bail);
+      const row = j && j.code === 'Ok' && j.distances && j.distances[0];
+      if (!row) { ROAD[cacheKey] = { ok: false, m: {} }; return; }
+      const m = Object.create(null);
+      pairs.forEach((p, n) => { const d = row[n + 1]; if (typeof d === 'number') m[p.key] = d; });
+      ROAD[cacheKey] = { ok: Object.keys(m).length > 0, m };
+    })
+    .catch(() => { clearTimeout(bail); ROAD[cacheKey] = { ok: false, m: {} }; })
+    .then(() => { roadPending = null; done && done(); });
+}
+
 function geoKmTo(key) {
   const pos = geoUsable();
   const ll = (typeof VENUE_LL !== 'undefined') && VENUE_LL[key];
@@ -7921,7 +7975,11 @@ function venueCard(city, catId, v, idx) {
            (his "it's only available and showing on the nearest tab"), which
            is also what keeps it off the other three sorts' photographs. */
         if (!distMode) return '';
-        const km = geoKmTo(key);
+        /* Road metres when the router answered for this venue, the straight
+           line otherwise — never a mix presented as one thing: the note under
+           the bar states which of the two the screen is showing. */
+        const m = distRoad && distRoad[key];
+        const km = (typeof m === 'number') ? m / 1000 : geoKmTo(key);
         return km === null ? '' : `<div class="distbubble"><b>${kmLabel(km, city.id)}</b><i>away</i></div>`;
       })()}
       <div class="body">
@@ -7960,6 +8018,9 @@ let lunchOnly = false;
 /* True only while a category feed is actually rendering distance-sorted.
    The card reads it to decide whether the photograph carries a bubble. */
 let distMode = false;
+/* The road table in force for the screen being rendered, or null when the
+   straight line is what is on show. venueCard reads it; nothing else does. */
+let distRoad = null;
 /* Validate, do not trust. A persisted 'near' survives permission being
    revoked, and would render the chip lit while the list silently showed
    collection order — the chip claiming a sort it is not performing. */
@@ -8109,6 +8170,29 @@ function viewCategory(cityId, catId) {
      than immediately above the card loop is how a photograph ends up wearing
      a distance under "The Edit". */
   distMode = sortNow === 'near';
+
+  /* ROAD DISTANCE, fetched once per screen and per ~110m of member movement.
+     Fired only under Nearest, only with a fix, and single-flight — the geo
+     re-render storm (73 requests in six seconds) is the reason every one of
+     those guards is here rather than implied. */
+  distRoad = null;
+  let roadState = 'straight';
+  if (distMode) {
+    const fix = geoUsable();
+    if (fix) {
+      const ck = roadCacheKey(city.id, cat.id, fix);
+      const cached = ROAD[ck];
+      if (cached && cached.ok) { distRoad = cached.m; roadState = 'road'; }
+      else if (cached) { roadState = 'failed'; }
+      else {
+        roadState = 'waiting';
+        const rows = flat.map(o => ({ key: K(o), ll: (typeof VENUE_LL !== 'undefined') && VENUE_LL[K(o)] }))
+                         .filter(o => o.ll);
+        const at = location.hash;
+        roadFetch(ck, rows, fix, () => { if (location.hash === at) renderRoute(true); });
+      }
+    }
+  }
   const showHeads = sectioned && groups.filter(g => g.part !== 'whatsnew').length > 1 && sortNow === 'edit';
 
   /* Stale but present, and already granted? Refresh once and re-render.
@@ -8153,7 +8237,17 @@ function viewCategory(cityId, catId) {
        and an implementation-defined shuffle (3 today: two adjacent Marbella
        beach clubs and a Mykonos helicopter transfer). */
     if (sortNow === 'near') {
-      const km = (o) => { const d = geoKmTo(K(o)); return d === null ? Infinity : d; };
+      /* Sort by the SAME number the bubble prints. Sorting on the straight
+         line while showing road distance would put a list in an order its own
+         labels contradict — and the two orders genuinely differ: from the
+         beach, R+D reads 1.2 mi straight and 2.6 by road, which moves it
+         below two venues the straight line had it beating. */
+      const km = (o) => {
+        const m = distRoad && distRoad[K(o)];
+        if (typeof m === 'number') return m / 1000;
+        const d = geoKmTo(K(o));
+        return d === null ? Infinity : d;
+      };
       rows.sort((a, b) => km(a) - km(b));
     }
     feed = rows.map(o => venueCard(city, o.part, o.v, o.i)).join('');
@@ -8196,6 +8290,10 @@ function viewCategory(cityId, catId) {
       <div class="sub rise">${cat.sub} — ${city.name}</div>
     </div>
     ${sortbar}
+    ${(distMode && roadState !== 'straight') ? `<div class="filternote">${
+        roadState === 'road' ? 'Driving distance'
+        : roadState === 'waiting' ? 'Straight line · measuring by road…'
+        : 'Straight line · road distance unavailable'}</div>` : ''}
     ${(openTonight || lunchOnly) ? `<div class="filternote">${
         openTonight ? (flat.length ? `${flat.length} open now` : 'Nothing open now')
                     : `${flat.length} lunch ${flat.length === 1 ? 'place' : 'places'}`
