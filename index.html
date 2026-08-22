@@ -3584,6 +3584,26 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
 .map-side button svg { width: 19px; height: 19px; }
 
 /* the home pill — a lovely one-tap return from the map to the city's page */
+/* THE COUNT — "68 restaurants", the one thing the reference map said that
+   ours did not. Sits opposite .map-home on the same baseline, so the bottom
+   band reads: where you are on the left, how much is here on the right.
+   Text only, no plate: a second filled pill down there would crowd the
+   floating dock the .map-home comment already fought for clearance from. */
+.map-count {
+  /* right:46px, not 16px — the folded attribution disc occupies x 348-372 on
+     this baseline and the count measured a 24px overlap with it. Clearing it
+     sideways keeps the count on .map-home's baseline, which is the point:
+     where you are on the left, how much is here on the right. */
+  position: absolute; right: 46px; z-index: 620;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 104px);
+  font-family: var(--sans); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(244, 239, 230, 0.66);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.9), 0 0 22px rgba(0, 0, 0, 0.7);
+  opacity: 0; transition: opacity 0.35s ease; pointer-events: none;
+}
+.map-count.show { opacity: 1; }
+
 .map-home {
   position: absolute; left: 14px; z-index: 620;
   /* clear of the floating dock's envelope (audit J): the dock sits at
@@ -3838,6 +3858,22 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
   letter-spacing: 0.08em; color: rgba(244, 239, 230, 0.35) !important;
 }
 #mapview .maplibregl-ctrl-bottom-right { bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 2px); right: 8px; z-index: 600; }
+/* COMPACT ATTRIBUTION. The transparent background above is right for the
+   expanded credit and wrong for the folded one: it erased the pill that
+   MakeLibre's (i) button needs to be visible at all, which is part of why
+   the control stayed expanded and smeared 362x44px of grey across the map.
+   Folded, it gets its plate back — small, dim, and out of the way. */
+#mapview .maplibregl-ctrl-attrib.maplibregl-compact:not(.maplibregl-compact-show) {
+  background: rgba(19, 17, 9, 0.6) !important;
+  border: 1px solid rgba(232, 201, 128, 0.22);
+  border-radius: 999px; min-height: 22px; min-width: 22px; padding: 0;
+}
+#mapview .maplibregl-ctrl-attrib.maplibregl-compact:not(.maplibregl-compact-show) .maplibregl-ctrl-attrib-inner { display: none; }
+/* Expanded by tap: cap it so a long credit can never span the viewport. */
+#mapview .maplibregl-ctrl-attrib.maplibregl-compact-show {
+  max-width: 74vw; background: rgba(19, 17, 9, 0.82) !important;
+  border-radius: 12px; padding: 6px 9px;
+}
 
 @media (prefers-reduced-motion: reduce) {
   #mapview { transition: opacity 0.2s ease; transform: none; }
@@ -4480,8 +4516,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '21 August 2026 · 01:09 CEST';
-const APP_BUILD = 'v555';
+const COLLECTION_UPDATED = '22 August 2026 · 03:20 CEST';
+const APP_BUILD = 'v562';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -10696,7 +10732,17 @@ window.addEventListener('hashchange', () => {
   const g = $app.querySelector('.greeting-block .eyebrow');
   if (g) g.textContent = greeting();
 });
-renderRoute();
+/* COLD START AT #/map IS map.js's TO SERVE, NOT OURS.
+   app.js is concatenated BEFORE map.js, so this call runs while map.js's
+   own `let mapDom` has not executed yet — routing into openMapView from
+   here hits the temporal dead zone and throws "Cannot access 'mapDom'
+   before initialization", leaving a blank screen. Refreshing the page while
+   on the map did exactly that.
+   map.js already ends with its own guarded `if (hash startsWith '#/map')
+   renderRoute()` for precisely this handover; it just never got the chance
+   because this line threw first. So: skip the map route here and let map.js
+   claim it once its state exists. Every other route is served as before. */
+if (!(location.hash || '').startsWith('#/map')) renderRoute();
 
 /* The arrival fades once the first page has painted — held a beat so it's
    savoured, then gone. Guarded so a slow 49MB parse never traps it. */
@@ -11304,6 +11350,7 @@ function ensureMapDom() {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.4" y="3.4" width="7" height="7" rx="1.6"/><rect x="13.6" y="3.4" width="7" height="7" rx="1.6"/><rect x="3.4" y="13.6" width="7" height="7" rx="1.6"/><rect x="13.6" y="13.6" width="7" height="7" rx="1.6"/></svg>
       <span class="mh-name"></span>
     </button>
+    <div class="map-count" id="mapcount"></div>
     <div id="mapcard"></div>
     <div id="maptoast"></div>`;
   document.body.appendChild(mapDom);
@@ -11472,9 +11519,23 @@ function ensureMap_GL() {
   const vg = mapDom.querySelector('.map-vignette');
   if (vg) GLMAP.getCanvasContainer().appendChild(vg);
   // equivalent attribution line — legally required, aesthetically tamed in CSS
-  GLMAP.addControl(new maplibregl.AttributionControl({
-    compact: false, customAttribution: GL_ATTR,
-  }), 'bottom-right');
+  /* COMPACT. Expanded, this control measured 382x40px at a 390pt viewport —
+     near the full width, wrapped to two lines, smeared in low-contrast grey
+     across the lower third of the map. Compact collapses it to a single (i)
+     that expands on tap: the same attribution, legally identical, off the
+     canvas. */
+  const attrib = new maplibregl.AttributionControl({ compact: true, customAttribution: GL_ATTR });
+  GLMAP.addControl(attrib, 'bottom-right');
+  /* START COLLAPSED. compact:true alone was not enough — MapLibre mounts the
+     control with `maplibregl-compact-show` already set, so the full credit
+     line rendered anyway: measured 362x44px at a 390pt viewport, wrapped to
+     two lines across the lower third of the map. Dropping the class puts it
+     in the state compact exists for — a single (i) the member can tap to
+     read the whole credit. Nothing is hidden, only folded. */
+  requestAnimationFrame(() => {
+    const el = mapDom && mapDom.querySelector('.maplibregl-ctrl-attrib');
+    if (el) el.classList.remove('maplibregl-compact-show');
+  });
   addEventListener('online', () => {
     // tiles that failed offline are stamped errored in the source cache;
     // re-setting the style is the supported way to refetch the world.
@@ -11623,15 +11684,33 @@ const PART_ORDER = ['restaurants', 'lunch', 'lounges', 'nightclubs', 'beach', 'p
 const partLabel = (p) => p === 'beach' ? 'Beach' : p === 'pools' ? 'Pools'
   : (CATEGORIES.find(c => c.id === displayCat(p)) || {}).label || p;
 
+/* HOW MANY ROOMS AM I LOOKING AT. Borrowed from the reference Mishari sent:
+   its map answers that in words at the bottom of the screen, ours answered
+   it only by counting gold discs — and at city zoom most discs are clusters
+   showing "8", so the eye never reaches a total at all.
+   It mirrors the filter exactly: tap Restaurants and it says how many
+   restaurants, not how many pins survived clustering. */
+function updateMapCount(cityId) {
+  const el = mapDom && mapDom.querySelector('#mapcount');
+  if (!el) return;
+  const idx = cityId && buildCityIndex()[cityId];
+  if (!idx) { el.textContent = ''; el.classList.remove('show'); return; }
+  const rows = idx.entries.filter(e => !mapFilter || e.cat === mapFilter);
+  const noun = mapFilter ? partLabel(mapFilter).toLowerCase() : 'places';
+  el.textContent = `${rows.length} ${rows.length === 1 ? noun.replace(/s$/, '') : noun}`;
+  el.classList.toggle('show', rows.length > 0);
+}
+
 function renderFilterRail(cityId) {
   const rail = mapDom.querySelector('#mapfilter');
-  if (!cityId) { rail.innerHTML = ''; rail.classList.remove('show'); return; }
+  if (!cityId) { rail.innerHTML = ''; rail.classList.remove('show'); updateMapCount(null); return; }
   const idx = buildCityIndex()[cityId];
   const parts = [...new Set(idx.entries.map(e => e.cat))]
     .sort((a, b) => PART_ORDER.indexOf(a) - PART_ORDER.indexOf(b));
   rail.innerHTML = `<button class="fchip ${!mapFilter ? 'on' : ''}" data-f="">All</button>` +
     parts.map(p => `<button class="fchip ${mapFilter === p ? 'on' : ''}" data-f="${p}">${MAP_GLYPH[p] || ''}<span>${esc(partLabel(p))}</span></button>`).join('');
   rail.classList.add('show');
+  updateMapCount(cityId);
   // the active chip must be SEEN to be believed — Spas sat off-screen right
   // and the pre-select read as "nothing happened" (Mishari 07:31)
   requestAnimationFrame(() => {
@@ -11640,6 +11719,7 @@ function renderFilterRail(cityId) {
   });
   rail.querySelectorAll('.fchip').forEach(b => b.addEventListener('click', () => {
     mapFilter = b.dataset.f || null;
+    updateMapCount(cityId);
     rail.querySelectorAll('.fchip').forEach(x => x.classList.toggle('on', x === b));
     applyFilter();
   }));
