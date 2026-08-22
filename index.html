@@ -3551,17 +3551,42 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
   color: var(--ink); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
 }
 .map-head .map-back svg { width: 18px; height: 18px; }
-.map-city { flex: 1; text-align: center; padding-top: 2px; padding-right: 50px; }
-.map-city .eyebrow { display: block; font-size: 9px; letter-spacing: 0.34em; text-transform: uppercase; }
-.map-city .name {
-  display: inline-block; font-size: 26px; color: var(--ink); margin-top: 3px;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.85);
-  border-bottom: 1px solid rgba(200, 162, 75, 0.35); padding-bottom: 6px;
+
+/* ---- the map search bar (his reference, 22 Aug) ----------------------
+   Its proportions are the reference's: one full-width rounded field beside
+   the back button, magnifier at the head, and a placeholder in two weights —
+   the verb bright, the place quieter. What it replaced was a 26px serif city
+   name that used the same band to state something the member had just
+   tapped.
+   backdrop-filter is deliberate and affordable HERE, unlike on a card: the
+   map chrome is a fixed layer that does not move during momentum scroll, so
+   it is composited once rather than re-sampled per frame (the WebKit F1
+   finding that banned it from .vcard). It is already used by .map-back and
+   .fchip on this same layer. */
+.map-search {
+  pointer-events: auto; flex: 1; min-width: 0;
+  display: flex; align-items: center; gap: 10px;
+  height: 44px; padding: 0 16px; border-radius: 22px;
+  background: rgba(19, 17, 9, 0.78);
+  border: 1px solid rgba(200, 162, 75, 0.30);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.38);   /* static — paint law */
+  font-family: var(--sans); text-align: left;
+  overflow: hidden; cursor: pointer;
 }
+.map-search svg { width: 17px; height: 17px; flex: none; color: var(--gold-bright); }
+.map-search .ms-label { font-size: 14px; font-weight: 500; color: var(--ink); flex: none; }
+.map-search .ms-where {
+  font-size: 14px; color: rgba(244, 239, 230, 0.52);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
+}
+.map-search:active { border-color: rgba(232, 201, 128, 0.5); }
 
 .map-filter {
   position: absolute; left: 0; right: 0;
-  top: calc(env(safe-area-inset-top, 0px) + 108px);
+  /* 14 (head pad) + 44 (search) + 10 = 68. Was 108, under the old serif
+     plaque — the 40px it gives back is map. */
+  top: calc(env(safe-area-inset-top, 0px) + 68px);
   z-index: 620; display: flex; gap: 7px; padding: 2px 14px 8px;
   overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
@@ -3578,11 +3603,22 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 .fchip svg { width: 13px; height: 13px; color: var(--gold-bright); }
+/* ACTIVE = OUTLINED, not filled — this is the reference's treatment and it
+   is better for the reason he noticed: a solid chip is an opaque block laid
+   over the cartography, while an outlined one states itself and still lets
+   the map through. The hue stays gold. The reference's is red because red is
+   its house colour; ours sits 60px above a gold nav bar and a field of gold
+   pins, and importing another brand's accent into that is the one part of
+   "copy the colouring" that would make the screen worse. Say the word and it
+   becomes carmine — the app already owns that red for "you are looking at
+   this" — but it should be the app's red, never theirs. */
 .fchip.on {
-  background: linear-gradient(120deg, rgba(200, 162, 75, 0.94), rgba(232, 201, 128, 0.9));
-  color: #131109; border-color: rgba(232, 201, 128, 0.6);
+  background: rgba(19, 17, 9, 0.82);
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+  box-shadow: inset 0 0 0 1px rgba(232, 201, 128, 0.35);
 }
-.fchip.on svg { color: #131109; }
+.fchip.on svg { color: var(--gold-bright); }
 .leaflet-marker-icon.hid { display: none; }
 .leaflet-marker-icon.clustered { display: none; }
 /* GL twin: MapLibre markers carry .maplibregl-marker, not .leaflet-marker-icon —
@@ -3635,9 +3671,13 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
      where you are on the left, how much is here on the right. */
   position: absolute; right: 46px; z-index: 620;
   bottom: calc(env(safe-area-inset-bottom, 0px) + 104px);
-  font-family: var(--sans); font-size: 10px; font-weight: 600;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: rgba(244, 239, 230, 0.66);
+  /* Sentence case at 13px, as the reference reads it ("68 restaurants").
+     It was 10px uppercase at 0.2em tracking, which is a label treatment —
+     correct for an eyebrow, wrong for the one number on the screen that
+     answers "how much is here". */
+  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  letter-spacing: 0.01em;
+  color: rgba(244, 239, 230, 0.82);
   text-shadow: 0 1px 12px rgba(0, 0, 0, 0.9), 0 0 22px rgba(0, 0, 0, 0.7);
   opacity: 0; transition: opacity 0.35s ease; pointer-events: none;
 }
@@ -4555,8 +4595,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 August 2026 · 03:58 CEST';
-const APP_BUILD = 'v569';
+const COLLECTION_UPDATED = '22 August 2026 · 04:35 CEST';
+const APP_BUILD = 'v573';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7106,7 +7146,7 @@ function wireSearch() {
     const venues = findVenues(q);
     box.classList.add('open');
     const cityRows = cities.map(c =>
-      `<button data-goto="#/city/${c.id}">${c.name}&nbsp;<span class="country">${c.country}</span></button>`).join('');
+      `<button data-goto="#/city/${c.id}" data-cityid="${c.id}">${c.name}&nbsp;<span class="country">${c.country}</span></button>`).join('');
     const venueRows = venues.map(h =>
       `<button data-venue="${h.city.id}|${h.part}|${h.idx}">${h.v.n}&nbsp;<span class="country">${h.city.name} · ${h.cat.label}</span></button>`).join('');
     const divider = cities.length && venues.length ? '<div class="shead">Addresses</div>' : '';
@@ -9281,6 +9321,11 @@ function viewExplore() {
 }
 
 /* ---------- global search overlay: every club, everywhere ---------- */
+/* Which surface asked. Declared ABOVE the overlay's IIFE, not beside
+   openSearch below it: the handlers this file builds close over it, and a
+   `let` read before its declaration is evaluated is a TDZ ReferenceError —
+   the exact class that crashed the cold-load map deep link on 21 Aug. */
+let searchOnMap = false;
 const $gsearch = (() => {
   const d = document.createElement('div');
   d.id = 'gsearch';
@@ -9292,7 +9337,7 @@ const $gsearch = (() => {
   document.body.appendChild(d);
   // ANY close of the overlay abandons a pending day-add (audit F): the stale
   // dayAddFor otherwise hijacked the NEXT search pick into the old day
-  d.querySelector('.gs-close').onclick = () => { d.classList.remove('open'); dayAddFor = null; };
+  d.querySelector('.gs-close').onclick = () => { d.classList.remove('open'); dayAddFor = null; searchOnMap = false; };
   const input = d.querySelector('#gsinput');
   const res = d.querySelector('#gsresults');
   const render = () => {
@@ -9301,16 +9346,25 @@ const $gsearch = (() => {
     const cities = findCities(q);
     const venues = findVenues(q);
     const cityRows = cities.map(c =>
-      `<button data-goto="#/city/${c.id}">${c.name}&nbsp;<span class="country">${c.country}</span></button>`).join('');
+      `<button data-goto="#/city/${c.id}" data-cityid="${c.id}">${c.name}&nbsp;<span class="country">${c.country}</span></button>`).join('');
     const venueRows = venues.map(h =>
       `<button data-venue="${h.city.id}|${h.part}|${h.idx}">${h.v.n}&nbsp;<span class="country">${h.city.name} · ${h.cat.label}</span></button>`).join('');
     const divider = cities.length && venues.length ? '<div class="shead">Addresses</div>' : '';
     res.innerHTML = (cityRows + divider + venueRows) || '<div class="shead">Not yet curated</div>';
-    res.querySelectorAll('[data-goto]').forEach(b => b.onclick = () => { d.classList.remove('open'); go(b.dataset.goto); });
+    res.querySelectorAll('[data-goto]').forEach(b => b.onclick = () => {
+      d.classList.remove('open');
+      /* Opened FROM the map, a result stays on the map. Navigating to the
+         city page here would close the very surface the member searched
+         from — the reference's search bar flies its map, it does not leave
+         it. Same index, same rows, one different destination. */
+      if (searchOnMap) { searchOnMap = false; diveToCity(b.dataset.cityid, true); return; }
+      go(b.dataset.goto);
+    });
     res.querySelectorAll('[data-venue]').forEach(b => b.onclick = () => {
       d.classList.remove('open');
       const [c, cat, i] = b.dataset.venue.split('|');
       if (dayAddFor) { const iso = dayAddFor; dayAddFor = null; openPlanSheet(c, cat, +i, iso); return; }
+      if (searchOnMap) { searchOnMap = false; openMapAtVenue(c, cat, +i); return; }
       goVenue(c, cat, +i);
     });
   };
@@ -9320,6 +9374,12 @@ const $gsearch = (() => {
       const venues = findVenues(input.value);
       const cities = findCities(input.value);
       d.classList.remove('open');
+      if (searchOnMap) {
+        searchOnMap = false; dayAddFor = null;
+        if (cities.length) diveToCity(cities[0].id, true);
+        else if (venues.length) openMapAtVenue(venues[0].city.id, venues[0].part, venues[0].idx);
+        return;
+      }
       if (cities.length) { dayAddFor = null; go(`#/city/${cities[0].id}`); }
       else if (venues.length) {
         // Enter honours a pending day-add exactly like a tapped row
@@ -9331,7 +9391,8 @@ const $gsearch = (() => {
   });
   return d;
 })();
-function openSearch() {
+function openSearch(opts) {
+  searchOnMap = !!(opts && opts.onMap);
   $gsearch.classList.add('open');
   const i = $gsearch.querySelector('#gsinput');
   i.value = '';
@@ -11361,7 +11422,7 @@ let LMAP = null, mapDom = null, pinLayer = null, worldLayer = null, labelTiles =
 let meMarker = null, meHalo = null, geoWatch = null;
 let mapCityId = null, mapIdleTimer = null, mapRanks = {}, mapGroups = null;
 let cityIndex = null, tileErrors = [], onOsmFallback = false, baseLayer = null;
-let mapFilter = null;   // active category chip (raw part name) — null = all
+let mapFilter = null;   // active chip: ARRAY of part names, or null for all
 let openSeq = 0;        // guards the async engine decision against a close-while-loading
 
 function mapHaversine(a, b, c, d) {
@@ -11439,10 +11500,19 @@ function ensureMapDom() {
     <div class="map-vignette"></div>
     <div class="map-head">
       <button class="map-back" aria-label="Close map">${I.back}</button>
-      <div class="map-city">
-        <span class="eyebrow gold">The World</span>
-        <span class="name serif"></span>
-      </div>
+      <!-- THE SEARCH BAR (his reference, 22 Aug). What it replaced: a 26px
+           serif city name under a letter-spaced eyebrow, which ate 108px of
+           the top of the map to tell the member the name of the city they
+           had just tapped. The reference gives that band to a search field
+           and puts the city's name INSIDE it as the placeholder's second
+           half — the same words, a third of the height, and now it does
+           something. It is a button, not a live input: an input focused on
+           the map raises the keyboard over the thing being searched, which
+           is why the reference pushes into a search surface too. -->
+      <button class="map-search" id="mapsearch" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
+        <span class="ms-label">Search</span><span class="ms-where"></span>
+      </button>
     </div>
     <div class="map-filter" id="mapfilter"></div>
     <div class="map-side">
@@ -11458,6 +11528,11 @@ function ensureMapDom() {
     <div id="maptoast"></div>`;
   document.body.appendChild(mapDom);
   mapDom.querySelector('.map-back').addEventListener('click', () => { history.length > 1 ? history.back() : (location.hash = appHash); });
+  /* One search engine, two destinations. openSearch already indexes every
+     city and every venue; opening it with onMap means a tapped result FLIES
+     THE MAP instead of navigating away from it. Building a second search
+     here would have been two indexes to keep honest. */
+  mapDom.querySelector('#mapsearch').addEventListener('click', () => openSearch({ onMap: true }));
   mapDom.querySelector('.map-home').addEventListener('click', () => { if (mapCityId) mapHomeReturn(mapCityId); });
   mapDom.querySelector('.map-locate').addEventListener('click', () => {
     if (!theMap()) return;              // engine still deciding (review gap 1)
@@ -11787,6 +11862,15 @@ const PART_ORDER = ['restaurants', 'lunch', 'lounges', 'nightclubs', 'beach', 'p
 const partLabel = (p) => p === 'beach' ? 'Beach' : p === 'pools' ? 'Pools'
   : (CATEGORIES.find(c => c.id === displayCat(p)) || {}).label || p;
 
+/* THE FILTER IS A SET OF PARTS, not one part — because two parts can share a
+   label. `spas` and `dayout` are both labelled "By Day" (they are one
+   chapter), so the rail printed BY DAY twice, side by side, each filtering
+   half of it. Tapping the first hid every spa; tapping the second hid every
+   day-out; neither showed the chapter. Beach and Pools keep separate labels
+   deliberately and so stay two chips — the rule is one chip per LABEL, not
+   one per chapter. */
+const inFilter = (e) => !mapFilter || mapFilter.includes(e.cat);
+
 /* HOW MANY ROOMS AM I LOOKING AT. Borrowed from the reference Mishari sent:
    its map answers that in words at the bottom of the screen, ours answered
    it only by counting gold discs — and at city zoom most discs are clusters
@@ -11798,8 +11882,8 @@ function updateMapCount(cityId) {
   if (!el) return;
   const idx = cityId && buildCityIndex()[cityId];
   if (!idx) { el.textContent = ''; el.classList.remove('show'); return; }
-  const rows = idx.entries.filter(e => !mapFilter || e.cat === mapFilter);
-  const noun = mapFilter ? partLabel(mapFilter).toLowerCase() : 'places';
+  const rows = idx.entries.filter(inFilter);
+  const noun = mapFilter ? partLabel(mapFilter[0]).toLowerCase() : 'places';
   el.textContent = `${rows.length} ${rows.length === 1 ? noun.replace(/s$/, '') : noun}`;
   el.classList.toggle('show', rows.length > 0);
 }
@@ -11810,8 +11894,16 @@ function renderFilterRail(cityId) {
   const idx = buildCityIndex()[cityId];
   const parts = [...new Set(idx.entries.map(e => e.cat))]
     .sort((a, b) => PART_ORDER.indexOf(a) - PART_ORDER.indexOf(b));
+  /* Collapse parts that share a label into ONE chip carrying both. */
+  const byLabel = [];
+  for (const p of parts) {
+    const label = partLabel(p);
+    const hit = byLabel.find(x => x.label === label);
+    if (hit) hit.parts.push(p); else byLabel.push({ label, parts: [p], glyph: MAP_GLYPH[p] || '' });
+  }
+  const isOn = (x) => !!mapFilter && x.parts.every(p => mapFilter.includes(p)) && x.parts.length === mapFilter.length;
   rail.innerHTML = `<button class="fchip ${!mapFilter ? 'on' : ''}" data-f="">All</button>` +
-    parts.map(p => `<button class="fchip ${mapFilter === p ? 'on' : ''}" data-f="${p}">${MAP_GLYPH[p] || ''}<span>${esc(partLabel(p))}</span></button>`).join('');
+    byLabel.map(x => `<button class="fchip ${isOn(x) ? 'on' : ''}" data-f="${x.parts.join(',')}">${x.glyph}<span>${esc(x.label)}</span></button>`).join('');
   rail.classList.add('show');
   updateMapCount(cityId);
   // the active chip must be SEEN to be believed — Spas sat off-screen right
@@ -11821,7 +11913,7 @@ function renderFilterRail(cityId) {
     if (on && on.dataset.f) on.scrollIntoView({ inline: 'center', block: 'nearest' });
   });
   rail.querySelectorAll('.fchip').forEach(b => b.addEventListener('click', () => {
-    mapFilter = b.dataset.f || null;
+    mapFilter = b.dataset.f ? b.dataset.f.split(',') : null;
     updateMapCount(cityId);
     rail.querySelectorAll('.fchip').forEach(x => x.classList.toggle('on', x === b));
     applyFilter();
@@ -11832,7 +11924,7 @@ function applyFilter() {
   if (!mapGroups) return;
   hideMapCard();
   for (const g of mapGroups) {
-    g.hidden = !!mapFilter && !g.entries.some(e => e.cat === mapFilter);
+    g.hidden = !!mapFilter && !g.entries.some(inFilter);
     const el = g.marker.el;
     if (el) el.classList.toggle('hid', g.hidden);
   }
@@ -11885,7 +11977,7 @@ function landOnPendingVenue() {
   // arriving FROM a category: the rail pre-selects that category, so the
   // map shows the world you were browsing (Mishari 17:24 — Cipriani should
   // land among Restaurants, not All)
-  mapFilter = key.split('|')[1];
+  mapFilter = [key.split('|')[1]];
   renderFilterRail(mapCityId);
   applyFilter();
   // district framing, not street level: the venue in its neighbourhood with
@@ -12153,7 +12245,7 @@ function showMapCard(group, preferKey) {
     dist = km < 1 ? ` · ${Math.round(km * 1000)} m from you` : km < 100 ? ` · ${km.toFixed(1)} km from you` : '';
   }
   const chooser = group.entries.length > 1 ? `<div class="mc-choose">${group.entries.map((x, i) =>
-    `<button data-i="${i}" class="${(!mapFilter ? i === 0 : x.cat === mapFilter) ? 'on' : ''}">${MAP_GLYPH[x.cat] || ''}<span>${esc((CATEGORIES.find(c => c.id === displayCat(x.cat)) || {}).label || x.cat)}</span></button>`).join('')}</div>` : '';
+    `<button data-i="${i}" class="${(!mapFilter ? i === 0 : inFilter(x)) ? 'on' : ''}">${MAP_GLYPH[x.cat] || ''}<span>${esc((CATEGORIES.find(c => c.id === displayCat(x.cat)) || {}).label || x.cat)}</span></button>`).join('')}</div>` : '';
   // one ride, door to door: Uber's universal link takes a dropoff pin —
   // pickup is wherever the member is standing. No API, no key.
   const uber = 'https://m.uber.com/ul/?action=setPickup&pickup=my_location'
@@ -12193,7 +12285,7 @@ function showMapCard(group, preferKey) {
   fetchDriveEta(e, card);              // "Uber · 14 min" replaces the km reading when the route answers
   let sel = Math.max(0, preferKey
     ? group.entries.findIndex(x => x.key === preferKey)
-    : group.entries.findIndex(x => !mapFilter || x.cat === mapFilter));
+    : group.entries.findIndex(inFilter));
   card.querySelectorAll('.mc-choose button').forEach(b => b.addEventListener('click', (ev) => {
     ev.stopPropagation();
     sel = +b.dataset.i;
@@ -12231,7 +12323,7 @@ function stepVenue(dir) {
   let i = order.indexOf(selectedGroup);
   i = i < 0 ? (dir > 0 ? 0 : order.length - 1) : (i + dir + order.length) % order.length;
   const g = order[i];
-  const prefer = mapFilter ? ((g.entries.find(e => e.cat === mapFilter) || g.entries[0]).key) : null;
+  const prefer = mapFilter ? ((g.entries.find(inFilter) || g.entries[0]).key) : null;
   if (typeof haptic === 'function') haptic();
   stepDir = dir;
   const Z = Math.max(14.1, mapZoom());
@@ -12288,7 +12380,10 @@ function showWorldStage(animate) {
   hideMapCard();
   renderFilterRail(null);
   renderWorldDots();
-  setPlaque('Choose a destination', 'The World');
+  /* Placeholder grammar, not headline grammar: the plaque's words now sit
+     after "Search", where "Choose a destination" reads as an instruction the
+     field cannot carry out. */
+  setPlaque('the world', 'The World');
   const target = [34, 8];
   const noMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (ENGINE === 'gl') {
@@ -12312,9 +12407,15 @@ function showWorldStage(animate) {
     b.addEventListener('click', () => diveToCity(b.dataset.city, true)));
 }
 
+/* The place-name now lives as the second half of the search placeholder —
+   "Search  Los Angeles" — exactly as the reference reads "Search  Westwood,
+   Los Angeles". Same call site, same two arguments; the eyebrow (which said
+   THE WORLD · UNITED STATES above a 26px serif) becomes the world-stage
+   fallback only, because on a city map the country is not what the member
+   is about to type. */
 function setPlaque(name, eyebrow) {
-  mapDom.querySelector('.map-city .name').textContent = name;
-  mapDom.querySelector('.map-city .eyebrow').textContent = eyebrow;
+  const w = mapDom.querySelector('.ms-where');
+  if (w) w.textContent = name || eyebrow || '';
 }
 
 /* the home pill (bottom-left): a lovely one-tap return from the map to the
