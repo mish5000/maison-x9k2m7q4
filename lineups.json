@@ -1,23 +1,8 @@
 {
- "generated": "2026-08-20T03:09:50Z",
+ "generated": "2026-08-21T03:09:57Z",
  "venues": {
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-08-19": {
-     "hl": "Meduza",
-     "line": [
-      "Meduza",
-      "James Hype",
-      "Maya Jane Coles",
-      "Anna Tur",
-      "Jonas Blue",
-      "Sasson"
-     ],
-     "party": "Our House",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-20": {
      "hl": "HUGEL B2B Diplo",
      "line": [
@@ -130,23 +115,25 @@
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-28": {
+     "hl": "Dom Dolla",
+     "line": [
+      "Dom Dolla",
+      "Sasha",
+      "Ewan McVicar",
+      "DJ Heartstring",
+      "Luke Alessi"
+     ],
+     "party": "Dom Dolla Closing Party",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-08-19": {
-     "hl": "Oliver Heldens",
-     "line": [
-      "Oliver Heldens",
-      "Brina Knauss",
-      "MATTN"
-     ],
-     "party": "Tomorrowland",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-20": {
      "hl": "Martin Garrix",
      "line": [
@@ -246,24 +233,23 @@
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-28": {
+     "hl": "Calvin Harris",
+     "line": [
+      "Calvin Harris",
+      "MK",
+      "Tyson O'Brien"
+     ],
+     "party": "",
+     "doors": "17:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-08-19": {
-     "hl": "Mau P",
-     "line": [
-      "Mau P",
-      "Joseph Capriati",
-      "Sven Väth",
-      "Karretero"
-     ],
-     "party": "Baddest Behaviour",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-20": {
      "hl": "Purple Disco Machine",
      "line": [
@@ -364,24 +350,24 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-28": {
+     "hl": "Marco Carola",
+     "line": [
+      "Marco Carola",
+      "Luciano",
+      "Rossi.",
+      "Obskür"
+     ],
+     "party": "Music On",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-08-19": {
-     "hl": "ARTBAT",
-     "line": [
-      "ARTBAT",
-      "Adam Beyer",
-      "CAMELPHAT",
-      "Out Of Mind"
-     ],
-     "party": "RESISTANCE",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-20": {
      "hl": "Josh Baker B2B Kettama",
      "line": [
@@ -483,21 +469,25 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-28": {
+     "hl": "Glitterbox",
+     "line": [
+      "DJ Jazzy Jeff",
+      "Groove Armada",
+      "Horse Meat Disco",
+      "Dam Swindle",
+      "Fat Tony"
+     ],
+     "party": "Glitterbox",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "marbella|nightclubs|0": {
    "nights": {
-    "2026-08-19": {
-     "hl": "Alex Puche",
-     "line": [
-      "Alex Puche"
-     ],
-     "party": "",
-     "doors": "23:45",
-     "src": "mandalatickets.com",
-     "conf": "high"
-    },
     "2026-08-20": {
      "hl": "Rivo",
      "line": [
@@ -577,23 +567,21 @@
      "doors": "23:45",
      "src": "mandalatickets.com",
      "conf": "high"
+    },
+    "2026-08-28": {
+     "hl": "Malive Unfazed",
+     "line": [
+      "Malive Unfazed"
+     ],
+     "party": "",
+     "doors": "23:45",
+     "src": "mandalatickets.com",
+     "conf": "high"
     }
    }
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-08-19": {
-     "hl": "Ilario Alicante",
-     "line": [
-      "Ilario Alicante",
-      "Manolaco",
-      "Zyrak"
-     ],
-     "party": "",
-     "doors": "23:59",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
     "2026-08-20": {
      "hl": "B T R F L Y FX w/ Joezi",
      "line": [
@@ -696,14 +684,6 @@
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-08-19": {
-     "hl": "Five Venoms",
-     "line": "Five Venoms",
-     "party": "",
-     "doors": "23:00",
-     "src": "11miami.com",
-     "conf": "high"
-    },
     "2026-08-20": {
      "hl": "Leondis",
      "line": "Leondis",
@@ -767,19 +747,19 @@
      "doors": "23:00",
      "src": "11miami.com",
      "conf": "high"
+    },
+    "2026-08-28": {
+     "hl": "Bossman Dlow",
+     "line": "Bossman Dlow",
+     "party": "",
+     "doors": "23:00",
+     "src": "11miami.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-08-19": {
-     "hl": "Toy Room",
-     "line": [],
-     "party": "Toy Room",
-     "doors": "20:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-20": {
      "hl": "Nomis",
      "line": [
@@ -840,6 +820,16 @@
       "Nomis"
      ],
      "party": "Tiempo",
+     "doors": "23:45",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-08-28": {
+     "hl": "Sebastian Gamboa",
+     "line": [
+      "Sebastian Gamboa"
+     ],
+     "party": "Vintage",
      "doors": "23:45",
      "src": "ibiza-spotlight.com",
      "conf": "high"
