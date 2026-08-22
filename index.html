@@ -45,6 +45,7 @@ var b=document.getElementById('boot');setTimeout(function(){if(b)b.classList.add
   <div class="sp-word">
     <span class="sp-rule"></span>
     <span class="sp-tag">Transporting you to the extraordinary</span>
+    <span class="sp-build">V594</span>
   </div>
 </div>
 <div id="shell">
@@ -79,6 +80,7 @@ var b=document.getElementById('boot');setTimeout(function(){if(b)b.classList.add
       <span class="rf-mono serif">M</span>
     </div>
     <div class="rf-label">À votre service</div>
+    <div class="rf-build">V594</div>
   </div>
 </div>
 <div id="toast"></div>
@@ -4237,6 +4239,21 @@ body.calmodal .backbtn, body.calmodal .topbar-search { top: 26px; }
   font-family: system-ui, -apple-system, sans-serif; font-size: 10px; font-weight: 400;
   letter-spacing: 0.34em; text-transform: uppercase; color: rgba(244,239,230,0.6);
 }
+/* THE BUILD NUMBER, on the two screens that cover a reload. His ask, 22 Aug:
+   when the app comes back he wants to know which build he is looking at
+   without hunting for the colophon at the bottom of My List.
+   Gold and a size up from the tagline it sits under — he asked for it to be
+   stated CLEARLY, and a 10px whisper is what "right now I cannot read
+   anything" was about the last time. Stamped into the markup at build time,
+   so it is on screen before a single line of script has run. */
+.rf-build, .sp-build {
+  margin-top: 12px;
+  font-family: var(--sans); font-size: 14px; font-weight: 600;
+  letter-spacing: 0.26em; text-transform: uppercase;
+  color: var(--gold-bright);
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.8);
+}
+.sp-build { display: block; text-align: center; }
 @media (prefers-reduced-motion: reduce) {
   .rf-shoot { display: none; } .rf-mono { animation: none; }
   #refresh.show .rf-prog { animation: none; stroke-dashoffset: 84; }
@@ -4603,8 +4620,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 August 2026 · 21:39 CEST';
-const APP_BUILD = 'v591';
+const COLLECTION_UPDATED = '22 August 2026 · 21:53 CEST';
+const APP_BUILD = 'v594';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
