@@ -1237,6 +1237,14 @@ body {
    scrollbar that is deliberately invisible. The Pulse stamp is the honesty
    stamp; it cannot be the one thing the member can never see. It now sits on
    its own row under the chips. */
+/* the Open Tonight tally — states what the filter did, including what it
+   could not see. Same faint sans as the rest of the meta; never a badge. */
+.filternote {
+  margin: -2px 22px 8px;
+  font-family: var(--sans); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(244, 239, 230, 0.55);
+}
 .sortstamp { display: flex; margin: -2px 22px 6px auto;
   margin-left: auto;
   display: inline-flex; align-items: center; gap: 6px;
@@ -4595,8 +4603,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 August 2026 · 04:46 CEST';
-const APP_BUILD = 'v576';
+const COLLECTION_UPDATED = '22 August 2026 · 19:02 CEST';
+const APP_BUILD = 'v582';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -4678,74 +4686,118 @@ const SEASON = {
 };
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
+/* ---- THE FOUR CHAPTERS ---------------------------------------------------
+   One organising principle: MEMBER INTENT. What replaced it mixed three —
+   venue type (Restaurants, Bars, Nightclubs, Hotels), time of day (Lunch, By
+   Day), setting (Beach & Pools) and recency (What's New) — so the member had
+   to re-orient at every card.
+
+   THE PARTS UNDERNEATH DO NOT MOVE, and that is not a style choice. 4,280
+   sidecar records are keyed `city|part|index` — coordinates, images, hours,
+   ratings, cuisines, tags, galleries, dishes, booking links — and so are
+   every member's saved venues and planned days, which live in localStorage
+   on their own device and can never be migrated by us. Renumber one array
+   and every sidecar silently re-points to the wrong venue, on their phone,
+   with no way back. So this is a DISPLAY re-grouping: the chapters change,
+   the storage does not, and not one venue index shifts.
+
+   Order is fixed and identical in every city. */
 const CATEGORIES = [
-  { id: 'restaurants', label: 'Restaurants', sub: 'Tables worth travelling for' },
-  /* LUNCH (13 Aug, Mishari): "super famous, fun places, premium but not
-     necessarily amazing... not hole in the walls, they must be decent
-     interiors... still excellent but more focused on non-vibey."
-     A deliberately different bar from every other chapter. Restaurants ranks
-     on the table; Bars and Nightclubs rank on the room's energy. This one
-     ranks on FAME plus a civilised room, and explicitly tolerates food that
-     is merely good — The Ivy and Urth Caffé are the point, not the
-     compromise. It is the only chapter where "not a scene" is a REQUIREMENT.
-     City pages filter out categories a city has no venues for (viewCity's
-     tiles filter), so this ships Los Angeles-only without putting a dead
-     tile in the other 21 cities. */
-  { id: 'lunch',       label: 'Lunch',       sub: 'The midday institutions' },
-  /* Wine folded in (2 Aug). 27 venues across 22 cities — ABSENT in 13, real
-     (5+) in exactly two, London and Paris. A tile that three venues cannot
-     fill still shouts as loudly as the 249-venue Restaurants tile, because
-     the grammar has no way to express weight. It keeps its own sub-heading
-     INSIDE the chapter, so nothing is buried; only the front door closes. */
-  /* Sub-heading gone too (13 Aug, Mishari: "lets merge cocktails and
-     winebars"). The 2 Aug fold closed the front door but kept two labelled
-     sections inside, so the member still had to pick a KIND of bar before
-     picking a room — and the split was arbitrary at the edges (Wally's is a
-     wine emporium with a marble cocktail bar; 67 Pall Mall is a members'
-     club). The 30 wine venues moved to the END of their city's lounges
-     array, so no existing lounges index shifted; `wine` stays in
-     RETIRED_CAT so saved #/cat/x/wine links still land. */
-  /* Renamed Sundown -> Bars (9 Aug, Mishari). 'Sundown' named an HOUR, and so
-     did 'After Dark' — which is precisely why he could never tell the two
-     tabs apart. A tab has to name the ROOM. The id moves sundown -> bars, so
-     PART_TO_DISPLAY folds the old deep links automatically; the parts are
-     untouched, so all 125 lounges/wine sidecar keys keep working. */
-  /* parts stays ['lounges'] and does NOT become undefined: catParts() falls
-     back to [cat.id], and there is no `bars` array in any city. */
-  { id: 'bars',        label: 'Bars',        sub: 'Long bars & serious cellars', parts: ['lounges'] },
-  /* 'Nightclubs' was a lie the schema told (1 Aug). Las Vegas held six
-     speakeasies and cocktail rooms under it and nothing else, because the
-     cocktail slot was empty and this one was open; Los Angeles held five
-     members' and supper rooms; London holds Oswald's and Mark's Club. The
-     house has been filing by occasion for months. The label now says so.
-     Only the LABEL moves — the id stays `nightclubs`, so every image,
-     hours, coords, gallery, tag and dish key is untouched. */
-  /* Back to 'Nightclubs' (10 Aug, Mishari, twice): "all those DJ places are
-     nightclubs, they are not after dark — that doesn't even make sense."
-     He is right about the 14 cities that hold Hï, Pacha, LIV, E11EVEN, Cavo.
-     The caveat that produced 'After Dark' is real and NOT yet fixed: London
-     is 6/10 members' clubs, New York 3/5, Aspen's Caribou. Those belong in
-     Bars — a members' room is a drinking room with the hardest door there
-     is — and until they move, this label overstates four cities. Migration
-     pending his go-ahead; the label follows his instruction meanwhile. */
-  { id: 'nightclubs',  label: 'Nightclubs',  sub: 'Late doors & the rooms behind them' },
-  /* Display category: beach + pools present as one screen; venues stay in
-     their own arrays underneath so all generated data keys keep working. */
-  { id: 'beachpools',  label: 'Beach & Pools', sub: 'Legendary beach clubs & iconic pools', parts: ['beach', 'pools'] },
-  /* Spas + Day Out merged (2 Aug). The number that settles it: they are
-     empty in the SAME nine cities, so the merge creates no new blank, and
-     in all thirteen cities where either exists the merged tile is 4 or more.
-     Two tiles thin in ten cities become one thin in none. 'Day Out' also
-     read faintly downmarket — in British English it is a coach trip. */
-  { id: 'byday',       label: 'By Day',      sub: 'Spas, sport & extraordinary days', parts: ['spas', 'dayout'] },
-  /* 'Resorts' is wrong in twelve of twenty-two cities — Milan, Madrid,
-     London, New York and Paris have none. Calling The Connaught a resort
-     loses exactly the reader who knows. Label only; the id stays. */
-  { id: 'resorts',     label: 'Hotels',      sub: 'Stay exceptional' },
-  /* His 29 Jul ask: the buzz tab — brand-new, high-visibility rooms.
-     Sits LAST so it lands immediately before the Concierge tile. */
-  { id: 'whatsnew',    label: "What's New",   sub: 'Just opened, already the room' },
+  { id: 'dine',   label: 'Dine',   sub: 'Tables worth travelling for',        parts: ['restaurants', 'lunch'] },
+  /* Lunch is absorbed, not lost: time of day is a property of a table, never
+     a chapter of its own. `restaurants` and `lunch` stay separate arrays. */
+  { id: 'nights', label: 'Nights', sub: 'Long bars & late doors',             parts: ['lounges', 'nightclubs'] },
+  /* NIGHTCLUB IS A TAG, NOT A SECTION. Promote it to a visible section
+     within NIGHTS only where a city holds SIX OR MORE nightclub venues.
+     Measured 22 Aug, exactly three cities clear that bar: Marbella (9),
+     Ibiza (7), Las Vegas (6). Everywhere else it is one to four rooms and a
+     section heading would announce the thinness rather than hide it. */
+  { id: 'days',   label: 'Days',   sub: 'Beach, water, spas & long afternoons', parts: ['beach', 'pools', 'spas', 'dayout'] },
+  { id: 'stay',   label: 'Stay',   sub: 'Stay exceptional',                   parts: ['resorts'] },
 ];
+
+/* ---- What's New, dissolved -----------------------------------------------
+   The chapter is gone: no card, no strip, no badge, no flag, no sort, no
+   filter. Its 64 venues are NOT gone and NOT moved — they keep their
+   `city|whatsnew|index` keys, so every sidecar and every saved venue still
+   resolves — and each is assigned here to the chapter its type belongs to.
+   This is the only place recency survives, and it survives as nothing more
+   than a lookup table.
+
+   THE RULE, applied to the 32 venues that carry two types (a restaurant that
+   is also a cocktail bar, or also a beach club): a venue whose primary
+   bookable product is a TABLE goes to DINE, whatever else it holds.
+
+   TWO ARE FLAGGED, NOT SETTLED — Aqua Kyoto Paris and Florentine Madrid
+   carry only ['Rooftop', <cuisine>] and no venue-type tag at all. Both read
+   as restaurants on a roof and are filed as DINE; if either is really a bar
+   with food, move the single line. */
+const WN_CHAPTER = {
+  'aspen|whatsnew|0': 'dine',
+  'aspen|whatsnew|1': 'dine',
+  'bodrum|whatsnew|0': 'dine',
+  'bodrum|whatsnew|1': 'dine',
+  'bodrum|whatsnew|2': 'dine',
+  'capri|whatsnew|0': 'dine',
+  'capri|whatsnew|1': 'dine',
+  'capri|whatsnew|2': 'days',
+  'courchevel|whatsnew|0': 'dine',
+  'dubai|whatsnew|0': 'dine',
+  'dubai|whatsnew|1': 'dine',
+  'dubai|whatsnew|2': 'dine',
+  'dubai|whatsnew|3': 'dine',
+  'hamptons|whatsnew|0': 'dine',
+  'hamptons|whatsnew|1': 'dine',
+  'hamptons|whatsnew|2': 'dine',
+  'ibiza|whatsnew|0': 'dine',
+  'ibiza|whatsnew|1': 'dine',
+  'ibiza|whatsnew|2': 'dine',
+  'lasvegas|whatsnew|0': 'dine',
+  'lasvegas|whatsnew|1': 'dine',
+  'lasvegas|whatsnew|2': 'nights',
+  'london|whatsnew|0': 'dine',
+  'london|whatsnew|1': 'dine',
+  'london|whatsnew|2': 'dine',
+  'london|whatsnew|3': 'dine',
+  'london|whatsnew|4': 'dine',
+  'losangeles|whatsnew|0': 'dine',
+  'losangeles|whatsnew|1': 'dine',
+  'losangeles|whatsnew|2': 'nights',
+  'losangeles|whatsnew|3': 'dine',
+  'losangeles|whatsnew|4': 'nights',
+  'madrid|whatsnew|0': 'nights',
+  'madrid|whatsnew|1': 'dine',
+  'madrid|whatsnew|2': 'dine',
+  'marbella|whatsnew|0': 'dine',
+  'marbella|whatsnew|1': 'dine',
+  'miami|whatsnew|0': 'dine',
+  'miami|whatsnew|1': 'dine',
+  'miami|whatsnew|2': 'dine',
+  'miami|whatsnew|3': 'dine',
+  'milan|whatsnew|0': 'dine',
+  'milan|whatsnew|1': 'nights',
+  'milan|whatsnew|2': 'dine',
+  'monaco|whatsnew|0': 'nights',
+  'mykonos|whatsnew|0': 'dine',
+  'mykonos|whatsnew|1': 'dine',
+  'newyork|whatsnew|0': 'nights',
+  'newyork|whatsnew|1': 'nights',
+  'newyork|whatsnew|2': 'dine',
+  'newyork|whatsnew|3': 'dine',
+  'newyork|whatsnew|4': 'dine',
+  'orangecounty|whatsnew|0': 'dine',
+  'paris|whatsnew|0': 'dine',
+  'paris|whatsnew|1': 'dine',
+  'paris|whatsnew|2': 'dine',
+  'portocervo|whatsnew|0': 'dine',
+  'portocervo|whatsnew|1': 'dine',
+  'portocervo|whatsnew|2': 'nights',
+  'stbarths|whatsnew|0': 'dine',
+  'stbarths|whatsnew|1': 'nights',
+  'stbarths|whatsnew|2': 'nights',
+  'sttropez|whatsnew|0': 'days',
+  'sttropez|whatsnew|1': 'dine',
+};
 
 /* Venue fields:
    n  name        a  area / neighbourhood     b  one-line blurb
@@ -6607,10 +6659,38 @@ const PART_TO_DISPLAY = (() => {
    covered #/cat/london/wine — but the venues have now moved into `lounges`
    and the part is gone from CATEGORIES, which would silently drop those
    links. Retiring the id keeps them landing on Bars. */
-const RETIRED_CAT = { sundown: 'bars', wine: 'bars' };
+/* Retired DISPLAY ids -> where a saved link now lands. Every id this app has
+   ever put in a URL is here; breaking a link a member saved is not a cost
+   this migration is allowed to pay. `whatsnew` folds to Dine because 51 of
+   its 64 venues did. */
+const RETIRED_CAT = {
+  sundown: 'nights', wine: 'nights', bars: 'nights',
+  beachpools: 'days', byday: 'days', whatsnew: 'dine',
+};
 const displayCat = (catId) => RETIRED_CAT[catId] || PART_TO_DISPLAY[catId] || catId;
-const catVenueEntries = (city, cat) =>
-  catParts(cat).flatMap(part => (city.venues[part] || []).map((v, i) => ({ part, v, i })));
+/* THE ONE PLACE a chapter's venues are enumerated. It is its own function
+   precisely so the dissolved What's New has exactly one seam to enter
+   through: the chapter's own parts, plus every `whatsnew` venue assigned to
+   this chapter in WN_CHAPTER. Those venues keep their whatsnew part and
+   index — the sidecars and the member's saved list depend on it — so what
+   changes is only which screen they appear on. */
+const catVenueEntries = (city, cat) => {
+  const rows = catParts(cat).flatMap(part =>
+    (city.venues[part] || []).map((v, i) => ({ part, v, i })));
+  const wn = city.venues.whatsnew || [];
+  wn.forEach((v, i) => {
+    if (typeof WN_CHAPTER !== 'undefined' && WN_CHAPTER[`${city.id}|whatsnew|${i}`] === cat.id)
+      rows.push({ part: 'whatsnew', v, i });
+  });
+  return rows;
+};
+/* Which chapter a single venue belongs to. A part alone cannot answer it for
+   `whatsnew`, whose venues are assigned one by one — so anything naming a
+   venue's chapter must ask with the venue, not with the part. */
+const chapterOf = (cityId, part, idx) =>
+  (part === 'whatsnew' && typeof WN_CHAPTER !== 'undefined')
+    ? (WN_CHAPTER[`${cityId}|whatsnew|${idx}`] || 'dine')
+    : displayCat(part);
 
 /* Category tiles aren't venue claims — use the first real venue photo,
    else a neutral category texture. The override map exists because the
@@ -7316,9 +7396,33 @@ function geoKmTo(key) {
 }
 /* Thousands are grouped because the cap is gone: "12903 km" is a number the
    eye has to count digits on, "12,903 km" is read at a glance. */
-const kmLabel = (km) => (Math.round(km * 1000) < 1000 ? Math.round(km * 1000) + ' m'
-  : km < 10 ? km.toFixed(1) + ' km'
-  : Math.round(km).toLocaleString('en-GB') + ' km');
+/* ---- distance units, by the city being browsed --------------------------
+   Miles where the member's feet are on miles, kilometres everywhere else.
+   NOT hardcoded app-wide, and NOT derived from `country`: that field says
+   "California" for Orange County and "Nevada" for Las Vegas, so a
+   country === 'United States' test silently misses two American cities and
+   quotes them in kilometres. City ids are the only field that cannot drift.
+   The United Kingdom is here on purpose — Britain measures road distance in
+   miles, and London is our second-largest collection. */
+const IMPERIAL_CITIES = new Set([
+  'losangeles', 'miami', 'newyork', 'aspen', 'hamptons', 'orangecounty', 'lasvegas',
+  'london',
+]);
+let distCity = null;   // the city whose screen is rendering; set by viewCategory
+const useMiles = (cityId) => IMPERIAL_CITIES.has(cityId || distCity);
+/* Thousands are grouped because there is no distance cap: "12,903 km" is a
+   number the eye has to count digits on, "12,903 km" is read at a glance. */
+const kmLabel = (km, cityId) => {
+  if (useMiles(cityId)) {
+    const mi = km * 0.621371;
+    return mi < 0.1 ? Math.round(mi * 5280) + ' ft'
+      : mi < 10 ? mi.toFixed(1) + ' mi'
+      : Math.round(mi).toLocaleString('en-GB') + ' mi';
+  }
+  return Math.round(km * 1000) < 1000 ? Math.round(km * 1000) + ' m'
+    : km < 10 ? km.toFixed(1) + ' km'
+    : Math.round(km).toLocaleString('en-GB') + ' km';
+};
 
 function geoOrderedCities() {
   const pos = geoSnap || geoRead();
@@ -7532,12 +7636,11 @@ function viewCity(cityId) {
   const tiles = CATEGORIES
     .filter(cat => catVenueEntries(city, cat).length)
     .map((cat, i) => {
-      const n = catVenueEntries(city, cat).length;
       const tileBg = tileImg(city, cat.id);
       return `
       <button class="tile rise rise-${Math.min(i, 3)}" data-prewarm="${city.id}|${cat.id}" onclick="haptic();location.hash='#/cat/${city.id}/${cat.id}'">
         <span class="bg">${heroImg(tileBg)}</span>
-        <span class="plate"><span class="display serif">${cat.label}</span><span class="count">· ${n}</span></span>
+        <span class="plate"><span class="display serif">${cat.label}</span></span>
       </button>`;
     }).join('');
 
@@ -7552,10 +7655,11 @@ function viewCity(cityId) {
       <h1 class="display serif rise">${city.name}</h1>
       <div class="tagline rise rise-1">${city.tagline}</div>
     </header>
-    <div class="tiles">${tiles}${(typeof CONCIERGE !== 'undefined' && CONCIERGE[city.id]) ? `
-      <button class="tile concierge-tile" onclick="location.hash='#/concierge/${city.id}'">
-        <span class="plate"><span class="display serif">VIP Concierge</span><span class="count">· ${CONCIERGE[city.id].length === 1 ? 'One call, handled' : CONCIERGE[city.id].length + ' fixers'}</span></span>
-      </button>` : ''}</div>`;
+    ${/* VIP CONCIERGE IS NOT A BROWSE CATEGORY. It is a tab in the bar at the
+         bottom of every screen, and a fifth tile here made it compete with
+         the four chapters while duplicating a destination the member already
+         has. The route #/concierge/<city> is untouched. */''}
+    <div class="tiles">${tiles}</div>`;
   wireCards();
   $shell.scrollTo(0, 0);
 }
@@ -7735,7 +7839,7 @@ function venueCard(city, catId, v, idx) {
            is also what keeps it off the other three sorts' photographs. */
         if (!distMode) return '';
         const km = geoKmTo(key);
-        return km === null ? '' : `<div class="distbubble"><b>${kmLabel(km)}</b><i>away</i></div>`;
+        return km === null ? '' : `<div class="distbubble"><b>${kmLabel(km, city.id)}</b><i>away</i></div>`;
       })()}
       <div class="body">
         <div class="area">${v.a} · ${city.name}</div>
@@ -7759,14 +7863,36 @@ function venueCard(city, catId, v, idx) {
    'rated' = Google score weighted by review count (IMDb prior, m=200) so a
              5.0-from-12-reviews cannot outrank a 4.7-from-3,000. */
 let catSort = 'edit';
+/* OPEN TONIGHT — a genuine FILTER, the only one of the four requested that
+   this app can honestly serve. It narrows; it does not reorder. Off on every
+   launch: a filter the member did not ask for, silently hiding rooms, is
+   worse than no filter. */
+let openTonight = false;
 /* True only while a category feed is actually rendering distance-sorted.
    The card reads it to decide whether the photograph carries a bubble. */
 let distMode = false;
 /* Validate, do not trust. A persisted 'near' survives permission being
    revoked, and would render the chip lit while the list silently showed
    collection order — the chip claiming a sort it is not performing. */
-const CAT_SORTS = ['edit', 'hot', 'rated', 'near'];
-try { const v = localStorage.getItem('privee-catsort'); if (CAT_SORTS.includes(v)) catSort = v; } catch (_) {}
+/* 'hot' and 'rated' are RETIRED, and the persisted value is no longer
+   restored at all.
+   - RATED ranked a curated index by third-party stars. On a list where every
+     room is already vetted the scores compress into a narrow band, so it
+     effectively ranked by tourist volume.
+   - HOT was a hardcoded per-part hourly rhythm curve times an opening-hours
+     gate times `venueStanding` — and venueStanding is Google score x
+     log10(review count). It was therefore ALSO driven by third-party stars,
+     and the rest of it was our own editorial model, which is what The Edit
+     already is. Of the three proprietary signals that could have replaced
+     it: booking attempt/decline data does not exist (no backend, mock
+     provider); "most saved this week" CANNOT exist, because saves never
+     leave the member's device and aggregating them needs the backend the
+     house laws forbid; "most recently added" has no field to sort on.
+   - THE EDIT is now the silent default and has no chip. A curation the
+     member can switch off is a default list admitting it is uncurated.
+   - NEAREST survives as a sort but may never be the launch default, so the
+     persisted value is deliberately dropped on every cold start. */
+const CAT_SORTS = ['edit', 'near'];
 const venueStanding = (key) => {
   const r = venueRating(key);
   return r ? r[0] * Math.log10(Math.max(10, r[1])) : 8;
@@ -7809,10 +7935,30 @@ function viewCategory(cityId, catId) {
   const city = CITY_BY_ID[cityId];
   const cat = CAT_BY_ID[catId];
   if (!city || !cat) { go('#/'); return; }
+  distCity = city.id;
 
-  const PART_HEAD = { beach: 'Beach Clubs', pools: 'Pools', lounges: 'Bars', spas: 'Spas', dayout: 'Days Out' };
-  const groups = catParts(cat)
-    .map(part => ({ part, list: city.venues[part] || [] }))
+  const PART_HEAD = { beach: 'Beach Clubs', pools: 'Pools', lounges: 'Bars',
+    spas: 'Spas', dayout: 'Days Out', nightclubs: 'Nightclubs' };
+  /* WHICH CHAPTERS SHOW SECTIONS, and why each answer differs.
+     - DAYS does: a beach club, a pool, a spa and a day out are four
+       different afternoons, and the brief makes them sections by name.
+     - NIGHTS does NOT, unless this city holds six or more nightclubs.
+       Nightclub is a tag; a "Nightclubs" heading over one room announces
+       the thinness rather than hiding it. Three cities clear the bar today
+       — Marbella 9, Ibiza 7, Las Vegas 6.
+     - DINE does NOT. Its parts are `restaurants` and `lunch`, and a "Lunch"
+       heading would put time of day back on screen as structure, which is
+       the whole thing this migration removes.
+     - STAY has one part, so the question never arises. */
+  const NIGHTCLUB_SECTION_MIN = 6;
+  const sectioned = cat.id === 'days'
+    || (cat.id === 'nights' && (city.venues.nightclubs || []).length >= NIGHTCLUB_SECTION_MIN);
+  let rows = catVenueEntries(city, cat);
+  /* `whatsnew` venues sit at the END of their chapter with no heading of
+     their own — the chapter is dissolved, so they must not announce
+     themselves as a group. */
+  const buildGroups = () => [...catParts(cat), 'whatsnew']
+    .map(part => ({ part, list: rows.filter(r => r.part === part) }))
     .filter(g => g.list.length);
   /* EVERY ROW CARRIES ITS OWN PART. Sorting used to run inside each group,
      which is right for the Editor's List — the subheads ARE the structure —
@@ -7826,7 +7972,20 @@ function viewCategory(cityId, catId) {
      asked for distance or rating, that arrangement is gone and the headings
      would be describing a grouping that no longer exists. `i` still travels
      with its own part, so every sidecar key resolves exactly as before. */
-  const flat = groups.flatMap(g => g.list.map((v, i) => ({ v, i, part: g.part })));
+  /* THE FILTER RUNS FIRST, and it is honest about what it cannot see.
+     openState() returns null for a venue with no published hours — 355 of
+     907 across the app, and two cities (Orange County, Las Vegas) have none
+     at all. Those venues are EXCLUDED while the filter is on, because a room
+     we cannot prove is open must not be presented as open — and the number
+     excluded is printed under the bar rather than swallowed. */
+  const unknownHours = openTonight
+    ? rows.filter(r => !openState(vkey(city.id, r.part, r.i))).length : 0;
+  if (openTonight) {
+    const st = (r) => openState(vkey(city.id, r.part, r.i));
+    rows = rows.filter(r => { const o = st(r); return o && o.open && !o.temp; });
+  }
+  const groups = buildGroups();
+  const flat = rows.map(r => ({ v: r.v, i: r.i, part: r.part }));
   const K = (o) => vkey(city.id, o.part, o.i);
 
   /* A CHIP MUST NEVER CLAIM A SORT IT IS NOT PERFORMING, and the only
@@ -7848,7 +8007,7 @@ function viewCategory(cityId, catId) {
      than immediately above the card loop is how a photograph ends up wearing
      a distance under "The Edit". */
   distMode = sortNow === 'near';
-  const showHeads = groups.length > 1 && sortNow === 'edit';
+  const showHeads = sectioned && groups.filter(g => g.part !== 'whatsnew').length > 1 && sortNow === 'edit';
 
   /* Stale but present, and already granted? Refresh once and re-render.
      THREE guards, each load-bearing:
@@ -7877,12 +8036,15 @@ function viewCategory(cityId, catId) {
   }
   let feed;
   if (sortNow === 'edit') {
-    feed = groups.map(g => (showHeads ? `<div class="feed-subhead">${PART_HEAD[g.part] || ''}</div>` : '') +
-      g.list.map((v, i) => venueCard(city, g.part, v, i)).join('')).join('');
+    feed = groups.map(g => ((showHeads && PART_HEAD[g.part]) ? `<div class="feed-subhead">${PART_HEAD[g.part]}</div>` : '') +
+      /* o.i, NEVER the map index — a whatsnew venue's index is its position
+         in the whatsnew array, and re-deriving it here would key its
+         photograph, hours and rating to whatever sits at that position in
+         `restaurants`. */
+      g.list.map(o => venueCard(city, o.part, o.v, o.i)).join('')).join('');
   } else {
     let rows = flat.slice();
-    if (sortNow === 'hot') rows.sort((a, b) => hotScore(city.id, b.part, b.i) - hotScore(city.id, a.part, a.i));
-    if (sortNow === 'rated') rows.sort((a, b) => ratedScore(K(b)) - ratedScore(K(a)));
+
     /* Distance resolves through the ORIGINAL collection index, never a
        re-derived one — the sidecars are keyed positionally. A venue with no
        coordinate sinks via Infinity rather than producing NaN comparisons
@@ -7897,16 +8059,19 @@ function viewCategory(cityId, catId) {
 
   const sortbar = `
     <div class="sortbar rise">
-      ${/* Labels are SHORT because a fourth chip does not otherwise fit.
-           Measured in WebKit: the three original labels already used 334 of
-           344 available px at 390px, and every four-chip set with the long
-           names wrapped to a second row, doubling the bar from 43px to 86px
-           on every category screen. 'The Edit' is what the stylesheet's own
-           section comment has always called it. */
-        [['edit', 'The Edit'], ['hot', 'Hot'], ['rated', 'Rated'], ['near', 'Nearest']].map(([id, label]) =>
-        `<button class="schip ${sortNow === id ? 'on' : ''}" data-sort="${id}">${label}</button>`).join('')}
+      ${/* TWO CONTROLS, and they do different jobs: OPEN TONIGHT narrows the
+           set, NEAREST reorders it. Everything else was a sort wearing a
+           filter's clothes.
+           THE LABEL IS "OPEN TONIGHT", NOT "TONIGHT", and the difference is
+           not pedantry: this app holds opening hours and NO availability
+           anywhere — MockProvider is the active booking provider and there
+           can be no backend. "Tonight" would promise a table we cannot know
+           is free, and one empty booking costs more trust than the filter
+           earns. */''}
+      <button class="schip ${openTonight ? 'on' : ''}" data-filter="tonight">Open Tonight</button>
+      <button class="schip ${sortNow === 'near' ? 'on' : ''}" data-sort="${sortNow === 'near' ? 'edit' : 'near'}">Nearest</button>
     </div>
-    ${sortNow === 'hot' ? `<button class="sortstamp" data-sort="hot" aria-label="Refresh the pulse">${I.pulse}Pulse · ${cityClock(cityId)}</button>` : ''}`;
+    ${''/* the Pulse stamp went with Hot */}`;
 
   let ribbon = '';
   if (catId === 'nightclubs') {
@@ -7928,15 +8093,24 @@ function viewCategory(cityId, catId) {
       <div class="sub rise">${cat.sub} — ${city.name}</div>
     </div>
     ${sortbar}
+    ${openTonight ? `<div class="filternote">${flat.length ? `${flat.length} open now` : 'Nothing open now'}${unknownHours ? ` · ${unknownHours} with no published hours` : ''}</div>` : ''}
     ${ribbon}
     <div class="feed${distMode ? ' nearmode' : ''}">
-      ${feed}
+      ${feed || `<div class="emptystate rise"><p>Nothing in ${esc(cat.label)} is open at this hour.</p><button class="pill" data-filter="tonight">Show everything</button></div>`}
     </div>`;
   // chip tap = set order and soft re-render in place (scroll held); tapping
   // the Pulse stamp re-reads the model at the new minute
   /* The Pulse stamp now sits OUTSIDE .sortbar (it was off-screen inside the
      scroller), so the selector must reach both. */
-  $app.querySelectorAll('.sortbar [data-sort], .sortstamp[data-sort]').forEach(b => b.addEventListener('click', () => {
+  /* The filter is a TOGGLE and never persists across launches — see the
+     declaration. Its own handler, because it narrows rather than reorders
+     and must not run any of the geolocation machinery below. */
+  $app.querySelectorAll('[data-filter="tonight"]').forEach(b => b.addEventListener('click', () => {
+    haptic();
+    openTonight = !openTonight;
+    renderRoute(true);
+  }));
+  $app.querySelectorAll('.sortbar [data-sort]').forEach(b => b.addEventListener('click', () => {
     const want = b.dataset.sort;
     haptic();
     /* THE TAP IS THE PERMISSION REQUEST. iOS grants nothing before it and
@@ -7971,13 +8145,14 @@ function viewCategory(cityId, catId) {
                 ? 'This collection is not mapped yet — no distances to sort by'
                 : 'Could not read your location just now — try once more');
         }
-        try { localStorage.setItem('privee-catsort', catSort); } catch (_) {}
         renderRoute(true);
       });
       return;
     }
     catSort = want;
-    try { localStorage.setItem('privee-catsort', catSort); } catch (_) {}
+    /* NOT persisted. The brief forbids Nearest as a launch default, so a
+       stored sort has no reader — and a value written but never read is a
+       trap for the next person, not a feature. */
     renderRoute(true);
   }));
   wireCards();
@@ -9308,7 +9483,9 @@ function viewExplore() {
     <button class="pagesearch" onclick="openSearch()" aria-label="Search">${I.search}</button>
     <div class="pagehead">
       <h1 class="display serif rise">Destinations</h1>
-      <div class="sub rise">${CITIES.length} cities, ${totalVenues} vetted addresses</div>
+      ${/* the venue total is gone with every other count: it flatters at 907
+           and would expose the thin cities the moment anyone divided. */''}
+      <div class="sub rise">${CITIES.length} cities</div>
     </div>
     <div class="tiles">
       ${CITIES.map((c, i) => `
@@ -9657,7 +9834,7 @@ function viewPulse(cityId) {
   const pos = geoUsable();
   if (pos) $app.querySelectorAll('.dist[data-ll]').forEach(el => {
     const [vla, vlo] = el.dataset.ll.split(',').map(Number);
-    el.textContent = kmLabel(kmBetween(pos.la, pos.lo, vla, vlo));
+    el.textContent = kmLabel(kmBetween(pos.la, pos.lo, vla, vlo), cityId);
   });
   $shell.scrollTo(0, 0);
 }
@@ -11475,7 +11652,10 @@ function buildCityIndex() {
         const key = `${c.id}|${part}|${i}`;      // keys use raw part names
         const ll = (typeof VENUE_LL !== 'undefined') && VENUE_LL[key];
         if (!ll || MAPLESS.has(key)) return;
-        entries.push({ key, ll, city: c.id, cat: part, idx: i, v });
+        /* `chapter` is stamped HERE, from the loop that already knows it —
+           a part cannot answer it for `whatsnew`, whose venues are assigned
+           to chapters one at a time. */
+        entries.push({ key, ll, city: c.id, cat: part, chapter: cat.id, idx: i, v });
       });
     }
     if (!entries.length) continue;
@@ -11814,8 +11994,14 @@ function addPin_GL(layer, ll, opts) {
 function sealHtml(group) {
   const lead = group.entries[0];
   const name = lead.v.n;
-  const glyph = MAP_GLYPH[lead.cat] || MAP_GLYPH.dayout;
-  const badge = group.entries.length > 1 ? `<span class="badge">${group.entries.length}</span>` : '';
+  /* `whatsnew` has no glyph of its own — the chapter is dissolved — so a
+     venue that lives in that array borrows its CHAPTER's mark. */
+  const glyph = MAP_GLYPH[lead.cat]
+    || MAP_GLYPH[(((typeof CAT_BY_ID !== 'undefined' && CAT_BY_ID[lead.chapter]) || {}).parts || [])[0]]
+    || MAP_GLYPH.dayout;
+  /* No number on a cluster either — same rule, same reason. The seal still
+     reads as "more than one room here" by being a cluster seal at all. */
+  const badge = '';
   return `<div class="vpin" data-rank="${group.rank}" data-key="${lead.key}">
     <span class="pinbody"><span class="disc">${glyph}${badge}</span><span class="tip"></span></span>
     <span class="lbl"><b>${esc(name)}</b></span>
@@ -11859,8 +12045,11 @@ function showCityPins(cityId) {
 }
 
 const PART_ORDER = ['restaurants', 'lunch', 'lounges', 'nightclubs', 'beach', 'pools', 'spas', 'dayout', 'resorts'];
-const partLabel = (p) => p === 'beach' ? 'Beach' : p === 'pools' ? 'Pools'
-  : (CATEGORIES.find(c => c.id === displayCat(p)) || {}).label || p;
+/* The rail now names the FOUR CHAPTERS, in their fixed order, the same in
+   every city — the map was the last surface still filtering by storage part,
+   which is why Beach and Pools were two chips while Spas and Days Out shared
+   one that printed twice. */
+const chapterLabel = (id) => (CATEGORIES.find(c => c.id === id) || {}).label || id;
 
 /* THE FILTER IS A SET OF PARTS, not one part — because two parts can share a
    label. `spas` and `dayout` are both labelled "By Day" (they are one
@@ -11869,7 +12058,7 @@ const partLabel = (p) => p === 'beach' ? 'Beach' : p === 'pools' ? 'Pools'
    day-out; neither showed the chapter. Beach and Pools keep separate labels
    deliberately and so stay two chips — the rule is one chip per LABEL, not
    one per chapter. */
-const inFilter = (e) => !mapFilter || mapFilter.includes(e.cat);
+const inFilter = (e) => !mapFilter || mapFilter.includes(e.chapter);
 
 /* HOW MANY ROOMS AM I LOOKING AT. Borrowed from the reference Mishari sent:
    its map answers that in words at the bottom of the screen, ours answered
@@ -11882,28 +12071,22 @@ function updateMapCount(cityId) {
   if (!el) return;
   const idx = cityId && buildCityIndex()[cityId];
   if (!idx) { el.textContent = ''; el.classList.remove('show'); return; }
-  const rows = idx.entries.filter(inFilter);
-  const noun = mapFilter ? partLabel(mapFilter[0]).toLowerCase() : 'places';
-  el.textContent = `${rows.length} ${rows.length === 1 ? noun.replace(/s$/, '') : noun}`;
-  el.classList.toggle('show', rows.length > 0);
+  /* THE COUNT IS GONE. Global rule 1 names map labels explicitly: a number
+     flatters at 907 and exposes at 1, and the member is not shopping by
+     volume. The element stays so the layout and its tests keep their anchor;
+     it simply says nothing. */
+  el.textContent = '';
+  el.classList.remove('show');
 }
 
 function renderFilterRail(cityId) {
   const rail = mapDom.querySelector('#mapfilter');
   if (!cityId) { rail.innerHTML = ''; rail.classList.remove('show'); updateMapCount(null); return; }
   const idx = buildCityIndex()[cityId];
-  const parts = [...new Set(idx.entries.map(e => e.cat))]
-    .sort((a, b) => PART_ORDER.indexOf(a) - PART_ORDER.indexOf(b));
-  /* Collapse parts that share a label into ONE chip carrying both. */
-  const byLabel = [];
-  for (const p of parts) {
-    const label = partLabel(p);
-    const hit = byLabel.find(x => x.label === label);
-    if (hit) hit.parts.push(p); else byLabel.push({ label, parts: [p], glyph: MAP_GLYPH[p] || '' });
-  }
-  const isOn = (x) => !!mapFilter && x.parts.every(p => mapFilter.includes(p)) && x.parts.length === mapFilter.length;
+  const present = new Set(idx.entries.map(e => e.chapter));
+  const chapters = CATEGORIES.filter(c => present.has(c.id));
   rail.innerHTML = `<button class="fchip ${!mapFilter ? 'on' : ''}" data-f="">All</button>` +
-    byLabel.map(x => `<button class="fchip ${isOn(x) ? 'on' : ''}" data-f="${x.parts.join(',')}">${x.glyph}<span>${esc(x.label)}</span></button>`).join('');
+    chapters.map(c => `<button class="fchip ${mapFilter && mapFilter[0] === c.id ? 'on' : ''}" data-f="${c.id}">${MAP_GLYPH[(c.parts || [])[0]] || ''}<span>${esc(chapterLabel(c.id))}</span></button>`).join('');
   rail.classList.add('show');
   updateMapCount(cityId);
   // the active chip must be SEEN to be believed — Spas sat off-screen right
@@ -11977,7 +12160,7 @@ function landOnPendingVenue() {
   // arriving FROM a category: the rail pre-selects that category, so the
   // map shows the world you were browsing (Mishari 17:24 — Cipriani should
   // land among Restaurants, not All)
-  mapFilter = [key.split('|')[1]];
+  mapFilter = [chapterOf(key.split('|')[0], key.split('|')[1], +key.split('|')[2])];
   renderFilterRail(mapCityId);
   applyFilter();
   // district framing, not street level: the venue in its neighbourhood with
@@ -12025,11 +12208,14 @@ function reclusterPins() {
     taken.add(i);
     if (members.length === 1) continue;
     members.forEach(m => { m.g.clustered = true; });
-    const count = members.reduce((n, m) => n + m.g.entries.length, 0);
     const lls = members.map(m => m.g.ll);
     addPin(clusterLayer, members[0].g.ll, {
       className: 'cpin-wrap', w: 48, h: 60, ax: 24, ay: 50, z: 400,
-      html: `<div class="vpin cpin"><span class="pinbody"><span class="disc"><b>${count}</b></span><span class="tip"></span></span></div>`,
+      /* The number is gone per global rule 1, but the seal cannot be EMPTY —
+         an unmarked disc is not a quieter cluster, it is a broken pin. It
+         carries a cluster mark instead: the affordance survives ("more than
+         one room is under here, pinch in"), the inventory claim does not. */
+      html: `<div class="vpin cpin"><span class="pinbody"><span class="disc"><b>···</b></span><span class="tip"></span></span></div>`,
       onClick: () => camClusterZoom(lls),
     });
   }
