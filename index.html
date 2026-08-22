@@ -1667,6 +1667,55 @@ body {
 .vcard .dish-mark svg { width: 20px; height: 20px; }
 .vcard .dish-mark:active { transform: scale(0.94); }
 
+/* ---- the distance bubble (Nearest mode only) ---------------------------
+   His brief, verbatim: "in the top right of the image there is a big clear
+   bubble that says as example 2.1 miles away" — because "right now I cannot
+   read anything". It replaces a 12px grey line inside the body text.
+
+   The top-right of the photograph is occupied: save (16), plan (68), dishes
+   (120). The bubble takes that anchor and the stack moves DOWN under it,
+   tightening its own gaps from 10px to 6px so three buttons plus a 52px
+   bubble still finish inside the 16/10 photo (≈221px at the 354px card
+   width) instead of spilling onto the venue's name. Measured, not guessed.
+
+   No backdrop-filter — it re-samples every momentum-scroll frame (WebKit
+   audit F1) — and the shadow is STATIC: nothing here transitions. */
+.vcard .distbubble {
+  position: absolute; top: 14px; right: 14px; z-index: 4;
+  /* ONE LINE, which is also literally his example — "2.1 miles away". Stacked
+     over two lines it stood 52px tall, and 52 + three 42px buttons is 178px of
+     furniture inside a 221px photograph: the fork ended up flush against the
+     bottom corner. On one line the badge is 40px and the stack clears the
+     frame by 19px. Same size of type, more room around it. */
+  display: flex; flex-direction: row; align-items: baseline;
+  max-width: calc(100% - 28px);
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(232, 201, 128, 0.62);
+  background: rgba(11, 10, 8, 0.62);   /* a chip on the photo, never a veil over it */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.42);
+  pointer-events: none;                /* the whole card is the tap target */
+  white-space: nowrap;
+}
+.vcard .distbubble b {
+  font-family: var(--sans);
+  font-size: 20px; font-weight: 600; line-height: 1.05;
+  letter-spacing: 0.2px;
+  color: var(--gold-bright);
+}
+.vcard .distbubble i {
+  font-style: normal;
+  margin-left: 6px;
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(244, 239, 230, 0.74);
+}
+/* 14 top + 40 badge + 10 breath = 64, then 42 + 6 as above. Last button
+   finishes at 202 inside a 221px photo. Measured at 390px, not guessed. */
+.feed.nearmode .vcard .save     { top: 64px; }
+.feed.nearmode .vcard .plan-add { top: 112px; }
+.feed.nearmode .vcard .dish-mark{ top: 160px; }
+
 /* ---- the must-order card ---------------------------------------------- */
 .dishwrap { position: fixed; inset: 0; z-index: 60;
   display: flex; align-items: flex-end; justify-content: center; }
@@ -2670,21 +2719,11 @@ body {
 
 /* pulse row extras: distance + uber */
 .ag-item .pmeta { display: flex; align-items: baseline; gap: 12px; margin-top: 1px; }
-/* .ag-item .dist was scoped to the Pulse row; a bare .dist on a card
-   rendered completely unstyled. The card badge sits on its own line under
-   the hours, in the same faint sans as the rest of the meta. */
-.vcard .dist {
-  /* BLOCK, not inline-block. `.tasting` is inline-block and flowed onto the
-     same line beside it — measured side by side on Messina, Nintai and Skina
-     in Marbella alone. */
-  display: block;
-  margin-top: 5px;
-  font-family: var(--sans);
-  font-size: 9.5px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--gold-bright);
-}
+/* The card's own distance line is GONE — it was a 9.5px whisper between the
+   hours and the blurb, and his verdict on it was "right now I cannot read
+   anything". Replaced by .distbubble on the photograph. .dist survives only
+   on the Pulse row below, where it is one item of a meta line, not the
+   answer to a question the member just asked. */
 .ag-item .dist {
   font-family: var(--sans);
   font-size: 9px;
@@ -4516,8 +4555,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '22 August 2026 · 03:20 CEST';
-const APP_BUILD = 'v562';
+const COLLECTION_UPDATED = '22 August 2026 · 03:58 CEST';
+const APP_BUILD = 'v569';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -7134,7 +7173,14 @@ function kmBetween(la, lo, vla, vlo) {
    fidelity a distance badge needs. */
 const GEO_PRINT_AGE = 15 * 60 * 1000;
 const GEO_HARD_TTL = 24 * 60 * 60 * 1000;
-const GEO_MAX_KM = 250;
+/* THERE IS NO MAXIMUM DISTANCE. There was one — 250km, meant to suppress a
+   badge the member "could not use" — and it is the entire reason he reported
+   "the nearest tab doesn't work". Browse Los Angeles from Kuwait and every
+   venue is 12,900km away, every badge is suppressed, the comparator is
+   all-Infinity, the chip refuses to light, and the tap does NOTHING VISIBLE.
+   The cap turned a correct answer into a broken button. A distance is never
+   wrong for being large; the member is the one who decides whether 12,900km
+   is useful. */
 const GEO_MAX_ACCURACY = 50000;
 
 /* A denial is FATAL for the lifetime of the document — WebKit's
@@ -7145,6 +7191,14 @@ const GEO_MAX_ACCURACY = 50000;
 let geoDenied = false;
 let geoPending = null;
 let geoRefreshed = false;   // one-shot per launch — see viewCategory
+/* THE SNAPSHOT. His words: "snapshot the existing location of where we are
+   exactly one time and then when I click on nearest it will automatically
+   show". Once a fix lands in this launch it is held in memory and every
+   later screen prints from it — no second prompt, no badge that blanks
+   itself fifteen minutes into a browse because the localStorage copy aged
+   out of the print window. It dies with the document, which is the correct
+   lifetime: the next launch takes a new snapshot. */
+let geoSnap = null;
 
 function geoRead() {
   let pos = null;
@@ -7161,6 +7215,9 @@ function geoFresh() {
   const pos = geoRead();
   return (pos && Date.now() - pos.t <= GEO_PRINT_AGE) ? pos : null;
 }
+/* What every user-facing distance reads. The session snapshot outranks the
+   freshness window because it was taken THIS launch, on his tap. */
+function geoUsable() { return geoSnap || geoFresh(); }
 /* Ask the platform. One in-flight promise: four independent
    getCurrentPosition calls on one screen would race four prompts.
    enableHighAccuracy stays FALSE — WebKit maps false to
@@ -7175,7 +7232,9 @@ function geoRequest() {
   geoPending = new Promise((resolve) => {
     navigator.geolocation.getCurrentPosition((p) => {
       geoPending = null;
-      resolve(geoStore(p.coords, p.timestamp));
+      const fix = geoStore(p.coords, p.timestamp);
+      if (fix) geoSnap = fix;
+      resolve(fix);
     }, (err) => {
       geoPending = null;
       /* code 1 covers BOTH a tapped "Don't Allow" AND Location Services
@@ -7210,17 +7269,19 @@ function geoStore(coords, when) {
 }
 /* Distance to a venue, or null when we must not print one. */
 function geoKmTo(key) {
-  const pos = geoFresh();
+  const pos = geoUsable();
   const ll = (typeof VENUE_LL !== 'undefined') && VENUE_LL[key];
   if (!pos || !ll) return null;
-  const km = kmBetween(pos.la, pos.lo, ll[0], ll[1]);
-  return km <= GEO_MAX_KM ? km : null;
+  return kmBetween(pos.la, pos.lo, ll[0], ll[1]);
 }
+/* Thousands are grouped because the cap is gone: "12903 km" is a number the
+   eye has to count digits on, "12,903 km" is read at a glance. */
 const kmLabel = (km) => (Math.round(km * 1000) < 1000 ? Math.round(km * 1000) + ' m'
-  : km < 10 ? km.toFixed(1) + ' km' : Math.round(km) + ' km');
+  : km < 10 ? km.toFixed(1) + ' km'
+  : Math.round(km).toLocaleString('en-GB') + ' km');
 
 function geoOrderedCities() {
-  const pos = geoRead();
+  const pos = geoSnap || geoRead();
   if (!pos) return { cities: CITIES, near: false };
   const scored = CITIES.map(c => {
     const ll = cityCenter(c.id);
@@ -7623,14 +7684,25 @@ function venueCard(city, catId, v, idx) {
       </button>
       <button type="button" class="plan-add" onclick="event.stopPropagation();openBookingSheet('${key}')" aria-label="Book a table"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg></button>
       ${dishesFor(key) ? `<button type="button" class="dish-mark" onclick="event.stopPropagation();openDishes('${key}')" aria-label="Most popular dishes">${I.fork}</button>` : ''}
+      ${(() => {
+        /* THE DISTANCE BUBBLE — top-right of the photograph, in Nearest mode
+           only. His two sentences, both load-bearing: "a big clear bubble
+           that says as example 2.1 miles away", and "right now I cannot read
+           anything". What it replaces was a 12px line of grey type buried
+           between the opening hours and the blurb — legible in a screenshot,
+           invisible on a moving feed. It renders ONLY under the Nearest sort
+           (his "it's only available and showing on the nearest tab"), which
+           is also what keeps it off the other three sorts' photographs. */
+        if (!distMode) return '';
+        const km = geoKmTo(key);
+        return km === null ? '' : `<div class="distbubble"><b>${kmLabel(km)}</b><i>away</i></div>`;
+      })()}
       <div class="body">
         <div class="area">${v.a} · ${city.name}</div>
         <h2 class="name"><span class="nm">${v.n}${openDot(key)}</span>${reserveChip(key)}</h2>
         <span class="stars">${ratingBadge(key)}</span>
         <div class="txt">
           ${hoursLine(key)}
-          ${(() => { const km = geoKmTo(key);
-            return km === null ? '' : `<span class="dist">${kmLabel(km)} away</span>`; })()}
           ${tastingRoom(key) ? '<span class="tasting">Tasting menu only</span>' : ''}
           <p class="blurb">${v.b}</p>
         </div>
@@ -7647,6 +7719,9 @@ function venueCard(city, catId, v, idx) {
    'rated' = Google score weighted by review count (IMDb prior, m=200) so a
              5.0-from-12-reviews cannot outrank a 4.7-from-3,000. */
 let catSort = 'edit';
+/* True only while a category feed is actually rendering distance-sorted.
+   The card reads it to decide whether the photograph carries a bubble. */
+let distMode = false;
 /* Validate, do not trust. A persisted 'near' survives permission being
    revoked, and would render the chip lit while the list silently showed
    collection order — the chip claiming a sort it is not performing. */
@@ -7729,6 +7804,10 @@ function viewCategory(cityId, catId) {
   const kmOf = flat.map(o => geoKmTo(K(o)));
   const anyDistance = kmOf.some(d => d !== null);
   const sortNow = (catSort === 'near' && !anyDistance) ? 'edit' : catSort;
+  /* The bubble and the sort are ONE decision. Setting this anywhere other
+     than immediately above the card loop is how a photograph ends up wearing
+     a distance under "The Edit". */
+  distMode = sortNow === 'near';
   const showHeads = groups.length > 1 && sortNow === 'edit';
 
   /* Stale but present, and already granted? Refresh once and re-render.
@@ -7743,7 +7822,7 @@ function viewCategory(cityId, catId) {
        seconds with a throwing setItem, each one a full feed rebuild;
      - the re-render is gated on geoFresh(), not on the in-memory fix, so a
        failed write cannot trigger a render that changes nothing. */
-  if (catSort === 'near' && !geoFresh() && !geoDenied && !geoRefreshed
+  if (catSort === 'near' && !geoUsable() && !geoDenied && !geoRefreshed
       && navigator.permissions && navigator.permissions.query) {
     geoRefreshed = true;
     const at = location.hash;
@@ -7752,7 +7831,7 @@ function viewCategory(cityId, catId) {
         /* Only repaint the page that asked. A 6s fix can land after the
            member has navigated on, and rebuilding an unrelated feed would
            reorder it under their eyes while the scroll offset is held. */
-        if (geoFresh() && location.hash === at) renderRoute(true);
+        if (geoUsable() && location.hash === at) renderRoute(true);
       }); })
       .catch(() => {});
   }
@@ -7810,7 +7889,7 @@ function viewCategory(cityId, catId) {
     </div>
     ${sortbar}
     ${ribbon}
-    <div class="feed">
+    <div class="feed${distMode ? ' nearmode' : ''}">
       ${feed}
     </div>`;
   // chip tap = set order and soft re-render in place (scroll held); tapping
@@ -7826,13 +7905,32 @@ function viewCategory(cityId, catId) {
        ask at load: in display:standalone the system alert sometimes does not
        render at all and the call never returns, which at load time would be
        an invisible hang on the first screen a member ever sees. */
-    if (want === 'near' && !geoFresh()) {
+    if (want === 'near' && !geoUsable()) {
       geoRequest().then(() => {
         /* Same question the render asks, of the same rows: does ANY venue
            on this screen resolve to a printable distance? */
         const usable = catParts(cat).some(part =>
           (city.venues[part] || []).some((_, i) => geoKmTo(vkey(city.id, part, i)) !== null));
         catSort = usable ? 'near' : catSort;   // no usable distance, no lit chip
+        /* EVERY OUTCOME STATES ITSELF. This tap used to be able to do
+           nothing at all — no sort, no message, no error — which is exactly
+           what he reported as "the nearest tab doesn't work". A chip that
+           declines must say why it declined, in the member's language and
+           without accusing him of anything: iOS routes Location Services
+           being off system-wide to the same PermissionDenied as a tapped
+           "Don't Allow", so the copy can only describe, never blame. */
+        if (!usable) {
+          toast(geoDenied
+            ? 'Location is off — turn it on for PRIVÉE to sort by distance'
+            : !navigator.geolocation
+              ? 'This device cannot share a location'
+              : geoUsable()
+                /* The fix arrived; the COLLECTION is what is missing. Saying
+                   "could not read your location" here would send him to
+                   Settings to fix something that is not broken. */
+                ? 'This collection is not mapped yet — no distances to sort by'
+                : 'Could not read your location just now — try once more');
+        }
         try { localStorage.setItem('privee-catsort', catSort); } catch (_) {}
         renderRoute(true);
       });
@@ -9495,11 +9593,10 @@ function viewPulse(cityId) {
      declined, the Nearest chip was dead for the rest of the page's life
      without the app even recording the refusal. It now paints from the
      cached fix only; the tap on Nearest is the one place we ask. */
-  const pos = geoFresh();
+  const pos = geoUsable();
   if (pos) $app.querySelectorAll('.dist[data-ll]').forEach(el => {
     const [vla, vlo] = el.dataset.ll.split(',').map(Number);
-    const km = kmBetween(pos.la, pos.lo, vla, vlo);
-    if (km <= GEO_MAX_KM) el.textContent = kmLabel(km);
+    el.textContent = kmLabel(kmBetween(pos.la, pos.lo, vla, vlo));
   });
   $shell.scrollTo(0, 0);
 }
@@ -9875,6 +9972,12 @@ function renderRoute(soft = false, dir = 'fwd') {
   // (device 09:37: home landed on the right pixel, flashed Marbella, jumped
   // to top). The landed hash is the authority until history catches up.
   const h = (soft && sbPreRendered.length ? lastRouteHash : location.hash) || '#/';
+  /* distMode belongs to ONE category render and dies with it. venueCard is
+     also the My List and search card, and those feeds carry no .nearmode
+     class — so a mode left standing from the previous screen would paint a
+     bubble straight on top of the heart it is supposed to have displaced.
+     Cleared here, set by viewCategory, never anywhere else. */
+  distMode = false;
   bb('RR', soft ? 'soft' : 'hard', dir, h, 'sT=' + Math.round($shell.scrollTop));
   const parts = h.replace(/^#\//, '').split('/').filter(Boolean);
 
