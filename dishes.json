@@ -1,6 +1,62 @@
 {
- "generated": "2026-08-22T22:06:57Z",
+ "generated": "2026-08-23T00:57:12Z",
  "venues": {
+  "losangeles|lunch|30": {
+   "dishes": [
+    {
+     "n": "The French Dip",
+     "why": "Thin-sliced prime rib on a house-made roll; take the horseradish cream with it.",
+     "src": [
+      "infatuation",
+      "google",
+      "menu"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Knife & Fork Barbecue Ribs",
+     "why": "Slow-cooked pork ribs that earn the name; the most consistently praised plate.",
+     "src": [
+      "lemon8",
+      "google",
+      "gayot",
+      "menu"
+     ],
+     "n_src": 4
+    },
+    {
+     "n": "Spinach & Artichoke Dip",
+     "why": "The starter nearly every table orders, with warm tortilla chips.",
+     "src": [
+      "infatuation",
+      "google",
+      "menu"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Ding’s Crispy Chicken Sandwich",
+     "why": "Buttermilk-fried chicken, baby Swiss, spicy slaw — the one regulars return for.",
+     "src": [
+      "google",
+      "menu"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "The Hawaiian Ribeye — USDA Prime",
+     "why": "The steak to order here: USDA Prime in a pineapple-soy-ginger marinade.",
+     "src": [
+      "infatuation",
+      "gayot",
+      "menu"
+     ],
+     "n_src": 3
+    }
+   ],
+   "checked": "2026-08-23",
+   "status": "ok"
+  },
   "losangeles|lunch|0": {
    "dishes": [
     {
