@@ -1,23 +1,8 @@
 {
- "generated": "2026-08-23T03:33:44Z",
+ "generated": "2026-08-24T03:09:58Z",
  "venues": {
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-08-22": {
-     "hl": "Black Coffee",
-     "line": [
-      "Black Coffee",
-      "Kerri Chandler",
-      "Joeski",
-      "Skepta",
-      "Marsolo",
-      "Locky"
-     ],
-     "party": "Black Coffee",
-     "doors": "23:30",
-     "src": "hiibiza.com",
-     "conf": "high"
-    },
     "2026-08-23": {
      "hl": "CamelPhat",
      "line": [
@@ -145,22 +130,25 @@
      "doors": "23:30",
      "src": "hiibiza.com",
      "conf": "high"
+    },
+    "2026-08-31": {
+     "hl": "Francis Mercier",
+     "line": [
+      "Francis Mercier",
+      "THEMBA",
+      "Andrea Oliva",
+      "Maxi Meraki",
+      "Awen"
+     ],
+     "party": "Francis Mercier presents Solèy",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-08-22": {
-     "hl": "Marco Carola",
-     "line": [
-      "Marco Carola",
-      "Nic Fanciulli"
-     ],
-     "party": "ANTS",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-23": {
      "hl": "Swedish House Mafia",
      "line": [
@@ -261,22 +249,24 @@
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-31": {
+     "hl": "David Guetta",
+     "line": [
+      "David Guetta",
+      "Alesso",
+      "MistaJam",
+      "Paul Reynolds"
+     ],
+     "party": "David Guetta presents F*** Me I'm Famous!",
+     "doors": "17:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-08-22": {
-     "hl": "Roger Sanchez",
-     "line": [
-      "Roger Sanchez",
-      "The Shapeshifters"
-     ],
-     "party": "Flower Power",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-23": {
      "hl": "Solomun",
      "line": [
@@ -376,21 +366,24 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-31": {
+     "hl": "Sonny Fodera",
+     "line": [
+      "Sonny Fodera",
+      "Flight Facilities",
+      "Danny Howard",
+      "Laeet"
+     ],
+     "party": "Sonny Fodera",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-08-22": {
-     "hl": "Dalex",
-     "line": [
-      "Dalex"
-     ],
-     "party": "BRESH",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-23": {
      "hl": "Ricardo Villalobos",
      "line": [
@@ -413,13 +406,11 @@
      "line": [
       "Ben Hemsley",
       "Black Traffic",
-      "Diffrent",
-      "Jezza & Jod",
-      "Viki Dos Santos"
+      "Diffrent"
      ],
      "party": "NRG",
      "doors": "23:00",
-     "src": "amnesia.es",
+     "src": "ibiza-spotlight.com",
      "conf": "high"
     },
     "2026-08-25": {
@@ -501,21 +492,23 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-08-31": {
+     "hl": "Ben Hemsley",
+     "line": [
+      "Ben Hemsley",
+      "Benwal B2B Dart B2B Kyle Starkey",
+      "Denis Sulta B2B Robbie Doherty"
+     ],
+     "party": "NRG",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "marbella|nightclubs|0": {
    "nights": {
-    "2026-08-22": {
-     "hl": "Utopic Shimza",
-     "line": [
-      "Shimza"
-     ],
-     "party": "Utopic",
-     "doors": "23:45",
-     "src": "mandalatickets.com",
-     "conf": "high"
-    },
     "2026-08-23": {
      "hl": "Ancestral Soul",
      "line": [
@@ -580,19 +573,6 @@
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-08-22": {
-     "hl": "Benny Benassi",
-     "line": [
-      "Benny Benassi",
-      "Essentia",
-      "Squ4re",
-      "Zyrak"
-     ],
-     "party": "",
-     "doors": "01:45",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
     "2026-08-23": {
      "hl": "XLSIOR Festival",
      "line": [],
@@ -681,16 +661,6 @@
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-08-22": {
-     "hl": "Don Toliver",
-     "line": [
-      "Don Toliver"
-     ],
-     "party": "",
-     "doors": "23:00",
-     "src": "11miami.com",
-     "conf": "high"
-    },
     "2026-08-23": {
      "hl": "DJ Stretch",
      "line": [
@@ -765,14 +735,6 @@
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-08-22": {
-     "hl": "Kōdō",
-     "line": [],
-     "party": "Kōdō",
-     "doors": "23:45",
-     "src": "ibiza-spotlight.com",
-     "conf": "med"
-    },
     "2026-08-23": {
      "hl": "Travieso",
      "line": [],
@@ -831,17 +793,6 @@
   },
   "aspen|nightclubs|0": {
    "nights": {
-    "2026-08-22": {
-     "hl": "Natti b2b Takki",
-     "line": [
-      "Natti",
-      "Takki"
-     ],
-     "party": "Locals Night",
-     "doors": "21:00",
-     "src": "bellyupaspen.com",
-     "conf": "high"
-    },
     "2026-08-28": {
      "hl": "The Knocks",
      "line": [
