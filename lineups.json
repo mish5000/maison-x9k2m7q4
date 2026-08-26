@@ -1,25 +1,8 @@
 {
- "generated": "2026-08-24T03:09:58Z",
+ "generated": "2026-08-25T03:10:31Z",
  "venues": {
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-08-23": {
-     "hl": "CamelPhat",
-     "line": [
-      "CamelPhat",
-      "Maz",
-      "Scenarios",
-      "Indira Paganotto",
-      "Kobosil",
-      "Hyperloop",
-      "Riva Starr",
-      "Nice7"
-     ],
-     "party": "CamelPhat present Summer of Love",
-     "doors": "23:30",
-     "src": "hiibiza.com",
-     "conf": "high"
-    },
     "2026-08-24": {
      "hl": "Francis Mercier",
      "line": [
@@ -40,13 +23,11 @@
       "East End Dubs B2B Ilario Alicante",
       "Mason Collective",
       "Evie",
-      "Paco Osuna",
-      "RSquared",
-      "David Lowe"
+      "Paco Osuna"
      ],
      "party": "East End Dubs presents Eastenderz",
      "doors": "23:30",
-     "src": "hiibiza.com",
+     "src": "ibiza-spotlight.com",
      "conf": "high"
     },
     "2026-08-26": {
@@ -144,23 +125,27 @@
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-01": {
+     "hl": "East End Dubs",
+     "line": [
+      "East End Dubs",
+      "Miguelle & Tons",
+      "Job De Jong",
+      "Delilah",
+      "Paco Osuna",
+      "Joëlla Jackson",
+      "Easttown"
+     ],
+     "party": "East End Dubs presents Eastenderz",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-08-23": {
-     "hl": "Swedish House Mafia",
-     "line": [
-      "Swedish House Mafia",
-      "Bea Sylvan",
-      "Nosefine"
-     ],
-     "party": "Swedish House Mafia",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-24": {
      "hl": "David Guetta",
      "line": [
@@ -179,7 +164,7 @@
      "line": [
       "Calvin Harris",
       "Romy",
-      "Tyson O'Brien",
+      "Tyson O’Brien",
       "Siân Owen"
      ],
      "party": "Calvin Harris — Tuesday Closing Party",
@@ -267,17 +252,6 @@
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-08-23": {
-     "hl": "Solomun",
-     "line": [
-      "Solomun",
-      "Max Styler"
-     ],
-     "party": "Solomun +1",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-24": {
      "hl": "Sonny Fodera",
      "line": [
@@ -379,28 +353,24 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-01": {
+     "hl": "Gordo",
+     "line": [
+      "Gordo",
+      "Nicole Moudaber",
+      "Sacchi",
+      "Harvy Valencia"
+     ],
+     "party": "Gordo presents Taraka",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-08-23": {
-     "hl": "Ricardo Villalobos",
-     "line": [
-      "Ricardo Villalobos",
-      "Fumiya Tanaka",
-      "Laidlaw B2B Kepler",
-      "Germano Ventura",
-      "Sara Landry",
-      "Clara Cuvé",
-      "Aida Arko",
-      "Juliet Fox"
-     ],
-     "party": "Pyramid",
-     "doors": "23:00",
-     "src": "amnesia.es",
-     "conf": "high"
-    },
     "2026-08-24": {
      "hl": "Ben Hemsley",
      "line": [
@@ -420,14 +390,11 @@
       "Enzo Siragusa",
       "Archie Hamilton B2B Fleur Shore",
       "Marco Tropeano",
-      "Freddy K",
-      "ALARICO",
-      "ANNĒ",
-      "Antonio Pepe"
+      "Freddy K"
      ],
-     "party": "Metamorfosi",
+     "party": "Joseph Capriati presents Metamorfosi",
      "doors": "23:00",
-     "src": "amnesia.es",
+     "src": "ibiza-spotlight.com",
      "conf": "high"
     },
     "2026-08-26": {
@@ -504,21 +471,23 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-01": {
+     "hl": "Joseph Capriati",
+     "line": [
+      "Joseph Capriati B2B Josh Baker",
+      "Gennaro",
+      "Ben Klock"
+     ],
+     "party": "Joseph Capriati presents Metamorfosi",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "marbella|nightclubs|0": {
    "nights": {
-    "2026-08-23": {
-     "hl": "Ancestral Soul",
-     "line": [
-      "Ancestral Soul"
-     ],
-     "party": "",
-     "doors": "23:45",
-     "src": "mandalatickets.com",
-     "conf": "high"
-    },
     "2026-08-24": {
      "hl": "Alex Puche",
      "line": [
@@ -573,14 +542,6 @@
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-08-23": {
-     "hl": "XLSIOR Festival",
-     "line": [],
-     "party": "XLSIOR",
-     "doors": "01:45",
-     "src": "cavoparadiso.gr",
-     "conf": "med"
-    },
     "2026-08-24": {
      "hl": "Mamacita",
      "line": [],
@@ -656,21 +617,34 @@
      "doors": "23:59",
      "src": "cavoparadiso.gr",
      "conf": "high"
+    },
+    "2026-09-01": {
+     "hl": "Eran",
+     "line": [
+      "Eran",
+      "Asher Swissa",
+      "Maor Buzaglo"
+     ],
+     "party": "",
+     "doors": "23:59",
+     "src": "cavoparadiso.gr",
+     "conf": "high"
+    },
+    "2026-09-02": {
+     "hl": "Marasi",
+     "line": [
+      "Marasi",
+      "Novak"
+     ],
+     "party": "",
+     "doors": "23:59",
+     "src": "cavoparadiso.gr",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-08-23": {
-     "hl": "DJ Stretch",
-     "line": [
-      "DJ Stretch"
-     ],
-     "party": "",
-     "doors": "23:00",
-     "src": "11miami.com",
-     "conf": "high"
-    },
     "2026-08-24": {
      "hl": "Chizzle",
      "line": [
@@ -735,14 +709,6 @@
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-08-23": {
-     "hl": "Travieso",
-     "line": [],
-     "party": "Travieso",
-     "doors": "23:45",
-     "src": "ibiza-spotlight.com",
-     "conf": "med"
-    },
     "2026-08-25": {
      "hl": "Arkadyan",
      "line": [
@@ -788,6 +754,16 @@
      "doors": "23:45",
      "src": "ibiza-spotlight.com",
      "conf": "med"
+    },
+    "2026-09-01": {
+     "hl": "Arkadyan",
+     "line": [
+      "Arkadyan"
+     ],
+     "party": "Arkadyan presents Voyage",
+     "doors": "23:45",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
