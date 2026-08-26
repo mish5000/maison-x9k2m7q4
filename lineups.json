@@ -1,22 +1,8 @@
 {
- "generated": "2026-08-25T03:10:31Z",
+ "generated": "2026-08-26T03:21:49Z",
  "venues": {
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-08-24": {
-     "hl": "Francis Mercier",
-     "line": [
-      "Francis Mercier B2B Fideles",
-      "Alex Wann",
-      "Faul & Wad B2B Maesic",
-      "Andrea Oliva",
-      "Marten Lou"
-     ],
-     "party": "Francis Mercier presents Solèy",
-     "doors": "23:30",
-     "src": "hiibiza.com",
-     "conf": "high"
-    },
     "2026-08-25": {
      "hl": "East End Dubs",
      "line": [
@@ -34,16 +20,14 @@
      "hl": "James Hype",
      "line": [
       "James Hype",
-      "MEDUZA",
       "Tini Gessler",
       "8Kays",
       "Jonas Blue",
-      "Prunk",
-      "Storm Mollison"
+      "Prunk"
      ],
      "party": "MEDUZA & James Hype present Our House",
      "doors": "23:30",
-     "src": "hiibiza.com",
+     "src": "ibiza-spotlight.com",
      "conf": "high"
     },
     "2026-08-27": {
@@ -141,24 +125,25 @@
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-02": {
+     "hl": "Meduza",
+     "line": [
+      "Meduza",
+      "James Hype",
+      "Tita Lau",
+      "Jonas Blue",
+      "Sem Jacobs"
+     ],
+     "party": "MEDUZA & James Hype present Our House",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-08-24": {
-     "hl": "David Guetta",
-     "line": [
-      "David Guetta",
-      "Disciples",
-      "Majestic",
-      "Paul Reynolds"
-     ],
-     "party": "David Guetta presents F*** Me I'm Famous!",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-25": {
      "hl": "Calvin Harris",
      "line": [
@@ -247,24 +232,24 @@
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-02": {
+     "hl": "Armand Van Helden",
+     "line": [
+      "Armand Van Helden",
+      "Dombresky",
+      "Rendher",
+      "Tini Gessler"
+     ],
+     "party": "elrow Outdoors — Delusionville",
+     "doors": "17:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-08-24": {
-     "hl": "Sonny Fodera",
-     "line": [
-      "Sonny Fodera",
-      "Eats Everything",
-      "Danny Howard",
-      "Laeet"
-     ],
-     "party": "Sonny Fodera",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-25": {
      "hl": "Gordo",
      "line": [
@@ -366,23 +351,24 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-02": {
+     "hl": "Mau P",
+     "line": [
+      "Mau P",
+      "Loco Dice",
+      "Toman",
+      "Discip"
+     ],
+     "party": "Mau P presents Baddest Behaviour",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-08-24": {
-     "hl": "Ben Hemsley",
-     "line": [
-      "Ben Hemsley",
-      "Black Traffic",
-      "Diffrent"
-     ],
-     "party": "NRG",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-25": {
      "hl": "Joseph Capriati",
      "line": [
@@ -483,21 +469,24 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-02": {
+     "hl": "Adam Beyer",
+     "line": [
+      "Adam Beyer",
+      "Eric Prydz",
+      "Innellea",
+      "Dreya V"
+     ],
+     "party": "RESISTANCE Ibiza",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "marbella|nightclubs|0": {
    "nights": {
-    "2026-08-24": {
-     "hl": "Alex Puche",
-     "line": [
-      "Alex Puche"
-     ],
-     "party": "",
-     "doors": "23:45",
-     "src": "mandalatickets.com",
-     "conf": "high"
-    },
     "2026-08-25": {
      "hl": "Vite",
      "line": [
@@ -542,14 +531,6 @@
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-08-24": {
-     "hl": "Mamacita",
-     "line": [],
-     "party": "Mamacita",
-     "doors": "01:45",
-     "src": "cavoparadiso.gr",
-     "conf": "med"
-    },
     "2026-08-25": {
      "hl": "Armand Van Helden",
      "line": [
@@ -645,16 +626,6 @@
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-08-24": {
-     "hl": "Chizzle",
-     "line": [
-      "Chizzle"
-     ],
-     "party": "",
-     "doors": "23:00",
-     "src": "11miami.com",
-     "conf": "high"
-    },
     "2026-08-25": {
      "hl": "Richard Fraioli",
      "line": [
@@ -761,6 +732,16 @@
       "Arkadyan"
      ],
      "party": "Arkadyan presents Voyage",
+     "doors": "23:45",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-09-02": {
+     "hl": "Toy Room",
+     "line": [
+      "Toy Room"
+     ],
+     "party": "Toy Room",
      "doors": "23:45",
      "src": "ibiza-spotlight.com",
      "conf": "high"
