@@ -1,27 +1,8 @@
 {
- "generated": "2026-08-31T03:24:57Z",
+ "generated": "2026-09-02T03:18:05Z",
  "venues": {
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-08-30": {
-     "hl": "CamelPhat",
-     "line": [
-      "CamelPhat",
-      "Adam Ten",
-      "Nick Curly",
-      "Indira Paganotto",
-      "Elli Acula",
-      "KiNK",
-      "Marhu",
-      "Lauren Mia",
-      "Victoria Why Not",
-      "Summer Ghemati"
-     ],
-     "party": "CamelPhat present Summer of Love",
-     "doors": "23:30",
-     "src": "hiibiza.com",
-     "conf": "high"
-    },
     "2026-08-31": {
      "hl": "Francis Mercier",
      "line": [
@@ -104,23 +85,23 @@
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-07": {
+     "hl": "Francis Mercier",
+     "line": [
+      "Francis Mercier B2B Fideles",
+      "Alex Twin B2B Mednas",
+      "Andrea Oliva"
+     ],
+     "party": "Francis Mercier presents Solèy",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-08-30": {
-     "hl": "Swedish House Mafia",
-     "line": [
-      "Swedish House Mafia",
-      "Bea Sylvan",
-      "Nosefine"
-     ],
-     "party": "Swedish House Mafia",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-31": {
      "hl": "David Guetta",
      "line": [
@@ -198,22 +179,24 @@
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-07": {
+     "hl": "David Guetta",
+     "line": [
+      "David Guetta",
+      "Oliver Heldens",
+      "DJs From Mars",
+      "Paul Reynolds"
+     ],
+     "party": "David Guetta presents F*** Me I'm Famous!",
+     "doors": "17:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-08-30": {
-     "hl": "Solomun",
-     "line": [
-      "Solomun",
-      "Barry Can't Swim"
-     ],
-     "party": "Solomun +1",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-31": {
      "hl": "Sonny Fodera",
      "line": [
@@ -301,25 +284,24 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-07": {
+     "hl": "Sonny Fodera",
+     "line": [
+      "Sonny Fodera",
+      "TSHA",
+      "Danny Howard",
+      "Laeet"
+     ],
+     "party": "Sonny Fodera",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-08-30": {
-     "hl": "Ben Sterling",
-     "line": [
-      "Ben Sterling",
-      "Gaskin",
-      "999999999",
-      "Nina Kraviz",
-      "Yanamaste"
-     ],
-     "party": "Pyramid",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-08-31": {
      "hl": "Ben Hemsley",
      "line": [
@@ -407,23 +389,24 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-07": {
+     "hl": "Ben Hemsley",
+     "line": [
+      "Ben Hemsley B2B Alan Fitzpatrick",
+      "Black Traffic B2B Jezza & Jod",
+      "blk.",
+      "Paige Tomlinson"
+     ],
+     "party": "NRG",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-08-30": {
-     "hl": "Grossomoddo",
-     "line": [
-      "Grossomoddo",
-      "Vanco",
-      "Freespirit"
-     ],
-     "party": "",
-     "doors": "23:59",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
     "2026-09-01": {
      "hl": "Eran",
      "line": [
