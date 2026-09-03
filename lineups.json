@@ -1,38 +1,8 @@
 {
- "generated": "2026-09-02T03:18:05Z",
+ "generated": "2026-09-03T03:13:21Z",
  "venues": {
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-08-31": {
-     "hl": "Francis Mercier",
-     "line": [
-      "Francis Mercier",
-      "THEMBA",
-      "Andrea Oliva",
-      "Maxi Meraki",
-      "Awen"
-     ],
-     "party": "Francis Mercier presents Solèy",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
-    "2026-09-01": {
-     "hl": "East End Dubs",
-     "line": [
-      "East End Dubs",
-      "Miguelle & Tons",
-      "Job De Jong",
-      "Delilah",
-      "Paco Osuna",
-      "Joëlla Jackson",
-      "Easttown"
-     ],
-     "party": "East End Dubs presents Eastenderz",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-09-02": {
      "hl": "Meduza",
      "line": [
@@ -97,24 +67,27 @@
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-08": {
+     "hl": "East End Dubs",
+     "line": [
+      "East End Dubs",
+      "Luuk Van Dijk B2B Toman",
+      "Jazzy",
+      "Ryan Nicholls",
+      "Paco Osuna",
+      "Melanie Ribbe",
+      "Melissa Mahilaa"
+     ],
+     "party": "East End Dubs presents Eastenderz",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-08-31": {
-     "hl": "David Guetta",
-     "line": [
-      "David Guetta",
-      "Jonas Blue",
-      "MistaJam",
-      "Paul Reynolds"
-     ],
-     "party": "David Guetta presents F*** Me I'm Famous!",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-09-02": {
      "hl": "Armand Van Helden",
      "line": [
@@ -197,32 +170,6 @@
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-08-31": {
-     "hl": "Sonny Fodera",
-     "line": [
-      "Sonny Fodera",
-      "Flight Facilities",
-      "Danny Howard",
-      "Laeet"
-     ],
-     "party": "Sonny Fodera",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
-    "2026-09-01": {
-     "hl": "Gordo",
-     "line": [
-      "Gordo",
-      "Nicole Moudaber",
-      "Sacchi",
-      "Harvy Valencia"
-     ],
-     "party": "Gordo presents Taraka",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-09-02": {
      "hl": "Mau P",
      "line": [
@@ -297,35 +244,25 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-08": {
+     "hl": "Gordo",
+     "line": [
+      "Gordo",
+      "Shimza",
+      "Alex Wann",
+      "Arodes",
+      "Manda Moor"
+     ],
+     "party": "Gordo presents Taraka",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-08-31": {
-     "hl": "Ben Hemsley",
-     "line": [
-      "Ben Hemsley",
-      "Benwal B2B Dart B2B Kyle Starkey",
-      "Denis Sulta B2B Robbie Doherty"
-     ],
-     "party": "NRG",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
-    "2026-09-01": {
-     "hl": "Joseph Capriati",
-     "line": [
-      "Joseph Capriati B2B Josh Baker",
-      "Gennaro",
-      "Ben Klock"
-     ],
-     "party": "Joseph Capriati presents Metamorfosi",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-09-02": {
      "hl": "Adam Beyer",
      "line": [
@@ -402,41 +339,31 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-08": {
+     "hl": "Joseph Capriati",
+     "line": [
+      "Joseph Capriati B2B Seth Troxler",
+      "Maceo Plex",
+      "Joseph Capriati B2B Ryan Elliott",
+      "Dubfire",
+      "Sasha Carassi"
+     ],
+     "party": "Joseph Capriati presents Metamorfosi",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-09-01": {
-     "hl": "Eran",
-     "line": [
-      "Eran",
-      "Asher Swissa",
-      "Maor Buzaglo"
-     ],
-     "party": "",
-     "doors": "23:59",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
     "2026-09-02": {
      "hl": "Marasi",
      "line": [
       "Marasi",
       "Novak",
       "Mark Code"
-     ],
-     "party": "",
-     "doors": "23:59",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
-    "2026-08-31": {
-     "hl": "Richie Hawtin",
-     "line": [
-      "Richie Hawtin",
-      "Sama' Abdulhadi",
-      "Egmond"
      ],
      "party": "",
      "doors": "23:59",
@@ -481,16 +408,6 @@
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-09-01": {
-     "hl": "Arkadyan",
-     "line": [
-      "Arkadyan"
-     ],
-     "party": "Arkadyan presents Voyage",
-     "doors": "23:45",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-09-02": {
      "hl": "Toy Room",
      "line": [
@@ -517,6 +434,16 @@
       "Sebastian Gamboa"
      ],
      "party": "Vintage",
+     "doors": "23:45",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-09-08": {
+     "hl": "Arkadyan",
+     "line": [
+      "Arkadyan"
+     ],
+     "party": "Arkadyan presents Voyage",
      "doors": "23:45",
      "src": "ibiza-spotlight.com",
      "conf": "high"
