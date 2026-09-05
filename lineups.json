@@ -1,34 +1,8 @@
 {
- "generated": "2026-09-03T03:13:21Z",
+ "generated": "2026-09-05T03:06:02Z",
  "venues": {
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-09-02": {
-     "hl": "Meduza",
-     "line": [
-      "Meduza",
-      "James Hype",
-      "Tita Lau",
-      "Jonas Blue",
-      "Sem Jacobs"
-     ],
-     "party": "MEDUZA & James Hype present Our House",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
-    "2026-09-03": {
-     "hl": "HUGEL",
-     "line": [
-      "HUGEL",
-      "Chus",
-      "Miss Monique"
-     ],
-     "party": "HUGEL presents Make The Girls Dance",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-09-04": {
      "hl": "CamelPhat",
      "line": [
@@ -83,37 +57,25 @@
      "doors": "23:30",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-09": {
+     "hl": "Meduza",
+     "line": [
+      "Meduza",
+      "James Hype",
+      "Magdalena",
+      "Jonas Blue",
+      "Marten Lou"
+     ],
+     "party": "MEDUZA & James Hype present Our House",
+     "doors": "23:30",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-09-02": {
-     "hl": "Armand Van Helden",
-     "line": [
-      "Armand Van Helden",
-      "Dombresky",
-      "Rendher",
-      "Tini Gessler"
-     ],
-     "party": "elrow Outdoors — Delusionville",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
-    "2026-09-03": {
-     "hl": "Martin Garrix",
-     "line": [
-      "Martin Garrix",
-      "Benny Benassi",
-      "Goodboys",
-      "Mauro Venti"
-     ],
-     "party": "Martin Garrix",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-09-04": {
      "hl": "Calvin Harris",
      "line": [
@@ -165,37 +127,22 @@
      "doors": "17:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-09": {
+     "hl": "Dimitri Vegas & Like Mike",
+     "line": [
+      "Dimitri Vegas & Like Mike",
+      "Bassjackers"
+     ],
+     "party": "Tomorrowland presents Dimitri Vegas & Like Mike",
+     "doors": "17:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-02": {
-     "hl": "Mau P",
-     "line": [
-      "Mau P",
-      "Loco Dice",
-      "Toman",
-      "Discip"
-     ],
-     "party": "Mau P presents Baddest Behaviour",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
-    "2026-09-03": {
-     "hl": "Purple Disco Machine",
-     "line": [
-      "Purple Disco Machine",
-      "2manydjs",
-      "Brother Macklovitch",
-      "David Bay"
-     ],
-     "party": "Pure Pacha presents Purple Disco Machine",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-09-04": {
      "hl": "Marco Carola",
      "line": [
@@ -258,45 +205,32 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-09": {
+     "hl": "Mau P",
+     "line": [
+      "Mau P",
+      "DJ Tennis",
+      "Nic Fanciulli",
+      "Mita Gami",
+      "Brunello"
+     ],
+     "party": "Mau P presents Baddest Behaviour",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-09-02": {
-     "hl": "Adam Beyer",
-     "line": [
-      "Adam Beyer",
-      "Eric Prydz",
-      "Innellea",
-      "Dreya V"
-     ],
-     "party": "RESISTANCE Ibiza",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
-    "2026-09-03": {
-     "hl": "Josh Baker",
-     "line": [
-      "Josh Baker B2B Enzo Siragusa",
-      "Christian AB",
-      "Laidlaw",
-      "Alexandria"
-     ],
-     "party": "Josh Baker presents You&Me",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-09-04": {
      "hl": "David Morales",
      "line": [
       "David Morales",
+      "Horse Meat Disco",
       "Jayda G",
-      "Seamus Haji",
-      "Fat Tony",
-      "Horse Meat Disco"
+      "Seamus Haji"
      ],
      "party": "Glitterbox",
      "doors": "23:30",
@@ -304,9 +238,9 @@
      "conf": "high"
     },
     "2026-09-05": {
-     "hl": "BRESH",
+     "hl": "Eladio Carrión",
      "line": [
-      "BRESH"
+      "Eladio Carrión"
      ],
      "party": "BRESH Ibiza Closing Party",
      "doors": "23:30",
@@ -353,23 +287,24 @@
      "doors": "23:00",
      "src": "ibiza-spotlight.com",
      "conf": "high"
+    },
+    "2026-09-09": {
+     "hl": "ARTBAT",
+     "line": [
+      "ARTBAT",
+      "Adam Beyer",
+      "Massano B2B Stephan Bodzin",
+      "Olympe"
+     ],
+     "party": "RESISTANCE Ibiza",
+     "doors": "23:00",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
     }
    }
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-09-02": {
-     "hl": "Marasi",
-     "line": [
-      "Marasi",
-      "Novak",
-      "Mark Code"
-     ],
-     "party": "",
-     "doors": "23:59",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
     "2026-09-04": {
      "hl": "Tom Enzy",
      "line": [
@@ -408,26 +343,6 @@
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-09-02": {
-     "hl": "Toy Room",
-     "line": [
-      "Toy Room"
-     ],
-     "party": "Toy Room",
-     "doors": "23:45",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
-    "2026-09-03": {
-     "hl": "Nomis",
-     "line": [
-      "Nomis"
-     ],
-     "party": "Tiempo",
-     "doors": "23:45",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-09-04": {
      "hl": "Sebastian Gamboa",
      "line": [
@@ -444,6 +359,16 @@
       "Arkadyan"
      ],
      "party": "Arkadyan presents Voyage",
+     "doors": "23:45",
+     "src": "ibiza-spotlight.com",
+     "conf": "high"
+    },
+    "2026-09-09": {
+     "hl": "Toy Room",
+     "line": [
+      "Toy Room"
+     ],
+     "party": "Toy Room",
      "doors": "23:45",
      "src": "ibiza-spotlight.com",
      "conf": "high"
