@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-23T00:57:12Z",
+ "generated": "2026-09-07T11:26:26Z",
  "venues": {
   "losangeles|lunch|30": {
    "dishes": [
@@ -7422,6 +7422,116 @@
     }
    ],
    "checked": "2026-07-31",
+   "status": "thin"
+  },
+  "losangeles|restaurants|27": {
+   "dishes": [
+    {
+     "n": "Signature Hummus",
+     "why": "The most-named plate in the whole review corpus — the anchor of the mezze table.",
+     "src": [
+      "google",
+      "menu",
+      "press"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Herbed Labneh",
+     "why": "The second dip diners name, and the one that goes with the lamb.",
+     "src": [
+      "google",
+      "menu",
+      "press"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Mezze Sampler",
+     "why": "The composite of the dips — a table ordering this need not order them separately.",
+     "src": [
+      "google",
+      "menu",
+      "press"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Whole Lamb Rack",
+     "why": "Diners call it the lamb chops, the menu calls it this. The one large plate with consensus.",
+     "src": [
+      "google",
+      "menu",
+      "press"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Calabra Burger",
+     "why": "The off-Mediterranean outlier on a Mediterranean roof, and consistently recommended.",
+     "src": [
+      "google",
+      "menu",
+      "press"
+     ],
+     "n_src": 3
+    }
+   ],
+   "checked": "2026-09-07",
+   "status": "ok"
+  },
+  "losangeles|restaurants|28": {
+   "dishes": [
+    {
+     "n": "Charred Broccoli",
+     "why": "Best-supported plate here, and one of the few that survived the kitchen's rewrite.",
+     "src": [
+      "google",
+      "menu",
+      "press",
+      "diner"
+     ],
+     "n_src": 4
+    },
+    {
+     "n": "Yellowtail",
+     "why": "The raw starter diners keep naming; still on the current menu.",
+     "src": [
+      "google",
+      "menu",
+      "press"
+     ],
+     "n_src": 3
+    },
+    {
+     "n": "Bone-In Pork Chop",
+     "why": "Named by diners, by no critic. Rests on the review corpus and the live menu.",
+     "src": [
+      "google",
+      "menu"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "Saffron Risotto",
+     "why": "From the Italian-leaning rewrite — thin support, but it is on the menu now.",
+     "src": [
+      "google",
+      "menu"
+     ],
+     "n_src": 2
+    },
+    {
+     "n": "French Toast",
+     "why": "The brunch order, on two independent diner mentions.",
+     "src": [
+      "google",
+      "menu"
+     ],
+     "n_src": 2
+    }
+   ],
+   "checked": "2026-09-07",
    "status": "thin"
   }
  }
