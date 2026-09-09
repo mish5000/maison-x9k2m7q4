@@ -1,0 +1,25 @@
+# Claude Code — machine-local, never commit
+.claude/settings.local.json
+CLAUDE.local.md
+
+# Secrets (this app has none, but keep the guard)
+.env
+.env.*
+!.env.example
+secrets/
+
+# macOS
+.DS_Store
+
+# node (only used for the optional test/tooling scripts, never by the page)
+node_modules/
+dist/
+build/
+coverage/
+.next/
+.nuxt/
+.turbo/
+*.tsbuildinfo
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
