@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Strict CSP: only this site's own files, no external scripts, no network calls.
+       Never add external scripts to this project. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'; manifest-src 'self'; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#1d4ed8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="QuickCal">
+  <meta name="referrer" content="no-referrer">
+  <title>QuickCal</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <style>
+    :root {
+      --bg: #f5f5f7; --card: #ffffff; --text: #111827; --muted: #6b7280; --line: #d1d5db;
+      --accent: #1d4ed8; --accent-text: #ffffff; --ios: #111827; --google: #0b8043;
+      --warn-bg: #fff7ed; --warn-text: #9a3412; --tag-bg: #fef3c7; --tag-text: #92400e;
+      --danger: #b91c1c; --field: #ffffff;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #000000; --card: #1c1c1e; --text: #f5f5f7; --muted: #9ca3af; --line: #3a3a3c;
+        --accent: #3b82f6; --accent-text: #ffffff; --ios: #f5f5f7; --google: #34a853;
+        --warn-bg: #3a2a14; --warn-text: #fcd34d; --tag-bg: #4a3a12; --tag-text: #fde68a;
+        --danger: #f87171; --field: #2c2c2e;
+      }
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font: 17px/1.4 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+    main { max-width: 640px; margin: 0 auto; padding: 16px 16px 48px; }
+    header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+    h1 { font-size: 24px; margin: 8px 0; }
+    .muted { color: var(--muted); font-size: 14px; }
+    textarea, input, select {
+      width: 100%; font: inherit; color: var(--text); background: var(--field);
+      border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin-top: 4px;
+    }
+    textarea { min-height: 180px; resize: vertical; font-size: 17px; }
+    #msg { min-height: 220px; }
+    label { display: block; font-size: 14px; color: var(--muted); margin-top: 10px; }
+    label.check { display: flex; align-items: center; gap: 10px; margin-top: 26px; color: var(--text); font-size: 17px; }
+    label.check input { width: 24px; height: 24px; margin: 0; }
+    .row { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    button, .btn {
+      appearance: none; -webkit-appearance: none; font: inherit; font-weight: 600; cursor: pointer;
+      border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; min-height: 52px;
+      background: var(--card); color: var(--text); text-decoration: none; text-align: center;
+      display: inline-flex; align-items: center; justify-content: center; flex: 1 1 auto;
+    }
+    button.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); font-size: 19px; flex: 2 1 60%; }
+    button.ghost { background: transparent; }
+    .btn.ios { background: var(--ios); color: var(--bg); border-color: var(--ios); }
+    .btn.google { background: var(--google); color: #fff; border-color: var(--google); }
+    .btn.share { }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; margin-top: 16px;
+    }
+    .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .when { font-weight: 700; font-size: 18px; }
+    .src { margin-top: 2px; }
+    button.del { flex: 0 0 auto; min-height: 36px; padding: 6px 12px; color: var(--danger); border-color: transparent; background: transparent; font-weight: 500; }
+    .tag { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+      background: var(--tag-bg); color: var(--tag-text); border-radius: 999px; padding: 2px 8px; margin-left: 6px; vertical-align: middle; }
+    .flags { list-style: none; padding: 10px 12px; margin: 12px 0 0; background: var(--warn-bg); color: var(--warn-text); border-radius: 12px; font-size: 14px; }
+    .flags li + li { margin-top: 4px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .actions .btn { flex: 1 1 45%; }
+    #summary { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px; margin-top: 16px; }
+    #summary p { margin: 0 0 8px; }
+    #summary ul { margin: 0 0 8px; padding-left: 20px; }
+    #allrow { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px; margin-top: 12px; }
+    #allrow strong { display: block; margin-bottom: 8px; }
+    #all-google-list { margin: 10px 0 0; padding-left: 20px; font-size: 15px; }
+    #all-google-list li { margin: 6px 0; }
+    #all-google-list a { color: var(--google); }
+    #empty { margin-top: 16px; padding: 14px 16px; border-radius: 14px; background: var(--warn-bg); color: var(--warn-text); }
+    details.card summary { cursor: pointer; font-weight: 600; }
+    details.card dl { margin: 10px 0 0; font-size: 14px; }
+    details.card dt { color: var(--muted); margin-top: 8px; }
+    details.card dd { margin: 0; word-break: break-word; }
+    details.card select { margin-top: 6px; }
+    #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--text); color: var(--bg);
+      padding: 12px 16px; border-radius: 12px; font-size: 15px; max-width: 90vw; z-index: 10; }
+    a { color: var(--accent); }
+    footer { margin-top: 32px; }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>QuickCal</h1>
+    <span class="muted">Paste → events → calendar</span>
+  </header>
+
+  <section id="input">
+    <label for="msg">Paste a message (group chat, email, invite)</label>
+    <textarea id="msg" placeholder="Paste here…" autocapitalize="off" autocorrect="off" spellcheck="false"></textarea>
+    <div class="row">
+      <button id="find" class="primary" type="button">Find events</button>
+      <button id="paste" class="ghost" type="button">Paste</button>
+      <button id="clear" class="ghost" type="button">Clear</button>
+    </div>
+    <p class="muted">Rules only, no AI. Nothing leaves your phone: the page makes no network requests after it loads.</p>
+  </section>
+
+  <div id="empty" hidden></div>
+
+  <section id="result" hidden>
+    <div id="summary" aria-live="polite"></div>
+
+    <div id="allrow" hidden>
+      <strong>All events</strong>
+      <div class="actions">
+        <a id="all-ios" class="btn ios" href="#">Add all to iPhone Calendar</a>
+        <button id="all-share" class="btn share" type="button" hidden>Share all as .ics</button>
+        <button id="all-google" class="btn google" type="button">Google Calendar links</button>
+      </div>
+      <ul id="all-google-list" hidden></ul>
+      <p class="muted">Google Calendar has no “add several at once” link, so these open one at a time.</p>
+    </div>
+
+    <div id="cards"></div>
+  </section>
+
+  <template id="card-tpl">
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <div class="when"></div>
+          <div class="src muted"></div>
+        </div>
+        <button class="del" type="button" aria-label="Delete this event">Delete</button>
+      </div>
+      <ul class="flags" hidden></ul>
+      <label>Title <span class="tag tag-title">guessed</span>
+        <input class="f-title" type="text" autocomplete="off">
+      </label>
+      <div class="grid2">
+        <label>Date <input class="f-date" type="date"></label>
+        <label class="check"><input class="f-allday" type="checkbox"> All-day</label>
+      </div>
+      <div class="grid2 timed">
+        <label>Start <input class="f-start" type="time"></label>
+        <label>End <input class="f-end" type="time"></label>
+      </div>
+      <label class="enddate">End date <input class="f-enddate" type="date"></label>
+      <label class="timed">Timezone
+        <select class="f-tz"></select>
+      </label>
+      <label>Location <span class="tag tag-loc">guessed</span>
+        <input class="f-loc" type="text" placeholder="optional" autocomplete="off">
+      </label>
+      <label>Notes (the full message)
+        <textarea class="f-notes" rows="3"></textarea>
+      </label>
+      <div class="actions">
+        <a class="btn ios" href="#">Add to iPhone Calendar</a>
+        <button class="btn share" type="button" hidden>Share .ics</button>
+        <a class="btn google" href="#" target="_blank" rel="noopener">Add to Google Calendar</a>
+      </div>
+    </article>
+  </template>
+
+  <footer>
+    <details class="card">
+      <summary>Advanced / troubleshooting</summary>
+      <label>iPhone Calendar button opens the .ics as a
+        <select id="set-ios-method">
+          <option value="blob">blob: link (default)</option>
+          <option value="data">data: link</option>
+        </select>
+      </label>
+      <label>Times inside the .ics file are written as
+        <select id="set-ics-time">
+          <option value="tzid">local time with TZID (default)</option>
+          <option value="utc">UTC (fallback if times come out shifted)</option>
+        </select>
+      </label>
+      <dl>
+        <dt>Device timezone</dt><dd id="env-tz"></dd>
+        <dt>Share sheet can take .ics files</dt><dd id="env-share"></dd>
+        <dt>Running from Home Screen</dt><dd id="env-standalone"></dd>
+        <dt>Version</dt><dd id="env-version"></dd>
+        <dt>Browser</dt><dd id="env-ua" class="muted"></dd>
+      </dl>
+    </details>
+  </footer>
+</main>
+<div id="toast" hidden role="status"></div>
+<script src="vendor/chrono-en.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
