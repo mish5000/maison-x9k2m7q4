@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-08T03:29:40Z",
+ "generated": "2026-09-09T03:28:18Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
@@ -35,7 +35,7 @@
      "hl": "Bronwyn Keith-Hynes",
      "line": "Bronwyn Keith-Hynes 20:00 · Karaoke!! w/ JBM 22:00",
      "party": "",
-     "doors": "20:00 (early) / 22:00 (late) — show times, venue publishes no doors",
+     "doors": "20:00",
      "src": "https://www.stephentalkhouse.com/events/185024",
      "conf": "high"
     },
@@ -43,7 +43,7 @@
      "hl": "Student Body",
      "line": "Student Body 20:00 · OP Effect 22:00",
      "party": "",
-     "doors": "20:00 (early) / 22:00 (late) — show times, venue publishes no doors",
+     "doors": "20:00",
      "src": "https://www.stephentalkhouse.com/events/202383",
      "conf": "high"
     },
@@ -51,7 +51,7 @@
      "hl": "The Smiths Tribute NYC",
      "line": "THE SMITHS TRIBUTE NYC 20:00 · LHT 22:00",
      "party": "",
-     "doors": "20:00 (early) / 22:00 (late) — show times, venue publishes no doors",
+     "doors": "20:00",
      "src": "https://www.stephentalkhouse.com/events/194171",
      "conf": "high"
     }
@@ -59,18 +59,6 @@
   },
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-09-07": {
-     "hl": "Francis Mercier",
-     "line": [
-      "Francis Mercier B2B Fideles",
-      "Alex Twin B2B Mednas",
-      "Andrea Oliva"
-     ],
-     "party": "Francis Mercier presents Solèy",
-     "doors": "23:30",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-09-08": {
      "hl": "East End Dubs",
      "line": "East End Dubs · Luuk Van Dijk B2B Toman · Jazzy · Ryan Nicholls · Paco Osuna · Melanie Ribbe · Melissa Mahilaa",
@@ -118,24 +106,19 @@
      "doors": "23:30",
      "src": "https://www.ibiza-spotlight.com/night/events/2026/09/14",
      "conf": "high"
+    },
+    "2026-09-15": {
+     "hl": "East End Dubs B2B Marco Carola",
+     "line": "Eastenderz — Theatre: Gaskin, Lola Palmer · Club Room: Paco Osuna, Luuk Van Dijk, Chinonegro",
+     "party": "Eastenderz",
+     "doors": "23:30",
+     "src": "https://www.hiibiza.com/events/2026/eastenderz/2026-09-15",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-09-07": {
-     "hl": "David Guetta",
-     "line": [
-      "David Guetta",
-      "Oliver Heldens",
-      "DJs From Mars",
-      "Paul Reynolds"
-     ],
-     "party": "David Guetta presents F*** Me I'm Famous!",
-     "doors": "17:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-09-09": {
      "hl": "Dimitri Vegas & Like Mike",
      "line": "Dimitri Vegas · Bassjackers · Viktor · Block & Crown",
@@ -188,19 +171,6 @@
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-07": {
-     "hl": "Sonny Fodera",
-     "line": [
-      "Sonny Fodera",
-      "TSHA",
-      "Danny Howard",
-      "Laeet"
-     ],
-     "party": "Sonny Fodera",
-     "doors": "23:00",
-     "src": "ibiza-spotlight.com",
-     "conf": "high"
-    },
     "2026-09-08": {
      "hl": "Gordo",
      "line": "Gordo · Shimza · Alex Wann · Arodes · Manda Moor",
@@ -256,6 +226,14 @@
      "doors": "23:00",
      "src": "https://www.ibiza-spotlight.com/night/events/2026/09/14",
      "conf": "high"
+    },
+    "2026-09-15": {
+     "hl": "Gordo & Vintage Culture",
+     "line": "Taraka — Patrick Topping, Sacchi, Jørds",
+     "party": "Taraka",
+     "doors": "23:00",
+     "src": "https://www.ibiza-spotlight.com/night/events/2026/09/15",
+     "conf": "high"
     }
    }
   },
@@ -308,6 +286,14 @@
      "doors": "23:45",
      "src": "https://www.ibiza-spotlight.com/night/events/2026/09/13",
      "conf": "high"
+    },
+    "2026-09-15": {
+     "hl": "Arkadyan (live)",
+     "line": "Voyage closing party — live three-piece into the club, further guests TBA",
+     "party": "Arkadyan presents Voyage",
+     "doors": "23:45",
+     "src": "https://www.ibiza-spotlight.com/night/events/2026/09/15",
+     "conf": "high"
     }
    }
   },
@@ -359,6 +345,34 @@
      "party": "Pyramid",
      "doors": "23:00",
      "src": "https://sales.ticketing.cm.com/Pyramid-Amnesia-13thSeptember2026",
+     "conf": "high"
+    },
+    "2026-09-15": {
+     "hl": "Joseph Capriati B2B Richie Hawtin",
+     "line": "Metamorfosi — Terrace: Toman, Paramida, Vanee · Club Room: Yanamaste, Adiel B2B Alarico, Nuke",
+     "party": "Metamorfosi",
+     "doors": "23:00",
+     "src": "https://dice.fm/event/py5xel-metamorfosi-15th-sep-amnesia-ibiza-ibiza-tickets",
+     "conf": "high"
+    }
+   }
+  },
+  "ibiza|nightclubs|5": {
+   "nights": {
+    "2026-09-10": {
+     "hl": "Marco Carola & ANOTR",
+     "line": "Solid Grooves Week 15 — PAWSA, Djebali, Dan Ghenacia, Maher Daniel, Reelow, Rossko, Aline Umber",
+     "party": "Solid Grooves",
+     "doors": "23:00",
+     "src": "https://dice.fm/event/q2w58a-solid-grooves-week-15-10th-sep-dc-10-ibiza-tickets",
+     "conf": "high"
+    },
+    "2026-09-14": {
+     "hl": "Black Coffee & Adam Port",
+     "line": "Circoloco Week 21 — Enzo Siragusa, Gerd Janson, Bambounou, Call Super, Tania Vulcano, Konstantin, salute, map.ache, Ageless, Sossa, Wildealer",
+     "party": "Circoloco",
+     "doors": "18:00",
+     "src": "https://dice.fm/event/yob88v-circoloco-ibiza-week-21-14th-sep-dc-10-ibiza-tickets",
      "conf": "high"
     }
    }
@@ -492,6 +506,14 @@
      "doors": "open 24 hours",
      "src": "https://11miami.com/events/",
      "conf": "high"
+    },
+    "2026-09-15": {
+     "hl": "Iron Lyon",
+     "line": "Iron Lyon",
+     "party": "",
+     "doors": "20:00",
+     "src": "https://speakeasygo.com/E11EVEN/IRON-LYON-AT-E11EVEN?eid=EVE-0FJ7P0",
+     "conf": "high"
     }
    }
   },
@@ -517,17 +539,6 @@
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-09-07": {
-     "hl": "Ten Ten",
-     "line": [
-      "Ten Ten",
-      "Endie Kenzak"
-     ],
-     "party": "",
-     "doors": "23:59",
-     "src": "cavoparadiso.gr",
-     "conf": "high"
-    },
     "2026-09-09": {
      "hl": "Kalidon",
      "line": "Kalidon · Nick G · Antony PL",
@@ -551,6 +562,14 @@
      "doors": "23:00",
      "src": "https://www.cavoparadiso.gr/events.asp",
      "conf": "high"
+    },
+    "2026-09-15": {
+     "hl": "Fused",
+     "line": "Fused, Endie Kenzak",
+     "party": "",
+     "doors": "23:00",
+     "src": "https://www.cavoparadiso.gr/event.asp?eid=1131",
+     "conf": "high"
     }
    }
   },
@@ -560,7 +579,7 @@
      "hl": "Friends & Family",
      "line": "no DJs published",
      "party": "Friends & Family",
-     "doors": "00:00 (–06:00)",
+     "doors": "00:00",
      "src": "https://nightly.gr/mykonos/void/friends-family-2026-09-11",
      "conf": "med"
     },
@@ -568,7 +587,7 @@
      "hl": "Birds of Mind",
      "line": "Birds of Mind",
      "party": "Birds of Mind",
-     "doors": "00:00 (–06:00)",
+     "doors": "00:00",
      "src": "https://nightly.gr/mykonos/void/birds-of-mind-2026-09-12",
      "conf": "med"
     },
@@ -576,7 +595,7 @@
      "hl": "CamelPhat",
      "line": "CamelPhat",
      "party": "",
-     "doors": "00:00 (–06:00)",
+     "doors": "00:00",
      "src": "https://nightly.gr/mykonos/void/camelphat-2026-09-13",
      "conf": "med"
     }
