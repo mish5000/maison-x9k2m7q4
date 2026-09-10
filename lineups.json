@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-09T03:28:18Z",
+ "generated": "2026-09-10T03:22:47Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
@@ -25,6 +25,14 @@
      "party": "",
      "doors": "20:30",
      "src": "https://bellyupaspen.com/events/an-evening-with-40oz-to-freedom-8/",
+     "conf": "high"
+    },
+    "2026-09-16": {
+     "hl": "Lupe Fiasco",
+     "line": "Lupe Fiasco, DJ Smokey",
+     "party": "",
+     "doors": "20:00",
+     "src": "https://bellyupaspen.com/events/lupe-fiasco/",
      "conf": "high"
     }
    }
@@ -59,14 +67,6 @@
   },
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-09-08": {
-     "hl": "East End Dubs",
-     "line": "East End Dubs · Luuk Van Dijk B2B Toman · Jazzy · Ryan Nicholls · Paco Osuna · Melanie Ribbe · Melissa Mahilaa",
-     "party": "Eastenderz",
-     "doors": "23:30",
-     "src": "https://www.ibiza-spotlight.com/night/events/2026/09/08",
-     "conf": "high"
-    },
     "2026-09-09": {
      "hl": "MEDUZA & James Hype",
      "line": "Meduza³ · James Hype · Magdalena · Jonas Blue · Marten Lou",
@@ -114,6 +114,14 @@
      "doors": "23:30",
      "src": "https://www.hiibiza.com/events/2026/eastenderz/2026-09-15",
      "conf": "high"
+    },
+    "2026-09-16": {
+     "hl": "MEDUZA & James Hype",
+     "line": "Theatre: MEDUZA³, James Hype, Dreya V, Tita Lau · Club Room (Jonas Blue presents SENSES): Jonas Blue, Butch, Ruze",
+     "party": "Our House",
+     "doors": "23:30",
+     "src": "https://www.hiibiza.com/events/2026/our-house/2026-09-16",
+     "conf": "high"
     }
    }
   },
@@ -130,7 +138,7 @@
     "2026-09-10": {
      "hl": "Martin Garrix",
      "line": "Martin Garrix · Citadelle · R3HAB · Justin Mylo",
-     "party": "Martin Garrix",
+     "party": "",
      "doors": "17:00",
      "src": "https://www.theushuaiaexperience.com/club/en/events/2026/martin-garrix/2026-09-10",
      "conf": "high"
@@ -138,7 +146,7 @@
     "2026-09-11": {
      "hl": "Calvin Harris",
      "line": "Calvin Harris · MK · OFFAIAH",
-     "party": "Calvin Harris",
+     "party": "",
      "doors": "17:00",
      "src": "https://www.theushuaiaexperience.com/club/en/events/2026/calvin-harris/2026-09-11",
      "conf": "high"
@@ -166,19 +174,19 @@
      "doors": "17:00",
      "src": "https://www.theushuaiaexperience.com/club/en/events/2026/fmif-david-guetta/2026-09-14",
      "conf": "high"
+    },
+    "2026-09-16": {
+     "hl": "Dimitri Vegas & Like Mike",
+     "line": "Dimitri Vegas, Oliver Heldens, Henri PFR, joulie",
+     "party": "Tomorrowland",
+     "doors": "17:00",
+     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/tomorrowland-and-dimitri-vegas-like-mike/2026-09-16",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-08": {
-     "hl": "Gordo",
-     "line": "Gordo · Shimza · Alex Wann · Arodes · Manda Moor",
-     "party": "Taraka",
-     "doors": "23:00",
-     "src": "https://www.ibiza-spotlight.com/night/events/2026/09/08",
-     "conf": "high"
-    },
     "2026-09-09": {
      "hl": "Mau P",
      "line": "Mau P · DJ Tennis · Nic Fanciulli · Mita Gami · Brunello",
@@ -206,7 +214,7 @@
     "2026-09-12": {
      "hl": "Robin Schulz",
      "line": "Robin Schulz · NERVO · Jodie Harsh · The Menendez Brothers",
-     "party": "Robin Schulz",
+     "party": "",
      "doors": "23:00",
      "src": "https://www.ibiza-spotlight.com/night/events/2026/09/12",
      "conf": "high"
@@ -222,7 +230,7 @@
     "2026-09-14": {
      "hl": "Sonny Fodera",
      "line": "Sonny Fodera · Lost Frequencies · Danny Howard · Laeet",
-     "party": "Sonny Fodera",
+     "party": "",
      "doors": "23:00",
      "src": "https://www.ibiza-spotlight.com/night/events/2026/09/14",
      "conf": "high"
@@ -234,23 +242,23 @@
      "doors": "23:00",
      "src": "https://www.ibiza-spotlight.com/night/events/2026/09/15",
      "conf": "high"
+    },
+    "2026-09-16": {
+     "hl": "Mau P",
+     "line": "Mau P, Carlita, Adam Ten, OMRI",
+     "party": "Baddest Behaviour",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/mau-p--baddest-behaviour-16-09-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-09-08": {
-     "hl": "Arkadyan",
-     "line": "Arkadyan",
-     "party": "Voyage",
-     "doors": "23:45",
-     "src": "https://www.ibiza-spotlight.com/night/events/2026/09/08",
-     "conf": "high"
-    },
     "2026-09-09": {
      "hl": "Toy Room",
      "line": "Billed as the party brand only — no DJ named on the dated listing",
-     "party": "Toy Room",
+     "party": "",
      "doors": "23:45",
      "src": "https://www.ibiza-spotlight.com/night/events/2026/09/09",
      "conf": "high"
@@ -274,7 +282,7 @@
     "2026-09-12": {
      "hl": "Kōdō",
      "line": "Billed as the party brand only — no DJ named on the dated listing",
-     "party": "Kōdō",
+     "party": "",
      "doors": "23:45",
      "src": "https://www.ibiza-spotlight.com/night/events/2026/09/12",
      "conf": "high"
@@ -282,7 +290,7 @@
     "2026-09-13": {
      "hl": "Travieso",
      "line": "Billed as the party brand only — no DJ named on the dated listing",
-     "party": "Travieso",
+     "party": "",
      "doors": "23:45",
      "src": "https://www.ibiza-spotlight.com/night/events/2026/09/13",
      "conf": "high"
@@ -294,19 +302,19 @@
      "doors": "23:45",
      "src": "https://www.ibiza-spotlight.com/night/events/2026/09/15",
      "conf": "high"
+    },
+    "2026-09-16": {
+     "hl": "Toy Room",
+     "line": "Toy Room residency with Frank the Teddy",
+     "party": "",
+     "src": "https://www.liogroup.com/events/toy-room-16-sep-2026",
+     "conf": "high",
+     "doors": ""
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-09-08": {
-     "hl": "Joseph Capriati",
-     "line": "Terraza: Joseph Capriati b2b Seth Troxler · Maceo Plex · Karretero b2b Skizzo — Club Room: Joseph Capriati b2b Ryan Elliott · Dubfire · Sasha Carassi · Janina",
-     "party": "Metamorfosi",
-     "doors": "23:00",
-     "src": "https://sales.ticketing.cm.com/Metamorfosi-Amnesia-8thSeptember2026",
-     "conf": "high"
-    },
     "2026-09-09": {
      "hl": "ARTBAT",
      "line": "ARTBAT · Adam Beyer · Massano b2b Stephan Bodzin · Olympe",
@@ -354,6 +362,14 @@
      "doors": "23:00",
      "src": "https://dice.fm/event/py5xel-metamorfosi-15th-sep-amnesia-ibiza-ibiza-tickets",
      "conf": "high"
+    },
+    "2026-09-16": {
+     "hl": "Adam Beyer",
+     "line": "Terraza: Adam Beyer, Eric Prydz, Mind Against, Brina Knauss · Main Room: I Hate Models, Nicole Moudaber b2b Estella Boersma, Juliet Fox b2b Stëh, NO_IP",
+     "party": "RESISTANCE Ibiza Closing Party",
+     "doors": "23:00",
+     "src": "https://www.amnesia.es/en/calendar/ibiza/2026/september",
+     "conf": "high"
     }
    }
   },
@@ -379,18 +395,10 @@
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-09-08": {
-     "hl": "Enrique Malanga",
-     "line": "Enrique Malanga · AKA Jay",
-     "party": "Bathtub Club",
-     "doors": "21:00",
-     "src": "https://www.pikesibiza.com/event/bathtub-club-08-09-2026/",
-     "conf": "high"
-    },
     "2026-09-09": {
      "hl": "Disco Disco",
      "line": "Unannounced special guests & Disco Disco resident DJs — Pikes publishes no names for this night by design",
-     "party": "Disco Disco",
+     "party": "",
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/disco-disco-09-09-2026/",
      "conf": "high"
@@ -430,10 +438,74 @@
     "2026-09-14": {
      "hl": "Mondays",
      "line": "Secret DJs & very special guests — Pikes publishes no names for this night by design",
-     "party": "Mondays",
+     "party": "",
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/mondays-14-09-2026/",
      "conf": "high"
+    },
+    "2026-09-16": {
+     "hl": "David Morales",
+     "line": "David Morales & more",
+     "party": "Freddies",
+     "doors": "21:00",
+     "src": "https://www.pikesibiza.com/event/david-morales-16-09-2026/",
+     "conf": "high"
+    }
+   }
+  },
+  "marbella|nightclubs|0": {
+   "nights": {
+    "2026-09-10": {
+     "hl": "Alex Puche",
+     "line": "Alex Puche · Rubén Alegre",
+     "party": "",
+     "doors": "00:00",
+     "src": "https://mandalatickets.com/en/marbella/events/bonbonniere/event-sep10",
+     "conf": "high"
+    },
+    "2026-09-11": {
+     "hl": "Assil",
+     "line": "Assil · Juan · Rubén Alegre",
+     "party": "",
+     "doors": "00:00",
+     "src": "https://mandalatickets.com/en/marbella/events/bonbonniere/event-sep11",
+     "conf": "high"
+    },
+    "2026-09-12": {
+     "hl": "Stryv & Voodoochild",
+     "line": "Stryv · Voodoochild · Brus · Rubén Alegre",
+     "party": "Utopic",
+     "doors": "00:00",
+     "src": "https://mandalatickets.com/en/marbella/events/bonbonniere/event-sep12",
+     "conf": "high"
+    }
+   }
+  },
+  "marbella|nightclubs|4": {
+   "nights": {
+    "2026-09-10": {
+     "hl": "DJ PM & Friends",
+     "line": "DJ PM & Friends",
+     "party": "Obsession",
+     "doors": "00:00",
+     "src": "https://tibu.reserveyourvenue.com/?date=09/10/2026",
+     "conf": "high"
+    },
+    "2026-09-11": {
+     "hl": "Jordan Valleys",
+     "line": "Jordan Valleys · DJ PM",
+     "party": "Bad & Boujee",
+     "doors": "00:00",
+     "src": "https://tibu.reserveyourvenue.com/?date=09/11/2026",
+     "conf": "med"
+    },
+    "2026-09-12": {
+     "hl": "Pure",
+     "line": "Pure",
+     "party": "",
+     "doors": "00:00",
+     "src": "https://tibu.reserveyourvenue.com/?date=09/12/2026",
+     "conf": "med"
     }
    }
   },
@@ -451,14 +523,6 @@
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-09-08": {
-     "hl": "Renn Mateos",
-     "line": "Renn Mateos",
-     "party": "",
-     "doors": "open 24 hours",
-     "src": "https://11miami.com/events/",
-     "conf": "high"
-    },
     "2026-09-09": {
      "hl": "Zeus",
      "line": "Zeus",
@@ -513,6 +577,14 @@
      "party": "",
      "doors": "20:00",
      "src": "https://speakeasygo.com/E11EVEN/IRON-LYON-AT-E11EVEN?eid=EVE-0FJ7P0",
+     "conf": "high"
+    },
+    "2026-09-16": {
+     "hl": "Fenix Flexin",
+     "line": "Fenix Flexin",
+     "party": "",
+     "doors": "20:00",
+     "src": "https://www.11miami.com/events/10759dd2-c5ca-44d8-a7cb-bc771b87874a1787755031",
      "conf": "high"
     }
    }
@@ -578,7 +650,7 @@
     "2026-09-11": {
      "hl": "Friends & Family",
      "line": "no DJs published",
-     "party": "Friends & Family",
+     "party": "",
      "doors": "00:00",
      "src": "https://nightly.gr/mykonos/void/friends-family-2026-09-11",
      "conf": "med"
@@ -586,7 +658,7 @@
     "2026-09-12": {
      "hl": "Birds of Mind",
      "line": "Birds of Mind",
-     "party": "Birds of Mind",
+     "party": "",
      "doors": "00:00",
      "src": "https://nightly.gr/mykonos/void/birds-of-mind-2026-09-12",
      "conf": "med"
