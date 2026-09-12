@@ -1,16 +1,8 @@
 {
- "generated": "2026-09-11T03:26:26Z",
+ "generated": "2026-09-12T03:38:50Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
-    "2026-09-10": {
-     "hl": "Chali 2na & Cut Chemist",
-     "line": "Chali 2na & Cut Chemist · Dank Cilantro (support) — show 21:00",
-     "party": "",
-     "doors": "20:00",
-     "src": "https://bellyupaspen.com/events/chali-2na-cut-chemist/",
-     "conf": "high"
-    },
     "2026-09-11": {
      "hl": "Colby Acuff",
      "line": "Colby Acuff · Levi Foster (support) — show 20:30",
@@ -42,19 +34,19 @@
      "src": "https://bellyupaspen.com/events/elephant-revival/",
      "conf": "high",
      "party": ""
+    },
+    "2026-09-18": {
+     "hl": "Mesto",
+     "line": "Mesto, ITS.SHWILLY",
+     "party": "",
+     "doors": "20:30",
+     "src": "https://bellyupaspen.com/events/mesto/",
+     "conf": "high"
     }
    }
   },
   "hamptons|nightclubs|0": {
    "nights": {
-    "2026-09-10": {
-     "hl": "Bronwyn Keith-Hynes",
-     "line": "Bronwyn Keith-Hynes 20:00 · Karaoke!! w/ JBM 22:00",
-     "party": "",
-     "doors": "20:00",
-     "src": "https://www.stephentalkhouse.com/events/185024",
-     "conf": "high"
-    },
     "2026-09-11": {
      "hl": "Student Body",
      "line": "Student Body 20:00 · OP Effect 22:00",
@@ -78,19 +70,19 @@
      "src": "https://www.stephentalkhouse.com/events/204208",
      "conf": "high",
      "party": ""
+    },
+    "2026-09-18": {
+     "hl": "Willie Nile Band",
+     "line": "Willie Nile Band; late show Hot Lava (22:00)",
+     "party": "",
+     "doors": "20:00",
+     "src": "https://www.stephentalkhouse.com/events/188129",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-09-10": {
-     "hl": "HUGEL",
-     "line": "HUGEL · Rivo · Miss Monique · HI-LO · Fred Lenix",
-     "party": "Make The Girls Dance",
-     "doors": "23:30",
-     "src": "https://www.ibiza-spotlight.com/night/events/2026/09/10",
-     "conf": "high"
-    },
     "2026-09-11": {
      "hl": "CamelPhat",
      "line": "CamelPhat · Butch · Volkoder (Theatre) · Ewan McVicar · Roman Flügel · Maslow Unknown (Club Room)",
@@ -138,19 +130,19 @@
      "doors": "23:30",
      "src": "https://www.hiibiza.com/events/2026/hugel/2026-09-17",
      "conf": "high"
+    },
+    "2026-09-18": {
+     "hl": "CamelPhat",
+     "line": "Theatre: CamelPhat, Jimi Jules, Samm b2b Ajna. Club Room: Ewan McVicar, Skream, MPH",
+     "party": "Summer of Love",
+     "doors": "23:30",
+     "src": "https://www.hiibiza.com/events/2026/camelphat/2026-09-18",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-09-10": {
-     "hl": "Martin Garrix",
-     "line": "Martin Garrix · Citadelle · R3HAB · Justin Mylo",
-     "party": "",
-     "doors": "17:00",
-     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/martin-garrix/2026-09-10",
-     "conf": "high"
-    },
     "2026-09-11": {
      "hl": "Calvin Harris",
      "line": "Calvin Harris · MK · OFFAIAH",
@@ -198,19 +190,19 @@
      "src": "https://www.theushuaiaexperience.com/club/en/events/2026/martin-garrix",
      "conf": "high",
      "party": ""
+    },
+    "2026-09-18": {
+     "hl": "Calvin Harris",
+     "line": "Calvin Harris, MK, Eats Everything, Siân Owen",
+     "party": "",
+     "doors": "17:00",
+     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/calvin-harris/2026-09-18",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-10": {
-     "hl": "Purple Disco Machine",
-     "line": "Purple Disco Machine · Armand Van Helden · DiOsa",
-     "party": "Pure Pacha",
-     "doors": "23:00",
-     "src": "https://www.ibiza-spotlight.com/night/events/2026/09/10",
-     "conf": "high"
-    },
     "2026-09-11": {
      "hl": "Marco Carola",
      "line": "Marco Carola · Chris Stassy · Arapu · Priku · Traumer",
@@ -266,19 +258,19 @@
      "doors": "23:00",
      "src": "https://pacha.com/event/purple-disco-machine--pure-pacha-17-09-2026",
      "conf": "high"
+    },
+    "2026-09-18": {
+     "hl": "Marco Carola",
+     "line": "Marco Carola, Jamie Jones, Mason Collective, Calvin Clarke, AJ Christou, MEDNAS",
+     "party": "Music On",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/marco-carola-presents-music-on-18-09-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-09-10": {
-     "hl": "Nomis",
-     "line": "Nomis",
-     "party": "Tiempo",
-     "doors": "23:45",
-     "src": "https://www.ibiza-spotlight.com/night/events/2026/09/10",
-     "conf": "high"
-    },
     "2026-09-11": {
      "hl": "Sebastian Gamboa",
      "line": "Sebastian Gamboa",
@@ -326,19 +318,19 @@
      "conf": "high",
      "party": "",
      "doors": ""
+    },
+    "2026-09-18": {
+     "hl": "Vintage",
+     "line": "",
+     "party": "",
+     "doors": "",
+     "src": "https://www.liogroup.com/events/vintage-18-sep-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-09-10": {
-     "hl": "Josh Baker",
-     "line": "Josh Baker · Shanti Celeste b2b Peach · Kepler b2b Job de Jong · Jamie Fielding",
-     "party": "You&Me",
-     "doors": "23:00",
-     "src": "https://sales.ticketing.cm.com/YouandMe-Amnesia-10thSeptember2026",
-     "conf": "high"
-    },
     "2026-09-11": {
      "hl": "Dimitri From Paris",
      "line": "Terraza: Barbara Tucker · Breakbot & Irfane · Eats Everything · Jamie Love · Krystal Klear · The Brothers Macklovitch — Main Room: Dimitri From Paris · Lev · Sam Karlson (separate earlier ticket same night: Rememberland, 19:30)",
@@ -386,19 +378,19 @@
      "doors": "23:00",
      "src": "https://sales.ticketing.cm.com/YouandMe-Amnesia-17thSeptember2026",
      "conf": "high"
+    },
+    "2026-09-18": {
+     "hl": "Glitterbox",
+     "line": "Terraza (A-Z): Armand Van Helden, Floorplan, Mousse T., Raven Mandella, Spiller. Main Room (A-Z): Dan Shake, Natasha Diggs b2b Melvo Baptiste, Riva Starr",
+     "party": "",
+     "doors": "23:30",
+     "src": "https://www.amnesia.es/en/calendar/ibiza/2026/september",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|5": {
    "nights": {
-    "2026-09-10": {
-     "hl": "Marco Carola & ANOTR",
-     "line": "Solid Grooves Week 15 — PAWSA, Djebali, Dan Ghenacia, Maher Daniel, Reelow, Rossko, Aline Umber",
-     "party": "Solid Grooves",
-     "doors": "23:00",
-     "src": "https://dice.fm/event/q2w58a-solid-grooves-week-15-10th-sep-dc-10-ibiza-tickets",
-     "conf": "high"
-    },
     "2026-09-14": {
      "hl": "Black Coffee & Adam Port",
      "line": "Circoloco Week 21 — Enzo Siragusa, Gerd Janson, Bambounou, Call Super, Tania Vulcano, Konstantin, salute, map.ache, Ageless, Sossa, Wildealer",
@@ -419,14 +411,6 @@
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-09-10": {
-     "hl": "Becky Hill",
-     "line": "Becky Hill (DJ set) · Mick Wilson · CENTRL · Black Hawks of Panama · U*R*M",
-     "party": "Back to Mine",
-     "doors": "21:00",
-     "src": "https://www.pikesibiza.com/event/back-to-mine-10-09-2026/",
-     "conf": "high"
-    },
     "2026-09-11": {
      "hl": "Chaos In The CBD",
      "line": "Chaos In The CBD · Ivan Smagghe · Laura & Santiago · Camila Ramirez · Karlos Sense · Cintisizer",
@@ -479,14 +463,6 @@
   },
   "marbella|nightclubs|0": {
    "nights": {
-    "2026-09-10": {
-     "hl": "Alex Puche",
-     "line": "Alex Puche · Rubén Alegre",
-     "party": "",
-     "doors": "00:00",
-     "src": "https://mandalatickets.com/en/marbella/events/bonbonniere/event-sep10",
-     "conf": "high"
-    },
     "2026-09-11": {
      "hl": "Assil",
      "line": "Assil · Juan · Rubén Alegre",
@@ -510,19 +486,19 @@
      "conf": "high",
      "party": "",
      "doors": ""
+    },
+    "2026-09-18": {
+     "hl": "Alex Puche & Luke Garcia",
+     "line": "Alex Puche, Luke Garcia",
+     "party": "",
+     "doors": "",
+     "src": "https://mandalatickets.com/en/marbella/events/bonbonniere/event-sep18",
+     "conf": "high"
     }
    }
   },
   "marbella|nightclubs|4": {
    "nights": {
-    "2026-09-10": {
-     "hl": "DJ PM & Friends",
-     "line": "DJ PM & Friends",
-     "party": "Obsession",
-     "doors": "00:00",
-     "src": "https://tibu.reserveyourvenue.com/?date=09/10/2026",
-     "conf": "high"
-    },
     "2026-09-11": {
      "hl": "Jordan Valleys",
      "line": "Jordan Valleys · DJ PM",
@@ -550,19 +526,19 @@
      "doors": "23:30",
      "src": "https://www.livenation.com/venue/KovZ917Ac_V/liv-nightclub-miami-events",
      "conf": "high"
+    },
+    "2026-09-18": {
+     "hl": "Korolova",
+     "line": "",
+     "party": "",
+     "doors": "23:00",
+     "src": "https://www.livenation.com/event/rZ7HnEZ1A4ZfFN/korolova",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-09-10": {
-     "hl": "CX",
-     "line": "CX",
-     "party": "",
-     "doors": "open 24 hours",
-     "src": "https://11miami.com/events/",
-     "conf": "high"
-    },
     "2026-09-11": {
      "hl": "Shift",
      "line": "Shift",
@@ -618,6 +594,14 @@
      "src": "https://www.11miami.com/events/5b2f196d-c3d1-48f2-97db-4549854d47591788557758",
      "conf": "high",
      "party": ""
+    },
+    "2026-09-18": {
+     "hl": "Vice",
+     "line": "",
+     "party": "",
+     "doors": "20:00",
+     "src": "https://www.11miami.com/events/f0b83d2b-c171-4e95-a722-4781ab285d3b1789161889",
+     "conf": "high"
     }
    }
   },
@@ -637,6 +621,14 @@
      "party": "The Terrace",
      "doors": "23:00",
      "src": "https://dice.fm/event/7dbkvp-joseph-capriati-gennaro-kidoo-12th-sep-club-space-miami-miami-tickets",
+     "conf": "high"
+    },
+    "2026-09-18": {
+     "hl": "Shimza",
+     "line": "Shimza, Joe Kay, Joezi, Thunderpony, Monoky",
+     "party": "",
+     "doors": "23:00",
+     "src": "https://dice.fm/event/53mevw-shimza-joe-kay-joezi-18th-sep-club-space-miami-miami-tickets",
      "conf": "high"
     }
    }
