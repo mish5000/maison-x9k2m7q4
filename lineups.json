@@ -1,16 +1,8 @@
 {
- "generated": "2026-09-13T03:24:34Z",
+ "generated": "2026-09-14T03:33:46Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
-    "2026-09-12": {
-     "hl": "40oz. To Freedom",
-     "line": "An Evening with 40oz. To Freedom (Sublime tribute) — show 21:30",
-     "party": "",
-     "doors": "20:30",
-     "src": "https://bellyupaspen.com/events/an-evening-with-40oz-to-freedom-8/",
-     "conf": "high"
-    },
     "2026-09-16": {
      "hl": "Lupe Fiasco",
      "line": "Lupe Fiasco, DJ Smokey",
@@ -47,14 +39,6 @@
   },
   "hamptons|nightclubs|0": {
    "nights": {
-    "2026-09-12": {
-     "hl": "The Smiths Tribute NYC",
-     "line": "THE SMITHS TRIBUTE NYC 20:00 · LHT 22:00",
-     "party": "",
-     "doors": "20:00",
-     "src": "https://www.stephentalkhouse.com/events/194171",
-     "conf": "high"
-    },
     "2026-09-17": {
      "hl": "Klyph Black & Rumor Has It",
      "line": "Klyph Black & Rumor Has It take the early show, then Karaoke!! w/ JBM from 22:00",
@@ -75,14 +59,6 @@
   },
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-09-12": {
-     "hl": "Black Coffee",
-     "line": "Black Coffee · Mahmut Orhan · Kasango · Skepta (DJ set) · SG Lewis · Arielle Free",
-     "party": "Black Coffee / Más Tiempo",
-     "doors": "23:30",
-     "src": "https://www.ibiza-spotlight.com/night/events/2026/09/12",
-     "conf": "high"
-    },
     "2026-09-14": {
      "hl": "Francis Mercier",
      "line": "Francis Mercier B2B Kölsch · Patrick Mason · KILIMANJARO · Andrea Oliva · HoneyLuv",
@@ -135,14 +111,6 @@
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-09-12": {
-     "hl": "Andrea Oliva",
-     "line": "Andrea Oliva · Chelina Manuhutu B2B Syreeta · Joëlla Jackson · Raul Rodriguez · Sidney Charles",
-     "party": "ANTS",
-     "doors": "17:00",
-     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/ants/2026-09-12",
-     "conf": "high"
-    },
     "2026-09-13": {
      "hl": "Swedish House Mafia",
      "line": "Swedish House Mafia · Bea Sylvan · Nosefin",
@@ -190,19 +158,19 @@
      "doors": "17:00",
      "src": "https://www.theushuaiaexperience.com/club/en/events/2026/ants/2026-09-19",
      "conf": "high"
+    },
+    "2026-09-20": {
+     "hl": "Hugel",
+     "line": "Hugel, Jonas Blue, Themba, Ochok, Mili",
+     "party": "Make The Girls Dance",
+     "doors": "17:00",
+     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/hugel/2026-09-20",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-12": {
-     "hl": "Robin Schulz",
-     "line": "Robin Schulz · NERVO · Jodie Harsh · The Menendez Brothers",
-     "party": "",
-     "doors": "23:00",
-     "src": "https://www.ibiza-spotlight.com/night/events/2026/09/12",
-     "conf": "high"
-    },
     "2026-09-13": {
      "hl": "Solomun",
      "line": "Solomun · Desiree",
@@ -258,19 +226,19 @@
      "doors": "23:00",
      "src": "https://pacha.com/event/robin-schulz-19-09-2026",
      "conf": "high"
+    },
+    "2026-09-20": {
+     "hl": "Solomun",
+     "line": "Solomun, KETTAMA",
+     "party": "Solomun +1",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/solomun1-20-09-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-09-12": {
-     "hl": "Kōdō",
-     "line": "Billed as the party brand only — no DJ named on the dated listing",
-     "party": "",
-     "doors": "23:45",
-     "src": "https://www.ibiza-spotlight.com/night/events/2026/09/12",
-     "conf": "high"
-    },
     "2026-09-13": {
      "hl": "Travieso",
      "line": "Billed as the party brand only — no DJ named on the dated listing",
@@ -318,23 +286,23 @@
      "doors": "",
      "src": "https://www.liogroup.com/events/kodo-19-sep-2026",
      "conf": "high"
+    },
+    "2026-09-20": {
+     "hl": "DJ Papis",
+     "line": "DJ Papis, Jesus Cabello",
+     "party": "Travieso Closing Party",
+     "doors": "",
+     "src": "https://www.liogroup.com/events/closing-travieso-20-sep-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-09-12": {
-     "hl": "CAAL",
-     "line": "CAAL · DJ Oliver · Les Schmitz · Mar-T · special show: Baby Marcelo",
-     "party": "People From Ibiza",
-     "doors": "23:00",
-     "src": "https://sales.ticketing.cm.com/People-Amnesia-12thSeptember2026",
-     "conf": "high"
-    },
     "2026-09-13": {
-     "hl": "Ricardo Villalobos",
+     "hl": "Pyramid",
      "line": "Terraza (UNUM): Ricardo Villalobos b2b Luciano · Francesco Del Garda · Saoirse · Anitë — Main Room: Marco Faraone · Nina Kraviz · Annē · Ignez",
-     "party": "Pyramid",
+     "party": "",
      "doors": "23:00",
      "src": "https://sales.ticketing.cm.com/Pyramid-Amnesia-13thSeptember2026",
      "conf": "high"
@@ -378,6 +346,14 @@
      "doors": "22:30",
      "src": "https://sales.ticketing.cm.com/hacienda-amnesia-19thseptember2026",
      "conf": "high"
+    },
+    "2026-09-20": {
+     "hl": "Pyramid",
+     "line": "Terraza: Josh Baker (early set), Marco Faraone, Demi Riquisimo, Cam Stockman, Baggi — Main Room: Deborah De Luca, Andrés Campo, Charlie Sparks, Luca Donzelli",
+     "party": "",
+     "doors": "21:30",
+     "src": "https://sales.ticketing.cm.com/Pyramid-Amnesia-20thSeptember2026",
+     "conf": "high"
     }
    }
   },
@@ -403,14 +379,6 @@
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-09-12": {
-     "hl": "Sarah Story",
-     "line": "Sarah Story · S/A/M · Ryan O Gorman · Cami Jones · Cash Only & Friends",
-     "party": "Pikes House Party",
-     "doors": "21:00",
-     "src": "https://www.pikesibiza.com/event/pikes-house-party-12-09-2026/",
-     "conf": "high"
-    },
     "2026-09-13": {
      "hl": "Demi Riquìsimo",
      "line": "Demi Riquìsimo · Michelle Manetti · Jive Talk · Aldonna · Lulah Francs",
@@ -458,19 +426,19 @@
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/pikes-house-party-19-09-2026/",
      "conf": "high"
+    },
+    "2026-09-20": {
+     "hl": "Dr Banana",
+     "line": "Dr Banana, Luke Una, Joe Goddard, Nathan Detroit, Simon Morell, Albion Forever, Craven Area Disco, Mirror Dance",
+     "party": "Sundays at Pikes",
+     "doors": "21:00",
+     "src": "https://www.pikesibiza.com/event/sundays-at-pikes-20-09-2026/",
+     "conf": "high"
     }
    }
   },
   "marbella|nightclubs|0": {
    "nights": {
-    "2026-09-12": {
-     "hl": "Stryv & Voodoochild",
-     "line": "Stryv · Voodoochild · Brus · Rubén Alegre",
-     "party": "Utopic",
-     "doors": "00:00",
-     "src": "https://mandalatickets.com/en/marbella/events/bonbonniere/event-sep12",
-     "conf": "high"
-    },
     "2026-09-17": {
      "hl": "Juan & Luke Garcia",
      "line": "Juan and Luke Garcia share the Thursday booth; no party brand is published for this date",
@@ -486,18 +454,14 @@
      "doors": "",
      "src": "https://mandalatickets.com/en/marbella/events/bonbonniere/event-sep18",
      "conf": "high"
-    }
-   }
-  },
-  "marbella|nightclubs|4": {
-   "nights": {
-    "2026-09-12": {
-     "hl": "Pure",
-     "line": "Pure",
-     "party": "",
-     "doors": "00:00",
-     "src": "https://tibu.reserveyourvenue.com/?date=09/12/2026",
-     "conf": "med"
+    },
+    "2026-09-20": {
+     "hl": "Oriol Calvo",
+     "line": "Oriol Calvo, Pomboklap",
+     "party": "Nevermind by TEN Ibiza",
+     "doors": "",
+     "src": "https://mandalatickets.com/en/marbella/events/bonbonniere/event-sep20",
+     "conf": "high"
     }
    }
   },
@@ -518,24 +482,24 @@
      "doors": "23:30",
      "src": "https://www.livenation.com/event/rZ7HnEZ1A4Zf-S/matroda",
      "conf": "high"
+    },
+    "2026-09-20": {
+     "hl": "YG",
+     "line": "",
+     "party": "",
+     "doors": "23:30",
+     "src": "https://www.livenation.com/event/rZ7HnEZ1AfGbZV/yg",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-09-12": {
-     "hl": "Borgeous",
-     "line": "Borgeous",
-     "party": "",
-     "doors": "open 24 hours",
-     "src": "https://11miami.com/events/",
-     "conf": "high"
-    },
     "2026-09-13": {
      "hl": "Mister Gray",
      "line": "Mister Gray",
      "party": "",
-     "doors": "open 24 hours",
+     "doors": "",
      "src": "https://11miami.com/events/",
      "conf": "high"
     },
@@ -543,7 +507,7 @@
      "hl": "Five Venoms",
      "line": "Five Venoms",
      "party": "",
-     "doors": "open 24 hours",
+     "doors": "",
      "src": "https://11miami.com/events/",
      "conf": "high"
     },
@@ -583,22 +547,22 @@
      "hl": "DJ Pee Wee",
      "line": "DJ Pee Wee (Anderson .Paak)",
      "party": "",
-     "doors": "open 24 hours",
+     "doors": "",
      "src": "https://speakeasygo.com/E11EVEN/DJ-PEE-WEE-AT-E11EVEN?eid=EVE-E2I49A",
+     "conf": "high"
+    },
+    "2026-09-20": {
+     "hl": "CX",
+     "line": "",
+     "party": "",
+     "doors": "",
+     "src": "https://speakeasygo.com/E11EVEN/CX-AT-E11EVEN?eid=EVE-42YP7X",
      "conf": "high"
     }
    }
   },
   "miami|nightclubs|2": {
    "nights": {
-    "2026-09-12": {
-     "hl": "Joseph Capriati",
-     "line": "Joseph Capriati · GENNARO · Kidoo · Ms. Mada · Bakke · Alezsandro",
-     "party": "The Terrace",
-     "doors": "23:00",
-     "src": "https://dice.fm/event/7dbkvp-joseph-capriati-gennaro-kidoo-12th-sep-club-space-miami-miami-tickets",
-     "conf": "high"
-    },
     "2026-09-18": {
      "hl": "Shimza",
      "line": "Shimza, Joe Kay, Joezi, Thunderpony, Monoky",
@@ -619,14 +583,6 @@
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-09-12": {
-     "hl": "Dino MFU",
-     "line": "Dino MFU · Agent Greg · Hajo V · Elysian · Raf Mk",
-     "party": "",
-     "doors": "23:00",
-     "src": "https://www.cavoparadiso.gr/events.asp",
-     "conf": "high"
-    },
     "2026-09-15": {
      "hl": "Fused",
      "line": "Fused, Endie Kenzak",
@@ -655,14 +611,6 @@
   },
   "mykonos|nightclubs|1": {
    "nights": {
-    "2026-09-12": {
-     "hl": "Birds of Mind",
-     "line": "Birds of Mind",
-     "party": "",
-     "doors": "00:00",
-     "src": "https://nightly.gr/mykonos/void/birds-of-mind-2026-09-12",
-     "conf": "med"
-    },
     "2026-09-13": {
      "hl": "CamelPhat",
      "line": "CamelPhat",
