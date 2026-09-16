@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-15T03:22:43Z",
+ "generated": "2026-09-16T03:17:20Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
@@ -34,6 +34,14 @@
      "doors": "19:30",
      "src": "https://bellyupaspen.com/events/an-evening-w-dead-floyd/",
      "conf": "high"
+    },
+    "2026-09-22": {
+     "hl": "Candlebox",
+     "line": "Candlebox · Sponge",
+     "party": "Can’t Quit You Tour, Fall 2026",
+     "doors": "19:00",
+     "src": "https://bellyupaspen.com/events/candlebox/",
+     "conf": "high"
     }
    }
   },
@@ -59,14 +67,6 @@
   },
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-09-14": {
-     "hl": "Francis Mercier",
-     "line": "Francis Mercier B2B Kölsch · Patrick Mason · KILIMANJARO · Andrea Oliva · HoneyLuv",
-     "party": "Solèy",
-     "doors": "23:30",
-     "src": "https://www.ibiza-spotlight.com/night/events/2026/09/14",
-     "conf": "high"
-    },
     "2026-09-15": {
      "hl": "East End Dubs B2B Marco Carola",
      "line": "Eastenderz — Theatre: Gaskin, Lola Palmer · Club Room: Paco Osuna, Luuk Van Dijk, Chinonegro",
@@ -114,19 +114,19 @@
      "doors": "23:30",
      "src": "https://www.hiibiza.com/events/2026/francis-mercier/2026-09-21",
      "conf": "high"
+    },
+    "2026-09-22": {
+     "hl": "East End Dubs",
+     "line": "East End Dubs · Luciano · Laidlaw B2B Bullet Tooth · Reeshy · Paco Osuna · Iglesias · Fer BR",
+     "party": "Eastenderz",
+     "doors": "23:30",
+     "src": "https://www.hiibiza.com/events/2026/eastenderz/2026-09-22",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-09-14": {
-     "hl": "David Guetta",
-     "line": "David Guetta · Miss Monique · Tini Gessler · Paul Reynolds",
-     "party": "F*** Me I'm Famous!",
-     "doors": "17:00",
-     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/fmif-david-guetta/2026-09-14",
-     "conf": "high"
-    },
     "2026-09-16": {
      "hl": "Dimitri Vegas & Like Mike",
      "line": "Dimitri Vegas, Oliver Heldens, Henri PFR, joulie",
@@ -179,14 +179,6 @@
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-14": {
-     "hl": "Sonny Fodera",
-     "line": "Sonny Fodera · Lost Frequencies · Danny Howard · Laeet",
-     "party": "",
-     "doors": "23:00",
-     "src": "https://www.ibiza-spotlight.com/night/events/2026/09/14",
-     "conf": "high"
-    },
     "2026-09-15": {
      "hl": "Gordo & Vintage Culture",
      "line": "Taraka — Patrick Topping, Sacchi, Jørds",
@@ -241,6 +233,14 @@
      "party": "",
      "doors": "23:00",
      "src": "https://pacha.com/event/sonny-fodera-21-09-20261",
+     "conf": "high"
+    },
+    "2026-09-22": {
+     "hl": "GORDO",
+     "line": "GORDO · Shimza · HoneyLuv · Vanjee · Gala",
+     "party": "Taraka",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/gordo--taraka-22-09-2026",
      "conf": "high"
     }
    }
@@ -346,19 +346,19 @@
      "doors": "21:30",
      "src": "https://sales.ticketing.cm.com/Pyramid-Amnesia-20thSeptember2026",
      "conf": "high"
+    },
+    "2026-09-22": {
+     "hl": "Joseph Capriati",
+     "line": "Joseph Capriati B3B Traumer B3B Alisha · Obskür · Joe Vanditti · Ben Klock b2b Phillippa Pacho · Alarico · Markantonio · Roberto Capuano",
+     "party": "Metamorfosi",
+     "doors": "23:00",
+     "src": "https://sales.ticketing.cm.com/Metamorfosi-Amnesia-22ndSept2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|5": {
    "nights": {
-    "2026-09-14": {
-     "hl": "Black Coffee & Adam Port",
-     "line": "Circoloco Week 21 — Enzo Siragusa, Gerd Janson, Bambounou, Call Super, Tania Vulcano, Konstantin, salute, map.ache, Ageless, Sossa, Wildealer",
-     "party": "Circoloco",
-     "doors": "18:00",
-     "src": "https://dice.fm/event/yob88v-circoloco-ibiza-week-21-14th-sep-dc-10-ibiza-tickets",
-     "conf": "high"
-    },
     "2026-09-17": {
      "hl": "Solid Grooves",
      "line": "Flat A-Z bill: Dennis Cruz, Dungeon Meat, Elliot Schooling & Liam Palmer, Georgia, Michael Bibi, Miguelle & Tons, Rossi., Samuel Deep and Solomun",
@@ -379,14 +379,6 @@
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-09-14": {
-     "hl": "Mondays",
-     "line": "Secret DJs & very special guests — Pikes publishes no names for this night by design",
-     "party": "",
-     "doors": "21:00",
-     "src": "https://www.pikesibiza.com/event/mondays-14-09-2026/",
-     "conf": "high"
-    },
     "2026-09-16": {
      "hl": "David Morales",
      "line": "David Morales & more",
@@ -433,6 +425,14 @@
      "party": "",
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/mondays-21-09-2026/",
+     "conf": "high"
+    },
+    "2026-09-22": {
+     "hl": "Pikes Resident DJs",
+     "line": "Pikes Resident DJs",
+     "party": "Bathtub Club",
+     "doors": "21:00",
+     "src": "https://www.pikesibiza.com/event/bathtub-club-22-09-2026/",
      "conf": "high"
     }
    }
@@ -495,14 +495,6 @@
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-09-14": {
-     "hl": "Five Venoms",
-     "line": "Five Venoms",
-     "party": "",
-     "doors": "",
-     "src": "https://11miami.com/events/",
-     "conf": "high"
-    },
     "2026-09-15": {
      "hl": "Iron Lyon",
      "line": "Iron Lyon",
@@ -558,6 +550,14 @@
      "doors": "",
      "src": "https://www.11miami.com/events/c8aab373-afd4-4ce4-840a-9a49c3ac947d1789161881",
      "conf": "high"
+    },
+    "2026-09-22": {
+     "hl": "Ariel Assault",
+     "line": "Ariel Assault",
+     "party": "",
+     "doors": "",
+     "src": "https://www.11miami.com/events/1cdf8599-5060-477b-8a90-1016513761571789161878",
+     "conf": "high"
     }
    }
   },
@@ -605,6 +605,14 @@
      "party": "",
      "doors": "23:00",
      "src": "https://www.cavoparadiso.gr/events.asp",
+     "conf": "high"
+    },
+    "2026-09-22": {
+     "hl": "Terry",
+     "line": "Terry · Zyrak · Ten Ten",
+     "party": "Closing Week",
+     "doors": "23:00",
+     "src": "https://cavoparadiso.gr/event.asp?eid=1070",
      "conf": "high"
     }
    }
