@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-16T03:17:20Z",
+ "generated": "2026-09-17T03:14:30Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
@@ -67,14 +67,6 @@
   },
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-09-15": {
-     "hl": "East End Dubs B2B Marco Carola",
-     "line": "Eastenderz — Theatre: Gaskin, Lola Palmer · Club Room: Paco Osuna, Luuk Van Dijk, Chinonegro",
-     "party": "Eastenderz",
-     "doors": "23:30",
-     "src": "https://www.hiibiza.com/events/2026/eastenderz/2026-09-15",
-     "conf": "high"
-    },
     "2026-09-16": {
      "hl": "MEDUZA & James Hype",
      "line": "Theatre: MEDUZA³, James Hype, Dreya V, Tita Lau · Club Room (Jonas Blue presents SENSES): Jonas Blue, Butch, Ruze",
@@ -121,6 +113,14 @@
      "party": "Eastenderz",
      "doors": "23:30",
      "src": "https://www.hiibiza.com/events/2026/eastenderz/2026-09-22",
+     "conf": "high"
+    },
+    "2026-09-23": {
+     "hl": "MEDUZA³",
+     "line": "MEDUZA³ · James Hype · The Blessed Madonna · Jonas Blue · Kid Bamboo · Gudfella",
+     "party": "Our House",
+     "doors": "23:30",
+     "src": "https://www.hiibiza.com/events/2026/our-house/2026-09-23",
      "conf": "high"
     }
    }
@@ -174,19 +174,19 @@
      "doors": "17:00",
      "src": "https://www.theushuaiaexperience.com/club/en/events/2026/fmif-david-guetta/2026-09-21",
      "conf": "high"
+    },
+    "2026-09-23": {
+     "hl": "Dimitri Vegas",
+     "line": "Dimitri Vegas · HALŌ · Brina Knauss · Dyzen · Delafino B2B Jose Maria Ramon",
+     "party": "Tomorrowland",
+     "doors": "17:00",
+     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/tomorrowland-and-dimitri-vegas-like-mike/2026-09-23",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-15": {
-     "hl": "Gordo & Vintage Culture",
-     "line": "Taraka — Patrick Topping, Sacchi, Jørds",
-     "party": "Taraka",
-     "doors": "23:00",
-     "src": "https://www.ibiza-spotlight.com/night/events/2026/09/15",
-     "conf": "high"
-    },
     "2026-09-16": {
      "hl": "Mau P",
      "line": "Mau P, Carlita, Adam Ten, OMRI",
@@ -242,19 +242,19 @@
      "doors": "23:00",
      "src": "https://pacha.com/event/gordo--taraka-22-09-2026",
      "conf": "high"
+    },
+    "2026-09-23": {
+     "hl": "Mau P",
+     "line": "Mau P · WhoMadeWho (Hybrid DJ Set) · Ale De Tuglie · Frank Storm · Anna Tur",
+     "party": "Baddest Behaviour",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/mau-p--baddest-behaviour-23-09-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-09-15": {
-     "hl": "Arkadyan (live)",
-     "line": "Voyage closing party — live three-piece into the club, further guests TBA",
-     "party": "Arkadyan presents Voyage",
-     "doors": "23:45",
-     "src": "https://www.ibiza-spotlight.com/night/events/2026/09/15",
-     "conf": "high"
-    },
     "2026-09-16": {
      "hl": "Toy Room",
      "line": "Toy Room residency with Frank the Teddy",
@@ -294,19 +294,19 @@
      "doors": "",
      "src": "https://www.liogroup.com/events/closing-travieso-20-sep-2026",
      "conf": "high"
+    },
+    "2026-09-23": {
+     "hl": "Toy Room",
+     "line": "",
+     "party": "",
+     "doors": "",
+     "src": "https://www.liogroup.com/events/toy-room-23-sep-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-09-15": {
-     "hl": "Joseph Capriati B2B Richie Hawtin",
-     "line": "Metamorfosi — Terrace: Toman, Paramida, Vanee · Club Room: Yanamaste, Adiel B2B Alarico, Nuke",
-     "party": "Metamorfosi",
-     "doors": "23:00",
-     "src": "https://dice.fm/event/py5xel-metamorfosi-15th-sep-amnesia-ibiza-ibiza-tickets",
-     "conf": "high"
-    },
     "2026-09-16": {
      "hl": "Adam Beyer",
      "line": "Terraza: Adam Beyer, Eric Prydz, Mind Against, Brina Knauss · Main Room: I Hate Models, Nicole Moudaber b2b Estella Boersma, Juliet Fox b2b Stëh, NO_IP",
@@ -353,6 +353,14 @@
      "party": "Metamorfosi",
      "doors": "23:00",
      "src": "https://sales.ticketing.cm.com/Metamorfosi-Amnesia-22ndSept2026",
+     "conf": "high"
+    },
+    "2026-09-23": {
+     "hl": "Kevin and Perry Amnesia Experience",
+     "line": "Dj Eyeball Paul · Billy Gillies · Ian Van Dahl · N-Trance · Rob Tissera b2b Dale Castell · Ultrabeat · Dave Pearce · Lange · Seb Fontaine · Signum · Vicky Devine",
+     "party": "",
+     "doors": "22:00",
+     "src": "https://sales.ticketing.cm.com/KevinPerry-Amnesia-23rdSeptember2026",
      "conf": "high"
     }
    }
@@ -434,6 +442,14 @@
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/bathtub-club-22-09-2026/",
      "conf": "high"
+    },
+    "2026-09-23": {
+     "hl": "Kirollus",
+     "line": "Kirollus (All Night Long) · Darren Noguerol · Lea Olivia · Mix-Stress · Pirate Copy (Disco Set) · Sharples · Siggy · Hosted by Riss",
+     "party": "La Discothèque",
+     "doors": "21:00",
+     "src": "https://www.pikesibiza.com/event/la-discotheque-23-09-2026/",
+     "conf": "high"
     }
    }
   },
@@ -495,14 +511,6 @@
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-09-15": {
-     "hl": "Iron Lyon",
-     "line": "Iron Lyon",
-     "party": "",
-     "doors": "20:00",
-     "src": "https://speakeasygo.com/E11EVEN/IRON-LYON-AT-E11EVEN?eid=EVE-0FJ7P0",
-     "conf": "high"
-    },
     "2026-09-16": {
      "hl": "Fenix Flexin",
      "line": "Fenix Flexin",
@@ -558,6 +566,14 @@
      "doors": "",
      "src": "https://www.11miami.com/events/1cdf8599-5060-477b-8a90-1016513761571789161878",
      "conf": "high"
+    },
+    "2026-09-23": {
+     "hl": "Zeus",
+     "line": "Zeus",
+     "party": "",
+     "doors": "20:00",
+     "src": "https://www.11miami.com/events/467c2767-aa2e-47af-922d-1bc31b541ceb1789161872",
+     "conf": "high"
     }
    }
   },
@@ -583,14 +599,6 @@
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-09-15": {
-     "hl": "Fused",
-     "line": "Fused, Endie Kenzak",
-     "party": "",
-     "doors": "23:00",
-     "src": "https://www.cavoparadiso.gr/event.asp?eid=1131",
-     "conf": "high"
-    },
     "2026-09-17": {
      "hl": "Zyrak",
      "line": "Zyrak and MaPet on the cliff terrace; headline set starts around 01:45",
