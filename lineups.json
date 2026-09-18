@@ -1,16 +1,8 @@
 {
- "generated": "2026-09-17T03:14:30Z",
+ "generated": "2026-09-18T03:16:17Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
-    "2026-09-16": {
-     "hl": "Lupe Fiasco",
-     "line": "Lupe Fiasco, DJ Smokey",
-     "party": "",
-     "doors": "20:00",
-     "src": "https://bellyupaspen.com/events/lupe-fiasco/",
-     "conf": "high"
-    },
     "2026-09-17": {
      "hl": "Elephant Revival",
      "line": "An Evening With Elephant Revival — Celtic-tinged Americana from the Colorado five-piece, show at 20:30",
@@ -62,19 +54,19 @@
      "doors": "20:00",
      "src": "https://www.stephentalkhouse.com/events/188129",
      "conf": "high"
+    },
+    "2026-09-24": {
+     "hl": "Inda Eaton",
+     "line": "Inda Eaton · Karaoke!! w/ JBM",
+     "party": "",
+     "doors": "20:00",
+     "src": "https://www.stephentalkhouse.com/events/198042",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-09-16": {
-     "hl": "MEDUZA & James Hype",
-     "line": "Theatre: MEDUZA³, James Hype, Dreya V, Tita Lau · Club Room (Jonas Blue presents SENSES): Jonas Blue, Butch, Ruze",
-     "party": "Our House",
-     "doors": "23:30",
-     "src": "https://www.hiibiza.com/events/2026/our-house/2026-09-16",
-     "conf": "high"
-    },
     "2026-09-17": {
      "hl": "HUGEL",
      "line": "HUGEL with AMÉMÉ, David Tort and Nautik in the Theatre; Miss Monique with Benny Benassi and Volkoder in the Club Room",
@@ -122,19 +114,19 @@
      "doors": "23:30",
      "src": "https://www.hiibiza.com/events/2026/our-house/2026-09-23",
      "conf": "high"
+    },
+    "2026-09-24": {
+     "hl": "HUGEL",
+     "line": "HUGEL · Moojo · Juany Bravo B2B Grossomoddo · Miss Monique · Adam Beyer · Son Of Son",
+     "party": "Make The Girls Dance",
+     "doors": "23:30",
+     "src": "https://www.hiibiza.com/events/2026/hugel/2026-09-24",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-09-16": {
-     "hl": "Dimitri Vegas & Like Mike",
-     "line": "Dimitri Vegas, Oliver Heldens, Henri PFR, joulie",
-     "party": "Tomorrowland",
-     "doors": "17:00",
-     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/tomorrowland-and-dimitri-vegas-like-mike/2026-09-16",
-     "conf": "high"
-    },
     "2026-09-17": {
      "hl": "Martin Garrix",
      "line": "Martin Garrix with The Magician, Low Steppa and Megisto on the open-air main stage",
@@ -182,19 +174,19 @@
      "doors": "17:00",
      "src": "https://www.theushuaiaexperience.com/club/en/events/2026/tomorrowland-and-dimitri-vegas-like-mike/2026-09-23",
      "conf": "high"
+    },
+    "2026-09-24": {
+     "hl": "Martin Garrix",
+     "line": "Martin Garrix · Mesto · Citadelle · Gabss",
+     "party": "",
+     "doors": "17:00",
+     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/martin-garrix/2026-09-24",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-16": {
-     "hl": "Mau P",
-     "line": "Mau P, Carlita, Adam Ten, OMRI",
-     "party": "Baddest Behaviour",
-     "doors": "23:00",
-     "src": "https://pacha.com/event/mau-p--baddest-behaviour-16-09-2026",
-     "conf": "high"
-    },
     "2026-09-17": {
      "hl": "Purple Disco Machine",
      "line": "Purple Disco Machine with Cerrone, Kenny Dope, DiOSA and David Bay",
@@ -250,19 +242,19 @@
      "doors": "23:00",
      "src": "https://pacha.com/event/mau-p--baddest-behaviour-23-09-2026",
      "conf": "high"
+    },
+    "2026-09-24": {
+     "hl": "Purple Disco Machine",
+     "line": "Purple Disco Machine · Todd Terje · Deer Jade · David Bay",
+     "party": "Pure Pacha",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/purple-disco-machine--pure-pacha-24-09-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-09-16": {
-     "hl": "Toy Room",
-     "line": "Toy Room residency with Frank the Teddy",
-     "party": "",
-     "src": "https://www.liogroup.com/events/toy-room-16-sep-2026",
-     "conf": "high",
-     "doors": ""
-    },
     "2026-09-17": {
      "hl": "Tiempo",
      "line": "No DJ is billed — Lío lists the night by its Tiempo strand alone, dinner-and-cabaret format, smart casual, 18+",
@@ -302,19 +294,19 @@
      "doors": "",
      "src": "https://www.liogroup.com/events/toy-room-23-sep-2026",
      "conf": "high"
+    },
+    "2026-09-24": {
+     "hl": "Tiempo",
+     "line": "",
+     "party": "",
+     "doors": "",
+     "src": "https://www.liogroup.com/events/tiempo-24-sep-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-09-16": {
-     "hl": "Adam Beyer",
-     "line": "Terraza: Adam Beyer, Eric Prydz, Mind Against, Brina Knauss · Main Room: I Hate Models, Nicole Moudaber b2b Estella Boersma, Juliet Fox b2b Stëh, NO_IP",
-     "party": "RESISTANCE Ibiza Closing Party",
-     "doors": "23:00",
-     "src": "https://www.amnesia.es/en/calendar/ibiza/2026/september",
-     "conf": "high"
-    },
     "2026-09-17": {
      "hl": "Josh Baker b2b Interplanetary Criminal",
      "line": "Josh Baker b2b Interplanetary Criminal, Sosa, L.P Rhythm and Lili on the Terraza",
@@ -362,6 +354,14 @@
      "doors": "22:00",
      "src": "https://sales.ticketing.cm.com/KevinPerry-Amnesia-23rdSeptember2026",
      "conf": "high"
+    },
+    "2026-09-24": {
+     "hl": "Josh Baker",
+     "line": "Josh Baker · Luke Dean B2B Tommy Phillips · Julian Fijma · Elvi",
+     "party": "You&Me",
+     "doors": "23:00",
+     "src": "https://sales.ticketing.cm.com/YouandMe-Amnesia-24thSeptember2026",
+     "conf": "high"
     }
    }
   },
@@ -382,19 +382,19 @@
      "doors": "18:00",
      "src": "https://dice.fm/event/xeaqqm-circoloco-ibiza-week-22-21st-sep-dc-10-ibiza-tickets",
      "conf": "high"
+    },
+    "2026-09-24": {
+     "hl": "Solid Grooves",
+     "line": "Butch · Carista · East End Dubs · ISAbella · KiNK · Ms. Mada · Paramida · PAWSA · Sonja Moonear · Toman",
+     "party": "",
+     "doors": "23:00",
+     "src": "https://dice.fm/event/69b139a51d02a90001978f9b",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-09-16": {
-     "hl": "David Morales",
-     "line": "David Morales & more",
-     "party": "Freddies",
-     "doors": "21:00",
-     "src": "https://www.pikesibiza.com/event/david-morales-16-09-2026/",
-     "conf": "high"
-    },
     "2026-09-17": {
      "hl": "Makèz",
      "line": "Makèz, OJ Wilson and Cally around the pool at the hotel itself",
@@ -449,6 +449,14 @@
      "party": "La Discothèque",
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/la-discotheque-23-09-2026/",
+     "conf": "high"
+    },
+    "2026-09-24": {
+     "hl": "Beniso",
+     "line": "Beniso (Drop BCN) · Guy Williams · Jon Jak · Sophie Joy · Kesta · S/A/M",
+     "party": "Flash",
+     "doors": "21:00",
+     "src": "https://www.pikesibiza.com/event/flash-24-09-2026/",
      "conf": "high"
     }
    }
@@ -511,14 +519,6 @@
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-09-16": {
-     "hl": "Fenix Flexin",
-     "line": "Fenix Flexin",
-     "party": "",
-     "doors": "20:00",
-     "src": "https://www.11miami.com/events/10759dd2-c5ca-44d8-a7cb-bc771b87874a1787755031",
-     "conf": "high"
-    },
     "2026-09-17": {
      "hl": "Rockwell",
      "line": "Rockwell takes the booth at the 24-hour ultraclub on 11th Street",
@@ -574,6 +574,14 @@
      "doors": "20:00",
      "src": "https://www.11miami.com/events/467c2767-aa2e-47af-922d-1bc31b541ceb1789161872",
      "conf": "high"
+    },
+    "2026-09-24": {
+     "hl": "Chizzle",
+     "line": "Chizzle",
+     "party": "",
+     "doors": "",
+     "src": "https://www.11miami.com/events/713ca384-8241-46f0-91d7-fa2a999ae2a71789161863",
+     "conf": "high"
     }
    }
   },
@@ -621,6 +629,14 @@
      "party": "Closing Week",
      "doors": "23:00",
      "src": "https://cavoparadiso.gr/event.asp?eid=1070",
+     "conf": "high"
+    },
+    "2026-09-24": {
+     "hl": "Freespirit",
+     "line": "Freespirit · Mark Code",
+     "party": "Cavo Closing Week",
+     "doors": "23:00",
+     "src": "https://www.cavoparadiso.gr/event.asp?eid=1071",
      "conf": "high"
     }
    }
