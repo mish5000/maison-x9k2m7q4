@@ -1,16 +1,8 @@
 {
- "generated": "2026-09-20T03:15:02Z",
+ "generated": "2026-09-21T03:17:05Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
-    "2026-09-19": {
-     "hl": "Dead Floyd",
-     "line": "Dead Floyd",
-     "party": "",
-     "doors": "19:30",
-     "src": "https://bellyupaspen.com/events/an-evening-w-dead-floyd/",
-     "conf": "high"
-    },
     "2026-09-22": {
      "hl": "Candlebox",
      "line": "Candlebox · Sponge",
@@ -59,14 +51,6 @@
   },
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-09-19": {
-     "hl": "Black Coffee",
-     "line": "Theatre: Black Coffee, Anotr, Laolu. Club Room (Más Tiempo): East End Dubs, Locklead, Delilah, Djammin b2b Ossie",
-     "party": "",
-     "doors": "23:30",
-     "src": "https://www.hiibiza.com/events/2026/black-coffee/2026-09-19",
-     "conf": "high"
-    },
     "2026-09-21": {
      "hl": "Francis Mercier",
      "line": "Francis Mercier B2B Nitefreak · Francis Mercier · Novak B2B Skyla Tylaa · Nick Castle B2B Manu · Andrea Oliva · Michael Mayer B2B Raxon · Cameron Jack",
@@ -119,14 +103,6 @@
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-09-19": {
-     "hl": "Ilario Alicante",
-     "line": "Ilario Alicante, Paco Osuna b2b Melanie Ribbe, Manda Moor b2b Sirus Hood, Bastian Bux, Adez",
-     "party": "ANTS",
-     "doors": "17:00",
-     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/ants/2026-09-19",
-     "conf": "high"
-    },
     "2026-09-20": {
      "hl": "Hugel",
      "line": "Hugel, Jonas Blue, Themba, Ochok, Mili",
@@ -179,14 +155,6 @@
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-19": {
-     "hl": "Robin Schulz",
-     "line": "Robin Schulz, Jax Jones, Mistajam, Jaden Bojsen",
-     "party": "",
-     "doors": "23:00",
-     "src": "https://pacha.com/event/robin-schulz-19-09-2026",
-     "conf": "high"
-    },
     "2026-09-20": {
      "hl": "Solomun",
      "line": "Solomun, KETTAMA",
@@ -242,19 +210,19 @@
      "doors": "23:00",
      "src": "https://pacha.com/event/robin-schulz-26-09-2026",
      "conf": "high"
+    },
+    "2026-09-27": {
+     "hl": "Solomun",
+     "line": "Solomun · Amê (DJ Set)",
+     "party": "Solomun+1",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/solomun1-27-09-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-09-19": {
-     "hl": "KŌDŌ",
-     "line": "",
-     "party": "",
-     "doors": "",
-     "src": "https://www.liogroup.com/events/kodo-19-sep-2026",
-     "conf": "high"
-    },
     "2026-09-20": {
      "hl": "DJ Papis",
      "line": "DJ Papis, Jesus Cabello",
@@ -299,14 +267,6 @@
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-09-19": {
-     "hl": "Haçienda Classical",
-     "line": "Haçienda Classical (Live), David Morales, Inner City (Live), Todd Terry, Graeme Park, Mike Pickering, DJ Paulette, Alison Limerick (special guest PA)",
-     "party": "FAÇ51 – The Haçienda",
-     "doors": "22:30",
-     "src": "https://sales.ticketing.cm.com/hacienda-amnesia-19thseptember2026",
-     "conf": "high"
-    },
     "2026-09-20": {
      "hl": "Pyramid",
      "line": "Terraza: Josh Baker (early set), Marco Faraone, Demi Riquisimo, Cam Stockman, Baggi — Main Room: Deborah De Luca, Andrés Campo, Charlie Sparks, Luca Donzelli",
@@ -354,6 +314,14 @@
      "doors": "22:00",
      "src": "https://sales.ticketing.cm.com/godskitchen-amnesia-26thsept2026/",
      "conf": "high"
+    },
+    "2026-09-27": {
+     "hl": "Pyramid",
+     "line": "Obskür B2B Omar+ · Sosa · Kepler B2B Burnski · Caal b2b De La Swing · Jeff Mills · Nørbak · DJ Pete",
+     "party": "",
+     "doors": "23:00",
+     "src": "https://www.amnesia.es/en/calendar/ibiza/2026/all",
+     "conf": "high"
     }
    }
   },
@@ -379,14 +347,6 @@
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-09-19": {
-     "hl": "Pikes House Party",
-     "line": "",
-     "party": "",
-     "doors": "21:00",
-     "src": "https://www.pikesibiza.com/event/pikes-house-party-19-09-2026/",
-     "conf": "high"
-    },
     "2026-09-20": {
      "hl": "Dr Banana",
      "line": "Dr Banana, Luke Una, Joe Goddard, Nathan Detroit, Simon Morell, Albion Forever, Craven Area Disco, Mirror Dance",
@@ -459,14 +419,6 @@
   },
   "miami|nightclubs|0": {
    "nights": {
-    "2026-09-19": {
-     "hl": "Matroda",
-     "line": "",
-     "party": "",
-     "doors": "23:30",
-     "src": "https://www.livenation.com/event/rZ7HnEZ1A4Zf-S/matroda",
-     "conf": "high"
-    },
     "2026-09-20": {
      "hl": "YG",
      "line": "",
@@ -490,19 +442,19 @@
      "doors": "23:30",
      "src": "https://www.ticketweb.com/event/crankdat-liv-nightclub-miami-tickets/14246074",
      "conf": "high"
+    },
+    "2026-09-27": {
+     "hl": "BossMan Dlow",
+     "line": "BossMan Dlow",
+     "party": "",
+     "doors": "23:00",
+     "src": "https://www.livenation.com/venue/KovZ917Ac_V/liv-tickets",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-09-19": {
-     "hl": "DJ Pee Wee",
-     "line": "DJ Pee Wee (Anderson .Paak)",
-     "party": "",
-     "doors": "",
-     "src": "https://speakeasygo.com/E11EVEN/DJ-PEE-WEE-AT-E11EVEN?eid=EVE-E2I49A",
-     "conf": "high"
-    },
     "2026-09-20": {
      "hl": "CX",
      "line": "",
@@ -558,19 +510,19 @@
      "doors": "20:00",
      "src": "https://www.11miami.com/events/ab0eb97f-8c4e-4afa-afbd-3c98f8979b901789161854",
      "conf": "high"
+    },
+    "2026-09-27": {
+     "hl": "Damaged Goods",
+     "line": "Damaged Goods",
+     "party": "",
+     "doors": "",
+     "src": "https://www.11miami.com/events/7b42d699-33fc-4d13-8552-663bda4f31be1789161851",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|2": {
    "nights": {
-    "2026-09-19": {
-     "hl": "PLANET X",
-     "line": "(A-Z) Aline Umber (Live), Ben Sterling, Danyelino, Dean Turnley, Omar+, Paula Tape",
-     "party": "",
-     "doors": "23:00",
-     "src": "https://dice.fm/event/6a57c7d69b5a8c000145eed8",
-     "conf": "high"
-    },
     "2026-09-25": {
      "hl": "BLOND:ISH",
      "line": "BLOND:ISH · Yamagucci · Chinonegro",
@@ -591,14 +543,6 @@
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-09-19": {
-     "hl": "Liva K",
-     "line": "Liva K, Freespirit",
-     "party": "",
-     "doors": "23:00",
-     "src": "https://www.cavoparadiso.gr/events.asp",
-     "conf": "high"
-    },
     "2026-09-22": {
      "hl": "Terry",
      "line": "Terry · Zyrak · Ten Ten",
