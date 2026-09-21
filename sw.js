@@ -82,6 +82,9 @@ self.addEventListener('fetch', (e) => {
   let url;
   try { url = new URL(req.url); } catch (_) { return; }
   if (req.method !== 'GET' || url.origin !== location.origin) return;
+  // The SemiAnalysis Brief app lives in /substack-brief/ with its own worker —
+  // never answer for it, or its first load would get the PRIVÉE shell.
+  if (url.pathname.includes('/substack-brief/')) return;
 
   const isNav = req.mode === 'navigate' || url.pathname.endsWith('/') || url.pathname.endsWith('index.html');
   // dishes.json was missing here, so the largest of the three fell through to

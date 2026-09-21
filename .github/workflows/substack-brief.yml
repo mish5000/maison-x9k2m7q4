@@ -1,0 +1,72 @@
+# SemiAnalysis Brief — checks Substack for new SemiAnalysis posts and writes a
+# kid-level briefing for each one into substack-brief/data/briefs.json.
+#
+# Runs every 30 minutes on the default branch (GitHub may delay scheduled runs
+# by a few minutes) and whenever you press "Run workflow" in the Actions tab.
+#
+# Secrets to add under Settings → Secrets and variables → Actions:
+#   ANTHROPIC_API_KEY   required
+#   SUBSTACK_COOKIE     recommended (value of the substack.sid cookie)
+#   SUBSTACK_EMAIL / SUBSTACK_PASSWORD   alternative login
+#   BRIEF_PASSPHRASE    recommended on a public repo (encrypts the briefs file)
+#   NTFY_TOPIC          optional phone notifications via ntfy.sh
+name: SemiAnalysis brief
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: substack-brief
+  cancel-in-progress: false
+
+jobs:
+  brief:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: substack-brief/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r substack-brief/requirements.txt
+
+      - name: Fetch new posts and write briefs
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SUBSTACK_COOKIE: ${{ secrets.SUBSTACK_COOKIE }}
+          SUBSTACK_EMAIL: ${{ secrets.SUBSTACK_EMAIL }}
+          SUBSTACK_PASSWORD: ${{ secrets.SUBSTACK_PASSWORD }}
+          BRIEF_PASSPHRASE: ${{ secrets.BRIEF_PASSPHRASE }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          SUMMARY_MODEL: ${{ vars.SUMMARY_MODEL }}
+          MAX_NEW_POSTS: ${{ vars.MAX_NEW_POSTS }}
+          APP_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/substack-brief/
+        run: python substack-brief/brief.py
+
+      - name: Commit updated briefs
+        run: |
+          git config user.name "substack-brief-bot"
+          git config user.email "substack-brief-bot@users.noreply.github.com"
+          git add substack-brief/data/briefs.json
+          if git diff --cached --quiet; then
+            echo "No new briefs."
+            exit 0
+          fi
+          git commit -m "Brief: new SemiAnalysis summaries"
+          # Someone may have pushed meanwhile; rebase our single commit on top.
+          for i in 1 2 3; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep 5
+          done
+          echo "Push failed after 3 attempts" >&2
+          exit 1

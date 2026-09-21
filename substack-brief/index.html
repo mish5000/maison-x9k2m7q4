@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SemiAnalysis Brief</title>
+<meta name="description" content="Every new SemiAnalysis article, explained so a 10-year-old could follow it.">
+<meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f6f7f9" media="(prefers-color-scheme: light)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Brief">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+:root{
+  --bg:#f6f7f9; --card:#ffffff; --text:#14171c; --muted:#5f6772; --line:#e3e6ea;
+  --accent:#1f6feb; --accent-ink:#ffffff; --warn-bg:#fff4d6; --warn-ink:#7a5200;
+  --chip:#eef1f5; --shadow:0 1px 2px rgba(0,0,0,.06),0 6px 18px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1115; --card:#171a21; --text:#eef0f3; --muted:#9aa3ad; --line:#262b34;
+    --accent:#4c8dff; --accent-ink:#0b1220; --warn-bg:#3a2d0a; --warn-ink:#ffd36b;
+    --chip:#222731; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.35);
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,Segoe UI,Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+a{color:var(--accent)}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 40px}
+header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid var(--line)}
+.bar{max-width:720px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.bar h1{font-size:19px;margin:0;font-weight:700;letter-spacing:-.01em;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .sub{display:block;font-size:12px;color:var(--muted);font-weight:500;margin-top:1px}
+.ibtn{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--chip)}
+.ibtn:active{opacity:.6}
+.ibtn svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ibtn.spin svg{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hidden{display:none!important}
+.notice{margin:16px 0;padding:14px 16px;border-radius:14px;background:var(--warn-bg);color:var(--warn-ink);font-size:14px;line-height:1.45}
+.notice b{font-weight:650}
+.empty{padding:60px 16px;text-align:center;color:var(--muted);font-size:15px;line-height:1.5}
+.empty .big{font-size:44px;margin-bottom:10px}
+.list{display:flex;flex-direction:column;gap:12px;padding-top:16px}
+.card{position:relative;display:block;width:100%;text-align:left;background:var(--card);border-radius:18px;
+  padding:16px 16px 14px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.card:active{transform:scale(.99)}
+.card .date{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.02em;text-transform:uppercase;display:flex;gap:8px;align-items:center}
+.card .title{font-size:17px;font-weight:700;line-height:1.3;margin:6px 0 6px;letter-spacing:-.01em}
+.card .line{font-size:14.5px;color:var(--muted);line-height:1.45}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block;flex:none}
+.pill{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--warn-bg);color:var(--warn-ink);text-transform:none;letter-spacing:0}
+/* detail */
+.detail{padding-top:8px}
+.back{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:15px;color:var(--accent);padding:12px 0}
+.back svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.detail h2{font-size:24px;line-height:1.22;letter-spacing:-.02em;margin:4px 0 6px}
+.detail .meta{font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+.detail .meta a{font-weight:600}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0;box-shadow:var(--shadow)}
+.sec h3{margin:0 0 8px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.sec p{margin:0;font-size:17px;line-height:1.55}
+.sec p+p{margin-top:12px}
+.sec.idea p{font-size:18.5px;font-weight:500}
+.nums{display:grid;grid-template-columns:1fr;gap:10px}
+.num{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:baseline;padding:10px 12px;border-radius:12px;background:var(--chip)}
+.num .v{font-size:20px;font-weight:800;letter-spacing:-.02em;color:var(--accent);white-space:nowrap}
+.num .l{font-size:14px;font-weight:700}
+.num .m{grid-column:1/-1;font-size:14px;color:var(--muted);line-height:1.45}
+.words dt{font-weight:700;font-size:16px;margin-top:10px}
+.words dd{margin:2px 0 0;font-size:15.5px;line-height:1.5;color:var(--text)}
+.words dl{margin:0}
+.storyp{counter-reset:s}
+.storyp p{position:relative;padding-left:0}
+/* sheet */
+.sheet{position:fixed;inset:0;z-index:20;display:flex;align-items:flex-end;background:rgba(0,0,0,.45)}
+.sheet .panel{width:100%;max-width:720px;margin:0 auto;background:var(--card);border-radius:22px 22px 0 0;padding:14px 18px calc(22px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
+.sheet h3{margin:6px 0 14px;font-size:18px}
+.sheet label{display:block;font-size:13px;color:var(--muted);font-weight:600;margin:14px 0 6px}
+.sheet input{width:100%;font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--text)}
+.sheet .row{display:flex;gap:10px;margin-top:18px}
+.btn{flex:1;padding:13px;border-radius:14px;font-weight:700;font-size:15px;background:var(--chip);text-align:center}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.sheet .help{font-size:13px;color:var(--muted);line-height:1.5;margin-top:10px}
+.grab{width:38px;height:5px;border-radius:5px;background:var(--line);margin:0 auto 6px}
+.foot{margin-top:28px;text-align:center;font-size:12px;color:var(--muted);line-height:1.6}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <h1>SemiAnalysis Brief<span class="sub" id="status">Loading…</span></h1>
+    <button class="ibtn" id="btnRefresh" aria-label="Refresh"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></button>
+    <button class="ibtn" id="btnSettings" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="notice" class="notice hidden"></div>
+  <section id="list" class="list"></section>
+  <section id="detail" class="detail hidden"></section>
+  <div class="foot" id="foot"></div>
+</main>
+
+<div id="sheet" class="sheet hidden" role="dialog" aria-modal="true">
+  <div class="panel">
+    <div class="grab"></div>
+    <h3>Settings</h3>
+    <label for="pass">Passphrase (only needed if your briefs are encrypted)</label>
+    <input id="pass" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Same as BRIEF_PASSPHRASE in GitHub">
+    <div class="help">Stored only on this phone. It unlocks the briefs file that the GitHub robot writes.</div>
+    <div class="row">
+      <button class="btn" id="btnMarkRead">Mark all read</button>
+      <button class="btn primary" id="btnSave">Save</button>
+    </div>
+    <div class="help" id="about"></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const APP_VERSION = '1';
+  const DATA_URL = 'data/briefs.json';
+  const $ = (s) => document.querySelector(s);
+  const els = {
+    status: $('#status'), list: $('#list'), detail: $('#detail'), notice: $('#notice'),
+    sheet: $('#sheet'), pass: $('#pass'), foot: $('#foot'), about: $('#about'),
+    refresh: $('#btnRefresh'),
+  };
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (_) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} },
+  };
+  let data = null;          // decrypted store {generated_at, briefs:[...]}
+  let seen = new Set(store.get('seen', []));
+  let current = null;       // open brief id
+
+  // ---------- crypto (mirrors brief.py encrypt_payload) ----------
+  const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+  async function decrypt(blob, passphrase) {
+    const enc = new TextEncoder();
+    const base = await crypto.subtle.importKey('raw', enc.encode(passphrase), 'PBKDF2', false, ['deriveKey']);
+    const key = await crypto.subtle.deriveKey(
+      { name: 'PBKDF2', salt: b64(blob.salt), iterations: blob.iterations || 200000, hash: 'SHA-256' },
+      base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+    const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(blob.nonce) }, key, b64(blob.ciphertext));
+    return JSON.parse(new TextDecoder().decode(pt));
+  }
+
+  // ---------- helpers ----------
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  function fmtDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    if (isNaN(d)) return '';
+    return d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+  }
+  function fmtWhen(iso) {
+    if (!iso) return 'never';
+    const d = new Date(iso); if (isNaN(d)) return '';
+    const mins = Math.round((Date.now() - d.getTime()) / 60000);
+    if (mins < 2) return 'just now';
+    if (mins < 60) return `${mins} min ago`;
+    if (mins < 60 * 36) return `${Math.round(mins / 60)} h ago`;
+    return d.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+  }
+  function setNotice(html) { els.notice.innerHTML = html || ''; els.notice.classList.toggle('hidden', !html); }
+  function setBadge(n) { try { if ('setAppBadge' in navigator) { n ? navigator.setAppBadge(n) : navigator.clearAppBadge(); } } catch (_) {} }
+  function unreadCount() { return (data?.briefs || []).filter((b) => !seen.has(b.id)).length; }
+
+  // ---------- load ----------
+  async function load(showSpinner) {
+    if (showSpinner) els.refresh.classList.add('spin');
+    els.status.textContent = 'Checking for new briefs…';
+    try {
+      const res = await fetch(`${DATA_URL}?t=${Date.now()}`, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const raw = await res.json();
+      if (raw.encrypted) {
+        const pass = store.get('pass', '');
+        if (!pass) {
+          data = null;
+          setNotice('<b>Locked.</b> Your briefs are encrypted. Tap the gear and enter the passphrase you set in GitHub (BRIEF_PASSPHRASE).');
+          els.status.textContent = `Locked · updated ${fmtWhen(raw.generated_at)}`;
+          render(); return;
+        }
+        try { data = await decrypt(raw, pass); }
+        catch (_) {
+          data = null;
+          setNotice('<b>Wrong passphrase.</b> Tap the gear and enter the exact passphrase from GitHub.');
+          els.status.textContent = 'Locked'; render(); return;
+        }
+      } else {
+        data = raw;
+      }
+      setNotice('');
+      store.set('cache', data);
+      els.status.textContent = data.generated_at ? `Updated ${fmtWhen(data.generated_at)}` : 'No briefs yet';
+    } catch (err) {
+      const cached = store.get('cache', null);
+      if (cached) { data = cached; els.status.textContent = `Offline · showing saved briefs`; }
+      else { els.status.textContent = 'Could not load'; setNotice(`<b>Could not load the briefs file.</b> ${esc(err.message)}. If this is a brand-new setup, GitHub Pages may not have published yet.`); }
+    } finally {
+      els.refresh.classList.remove('spin');
+    }
+    render();
+  }
+
+  // ---------- render ----------
+  function render() {
+    const briefs = data?.briefs || [];
+    setBadge(unreadCount());
+    if (current !== null) {
+      const b = briefs.find((x) => x.id === current);
+      if (b) return renderDetail(b);
+      current = null;
+    }
+    els.detail.classList.add('hidden');
+    els.list.classList.remove('hidden');
+    if (!briefs.length) {
+      els.list.innerHTML = `<div class="empty"><div class="big">📰</div>${data ? 'No briefs yet. The GitHub robot writes one for each new SemiAnalysis article. Run the workflow once from the Actions tab to get started.' : ''}</div>`;
+      els.foot.textContent = '';
+      return;
+    }
+    els.list.innerHTML = briefs.map((b) => `
+      <button class="card" data-id="${esc(b.id)}">
+        <div class="date">${seen.has(b.id) ? '' : '<span class="dot" aria-label="unread"></span>'}<span>${esc(fmtDate(b.post_date))}</span>${b.full ? '' : '<span class="pill">preview only</span>'}</div>
+        <div class="title">${esc(b.title)}</div>
+        <div class="line">${esc(b.brief?.one_line || b.subtitle || '')}</div>
+      </button>`).join('');
+    els.foot.innerHTML = `${briefs.length} brief${briefs.length === 1 ? '' : 's'} · <a href="${esc(data.publication?.url || 'https://newsletter.semianalysis.com')}" target="_blank" rel="noopener">Open SemiAnalysis</a>`;
+  }
+
+  function renderDetail(b) {
+    els.list.classList.add('hidden');
+    els.detail.classList.remove('hidden');
+    const br = b.brief || {};
+    const paras = (arr) => (arr || []).map((p) => `<p>${esc(p)}</p>`).join('');
+    els.detail.innerHTML = `
+      <button class="back" id="btnBack"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>All briefs</button>
+      <h2>${esc(b.title)}</h2>
+      <div class="meta">${esc(fmtDate(b.post_date))}${b.subtitle ? ' · ' + esc(b.subtitle) : ''}<br>
+        <a href="${esc(b.url)}" target="_blank" rel="noopener">Read the original on SemiAnalysis →</a></div>
+      ${b.full ? '' : `<div class="notice"><b>Preview only.</b> The robot could only see ${esc(b.words_seen)} of ${esc(b.words_declared)} words, so this brief covers just the free part. Check the Substack login in your GitHub secrets.</div>`}
+      ${br.headline ? `<div class="sec idea"><h3>In one line</h3><p>${esc(br.headline)}</p></div>` : ''}
+      ${br.big_idea ? `<div class="sec"><h3>The big idea</h3><p>${esc(br.big_idea)}</p></div>` : ''}
+      ${br.story?.length ? `<div class="sec storyp"><h3>The story</h3>${paras(br.story)}</div>` : ''}
+      ${br.why_it_matters ? `<div class="sec"><h3>Why it matters</h3><p>${esc(br.why_it_matters)}</p></div>` : ''}
+      ${br.numbers?.length ? `<div class="sec"><h3>Numbers that matter</h3><div class="nums">${br.numbers.map((n) => `<div class="num"><span class="v">${esc(n.value)}</span><span class="l">${esc(n.label)}</span><span class="m">${esc(n.meaning)}</span></div>`).join('')}</div></div>` : ''}
+      ${br.words_to_know?.length ? `<div class="sec words"><h3>Words to know</h3><dl>${br.words_to_know.map((w) => `<dt>${esc(w.word)}</dt><dd>${esc(w.meaning)}</dd>`).join('')}</dl></div>` : ''}
+      ${br.one_line ? `<div class="sec"><h3>Tell a friend</h3><p>${esc(br.one_line)}</p></div>` : ''}
+      <div class="foot">Briefed ${esc(fmtWhen(b.briefed_at))} by ${esc(b.model || 'Claude')}. Summaries can contain mistakes — the original is the source of truth.</div>`;
+    window.scrollTo(0, 0);
+  }
+
+  // ---------- events ----------
+  els.list.addEventListener('click', (e) => {
+    const card = e.target.closest('.card'); if (!card) return;
+    const id = Number(card.dataset.id);
+    current = isNaN(id) ? card.dataset.id : id;
+    seen.add(current); store.set('seen', [...seen]);
+    history.pushState({ id: current }, '');
+    render();
+  });
+  els.detail.addEventListener('click', (e) => { if (e.target.closest('#btnBack')) history.back(); });
+  window.addEventListener('popstate', () => { current = history.state?.id ?? null; render(); });
+  els.refresh.addEventListener('click', () => load(true));
+  $('#btnSettings').addEventListener('click', () => {
+    els.pass.value = store.get('pass', '');
+    els.about.textContent = `App v${APP_VERSION} · data ${data?.generated_at ? 'updated ' + fmtWhen(data.generated_at) : 'not loaded'}`;
+    els.sheet.classList.remove('hidden');
+  });
+  els.sheet.addEventListener('click', (e) => { if (e.target === els.sheet) els.sheet.classList.add('hidden'); });
+  $('#btnSave').addEventListener('click', () => { store.set('pass', els.pass.value.trim()); els.sheet.classList.add('hidden'); load(true); });
+  $('#btnMarkRead').addEventListener('click', () => { (data?.briefs || []).forEach((b) => seen.add(b.id)); store.set('seen', [...seen]); els.sheet.classList.add('hidden'); render(); });
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') load(false); });
+
+  // ---------- boot ----------
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(() => {});
+  }
+  const cached = store.get('cache', null);
+  if (cached) { data = cached; render(); }
+  load(false);
+})();
+</script>
+</body>
+</html>
