@@ -45,7 +45,7 @@ var b=document.getElementById('boot');setTimeout(function(){if(b)b.classList.add
   <div class="sp-word">
     <span class="sp-rule"></span>
     <span class="sp-tag">Transporting you to the extraordinary</span>
-    <span class="sp-build">V691</span>
+    <span class="sp-build">V714</span>
   </div>
 </div>
 <div id="shell">
@@ -80,7 +80,7 @@ var b=document.getElementById('boot');setTimeout(function(){if(b)b.classList.add
       <span class="rf-mono serif">M</span>
     </div>
     <div class="rf-label">À votre service</div>
-    <div class="rf-build">V691</div>
+    <div class="rf-build">V714</div>
   </div>
 </div>
 <div id="toast"></div>
@@ -1722,9 +1722,18 @@ body {
   border: 1px solid rgba(232, 201, 128, 0.62);
   background: rgba(11, 10, 8, 0.62);   /* a chip on the photo, never a veil over it */
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.42);
-  pointer-events: none;                /* the whole card is the tap target */
+  /* It used to be pointer-events:none so the whole card stayed the tap
+     target. Since 21 Sep the bubble is an <a> into Google Maps with the
+     destination filled (his ask), so it takes its own taps; the card's
+     handler is kept out by stopPropagation on the anchor, not by CSS. */
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   white-space: nowrap;
 }
+/* Press feedback on transform only — paint law: nothing here transitions
+   box-shadow or filter, and there is no transition at all, just the state. */
+.vcard .distbubble:active { transform: scale(0.96); }
 .vcard .distbubble b {
   font-family: var(--sans);
   font-size: 20px; font-weight: 600; line-height: 1.05;
@@ -4638,8 +4647,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '8 September 2026 · 05:05 CEST';
-const APP_BUILD = 'v691';
+const COLLECTION_UPDATED = '21 September 2026 · 02:03 CEST';
+const APP_BUILD = 'v714';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -8147,7 +8156,17 @@ function venueCard(city, catId, v, idx) {
            the bar states which of the two the screen is showing. */
         const m = distRoad && distRoad[key];
         const km = (typeof m === 'number') ? m / 1000 : geoKmTo(key);
-        return km === null ? '' : `<div class="distbubble"><b>${kmLabel(km, city.id)}</b><i>away</i></div>`;
+        /* THE BUBBLE IS A LINK (21 Sep). His ask: tap the distance and be in
+           Google Maps with the destination filled, instead of reading the
+           number, leaving the app and typing the name. It is an <a>, not a
+           handler — a real href survives the standalone PWA, which is where
+           window.open() is least reliable — and it shares mapsUrl() with the
+           venue sheet's Google Maps row, so one destination format for the
+           whole app: coordinates when we hold them, name + address when not.
+           stopPropagation because wireCards() listens on the card itself and
+           has no descendant guard, the same reason .plan-add carries it. */
+        return km === null ? '' : `<a class="distbubble" href="${mapsUrl(v, city, key)}" target="_blank" rel="noopener"
+          onclick="event.stopPropagation()" aria-label="Navigate to ${esc(v.n)} in Google Maps"><b>${kmLabel(km, city.id)}</b><i>away</i></a>`;
       })()}
       <div class="body">
         <div class="area">${v.a} · ${city.name}</div>
