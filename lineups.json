@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-21T03:17:05Z",
+ "generated": "2026-09-22T03:13:31Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
@@ -17,6 +17,14 @@
      "party": "I'm People Tour",
      "doors": "19:00",
      "src": "https://tickets.bellyupaspen.com/link/event?event=hiss-golden-messenger-9-26-26",
+     "conf": "high"
+    },
+    "2026-09-28": {
+     "hl": "Yaima",
+     "line": "Yaima · Stella Lumina",
+     "party": "",
+     "doors": "19:00",
+     "src": "https://bellyupaspen.com/events/yaima/",
      "conf": "high"
     }
    }
@@ -98,19 +106,19 @@
      "doors": "23:30",
      "src": "https://www.hiibiza.com/events/2026/black-coffee/2026-09-26",
      "conf": "high"
+    },
+    "2026-09-28": {
+     "hl": "Francis Mercier",
+     "line": "Francis Mercier B2B Mahmut Orhan · Francis Mercier · Ashibah B2B ThatGirl SherryK · Jade B2B Rolbac · Andrea Oliva · Major League Djz · Bontan · Stofella",
+     "party": "Solèy",
+     "doors": "23:30",
+     "src": "https://www.hiibiza.com/events/2026/francis-mercier/2026-09-28",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-09-20": {
-     "hl": "Hugel",
-     "line": "Hugel, Jonas Blue, Themba, Ochok, Mili",
-     "party": "Make The Girls Dance",
-     "doors": "17:00",
-     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/hugel/2026-09-20",
-     "conf": "high"
-    },
     "2026-09-21": {
      "hl": "David Guetta",
      "line": "David Guetta · Fedde Le Grand · MYD · Paul Reynolds",
@@ -150,19 +158,19 @@
      "doors": "17:00",
      "src": "https://www.theushuaiaexperience.com/club/en/events/2026/ants/2026-09-26",
      "conf": "high"
+    },
+    "2026-09-28": {
+     "hl": "David Guetta",
+     "line": "David Guetta · Joel Corry · Levi · Paul Reynolds",
+     "party": "F*** Me I'm Famous!",
+     "doors": "17:00",
+     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/fmif-david-guetta/2026-09-28",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-20": {
-     "hl": "Solomun",
-     "line": "Solomun, KETTAMA",
-     "party": "Solomun +1",
-     "doors": "23:00",
-     "src": "https://pacha.com/event/solomun1-20-09-2026",
-     "conf": "high"
-    },
     "2026-09-21": {
      "hl": "Sonny Fodera",
      "line": "Sonny Fodera · Roger Sanchez",
@@ -218,19 +226,19 @@
      "doors": "23:00",
      "src": "https://pacha.com/event/solomun1-27-09-2026",
      "conf": "high"
+    },
+    "2026-09-28": {
+     "hl": "Sonny Fodera",
+     "line": "Sonny Fodera · Jazzy · Marten Lou",
+     "party": "",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/sonny-fodera-28-09-20261",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-09-20": {
-     "hl": "DJ Papis",
-     "line": "DJ Papis, Jesus Cabello",
-     "party": "Travieso Closing Party",
-     "doors": "",
-     "src": "https://www.liogroup.com/events/closing-travieso-20-sep-2026",
-     "conf": "high"
-    },
     "2026-09-23": {
      "hl": "Toy Room",
      "line": "",
@@ -267,14 +275,6 @@
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-09-20": {
-     "hl": "Pyramid",
-     "line": "Terraza: Josh Baker (early set), Marco Faraone, Demi Riquisimo, Cam Stockman, Baggi — Main Room: Deborah De Luca, Andrés Campo, Charlie Sparks, Luca Donzelli",
-     "party": "",
-     "doors": "21:30",
-     "src": "https://sales.ticketing.cm.com/Pyramid-Amnesia-20thSeptember2026",
-     "conf": "high"
-    },
     "2026-09-22": {
      "hl": "Joseph Capriati",
      "line": "Joseph Capriati B3B Traumer B3B Alisha · Obskür · Joe Vanditti · Ben Klock b2b Phillippa Pacho · Alarico · Markantonio · Roberto Capuano",
@@ -342,19 +342,19 @@
      "doors": "23:00",
      "src": "https://dice.fm/event/69b139a51d02a90001978f9b",
      "conf": "high"
+    },
+    "2026-09-28": {
+     "hl": "Circoloco",
+     "line": "Carl Craig · DJ Seinfeld · DJ Tennis · Francesco del Garda · Gabrielle Kwarteng · Isaac Carter · Jamback · Jonny Rock · Krystal Klear · Luciano · Rossi. · Seth Troxler · Skream · Tania Vulcano",
+     "party": "",
+     "doors": "18:00",
+     "src": "https://dice.fm/event/69b836aab280da00016bedc8",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-09-20": {
-     "hl": "Dr Banana",
-     "line": "Dr Banana, Luke Una, Joe Goddard, Nathan Detroit, Simon Morell, Albion Forever, Craven Area Disco, Mirror Dance",
-     "party": "Sundays at Pikes",
-     "doors": "21:00",
-     "src": "https://www.pikesibiza.com/event/sundays-at-pikes-20-09-2026/",
-     "conf": "high"
-    },
     "2026-09-21": {
      "hl": "Mondays",
      "line": "",
@@ -402,31 +402,27 @@
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/pikes-house-party-26-09-2026/",
      "conf": "high"
-    }
-   }
-  },
-  "marbella|nightclubs|0": {
-   "nights": {
-    "2026-09-20": {
-     "hl": "Oriol Calvo",
-     "line": "Oriol Calvo, Pomboklap",
-     "party": "Nevermind by TEN Ibiza",
-     "doors": "",
-     "src": "https://mandalatickets.com/en/marbella/events/bonbonniere/event-sep20",
+    },
+    "2026-09-27": {
+     "hl": "Manumission Carry On Cowboy",
+     "line": "Special Guest DJs",
+     "party": "",
+     "doors": "21:00",
+     "src": "https://www.pikesibiza.com/event/manumission-carry-on-cowboy-27-09-2026/",
+     "conf": "high"
+    },
+    "2026-09-28": {
+     "hl": "Mondays",
+     "line": "Secret DJs · Very Special Guests",
+     "party": "",
+     "doors": "21:00",
+     "src": "https://www.pikesibiza.com/event/mondays-28-09-2026/",
      "conf": "high"
     }
    }
   },
   "miami|nightclubs|0": {
    "nights": {
-    "2026-09-20": {
-     "hl": "YG",
-     "line": "",
-     "party": "",
-     "doors": "23:30",
-     "src": "https://www.livenation.com/event/rZ7HnEZ1AfGbZV/yg",
-     "conf": "high"
-    },
     "2026-09-25": {
      "hl": "Steve Aoki",
      "line": "Steve Aoki",
@@ -455,14 +451,6 @@
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-09-20": {
-     "hl": "CX",
-     "line": "",
-     "party": "",
-     "doors": "",
-     "src": "https://speakeasygo.com/E11EVEN/CX-AT-E11EVEN?eid=EVE-42YP7X",
-     "conf": "high"
-    },
     "2026-09-21": {
      "hl": "DJ RM",
      "line": "DJ RM",
@@ -517,6 +505,14 @@
      "party": "",
      "doors": "",
      "src": "https://www.11miami.com/events/7b42d699-33fc-4d13-8552-663bda4f31be1789161851",
+     "conf": "high"
+    },
+    "2026-09-28": {
+     "hl": "Prankstisci",
+     "line": "Prankstisci",
+     "party": "",
+     "doors": "",
+     "src": "https://speakeasygo.com/E11EVEN/PRANKSTISCI-AT-E11EVEN?eid=EVE-BDV3I4",
      "conf": "high"
     }
    }
