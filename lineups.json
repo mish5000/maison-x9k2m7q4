@@ -1,16 +1,8 @@
 {
- "generated": "2026-09-23T03:14:00Z",
+ "generated": "2026-09-24T03:12:05Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
-    "2026-09-22": {
-     "hl": "Candlebox",
-     "line": "Candlebox · Sponge",
-     "party": "Can’t Quit You Tour, Fall 2026",
-     "doors": "19:00",
-     "src": "https://bellyupaspen.com/events/candlebox/",
-     "conf": "high"
-    },
     "2026-09-26": {
      "hl": "Hiss Golden Messenger",
      "line": "Hiss Golden Messenger · Lou Hazel",
@@ -67,14 +59,6 @@
   },
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-09-22": {
-     "hl": "East End Dubs",
-     "line": "East End Dubs · Luciano · Laidlaw B2B Bullet Tooth · Reeshy · Paco Osuna · Iglesias · Fer BR",
-     "party": "Eastenderz",
-     "doors": "23:30",
-     "src": "https://www.hiibiza.com/events/2026/eastenderz/2026-09-22",
-     "conf": "high"
-    },
     "2026-09-23": {
      "hl": "MEDUZA³",
      "line": "MEDUZA³ · James Hype · The Blessed Madonna · Jonas Blue · Kid Bamboo · Gudfella",
@@ -122,6 +106,14 @@
      "doors": "23:30",
      "src": "https://www.hiibiza.com/events/2026/eastenderz/2026-09-29",
      "conf": "high"
+    },
+    "2026-09-30": {
+     "hl": "MEDUZA & James Hype",
+     "line": "James Hype · MEDUZA³ · Korolova · Brina Knauss · Jonas Blue · Malive · Calussa",
+     "party": "Our House",
+     "doors": "23:30",
+     "src": "https://www.hiibiza.com/events/2026/our-house/2026-09-30",
+     "conf": "high"
     }
    }
   },
@@ -166,19 +158,19 @@
      "doors": "17:00",
      "src": "https://www.theushuaiaexperience.com/club/en/events/2026/fmif-david-guetta/2026-09-28",
      "conf": "high"
+    },
+    "2026-09-30": {
+     "hl": "Dimitri Vegas & Like Mike",
+     "line": "Dimitri Vegas & Like Mike · Hannah Laing B2B Lilly Palmer · MATTN · LAMAR",
+     "party": "Tomorrowland Closing",
+     "doors": "17:00",
+     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/tomorrowland-and-dimitri-vegas-like-mike/2026-09-30",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-22": {
-     "hl": "GORDO",
-     "line": "GORDO · Shimza · HoneyLuv · Vanjee · Gala",
-     "party": "Taraka",
-     "doors": "23:00",
-     "src": "https://pacha.com/event/gordo--taraka-22-09-2026",
-     "conf": "high"
-    },
     "2026-09-23": {
      "hl": "Mau P",
      "line": "Mau P · WhoMadeWho (Hybrid DJ Set) · Ale De Tuglie · Frank Storm · Anna Tur",
@@ -234,6 +226,14 @@
      "doors": "23:00",
      "src": "https://pacha.com/event/gordo--taraka-29-09-2026",
      "conf": "high"
+    },
+    "2026-09-30": {
+     "hl": "Mau P",
+     "line": "Mau P · Jimi Jules · HAAi · Baggi",
+     "party": "Baddest Behaviour",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/mau-p--baddest-behaviour-30-09-2026",
+     "conf": "high"
     }
    }
   },
@@ -270,19 +270,19 @@
      "doors": "",
      "src": "https://www.liogroup.com/events/kodo-26-sep-2026",
      "conf": "high"
+    },
+    "2026-09-30": {
+     "hl": "Toy Room",
+     "line": "",
+     "party": "Closing Party",
+     "doors": "",
+     "src": "https://www.liogroup.com/events/toy-room-30-sep-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-09-22": {
-     "hl": "Joseph Capriati",
-     "line": "Joseph Capriati B3B Traumer B3B Alisha · Obskür · Joe Vanditti · Ben Klock b2b Phillippa Pacho · Alarico · Markantonio · Roberto Capuano",
-     "party": "Metamorfosi",
-     "doors": "23:00",
-     "src": "https://sales.ticketing.cm.com/Metamorfosi-Amnesia-22ndSept2026",
-     "conf": "high"
-    },
     "2026-09-23": {
      "hl": "Kevin and Perry Amnesia Experience",
      "line": "Dj Eyeball Paul · Billy Gillies · Ian Van Dahl · N-Trance · Rob Tissera b2b Dale Castell · Ultrabeat · Dave Pearce · Lange · Seb Fontaine · Signum · Vicky Devine",
@@ -355,14 +355,6 @@
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-09-22": {
-     "hl": "Pikes Resident DJs",
-     "line": "Pikes Resident DJs",
-     "party": "Bathtub Club",
-     "doors": "21:00",
-     "src": "https://www.pikesibiza.com/event/bathtub-club-22-09-2026/",
-     "conf": "high"
-    },
     "2026-09-23": {
      "hl": "Kirollus",
      "line": "Kirollus (All Night Long) · Darren Noguerol · Lea Olivia · Mix-Stress · Pirate Copy (Disco Set) · Sharples · Siggy · Hosted by Riss",
@@ -418,6 +410,14 @@
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/bathtub-club-29-09-2026/",
      "conf": "high"
+    },
+    "2026-09-30": {
+     "hl": "David Morales",
+     "line": "David Morales",
+     "party": "",
+     "doors": "21:00",
+     "src": "https://www.pikesibiza.com/event/david-morales-30-09-2026/",
+     "conf": "high"
     }
    }
   },
@@ -451,14 +451,6 @@
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-09-22": {
-     "hl": "Ariel Assault",
-     "line": "Ariel Assault",
-     "party": "",
-     "doors": "",
-     "src": "https://www.11miami.com/events/1cdf8599-5060-477b-8a90-1016513761571789161878",
-     "conf": "high"
-    },
     "2026-09-23": {
      "hl": "Zeus",
      "line": "Zeus",
@@ -514,6 +506,14 @@
      "doors": "",
      "src": "https://speakeasygo.com/E11EVEN/YISSEL-AT-E11EVEN?eid=EVE-X8TZD9",
      "conf": "high"
+    },
+    "2026-09-30": {
+     "hl": "Five Venoms",
+     "line": "Five Venoms",
+     "party": "",
+     "doors": "",
+     "src": "https://www.11miami.com/events",
+     "conf": "high"
     }
    }
   },
@@ -539,14 +539,6 @@
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-09-22": {
-     "hl": "Terry",
-     "line": "Terry · Zyrak · Ten Ten",
-     "party": "Closing Week",
-     "doors": "23:00",
-     "src": "https://cavoparadiso.gr/event.asp?eid=1070",
-     "conf": "high"
-    },
     "2026-09-24": {
      "hl": "Freespirit",
      "line": "Freespirit · Mark Code",
