@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-24T03:12:05Z",
+ "generated": "2026-09-25T03:13:56Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
@@ -25,6 +25,14 @@
      "party": "",
      "doors": "19:00",
      "src": "https://bellyupaspen.com/events/michigander/",
+     "conf": "high"
+    },
+    "2026-10-01": {
+     "hl": "Pink Talking Fish",
+     "line": "Pink Talking Fish",
+     "party": "",
+     "doors": "20:00",
+     "src": "https://bellyupaspen.com/events/an-evening-with-pink-talking-fish/",
      "conf": "high"
     }
    }
@@ -59,14 +67,6 @@
   },
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-09-23": {
-     "hl": "MEDUZA³",
-     "line": "MEDUZA³ · James Hype · The Blessed Madonna · Jonas Blue · Kid Bamboo · Gudfella",
-     "party": "Our House",
-     "doors": "23:30",
-     "src": "https://www.hiibiza.com/events/2026/our-house/2026-09-23",
-     "conf": "high"
-    },
     "2026-09-24": {
      "hl": "HUGEL",
      "line": "HUGEL · Moojo · Juany Bravo B2B Grossomoddo · Miss Monique · Adam Beyer · Son Of Son",
@@ -119,14 +119,6 @@
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-09-23": {
-     "hl": "Dimitri Vegas",
-     "line": "Dimitri Vegas · HALŌ · Brina Knauss · Dyzen · Delafino B2B Jose Maria Ramon",
-     "party": "Tomorrowland",
-     "doors": "17:00",
-     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/tomorrowland-and-dimitri-vegas-like-mike/2026-09-23",
-     "conf": "high"
-    },
     "2026-09-24": {
      "hl": "Martin Garrix",
      "line": "Martin Garrix · Mesto · Citadelle · Gabss",
@@ -171,14 +163,6 @@
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-23": {
-     "hl": "Mau P",
-     "line": "Mau P · WhoMadeWho (Hybrid DJ Set) · Ale De Tuglie · Frank Storm · Anna Tur",
-     "party": "Baddest Behaviour",
-     "doors": "23:00",
-     "src": "https://pacha.com/event/mau-p--baddest-behaviour-23-09-2026",
-     "conf": "high"
-    },
     "2026-09-24": {
      "hl": "Purple Disco Machine",
      "line": "Purple Disco Machine · Todd Terje · Deer Jade · David Bay",
@@ -234,19 +218,19 @@
      "doors": "23:00",
      "src": "https://pacha.com/event/mau-p--baddest-behaviour-30-09-2026",
      "conf": "high"
+    },
+    "2026-10-01": {
+     "hl": "Purple Disco Machine",
+     "line": "Purple Disco Machine · Gerd Janson · Busy P · Breakbot · David Bay",
+     "party": "Pure Pacha Closing",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/purple-disco-machine--pure-pacha---closing-party-01-10-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-09-23": {
-     "hl": "Toy Room",
-     "line": "",
-     "party": "",
-     "doors": "",
-     "src": "https://www.liogroup.com/events/toy-room-23-sep-2026",
-     "conf": "high"
-    },
     "2026-09-24": {
      "hl": "Tiempo",
      "line": "",
@@ -278,19 +262,19 @@
      "doors": "",
      "src": "https://www.liogroup.com/events/toy-room-30-sep-2026",
      "conf": "high"
+    },
+    "2026-10-01": {
+     "hl": "Tiempo",
+     "line": "",
+     "party": "Tiempo Closing",
+     "doors": "",
+     "src": "https://www.liogroup.com/events/closing-tiempo-1-oct-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-09-23": {
-     "hl": "Kevin and Perry Amnesia Experience",
-     "line": "Dj Eyeball Paul · Billy Gillies · Ian Van Dahl · N-Trance · Rob Tissera b2b Dale Castell · Ultrabeat · Dave Pearce · Lange · Seb Fontaine · Signum · Vicky Devine",
-     "party": "",
-     "doors": "22:00",
-     "src": "https://sales.ticketing.cm.com/KevinPerry-Amnesia-23rdSeptember2026",
-     "conf": "high"
-    },
     "2026-09-24": {
      "hl": "Josh Baker",
      "line": "Josh Baker · Luke Dean B2B Tommy Phillips · Julian Fijma · Elvi",
@@ -330,6 +314,14 @@
      "doors": "22:00",
      "src": "https://www.amnesia.es/en/calendar/ibiza/2026/all",
      "conf": "high"
+    },
+    "2026-10-01": {
+     "hl": "Josh Baker",
+     "line": "Josh Baker · Alexandria · Enzo Siragusa B2B Silva Bumpa · Laidlaw · Marsolo · Max Dean · Moxie · Alisha · Jamie Fielding · JWave · Local Dub · Reeshy",
+     "party": "You&Me Closing",
+     "doors": "16:00",
+     "src": "https://sales.ticketing.cm.com/YouandMe-Amnesia-1stOctober2026",
+     "conf": "high"
     }
    }
   },
@@ -350,19 +342,19 @@
      "doors": "18:00",
      "src": "https://dice.fm/event/69b836aab280da00016bedc8",
      "conf": "high"
+    },
+    "2026-10-01": {
+     "hl": "Solid Grooves",
+     "line": "",
+     "party": "Solid Grooves Closing",
+     "doors": "18:00",
+     "src": "https://dice.fm/event/avq6ev-solid-grooves-closing-party-1st-oct-dc-10-ibiza-tickets",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-09-23": {
-     "hl": "Kirollus",
-     "line": "Kirollus (All Night Long) · Darren Noguerol · Lea Olivia · Mix-Stress · Pirate Copy (Disco Set) · Sharples · Siggy · Hosted by Riss",
-     "party": "La Discothèque",
-     "doors": "21:00",
-     "src": "https://www.pikesibiza.com/event/la-discotheque-23-09-2026/",
-     "conf": "high"
-    },
     "2026-09-24": {
      "hl": "Beniso",
      "line": "Beniso (Drop BCN) · Guy Williams · Jon Jak · Sophie Joy · Kesta · S/A/M",
@@ -418,6 +410,14 @@
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/david-morales-30-09-2026/",
      "conf": "high"
+    },
+    "2026-10-01": {
+     "hl": "Ryan O Gorman",
+     "line": "Ryan O Gorman · Archie Hamilton · Ballarem Sound System · Hugo Martinez · Nuzzo · Pol K · San Francis B2B L3Ni · Cami Jones B2B Danny Beck · Uokhun",
+     "party": "Vitalik",
+     "doors": "21:00",
+     "src": "https://www.pikesibiza.com/event/vitalik-01-10-2026/",
+     "conf": "high"
     }
    }
   },
@@ -451,14 +451,6 @@
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-09-23": {
-     "hl": "Zeus",
-     "line": "Zeus",
-     "party": "",
-     "doors": "20:00",
-     "src": "https://www.11miami.com/events/467c2767-aa2e-47af-922d-1bc31b541ceb1789161872",
-     "conf": "high"
-    },
     "2026-09-24": {
      "hl": "Chizzle",
      "line": "Chizzle",
@@ -513,6 +505,14 @@
      "party": "",
      "doors": "",
      "src": "https://www.11miami.com/events",
+     "conf": "high"
+    },
+    "2026-10-01": {
+     "hl": "Rockwell Talent",
+     "line": "Dexes · Illicit · Raphy Prior · Zilla",
+     "party": "",
+     "doors": "",
+     "src": "https://speakeasygo.com/E11EVEN/ROCKWELL-AT-E11EVEN?eid=EVE-JPSYRF",
      "conf": "high"
     }
    }
