@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-25T03:13:56Z",
+ "generated": "2026-09-26T03:12:30Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
@@ -39,14 +39,6 @@
   },
   "hamptons|nightclubs|0": {
    "nights": {
-    "2026-09-24": {
-     "hl": "Inda Eaton",
-     "line": "Inda Eaton · Karaoke!! w/ JBM",
-     "party": "",
-     "doors": "20:00",
-     "src": "https://www.stephentalkhouse.com/events/198042",
-     "conf": "high"
-    },
     "2026-09-25": {
      "hl": "Joshua Radin",
      "line": "Joshua Radin",
@@ -62,19 +54,19 @@
      "doors": "22:00",
      "src": "https://www.stephentalkhouse.com/events/185111",
      "conf": "high"
+    },
+    "2026-10-02": {
+     "hl": "Kaintuck",
+     "line": "Kaintuck",
+     "party": "",
+     "doors": "20:00",
+     "src": "https://www.stephentalkhouse.com/events/183877",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-09-24": {
-     "hl": "HUGEL",
-     "line": "HUGEL · Moojo · Juany Bravo B2B Grossomoddo · Miss Monique · Adam Beyer · Son Of Son",
-     "party": "Make The Girls Dance",
-     "doors": "23:30",
-     "src": "https://www.hiibiza.com/events/2026/hugel/2026-09-24",
-     "conf": "high"
-    },
     "2026-09-25": {
      "hl": "CamelPhat",
      "line": "CamelPhat · Guy Gerber · Lilya Mandre · Ewan McVicar · Erol Akan · Giulia Tess",
@@ -114,19 +106,19 @@
      "doors": "23:30",
      "src": "https://www.hiibiza.com/events/2026/our-house/2026-09-30",
      "conf": "high"
+    },
+    "2026-10-02": {
+     "hl": "CamelPhat",
+     "line": "CamelPhat · Âme (Live) B2B Trikk · Josh Gigante · Ewan McVicar · Jayda G · Edd",
+     "party": "Summer of Love Closing",
+     "doors": "23:30",
+     "src": "https://www.hiibiza.com/events/2026/camelphat/2026-10-02",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-09-24": {
-     "hl": "Martin Garrix",
-     "line": "Martin Garrix · Mesto · Citadelle · Gabss",
-     "party": "",
-     "doors": "17:00",
-     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/martin-garrix/2026-09-24",
-     "conf": "high"
-    },
     "2026-09-25": {
      "hl": "Calvin Harris",
      "line": "Calvin Harris · MK · Storm Mollison · Siân Owen",
@@ -158,19 +150,19 @@
      "doors": "17:00",
      "src": "https://www.theushuaiaexperience.com/club/en/events/2026/tomorrowland-and-dimitri-vegas-like-mike/2026-09-30",
      "conf": "high"
+    },
+    "2026-10-02": {
+     "hl": "Calvin Harris",
+     "line": "Calvin Harris · MK · LF System · Siân Owen",
+     "party": "Closing Party",
+     "doors": "17:00",
+     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/calvin-harris/2026-10-02",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-24": {
-     "hl": "Purple Disco Machine",
-     "line": "Purple Disco Machine · Todd Terje · Deer Jade · David Bay",
-     "party": "Pure Pacha",
-     "doors": "23:00",
-     "src": "https://pacha.com/event/purple-disco-machine--pure-pacha-24-09-2026",
-     "conf": "high"
-    },
     "2026-09-25": {
      "hl": "Marco Carola",
      "line": "Marco Carola · Seth Troxler · Ilario Alicante · Chelina Manuhutu · Neverdogs · Leon",
@@ -226,19 +218,19 @@
      "doors": "23:00",
      "src": "https://pacha.com/event/purple-disco-machine--pure-pacha---closing-party-01-10-2026",
      "conf": "high"
+    },
+    "2026-10-02": {
+     "hl": "Marco Carola",
+     "line": "Marco Carola · Adriatique · Mita Gami · II Faces",
+     "party": "Music On",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/marco-carola-presents-music-on-02-10-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-09-24": {
-     "hl": "Tiempo",
-     "line": "",
-     "party": "",
-     "doors": "",
-     "src": "https://www.liogroup.com/events/tiempo-24-sep-2026",
-     "conf": "high"
-    },
     "2026-09-25": {
      "hl": "Vintage",
      "line": "",
@@ -270,19 +262,19 @@
      "doors": "",
      "src": "https://www.liogroup.com/events/closing-tiempo-1-oct-2026",
      "conf": "high"
+    },
+    "2026-10-02": {
+     "hl": "Vintage",
+     "line": "",
+     "party": "Closing Party",
+     "doors": "",
+     "src": "https://www.liogroup.com/events/closing-vintage-2-oct-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-09-24": {
-     "hl": "Josh Baker",
-     "line": "Josh Baker · Luke Dean B2B Tommy Phillips · Julian Fijma · Elvi",
-     "party": "You&Me",
-     "doors": "23:00",
-     "src": "https://sales.ticketing.cm.com/YouandMe-Amnesia-24thSeptember2026",
-     "conf": "high"
-    },
     "2026-09-25": {
      "hl": "Glitterbox",
      "line": "Basement Jaxx · Dan Shake · L3NI · Melvo Baptiste · Minna · Bridge · Luke Solomon · Makèz",
@@ -322,19 +314,19 @@
      "doors": "16:00",
      "src": "https://sales.ticketing.cm.com/YouandMe-Amnesia-1stOctober2026",
      "conf": "high"
+    },
+    "2026-10-02": {
+     "hl": "Glitterbox",
+     "line": "Danny Tenaglia · Dave Lee · Denis Sulta (Disco Set) · Eats Everything · Jamie Love · Coco & Breezy · Todd Terry",
+     "party": "",
+     "doors": "23:30",
+     "src": "https://sales.ticketing.cm.com/Glitterbox-Amnesia-2ndOctober2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|5": {
    "nights": {
-    "2026-09-24": {
-     "hl": "Solid Grooves",
-     "line": "Butch · Carista · East End Dubs · ISAbella · KiNK · Ms. Mada · Paramida · PAWSA · Sonja Moonear · Toman",
-     "party": "",
-     "doors": "23:00",
-     "src": "https://dice.fm/event/69b139a51d02a90001978f9b",
-     "conf": "high"
-    },
     "2026-09-28": {
      "hl": "Circoloco",
      "line": "Carl Craig · DJ Seinfeld · DJ Tennis · Francesco del Garda · Gabrielle Kwarteng · Isaac Carter · Jamback · Jonny Rock · Krystal Klear · Luciano · Rossi. · Seth Troxler · Skream · Tania Vulcano",
@@ -355,14 +347,6 @@
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-09-24": {
-     "hl": "Beniso",
-     "line": "Beniso (Drop BCN) · Guy Williams · Jon Jak · Sophie Joy · Kesta · S/A/M",
-     "party": "Flash",
-     "doors": "21:00",
-     "src": "https://www.pikesibiza.com/event/flash-24-09-2026/",
-     "conf": "high"
-    },
     "2026-09-25": {
      "hl": "Heidi",
      "line": "Heidi · Defex ft blondewearingblack · Ryan O Gorman · Romeren · Rhythm & Bliss",
@@ -418,6 +402,14 @@
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/vitalik-01-10-2026/",
      "conf": "high"
+    },
+    "2026-10-02": {
+     "hl": "Laidlaw",
+     "line": "Laidlaw · Laura & Santiago",
+     "party": "Pikes Sessions",
+     "doors": "21:00",
+     "src": "https://www.pikesibiza.com/event/pikes-sessions-02-10-2026/",
+     "conf": "high"
     }
    }
   },
@@ -446,19 +438,19 @@
      "doors": "23:00",
      "src": "https://www.livenation.com/venue/KovZ917Ac_V/liv-tickets",
      "conf": "high"
+    },
+    "2026-10-02": {
+     "hl": "PartyNextDoor",
+     "line": "PartyNextDoor",
+     "party": "",
+     "doors": "23:30",
+     "src": "https://www.livenation.com/venue/KovZ917Ac_V/liv-tickets",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-09-24": {
-     "hl": "Chizzle",
-     "line": "Chizzle",
-     "party": "",
-     "doors": "",
-     "src": "https://www.11miami.com/events/713ca384-8241-46f0-91d7-fa2a999ae2a71789161863",
-     "conf": "high"
-    },
     "2026-09-25": {
      "hl": "Afrojack",
      "line": "Afrojack",
@@ -514,6 +506,14 @@
      "doors": "",
      "src": "https://speakeasygo.com/E11EVEN/ROCKWELL-AT-E11EVEN?eid=EVE-JPSYRF",
      "conf": "high"
+    },
+    "2026-10-02": {
+     "hl": "Nelly",
+     "line": "Nelly",
+     "party": "",
+     "doors": "",
+     "src": "https://www.11miami.com/events/aa742240-3cc7-44ad-89f5-a955eeddd6751789162075",
+     "conf": "high"
     }
    }
   },
@@ -534,19 +534,19 @@
      "doors": "23:00",
      "src": "https://dice.fm/event/yod8nx-franky-rizardo-presents-flow-26th-sep-club-space-miami-miami-tickets",
      "conf": "high"
+    },
+    "2026-10-02": {
+     "hl": "Disco Dom & The Brothers Macklovitch",
+     "line": "Disco Dom · The Brothers Macklovitch · Bakke · Danyelino",
+     "party": "",
+     "doors": "23:00",
+     "src": "https://dice.fm/event/3obq6v-disco-dom-the-brothers-macklovitch-2nd-oct-club-space-miami-miami-tickets",
+     "conf": "high"
     }
    }
   },
   "mykonos|nightclubs|0": {
    "nights": {
-    "2026-09-24": {
-     "hl": "Freespirit",
-     "line": "Freespirit · Mark Code",
-     "party": "Cavo Closing Week",
-     "doors": "23:00",
-     "src": "https://www.cavoparadiso.gr/event.asp?eid=1071",
-     "conf": "high"
-    },
     "2026-09-26": {
      "hl": "Junior Pappa",
      "line": "Junior Pappa · Fused",
