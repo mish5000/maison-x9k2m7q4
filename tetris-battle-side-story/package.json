@@ -1,0 +1,10 @@
+{
+  "name": "tetris-battle-side-story",
+  "version": "1.0.0",
+  "private": true,
+  "description": "English-only browser recreation of the rules of Tetris Battle Gaiden (1993).",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "test": "node --test test/*.test.js"
+  }
+}

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#0b0b1a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 4 4%22%3E%3Crect width=%223%22 height=%221%22 fill=%22%23b04ce0%22/%3E%3Crect x=%221%22 y=%221%22 width=%221%22 height=%221%22 fill=%22%23b04ce0%22/%3E%3C/svg%3E">
+<title>Tetris Battle: Side Story</title>
+<style>
+  :root {
+    --bg: #0b0b1a; --panel: #16162e; --ink: #f2f0ff; --dim: #9a98b8;
+    --accent: #ffd34d; --line: #34345c;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink);
+    font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif; overflow: hidden;
+    -webkit-user-select: none; user-select: none; touch-action: manipulation; }
+  #wrap { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  #stage { position: relative; }
+  canvas { display: block; image-rendering: pixelated; background: #05050f; border: 2px solid var(--line); border-radius: 6px; }
+  .screen { position: fixed; inset: 0; z-index: 10; display: none; flex-direction: column; align-items: center;
+    justify-content: center; gap: 10px; background: rgba(8, 8, 22, 0.92); padding: 16px; overflow-y: auto; }
+  .screen.on { display: flex; }
+  h1 { margin: 0; font-size: clamp(26px, 6vw, 44px); letter-spacing: 2px; color: var(--accent); text-align: center;
+    text-shadow: 3px 3px 0 #7a2bff; }
+  h2 { margin: 0 0 6px; font-size: 22px; color: var(--accent); text-align: center; }
+  .sub { color: var(--dim); font-size: 13px; text-align: center; }
+  button { font: inherit; font-size: 16px; color: var(--ink); background: var(--panel); border: 2px solid var(--line);
+    border-radius: 8px; padding: 9px 18px; min-width: 220px; cursor: pointer; }
+  button:hover, button:focus { border-color: var(--accent); outline: none; background: #232347; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; width: min(720px, 100%); }
+  .card { min-width: 0; text-align: left; padding: 8px 10px; }
+  .card b { display: block; font-size: 15px; }
+  .card small { color: var(--dim); font-size: 11px; line-height: 1.35; display: block; }
+  .card .dot { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+  .card.locked { opacity: 0.4; cursor: not-allowed; }
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
+  .opt { display: flex; justify-content: space-between; align-items: center; gap: 12px; width: min(420px, 100%); }
+  .opt button { min-width: 150px; }
+  .howto { max-width: 640px; font-size: 14px; line-height: 1.5; color: var(--ink); }
+  .howto table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  .howto td, .howto th { border-bottom: 1px solid var(--line); padding: 3px 6px; text-align: left; vertical-align: top; }
+  .howto th { color: var(--accent); }
+  #touch { display: none; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; width: min(520px, 100%); padding: 0 10px; }
+  #touch.on { display: grid; }
+  #touch button { min-width: 0; height: 58px; padding: 0; font-size: 24px; border-radius: 12px; touch-action: none; }
+  #touch button.small { height: 40px; font-size: 13px; color: var(--dim); }
+  #touch button.spell { background: #3a1f5c; border-color: #b06bff; font-size: 16px; font-weight: bold; }
+  #topbar { position: absolute; top: 4px; left: 50%; transform: translateX(-50%); display: flex; gap: 4px; z-index: 5; }
+  #topbar button { min-width: 0; padding: 2px 8px; font-size: 12px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="stage">
+    <div id="topbar">
+      <button id="btnPause" title="Pause (Enter)">&#10074;&#10074;</button>
+      <button id="btnMute" title="Sound on/off (M)">Sound: on</button>
+    </div>
+    <canvas id="cv" width="760" height="540"></canvas>
+
+    <div class="screen on" id="scrTitle">
+      <h1>TETRIS BATTLE<br>SIDE STORY</h1>
+      <div class="sub">A two-player magic battle puzzle game</div>
+      <button data-go="arcade">1 Player: Story Battle</button>
+      <button data-go="free">1 Player: Free Battle</button>
+      <button data-go="versus">2 Players: Versus</button>
+      <button data-go="options">Options</button>
+      <button data-go="howto">How to Play</button>
+      <div class="sub" id="unlockNote"></div>
+    </div>
+
+    <div class="screen" id="scrSelect">
+      <h2 id="selTitle">Choose your character</h2>
+      <div class="grid" id="selGrid"></div>
+      <button data-go="title">Back</button>
+    </div>
+
+    <div class="screen" id="scrOptions">
+      <h2>Options</h2>
+      <div class="opt"><span>Crystals per spell level</span><button id="optCost"></button></div>
+      <div class="opt"><span>Computer skill (Free Battle)</span><button id="optCpu"></button></div>
+      <div class="opt"><span>Starting speed</span><button id="optSpeed"></button></div>
+      <div class="opt"><span>Rounds to win a match</span><button id="optRounds"></button></div>
+      <button data-go="title">Back</button>
+    </div>
+
+    <div class="screen" id="scrHowto">
+      <div class="howto">
+        <h2>How to Play</h2>
+        <p>Both players take pieces from the <b>same</b> 3-piece Next queue. Whoever finishes a piece first takes the next one.
+        Some pieces carry a <b>crystal</b>. Clear a line that contains a crystal to collect it.</p>
+        <p>Crystals charge your spell gauge. Press <b>Up</b> (Player 1 alone, or Player 2) or <b>W</b> (Player 1 in Versus) to cast the
+        highest spell level you can afford. Casting throws away the current piece of <b>both</b> players.</p>
+        <p>Clearing 2 or more lines at once sends garbage lines to the opponent. There is no hold and no instant drop.
+        You lose when a piece locks in the top zone above the field.</p>
+        <table>
+          <tr><th></th><th>Player 1</th><th>Player 2 (Versus)</th></tr>
+          <tr><td>Move</td><td>A / D (alone: also Arrow keys)</td><td>Arrow Left / Right</td></tr>
+          <tr><td>Soft drop</td><td>S (alone: also Arrow Down)</td><td>Arrow Down</td></tr>
+          <tr><td>Rotate</td><td>Z / X or F / G (alone: also K / L)</td><td>K / L</td></tr>
+          <tr><td>Cast spell</td><td>W (alone: also Arrow Up)</td><td>Arrow Up</td></tr>
+          <tr><td>Wish: pick piece</td><td>Q / E</td><td>I / O</td></tr>
+          <tr><td>Pause</td><td colspan="2">Enter or P. Sound: M</td></tr>
+        </table>
+        <p class="sub">Unofficial fan recreation. Rules follow public documentation of the 1993 original; details that are not documented are
+        marked as assumptions in the README.</p>
+      </div>
+      <button data-go="title">Back</button>
+    </div>
+
+    <div class="screen" id="scrPause">
+      <h2>Paused</h2>
+      <button id="btnResume">Resume</button>
+      <button id="btnQuit">Quit to Title</button>
+    </div>
+
+    <div class="screen" id="scrResult">
+      <h2 id="resTitle"></h2>
+      <div class="sub" id="resText"></div>
+      <button id="resNext">Continue</button>
+      <button id="resQuit">Quit to Title</button>
+    </div>
+  </div>
+
+  <div id="touch">
+    <button class="small" data-t="wishPrev" title="Wish: previous piece">&lsaquo; piece</button>
+    <button class="small" data-t="wishNext" title="Wish: next piece">piece &rsaquo;</button>
+    <button data-t="rotL" title="Rotate left">&#10226;</button>
+    <button data-t="rotR" title="Rotate right">&#10227;</button>
+    <button data-t="left" title="Left">&#9664;</button>
+    <button data-t="down" title="Soft drop">&#9660;</button>
+    <button data-t="right" title="Right">&#9654;</button>
+    <button class="spell" data-t="spell">SPELL</button>
+  </div>
+</div>
+<script src="src/engine.js"></script>
+<script src="src/ai.js"></script>
+<script src="src/main.js"></script>
+</body>
+</html>

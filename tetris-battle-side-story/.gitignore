@@ -1,0 +1,25 @@
+# Claude Code — machine-local, never commit
+.claude/settings.local.json
+CLAUDE.local.md
+
+# Secrets
+.env
+.env.*
+!.env.example
+secrets/
+
+# macOS
+.DS_Store
+
+# node
+node_modules/
+dist/
+build/
+coverage/
+.next/
+.nuxt/
+.turbo/
+*.tsbuildinfo
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
