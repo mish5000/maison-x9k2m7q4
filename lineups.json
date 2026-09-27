@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-26T03:12:30Z",
+ "generated": "2026-09-27T03:10:51Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
@@ -34,19 +34,19 @@
      "doors": "20:00",
      "src": "https://bellyupaspen.com/events/an-evening-with-pink-talking-fish/",
      "conf": "high"
+    },
+    "2026-10-03": {
+     "hl": "Sam Feldt",
+     "line": "Sam Feldt",
+     "party": "",
+     "doors": "20:30",
+     "src": "https://bellyupaspen.com/events/sam-feldt-4/",
+     "conf": "high"
     }
    }
   },
   "hamptons|nightclubs|0": {
    "nights": {
-    "2026-09-25": {
-     "hl": "Joshua Radin",
-     "line": "Joshua Radin",
-     "party": "",
-     "doors": "20:00",
-     "src": "https://www.stephentalkhouse.com/events/188092",
-     "conf": "high"
-    },
     "2026-09-26": {
      "hl": "Social Gold",
      "line": "Social Gold",
@@ -67,14 +67,6 @@
   },
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-09-25": {
-     "hl": "CamelPhat",
-     "line": "CamelPhat · Guy Gerber · Lilya Mandre · Ewan McVicar · Erol Akan · Giulia Tess",
-     "party": "Summer of Love",
-     "doors": "23:30",
-     "src": "https://www.hiibiza.com/events/2026/camelphat/2026-09-25",
-     "conf": "high"
-    },
     "2026-09-26": {
      "hl": "Black Coffee",
      "line": "Black Coffee · Marco Carola · AMÉMÉ · DJ EZ (House & Garage Set) · Circle feat Supa D b2b Kismet b2b Feva & Tippa · Olive F · Ossie",
@@ -114,19 +106,19 @@
      "doors": "23:30",
      "src": "https://www.hiibiza.com/events/2026/camelphat/2026-10-02",
      "conf": "high"
+    },
+    "2026-10-03": {
+     "hl": "Black Coffee",
+     "line": "Black Coffee · Luciano · Dorian Craft · Djeff · Skepta · Djammin B2B Ossie B2B Meeshy · Maximum B2B The Menendez Brothers · Shae Reid",
+     "party": "Closing Party",
+     "doors": "23:30",
+     "src": "https://www.hiibiza.com/events/2026/black-coffee/2026-10-03",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-09-25": {
-     "hl": "Calvin Harris",
-     "line": "Calvin Harris · MK · Storm Mollison · Siân Owen",
-     "party": "",
-     "doors": "17:00",
-     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/calvin-harris/2026-09-25",
-     "conf": "high"
-    },
     "2026-09-26": {
      "hl": "Maceo Plex",
      "line": "Maceo Plex · Nic Fanciulli · M-High · Antares · Raul Rodriguez",
@@ -158,19 +150,19 @@
      "doors": "17:00",
      "src": "https://www.theushuaiaexperience.com/club/en/events/2026/calvin-harris/2026-10-02",
      "conf": "high"
+    },
+    "2026-10-03": {
+     "hl": "Franky Rizardo",
+     "line": "Franky Rizardo · Nic Fanciulli B2B Sosa · Bontan B2B Rafael · Ranger Trucco B2B Robbie Doherty · Meeshy · Raul Rodriguez",
+     "party": "ANTS Closing Party",
+     "doors": "15:00",
+     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/ants/2026-10-03",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-25": {
-     "hl": "Marco Carola",
-     "line": "Marco Carola · Seth Troxler · Ilario Alicante · Chelina Manuhutu · Neverdogs · Leon",
-     "party": "Music On",
-     "doors": "23:00",
-     "src": "https://pacha.com/event/marco-carola-presents-music-on-25-09-2026",
-     "conf": "high"
-    },
     "2026-09-26": {
      "hl": "Robin Schulz",
      "line": "Robin Schulz · Tita Lau · Noel Holler · Wave Wave",
@@ -226,19 +218,19 @@
      "doors": "23:00",
      "src": "https://pacha.com/event/marco-carola-presents-music-on-02-10-2026",
      "conf": "high"
+    },
+    "2026-10-03": {
+     "hl": "Robin Schulz",
+     "line": "Robin Schulz · Oliver Heldens · LOVRA · Alle Farben",
+     "party": "Closing Party",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/robin-schulz---closing-party-03-10-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-09-25": {
-     "hl": "Vintage",
-     "line": "",
-     "party": "",
-     "doors": "",
-     "src": "https://www.liogroup.com/events/vintage-25-sep-2026",
-     "conf": "high"
-    },
     "2026-09-26": {
      "hl": "KŌDŌ",
      "line": "",
@@ -270,19 +262,19 @@
      "doors": "",
      "src": "https://www.liogroup.com/events/closing-vintage-2-oct-2026",
      "conf": "high"
+    },
+    "2026-10-03": {
+     "hl": "KŌDŌ",
+     "line": "",
+     "party": "",
+     "doors": "",
+     "src": "https://www.liogroup.com/events/kodo-3-oct-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-09-25": {
-     "hl": "Glitterbox",
-     "line": "Basement Jaxx · Dan Shake · L3NI · Melvo Baptiste · Minna · Bridge · Luke Solomon · Makèz",
-     "party": "",
-     "doors": "23:30",
-     "src": "https://sales.ticketing.cm.com/Glitterbox-Amnesia-25thSeptember2026",
-     "conf": "high"
-    },
     "2026-09-26": {
      "hl": "Godskitchen",
      "line": "Fergie (5h Vinyl Set) · Jordan Nocturne · Ferry Corsten · John O'Callaghan · Lisa Lashes · Paul Thomas · Paul van Dyk · Tall Paul · AJ Gibson",
@@ -347,14 +339,6 @@
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-09-25": {
-     "hl": "Heidi",
-     "line": "Heidi · Defex ft blondewearingblack · Ryan O Gorman · Romeren · Rhythm & Bliss",
-     "party": "Pikes Sessions",
-     "doors": "21:00",
-     "src": "https://www.pikesibiza.com/event/pikes-sessions-25-09-2026/",
-     "conf": "high"
-    },
     "2026-09-26": {
      "hl": "Carl Craig",
      "line": "Carl Craig (Disco Set) · El Conchitas · Sadeedo · Mina",
@@ -410,19 +394,19 @@
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/pikes-sessions-02-10-2026/",
      "conf": "high"
+    },
+    "2026-10-03": {
+     "hl": "Denney",
+     "line": "Denney · Romeren",
+     "party": "Pikes House Party",
+     "doors": "21:00",
+     "src": "https://www.pikesibiza.com/event/pikes-house-party-03-10-2026/",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|0": {
    "nights": {
-    "2026-09-25": {
-     "hl": "Steve Aoki",
-     "line": "Steve Aoki",
-     "party": "",
-     "doors": "23:00",
-     "src": "https://www.ticketweb.com/event/steve-aoki-liv-nightclub-miami-tickets/15014233",
-     "conf": "high"
-    },
     "2026-09-26": {
      "hl": "Crankdat",
      "line": "Crankdat",
@@ -446,19 +430,19 @@
      "doors": "23:30",
      "src": "https://www.livenation.com/venue/KovZ917Ac_V/liv-tickets",
      "conf": "high"
+    },
+    "2026-10-03": {
+     "hl": "Karol G Official Afterparty",
+     "line": "",
+     "party": "",
+     "doors": "23:00",
+     "src": "https://content.livenationapi.com/v1/venues/KovZ917Ac_V/events?offset=0&limit=48&event_data_type=discovery",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-09-25": {
-     "hl": "Afrojack",
-     "line": "Afrojack",
-     "party": "",
-     "doors": "",
-     "src": "https://www.11miami.com/events/5e0d4655-d062-401b-a657-890b007501d21789161858",
-     "conf": "high"
-    },
     "2026-09-26": {
      "hl": "Ruckus",
      "line": "Ruckus",
@@ -514,19 +498,19 @@
      "doors": "",
      "src": "https://www.11miami.com/events/aa742240-3cc7-44ad-89f5-a955eeddd6751789162075",
      "conf": "high"
+    },
+    "2026-10-03": {
+     "hl": "T.I.",
+     "line": "T.I.",
+     "party": "",
+     "doors": "",
+     "src": "https://speakeasygo.com/E11EVEN/T.I.-AT-E11EVEN?eid=EVE-0KPH6Y",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|2": {
    "nights": {
-    "2026-09-25": {
-     "hl": "BLOND:ISH",
-     "line": "BLOND:ISH · Yamagucci · Chinonegro",
-     "party": "",
-     "doors": "23:00",
-     "src": "https://dice.fm/event/6a591b4c493a000001fac474",
-     "conf": "high"
-    },
     "2026-09-26": {
      "hl": "Franky Rizardo",
      "line": "Franky Rizardo · Toman · Chelina Manuhutu · Ms. Mada · Grace Arribas",
@@ -541,6 +525,14 @@
      "party": "",
      "doors": "23:00",
      "src": "https://dice.fm/event/3obq6v-disco-dom-the-brothers-macklovitch-2nd-oct-club-space-miami-miami-tickets",
+     "conf": "high"
+    },
+    "2026-10-03": {
+     "hl": "Âme",
+     "line": "Âme · Hardt Antoine · Maceo Plex",
+     "party": "",
+     "doors": "23:00",
+     "src": "https://dice.fm/event/dk7gme-me-dj-hardt-antoine-maceo-plex-3rd-oct-club-space-miami-miami-tickets",
      "conf": "high"
     }
    }
