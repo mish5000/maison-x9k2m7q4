@@ -113,8 +113,17 @@ self.addEventListener('fetch', (e) => {
     e.respondWith((async () => {
       try {
         const net = await fetch(req, { cache: 'no-store' });
-        (await caches.open(CACHE)).put(keyFor(req), net.clone());
-        return net;
+        /* Only a GOOD response may replace the offline copy (audit A-6). This
+           used to store whatever came back — a 404 or a 500 page overwrote the
+           last good lineups.json, so the next offline launch had no bill. The
+           write is handed to waitUntil so the worker stays alive until it
+           lands, without holding the response back for it. */
+        if (net && net.ok) {
+          const copy = net.clone();
+          e.waitUntil(caches.open(CACHE).then(c => c.put(keyFor(req), copy)).catch(() => {}));
+          return net;
+        }
+        return (await caches.match(keyFor(req))) || net;
       } catch (_) {
         return (await caches.match(keyFor(req))) ||
           new Response('{}', { headers: { 'Content-Type': 'application/json' } });

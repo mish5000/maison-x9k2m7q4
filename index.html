@@ -45,7 +45,7 @@ var b=document.getElementById('boot');setTimeout(function(){if(b)b.classList.add
   <div class="sp-word">
     <span class="sp-rule"></span>
     <span class="sp-tag">Transporting you to the extraordinary</span>
-    <span class="sp-build">V714</span>
+    <span class="sp-build">V731</span>
   </div>
 </div>
 <div id="shell">
@@ -80,7 +80,7 @@ var b=document.getElementById('boot');setTimeout(function(){if(b)b.classList.add
       <span class="rf-mono serif">M</span>
     </div>
     <div class="rf-label">À votre service</div>
-    <div class="rf-build">V714</div>
+    <div class="rf-build">V731</div>
   </div>
 </div>
 <div id="toast"></div>
@@ -4647,8 +4647,8 @@ const IMG = {
   ],
 };
 
-const COLLECTION_UPDATED = '21 September 2026 · 02:03 CEST';
-const APP_BUILD = 'v714';
+const COLLECTION_UPDATED = '28 September 2026 · 22:25 CEST';
+const APP_BUILD = 'v731';
 
 
 /* The Season — the global elite calendar, month by month. Entries:
@@ -8521,7 +8521,9 @@ function viewCategory(cityId, catId) {
     </div>
     ${sortbar}
     ${(distMode && roadState !== 'straight') ? `<div class="filternote">${
-        roadState === 'road' ? 'Driving distance'
+        /* audit G-2: the member's position goes to the public OSRM router
+           to get these — name it where the result is shown */
+        roadState === 'road' ? 'Driving distance · routed via OSRM'
         : roadState === 'waiting' ? 'Straight line · measuring by road…'
         : 'Straight line · road distance unavailable'}</div>` : ''}
     ${(openTonight || lunchOnly) ? `<div class="filternote">${
@@ -8749,11 +8751,20 @@ async function shareWeek() {
   if (!p) { toast('Plan a day first — tap the calendar on any venue'); return; }
   const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(p))))
     .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  const url = await tinyify(APP_URL + '#/week/' + b64);
-  if (navigator.share) { navigator.share({ title: `${MEMBER.name}'s week`, url }).catch(() => {}); return; }
+  const long = APP_URL + '#/week/' + b64;
+  const url = await tinyify(long);
+  /* SAY WHO HOLDS IT (audit G-1). A shortened link means TinyURL stores the
+     whole plan — the member's name, venues, days — on its servers. Kept,
+     because the base64 wall is unusable in a chat bubble, but no longer
+     silent. Only said when the shortener actually answered. */
+  const via = url !== long ? ' — shortened by TinyURL, which keeps a copy' : '';
+  if (navigator.share) {
+    if (via) toast('Link shortened by TinyURL, which keeps a copy');
+    navigator.share({ title: `${MEMBER.name}'s week`, url }).catch(() => {}); return;
+  }
   // never toast the raw URL (audit G) — it stays on the clipboard only
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject())
-    .then(() => toast('The week is sealed — the link is on your clipboard'),
+    .then(() => toast('The week is sealed — the link is on your clipboard' + via),
           () => toast('The link couldn’t be copied — try Share again'));
 }
 /* the adopt link: reservations travel INTO the calendar — same encoding as
@@ -11992,6 +12003,48 @@ const MAP_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenS
 const GL_DIR = 'assets/maplibre/';           // ships beside index.html, like every asset
 const GL_STYLE = GL_DIR + 'privee-chart.json';
 const GL_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://openfreemap.org">OpenFreeMap</a>';
+/* THE TILE SERVER NEVER WRITES HTML INTO THE APP (audit A-8).
+   The chart's vector source is a TileJSON URL on tiles.openfreemap.org, and
+   TileJSON carries an `attribution` HTML string. Handed the URL, MapLibre
+   fetches that string and the attribution control writes it into the page
+   with innerHTML — 4.7.1 has no sanitiser at all, and the sanitiser added
+   later was itself bypassable up to 6.4.0 (GHSA-jrc7-96c5-q579). So a
+   compromised or spoofed tile server could run script inside PRIVÉE.
+   MapLibre 6 is ESM-only and would mean rewriting the loader, so instead
+   the app resolves the TileJSON ITSELF, keeps only the tile URLs (checked
+   to be https on openfreemap.org) and the zoom range, and pins the credit
+   to this constant — the exact text the server sends today, so the colophon
+   reads identically. Asserted by build/tests/wkmapattr.cjs. */
+const GL_SRC_ATTR = '<a href="https://openfreemap.org" target="_blank">OpenFreeMap</a> <a href="https://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>';
+const glTileOk = (u) => {
+  try { const x = new URL(String(u).replace(/[{}]/g, ''));
+        return x.protocol === 'https:' && /(^|\.)openfreemap\.org$/.test(x.hostname); }
+  catch (_) { return false; }
+};
+let GL_STYLE_OBJ = null;
+async function glResolvedStyle() {
+  const style = await (await fetch(GL_STYLE)).json();
+  for (const [id, src] of Object.entries(style.sources || {})) {
+    if (!src || !src.url) continue;
+    let tj = null;
+    try { const r = await fetch(src.url); if (r.ok) tj = await r.json(); } catch (_) {}
+    const tiles = tj && Array.isArray(tj.tiles) ? tj.tiles.filter(glTileOk) : [];
+    if (!tiles.length) { delete style.sources[id]; continue; }   // fail SAFE: no remote HTML path
+    style.sources[id] = { type: src.type, tiles,
+      minzoom: Number.isFinite(tj.minzoom) ? tj.minzoom : 0,
+      maxzoom: Number.isFinite(tj.maxzoom) ? tj.maxzoom : 14,
+      attribution: GL_SRC_ATTR };
+  }
+  // a layer whose source was dropped would make the whole style invalid
+  style.layers = (style.layers || []).filter(l => !l.source || style.sources[l.source]);
+  return style;
+}
+// MapLibre keeps the object it is given; a recreated map must not share it
+const glStyleCopy = () => JSON.parse(JSON.stringify(GL_STYLE_OBJ));
+function glApplyStyle() {
+  glResolvedStyle().then((st) => { GL_STYLE_OBJ = st; if (GLMAP) GLMAP.setStyle(glStyleCopy()); })
+                   .catch(() => {});
+}
 const BAND_MID = 12.5, BAND_NEAR = 15;      // FAR < 12.5 <= MID < 15 <= NEAR
 const MEDALLION_CAP = 16;                    // decoded photo thumbs at street zoom
 const IDLE_DESTROY_MS = 120000;              // keep the map warm 2min after close
@@ -12297,7 +12350,11 @@ function ensureMap_GL() {
   if (GLMAP) return GLMAP;
   GLMAP = new maplibregl.Map({
     container: 'lmap',
-    style: GL_STYLE,                   // the house chart — already palette-graded, no CSS filter needed
+    // the house chart — already palette-graded, no CSS filter needed. Starts
+    // empty and is filled by glApplyStyle() once the TileJSON is resolved
+    // here rather than inside MapLibre (A-8). MapLibre fetched the style
+    // asynchronously before too, so first paint waits the same way.
+    style: GL_STYLE_OBJ ? glStyleCopy() : { version: 8, sources: {}, layers: [] },
     attributionControl: false,         // we mount our own, styled as the colophon
     // GL zoom ≈ Leaflet − 1 (512px tiles): min 2 / max 17 mirror the raster 3/18
     minZoom: 2, maxZoom: 17,
@@ -12317,6 +12374,7 @@ function ensureMap_GL() {
      across the lower third of the map. Compact collapses it to a single (i)
      that expands on tap: the same attribution, legally identical, off the
      canvas. */
+  if (!GL_STYLE_OBJ) glApplyStyle();
   const attrib = new maplibregl.AttributionControl({ compact: true, customAttribution: GL_ATTR });
   GLMAP.addControl(attrib, 'bottom-right');
   /* START COLLAPSED. compact:true alone was not enough — MapLibre mounts the
@@ -12333,7 +12391,7 @@ function ensureMap_GL() {
     // tiles that failed offline are stamped errored in the source cache;
     // re-setting the style is the supported way to refetch the world.
     // DOM markers (every seal) live outside the style and survive untouched.
-    if (GLMAP && ENGINE === 'gl') { try { GLMAP.setStyle(GL_STYLE); } catch (_) {} }
+    if (GLMAP && ENGINE === 'gl') { try { glApplyStyle(); } catch (_) {} }
   });
   GLMAP.on('zoomend', onMapSettle);
   GLMAP.on('moveend', onMapSettle);
