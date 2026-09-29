@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-28T06:28:45Z",
+ "generated": "2026-09-29T03:11:07Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
@@ -13,7 +13,7 @@
     },
     "2026-09-29": {
      "hl": "Michigander",
-     "line": "Jake Lemond",
+     "line": "Michigander · Jake Lemond",
      "party": "",
      "doors": "19:00",
      "src": "https://bellyupaspen.com/events/michigander/",
@@ -29,7 +29,7 @@
     },
     "2026-10-03": {
      "hl": "Sam Feldt",
-     "line": "Sam Feldt",
+     "line": "Sam Feldt · blakegetbackhere",
      "party": "",
      "doors": "20:30",
      "src": "https://bellyupaspen.com/events/sam-feldt-4/",
@@ -49,7 +49,7 @@
    "nights": {
     "2026-10-02": {
      "hl": "Kaintuck",
-     "line": "Kaintuck",
+     "line": "Kaintuck · KRUSH",
      "party": "",
      "doors": "20:00",
      "src": "https://www.stephentalkhouse.com/events/183877",
@@ -69,7 +69,7 @@
     },
     "2026-09-29": {
      "hl": "East End Dubs",
-     "line": "Hot Since 82 · Oden & Fatzo (Live) · Gallya · Paco Osuna · Nick Curly · Ariel Rodz",
+     "line": "East End Dubs · Hot Since 82 · Oden & Fatzo (Live) · Gallya · Paco Osuna · Nick Curly · Ariel Rodz",
      "party": "Eastenderz",
      "doors": "23:30",
      "src": "https://www.hiibiza.com/events/2026/eastenderz/2026-09-29",
@@ -86,7 +86,7 @@
     "2026-10-02": {
      "hl": "CamelPhat",
      "line": "CamelPhat · Âme (Live) B2B Trikk · Josh Gigante · Ewan McVicar · Jayda G · Edd",
-     "party": "Summer of Love Closing",
+     "party": "Summer of Love Closing Party",
      "doors": "23:30",
      "src": "https://www.hiibiza.com/events/2026/camelphat/2026-10-02",
      "conf": "high"
@@ -97,6 +97,14 @@
      "party": "Closing Party",
      "doors": "23:30",
      "src": "https://www.hiibiza.com/events/2026/black-coffee/2026-10-03",
+     "conf": "high"
+    },
+    "2026-10-05": {
+     "hl": "Francis Mercier B2B Shimza",
+     "line": "Francis Mercier B2B Shimza · Satori · Apache B2B Vanjee · Gudfella · Andrea Oliva · Bensy B2B Serve Cold",
+     "party": "Solèy Closing Party",
+     "doors": "23:30",
+     "src": "https://www.hiibiza.com/events/2026/francis-mercier/2026-10-05",
      "conf": "high"
     }
    }
@@ -112,9 +120,9 @@
      "conf": "high"
     },
     "2026-09-30": {
-     "hl": "Dimitri Vegas & Like Mike",
-     "line": "Dimitri Vegas & Like Mike · Hannah Laing B2B Lilly Palmer · MATTN · LAMAR",
-     "party": "Tomorrowland Closing",
+     "hl": "Dimitri Vegas",
+     "line": "Dimitri Vegas · Hannah Laing B2B Lilly Palmer · Massano · MATTN · LAMAR",
+     "party": "Tomorrowland Closing Party",
      "doors": "17:00",
      "src": "https://www.theushuaiaexperience.com/club/en/events/2026/tomorrowland-and-dimitri-vegas-like-mike/2026-09-30",
      "conf": "high"
@@ -134,19 +142,19 @@
      "doors": "15:00",
      "src": "https://www.theushuaiaexperience.com/club/en/events/2026/ants/2026-10-03",
      "conf": "high"
+    },
+    "2026-10-05": {
+     "hl": "David Guetta",
+     "line": "David Guetta · Afrojack · Matt Sassari · Paul Reynolds",
+     "party": "F*** Me I'm Famous! Closing Party",
+     "doors": "17:00",
+     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/fmif-david-guetta/2026-10-05",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-27": {
-     "hl": "Solomun",
-     "line": "Solomun · Amê (DJ Set)",
-     "party": "Solomun+1",
-     "doors": "23:00",
-     "src": "https://pacha.com/event/solomun1-27-09-2026",
-     "conf": "high"
-    },
     "2026-09-28": {
      "hl": "Sonny Fodera",
      "line": "Sonny Fodera · Jazzy · Marten Lou",
@@ -157,7 +165,7 @@
     },
     "2026-09-29": {
      "hl": "GORDO",
-     "line": "Roger Sanchez · Gala · Abril Love",
+     "line": "GORDO · Roger Sanchez · Gala · Abril Love",
      "party": "TARAKA Closing Party",
      "doors": "23:00",
      "src": "https://pacha.com/event/gordo--taraka-29-09-2026",
@@ -174,7 +182,7 @@
     "2026-10-01": {
      "hl": "Purple Disco Machine",
      "line": "Purple Disco Machine · Gerd Janson · Busy P · Breakbot · David Bay",
-     "party": "Pure Pacha Closing",
+     "party": "Pure Pacha Closing Party",
      "doors": "23:00",
      "src": "https://pacha.com/event/purple-disco-machine--pure-pacha---closing-party-01-10-2026",
      "conf": "high"
@@ -202,6 +210,14 @@
      "doors": "23:00",
      "src": "https://pacha.com/event/solomun1---closing-party-04-10-2026",
      "conf": "high"
+    },
+    "2026-10-05": {
+     "hl": "Sonny Fodera",
+     "line": "Sonny Fodera · Fatboy Slim · Danny Howard · Saffron Stone",
+     "party": "Closing Party",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/sonny-fodera-05-10-20261",
+     "conf": "high"
     }
    }
   },
@@ -218,7 +234,7 @@
     "2026-10-01": {
      "hl": "Tiempo",
      "line": "",
-     "party": "Tiempo Closing",
+     "party": "Closing Party",
      "doors": "",
      "src": "https://www.liogroup.com/events/closing-tiempo-1-oct-2026",
      "conf": "high"
@@ -241,9 +257,9 @@
     },
     "2026-10-04": {
      "hl": "Lío Ibiza Closing Party",
-     "line": "Jon Rocca · Nomis · Sebastián Gamboa",
+     "line": "",
      "party": "",
-     "doors": "00:00",
+     "doors": "",
      "src": "https://www.liogroup.com/events/lio-ibiza-closing-party-4-oct-2026",
      "conf": "high"
     }
@@ -251,26 +267,18 @@
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-09-27": {
-     "hl": "Pyramid",
-     "line": "Obskür B2B Omar+ · Sosa · Kepler B2B Burnski · Caal b2b De La Swing · Jeff Mills · Nørbak · DJ Pete",
-     "party": "",
-     "doors": "23:00",
-     "src": "https://www.amnesia.es/en/calendar/ibiza/2026/all",
-     "conf": "high"
-    },
     "2026-09-29": {
-     "hl": "Joseph Capriati",
-     "line": "Joseph Capriati b3b Jamie Jones b3b Chris Stassy · Marco Faraone · Marco Tropeano b2b Francesco Squillante · Yanamaste · Freddy K · Elisa Bee · Skizzo",
-     "party": "Metamorfosi Closing",
+     "hl": "Joseph Capriati B3B Jamie Jones B3B Chris Stassy",
+     "line": "Joseph Capriati B3B Jamie Jones B3B Chris Stassy · Marco Faraone · Marco Tropeano B2B Francesco Squillante · Yanamaste · Freddy K · Elisa Bee · Skizzo",
+     "party": "Metamorfosi Closing Party",
      "doors": "22:00",
-     "src": "https://www.amnesia.es/en/calendar/ibiza/2026/all",
+     "src": "https://sales.ticketing.cm.com/Metamorfosi-Amnesia-29thSept2026",
      "conf": "high"
     },
     "2026-10-01": {
      "hl": "Josh Baker",
-     "line": "Josh Baker · Alexandria · Enzo Siragusa B2B Silva Bumpa · Laidlaw · Marsolo · Max Dean · Moxie · Alisha · Jamie Fielding · JWave · Local Dub · Reeshy",
-     "party": "You&Me Closing",
+     "line": "Josh Baker (Sunset Set + Sunrise Set) · Alexandria · Enzo Siragusa B2B Silva Bumpa · Laidlaw · Marsolo · Max Dean · Moxie · Alisha · Jamie Fielding · jWave · Local Dub · Reeshy",
+     "party": "You&Me Closing Party",
      "doors": "16:00",
      "src": "https://sales.ticketing.cm.com/YouandMe-Amnesia-1stOctober2026",
      "conf": "high"
@@ -285,10 +293,18 @@
     },
     "2026-10-04": {
      "hl": "Pyramid",
-     "line": "Terraza: Ricardo Villalobos b3b Raresh b3b Franco Cinelli · Seth Troxler · Shanti Celeste · Mar-T — Main Room: Adrián Mills · Nina Kraviz (extended set) · Cerrot · Luca Donzelli",
+     "line": "Terraza: Ricardo Villalobos b3b Raresh b3b Franco Cinelli · Seth Troxler · Shanti Celeste · Mar-T — Main Room: Adrián Mills · Nina Kraviz (Extended Set) · Cerrot · Luca Donzelli",
      "party": "Closing Party",
      "doors": "23:00",
-     "src": "https://www.amnesia.es/en/calendar/ibiza/2026/all",
+     "src": "https://sales.ticketing.cm.com/Pyramid-Amnesia-4thOctober2026",
+     "conf": "high"
+    },
+    "2026-10-05": {
+     "hl": "Max Dean B3B Luke Dean B3B Locky",
+     "line": "Max Dean B3B Luke Dean B3B Locky · Special Guest B3B Joss Dean B3B Tommy Phillips · Chopper B2B Ellis Garner · Diosa B2B Lily C-D",
+     "party": "Nexup",
+     "doors": "23:00",
+     "src": "https://sales.ticketing.cm.com/Nexup-Amnesia-5thOctober2026",
      "conf": "high"
     }
    }
@@ -306,23 +322,23 @@
     "2026-10-01": {
      "hl": "Solid Grooves",
      "line": "",
-     "party": "Solid Grooves Closing",
+     "party": "Closing Party",
      "doors": "18:00",
      "src": "https://dice.fm/event/avq6ev-solid-grooves-closing-party-1st-oct-dc-10-ibiza-tickets",
+     "conf": "high"
+    },
+    "2026-10-05": {
+     "hl": "Circoloco",
+     "line": "&ME · Âme · Bradley Zero · Carlita · Chaos In The CBD · O.BEE · Omar+ · Palms Trax · Pional · Prospa · Reptant · Sam Alfred · Serenda · Sossa · Tomas Station",
+     "party": "",
+     "doors": "18:00",
+     "src": "https://dice.fm/event/bbraax-circoloco-ibiza-week-24-5th-oct-dc-10-ibiza-tickets",
      "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-09-27": {
-     "hl": "Manumission Carry On Cowboy",
-     "line": "Special Guest DJs",
-     "party": "",
-     "doors": "21:00",
-     "src": "https://www.pikesibiza.com/event/manumission-carry-on-cowboy-27-09-2026/",
-     "conf": "high"
-    },
     "2026-09-28": {
      "hl": "Mondays",
      "line": "Secret DJs · Very Special Guests",
@@ -333,7 +349,7 @@
     },
     "2026-09-29": {
      "hl": "Bathtub Club",
-     "line": "Pikes Resident DJs",
+     "line": "Camila Ramerez · Scott Gray",
      "party": "",
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/bathtub-club-29-09-2026/",
@@ -341,7 +357,7 @@
     },
     "2026-09-30": {
      "hl": "David Morales",
-     "line": "David Morales",
+     "line": "David Morales · Mina · Ken Fan",
      "party": "",
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/david-morales-30-09-2026/",
@@ -357,15 +373,15 @@
     },
     "2026-10-02": {
      "hl": "Laidlaw",
-     "line": "Laidlaw · Laura & Santiago",
-     "party": "Pikes Sessions",
+     "line": "Laidlaw · Laura & Santiago · Aka Jay · Corbi · Jo Mills · Camilo Miranda · Rhythm & Bliss Collective",
+     "party": "Pikes Sessions Closing Party",
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/pikes-sessions-02-10-2026/",
      "conf": "high"
     },
     "2026-10-03": {
      "hl": "Denney",
-     "line": "Denney · Romeren",
+     "line": "Denney · Gjin · James Robinson · Romeren · Luca Averna",
      "party": "Pikes House Party",
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/pikes-house-party-03-10-2026/",
@@ -378,19 +394,19 @@
      "doors": "21:00",
      "src": "https://www.pikesibiza.com/event/sundays-at-pikes-04-10-2026/",
      "conf": "high"
+    },
+    "2026-10-05": {
+     "hl": "Mondays",
+     "line": "",
+     "party": "",
+     "doors": "21:00",
+     "src": "https://www.pikesibiza.com/event/mondays-05-10-2026/",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|0": {
    "nights": {
-    "2026-09-27": {
-     "hl": "BossMan Dlow",
-     "line": "BossMan Dlow",
-     "party": "",
-     "doors": "23:00",
-     "src": "https://www.livenation.com/venue/KovZ917Ac_V/liv-tickets",
-     "conf": "high"
-    },
     "2026-10-02": {
      "hl": "PartyNextDoor",
      "line": "PartyNextDoor",
@@ -404,21 +420,13 @@
      "line": "",
      "party": "",
      "doors": "23:00",
-     "src": "https://content.livenationapi.com/v1/venues/KovZ917Ac_V/events?offset=0&limit=48&event_data_type=discovery",
+     "src": "https://www.livenation.com/venue/KovZ917Ac_V/liv-tickets",
      "conf": "high"
     }
    }
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-09-27": {
-     "hl": "Damaged Goods",
-     "line": "Damaged Goods",
-     "party": "",
-     "doors": "",
-     "src": "https://www.11miami.com/events/7b42d699-33fc-4d13-8552-663bda4f31be1789161851",
-     "conf": "high"
-    },
     "2026-09-28": {
      "hl": "Prankstisci",
      "line": "Prankstisci",
@@ -429,7 +437,7 @@
     },
     "2026-09-29": {
      "hl": "Yissel",
-     "line": "",
+     "line": "Yissel",
      "party": "",
      "doors": "",
      "src": "https://speakeasygo.com/E11EVEN/YISSEL-AT-E11EVEN?eid=EVE-X8TZD9",
@@ -440,7 +448,7 @@
      "line": "Five Venoms",
      "party": "",
      "doors": "",
-     "src": "https://www.11miami.com/events",
+     "src": "https://speakeasygo.com/E11EVEN/FIVE-VENOMS-AT-E11EVEN?eid=EVE-OLBLW9",
      "conf": "high"
     },
     "2026-10-01": {
@@ -456,7 +464,7 @@
      "line": "Nelly",
      "party": "",
      "doors": "",
-     "src": "https://www.11miami.com/events/aa742240-3cc7-44ad-89f5-a955eeddd6751789162075",
+     "src": "https://speakeasygo.com/E11EVEN/NELLY-AT-E11EVEN?eid=EVE-63Z0YA",
      "conf": "high"
     },
     "2026-10-03": {
@@ -469,27 +477,43 @@
     },
     "2026-10-04": {
      "hl": "LIVITUP",
-     "line": "",
+     "line": "LIVITUP",
      "party": "",
      "doors": "",
      "src": "https://speakeasygo.com/E11EVEN/LIVITUP-AT-E11EVEN?eid=EVE-AKBM9R",
+     "conf": "high"
+    },
+    "2026-10-05": {
+     "hl": "A-Train",
+     "line": "A-Train",
+     "party": "",
+     "doors": "",
+     "src": "https://speakeasygo.com/E11EVEN/A-TRAIN-AT-E11EVEN?eid=EVE-72H0QY",
      "conf": "high"
     }
    }
   },
   "miami|nightclubs|2": {
    "nights": {
+    "2026-10-01": {
+     "hl": "B0YG1RL",
+     "line": "B0YG1RL · ALI RQ · prblm",
+     "party": "Album Release Party",
+     "doors": "20:00",
+     "src": "https://dice.fm/event/pyxyvk-b0yg1rl-album-release-party-1st-oct-club-space-miami-miami-tickets",
+     "conf": "high"
+    },
     "2026-10-02": {
      "hl": "Disco Dom & The Brothers Macklovitch",
      "line": "Disco Dom · The Brothers Macklovitch · Bakke · Danyelino",
      "party": "",
      "doors": "23:00",
-     "src": "https://dice.fm/event/3obq6v-disco-dom-the-brothers-macklovitch-2nd-oct-club-space-miami-miami-tickets",
+     "src": "https://dice.fm/event/3obq6v-dombresky-presents-disco-dom-the-brothers-macklovitch-a-trak-dave-1-2nd-oct-club-space-miami-miami-tickets",
      "conf": "high"
     },
     "2026-10-03": {
-     "hl": "Âme",
-     "line": "Âme · Hardt Antoine · Maceo Plex",
+     "hl": "Âme, Hardt Antoine & Maceo Plex",
+     "line": "Âme · Hardt Antoine · Camila Di Marzo · Maceo Plex",
      "party": "",
      "doors": "23:00",
      "src": "https://dice.fm/event/dk7gme-me-dj-hardt-antoine-maceo-plex-3rd-oct-club-space-miami-miami-tickets",
