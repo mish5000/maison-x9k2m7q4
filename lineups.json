@@ -1,16 +1,8 @@
 {
- "generated": "2026-09-29T03:11:07Z",
+ "generated": "2026-09-30T03:09:36Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
-    "2026-09-28": {
-     "hl": "Yaima",
-     "line": "Yaima · Stella Lumina",
-     "party": "",
-     "doors": "19:00",
-     "src": "https://bellyupaspen.com/events/yaima/",
-     "conf": "high"
-    },
     "2026-09-29": {
      "hl": "Michigander",
      "line": "Michigander · Jake Lemond",
@@ -59,14 +51,6 @@
   },
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-09-28": {
-     "hl": "Francis Mercier",
-     "line": "Francis Mercier B2B Mahmut Orhan · Francis Mercier · Ashibah B2B ThatGirl SherryK · Jade B2B Rolbac · Andrea Oliva · Major League Djz · Bontan · Stofella",
-     "party": "Solèy",
-     "doors": "23:30",
-     "src": "https://www.hiibiza.com/events/2026/francis-mercier/2026-09-28",
-     "conf": "high"
-    },
     "2026-09-29": {
      "hl": "East End Dubs",
      "line": "East End Dubs · Hot Since 82 · Oden & Fatzo (Live) · Gallya · Paco Osuna · Nick Curly · Ariel Rodz",
@@ -106,19 +90,19 @@
      "doors": "23:30",
      "src": "https://www.hiibiza.com/events/2026/francis-mercier/2026-10-05",
      "conf": "high"
+    },
+    "2026-10-06": {
+     "hl": "East End Dubs B2B Ewan McVicar",
+     "line": "East End Dubs B2B Ewan McVicar · Traumer B2B Priku · Teedee · A For Alpha · Paco Osuna · Andre Butano",
+     "party": "Eastenderz Closing Party",
+     "doors": "23:30",
+     "src": "https://www.hiibiza.com/events/2026/eastenderz/2026-10-06",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|1": {
    "nights": {
-    "2026-09-28": {
-     "hl": "David Guetta",
-     "line": "David Guetta · Joel Corry · Levi · Paul Reynolds",
-     "party": "F*** Me I'm Famous!",
-     "doors": "17:00",
-     "src": "https://www.theushuaiaexperience.com/club/en/events/2026/fmif-david-guetta/2026-09-28",
-     "conf": "high"
-    },
     "2026-09-30": {
      "hl": "Dimitri Vegas",
      "line": "Dimitri Vegas · Hannah Laing B2B Lilly Palmer · Massano · MATTN · LAMAR",
@@ -155,14 +139,6 @@
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-28": {
-     "hl": "Sonny Fodera",
-     "line": "Sonny Fodera · Jazzy · Marten Lou",
-     "party": "",
-     "doors": "23:00",
-     "src": "https://pacha.com/event/sonny-fodera-28-09-20261",
-     "conf": "high"
-    },
     "2026-09-29": {
      "hl": "GORDO",
      "line": "GORDO · Roger Sanchez · Gala · Abril Love",
@@ -217,6 +193,14 @@
      "party": "Closing Party",
      "doors": "23:00",
      "src": "https://pacha.com/event/sonny-fodera-05-10-20261",
+     "conf": "high"
+    },
+    "2026-10-06": {
+     "hl": "Rampa",
+     "line": "Rampa · Sven Väth · JAMIIE",
+     "party": "Anarchy",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/rampa-presents-anarchy-06-10-2026",
      "conf": "high"
     }
    }
@@ -287,13 +271,13 @@
      "hl": "Glitterbox",
      "line": "Danny Tenaglia · Dave Lee · Denis Sulta (Disco Set) · Eats Everything · Jamie Love · Coco & Breezy · Todd Terry",
      "party": "",
-     "doors": "23:30",
+     "doors": "23:59",
      "src": "https://sales.ticketing.cm.com/Glitterbox-Amnesia-2ndOctober2026",
      "conf": "high"
     },
     "2026-10-04": {
      "hl": "Pyramid",
-     "line": "Terraza: Ricardo Villalobos b3b Raresh b3b Franco Cinelli · Seth Troxler · Shanti Celeste · Mar-T — Main Room: Adrián Mills · Nina Kraviz (Extended Set) · Cerrot · Luca Donzelli",
+     "line": "Ricardo Villalobos B3B Raresh B3B Franco Cinelli · Seth Troxler · Shanti Celeste · Mar-T · Adrián Mills · Nina Kraviz (Extended Set) · Cerrot · Luca Donzelli",
      "party": "Closing Party",
      "doors": "23:00",
      "src": "https://sales.ticketing.cm.com/Pyramid-Amnesia-4thOctober2026",
@@ -311,14 +295,6 @@
   },
   "ibiza|nightclubs|5": {
    "nights": {
-    "2026-09-28": {
-     "hl": "Circoloco",
-     "line": "Carl Craig · DJ Seinfeld · DJ Tennis · Francesco del Garda · Gabrielle Kwarteng · Isaac Carter · Jamback · Jonny Rock · Krystal Klear · Luciano · Rossi. · Seth Troxler · Skream · Tania Vulcano",
-     "party": "",
-     "doors": "18:00",
-     "src": "https://dice.fm/event/69b836aab280da00016bedc8",
-     "conf": "high"
-    },
     "2026-10-01": {
      "hl": "Solid Grooves",
      "line": "",
@@ -339,14 +315,6 @@
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-09-28": {
-     "hl": "Mondays",
-     "line": "Secret DJs · Very Special Guests",
-     "party": "",
-     "doors": "21:00",
-     "src": "https://www.pikesibiza.com/event/mondays-28-09-2026/",
-     "conf": "high"
-    },
     "2026-09-29": {
      "hl": "Bathtub Club",
      "line": "Camila Ramerez · Scott Gray",
@@ -359,7 +327,7 @@
      "hl": "David Morales",
      "line": "David Morales · Mina · Ken Fan",
      "party": "",
-     "doors": "21:00",
+     "doors": "",
      "src": "https://www.pikesibiza.com/event/david-morales-30-09-2026/",
      "conf": "high"
     },
@@ -367,7 +335,7 @@
      "hl": "Ryan O Gorman",
      "line": "Ryan O Gorman · Archie Hamilton · Ballarem Sound System · Hugo Martinez · Nuzzo · Pol K · San Francis B2B L3Ni · Cami Jones B2B Danny Beck · Uokhun",
      "party": "Vitalik",
-     "doors": "21:00",
+     "doors": "",
      "src": "https://www.pikesibiza.com/event/vitalik-01-10-2026/",
      "conf": "high"
     },
@@ -375,7 +343,7 @@
      "hl": "Laidlaw",
      "line": "Laidlaw · Laura & Santiago · Aka Jay · Corbi · Jo Mills · Camilo Miranda · Rhythm & Bliss Collective",
      "party": "Pikes Sessions Closing Party",
-     "doors": "21:00",
+     "doors": "",
      "src": "https://www.pikesibiza.com/event/pikes-sessions-02-10-2026/",
      "conf": "high"
     },
@@ -383,7 +351,7 @@
      "hl": "Denney",
      "line": "Denney · Gjin · James Robinson · Romeren · Luca Averna",
      "party": "Pikes House Party",
-     "doors": "21:00",
+     "doors": "",
      "src": "https://www.pikesibiza.com/event/pikes-house-party-03-10-2026/",
      "conf": "high"
     },
@@ -391,7 +359,7 @@
      "hl": "Chez Damier",
      "line": "Chez Damier · Il Bosco · Kenny Blacksmith B2B Simon Morell · James Holroyd · Royal Male · Dave Seaman · Steve Parry · Begin",
      "party": "Sundays at Pikes",
-     "doors": "21:00",
+     "doors": "",
      "src": "https://www.pikesibiza.com/event/sundays-at-pikes-04-10-2026/",
      "conf": "high"
     },
@@ -399,8 +367,16 @@
      "hl": "Mondays",
      "line": "",
      "party": "",
-     "doors": "21:00",
+     "doors": "",
      "src": "https://www.pikesibiza.com/event/mondays-05-10-2026/",
+     "conf": "high"
+    },
+    "2026-10-06": {
+     "hl": "Bathtub Club",
+     "line": "",
+     "party": "",
+     "doors": "",
+     "src": "https://www.pikesibiza.com/event/bathtub-club-06-10-2026/",
      "conf": "high"
     }
    }
@@ -412,29 +388,21 @@
      "line": "PartyNextDoor",
      "party": "",
      "doors": "23:30",
-     "src": "https://www.livenation.com/venue/KovZ917Ac_V/liv-tickets",
+     "src": "https://www.livenation.com/event/rZ7HnEZ1AfGtQ7/partynextdoor",
      "conf": "high"
     },
     "2026-10-03": {
      "hl": "Karol G Official Afterparty",
-     "line": "",
+     "line": "Karol G",
      "party": "",
      "doors": "23:00",
-     "src": "https://www.livenation.com/venue/KovZ917Ac_V/liv-tickets",
+     "src": "https://www.livenation.com/event/rZ7HnEZ1A4ZfaK/karol-g-official-afterparty",
      "conf": "high"
     }
    }
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-09-28": {
-     "hl": "Prankstisci",
-     "line": "Prankstisci",
-     "party": "",
-     "doors": "",
-     "src": "https://speakeasygo.com/E11EVEN/PRANKSTISCI-AT-E11EVEN?eid=EVE-BDV3I4",
-     "conf": "high"
-    },
     "2026-09-29": {
      "hl": "Yissel",
      "line": "Yissel",
@@ -489,6 +457,14 @@
      "party": "",
      "doors": "",
      "src": "https://speakeasygo.com/E11EVEN/A-TRAIN-AT-E11EVEN?eid=EVE-72H0QY",
+     "conf": "high"
+    },
+    "2026-10-06": {
+     "hl": "Crespo",
+     "line": "Crespo",
+     "party": "",
+     "doors": "",
+     "src": "https://speakeasygo.com/E11EVEN/CRESPO-AT-E11EVEN?eid=EVE-VFY4VP",
      "conf": "high"
     }
    }
