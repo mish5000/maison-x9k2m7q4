@@ -1,16 +1,8 @@
 {
- "generated": "2026-09-30T03:09:36Z",
+ "generated": "2026-10-01T03:09:01Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
-    "2026-09-29": {
-     "hl": "Michigander",
-     "line": "Michigander · Jake Lemond",
-     "party": "",
-     "doors": "19:00",
-     "src": "https://bellyupaspen.com/events/michigander/",
-     "conf": "high"
-    },
     "2026-10-01": {
      "hl": "Pink Talking Fish",
      "line": "Pink Talking Fish",
@@ -51,14 +43,6 @@
   },
   "ibiza|nightclubs|0": {
    "nights": {
-    "2026-09-29": {
-     "hl": "East End Dubs",
-     "line": "East End Dubs · Hot Since 82 · Oden & Fatzo (Live) · Gallya · Paco Osuna · Nick Curly · Ariel Rodz",
-     "party": "Eastenderz",
-     "doors": "23:30",
-     "src": "https://www.hiibiza.com/events/2026/eastenderz/2026-09-29",
-     "conf": "high"
-    },
     "2026-09-30": {
      "hl": "MEDUZA & James Hype",
      "line": "James Hype · MEDUZA³ · Korolova · Brina Knauss · Jonas Blue · Malive · Calussa",
@@ -71,7 +55,7 @@
      "hl": "CamelPhat",
      "line": "CamelPhat · Âme (Live) B2B Trikk · Josh Gigante · Ewan McVicar · Jayda G · Edd",
      "party": "Summer of Love Closing Party",
-     "doors": "23:30",
+     "doors": "",
      "src": "https://www.hiibiza.com/events/2026/camelphat/2026-10-02",
      "conf": "high"
     },
@@ -139,14 +123,6 @@
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-09-29": {
-     "hl": "GORDO",
-     "line": "GORDO · Roger Sanchez · Gala · Abril Love",
-     "party": "TARAKA Closing Party",
-     "doors": "23:00",
-     "src": "https://pacha.com/event/gordo--taraka-29-09-2026",
-     "conf": "high"
-    },
     "2026-09-30": {
      "hl": "Mau P",
      "line": "Mau P · Jimi Jules · HAAi · Baggi",
@@ -181,7 +157,7 @@
     },
     "2026-10-04": {
      "hl": "Solomun",
-     "line": "Solomun",
+     "line": "Solomun · Argia",
      "party": "Solomun+1 Closing Party",
      "doors": "23:00",
      "src": "https://pacha.com/event/solomun1---closing-party-04-10-2026",
@@ -201,6 +177,14 @@
      "party": "Anarchy",
      "doors": "23:00",
      "src": "https://pacha.com/event/rampa-presents-anarchy-06-10-2026",
+     "conf": "high"
+    },
+    "2026-10-07": {
+     "hl": "Mau P",
+     "line": "Mau P",
+     "party": "Baddest Behaviour Closing Party",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/mau-p--baddest-behaviour---closing-party-07-10-2026",
      "conf": "high"
     }
    }
@@ -251,14 +235,6 @@
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-09-29": {
-     "hl": "Joseph Capriati B3B Jamie Jones B3B Chris Stassy",
-     "line": "Joseph Capriati B3B Jamie Jones B3B Chris Stassy · Marco Faraone · Marco Tropeano B2B Francesco Squillante · Yanamaste · Freddy K · Elisa Bee · Skizzo",
-     "party": "Metamorfosi Closing Party",
-     "doors": "22:00",
-     "src": "https://sales.ticketing.cm.com/Metamorfosi-Amnesia-29thSept2026",
-     "conf": "high"
-    },
     "2026-10-01": {
      "hl": "Josh Baker",
      "line": "Josh Baker (Sunset Set + Sunrise Set) · Alexandria · Enzo Siragusa B2B Silva Bumpa · Laidlaw · Marsolo · Max Dean · Moxie · Alisha · Jamie Fielding · jWave · Local Dub · Reeshy",
@@ -315,14 +291,6 @@
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-09-29": {
-     "hl": "Bathtub Club",
-     "line": "Camila Ramerez · Scott Gray",
-     "party": "",
-     "doors": "21:00",
-     "src": "https://www.pikesibiza.com/event/bathtub-club-29-09-2026/",
-     "conf": "high"
-    },
     "2026-09-30": {
      "hl": "David Morales",
      "line": "David Morales · Mina · Ken Fan",
@@ -378,6 +346,14 @@
      "doors": "",
      "src": "https://www.pikesibiza.com/event/bathtub-club-06-10-2026/",
      "conf": "high"
+    },
+    "2026-10-07": {
+     "hl": "David Morales",
+     "line": "David Morales",
+     "party": "",
+     "doors": "",
+     "src": "https://www.pikesibiza.com/event/david-morales-07-10-2026/",
+     "conf": "high"
     }
    }
   },
@@ -393,7 +369,7 @@
     },
     "2026-10-03": {
      "hl": "Karol G Official Afterparty",
-     "line": "Karol G",
+     "line": "Karol G Official Afterparty",
      "party": "",
      "doors": "23:00",
      "src": "https://www.livenation.com/event/rZ7HnEZ1A4ZfaK/karol-g-official-afterparty",
@@ -403,14 +379,6 @@
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-09-29": {
-     "hl": "Yissel",
-     "line": "Yissel",
-     "party": "",
-     "doors": "",
-     "src": "https://speakeasygo.com/E11EVEN/YISSEL-AT-E11EVEN?eid=EVE-X8TZD9",
-     "conf": "high"
-    },
     "2026-09-30": {
      "hl": "Five Venoms",
      "line": "Five Venoms",
@@ -465,6 +433,14 @@
      "party": "",
      "doors": "",
      "src": "https://speakeasygo.com/E11EVEN/CRESPO-AT-E11EVEN?eid=EVE-VFY4VP",
+     "conf": "high"
+    },
+    "2026-10-07": {
+     "hl": "DJ ReRe",
+     "line": "DJ ReRe",
+     "party": "",
+     "doors": "",
+     "src": "https://speakeasygo.com/E11EVEN/DJ-RERE-AT-E11EVEN?eid=EVE-067KRH",
      "conf": "high"
     }
    }
