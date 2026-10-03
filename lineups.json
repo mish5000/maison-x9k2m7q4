@@ -1,16 +1,8 @@
 {
- "generated": "2026-10-02T03:09:55Z",
+ "generated": "2026-10-03T03:25:14Z",
  "venues": {
   "aspen|nightclubs|0": {
    "nights": {
-    "2026-10-01": {
-     "hl": "Pink Talking Fish",
-     "line": "Pink Talking Fish",
-     "party": "",
-     "doors": "20:00",
-     "src": "https://bellyupaspen.com/events/an-evening-with-pink-talking-fish/",
-     "conf": "high"
-    },
     "2026-10-03": {
      "hl": "Sam Feldt",
      "line": "Sam Feldt · blakegetbackhere",
@@ -34,6 +26,14 @@
      "doors": "19:30",
      "src": "https://bellyupaspen.com/events/49-winchester/",
      "conf": "high"
+    },
+    "2026-10-09": {
+     "hl": "Verduzco",
+     "line": "Verduzco",
+     "party": "Locals Night",
+     "doors": "20:00",
+     "src": "https://bellyupaspen.com/events/locals-night-disco-djs-verduzco-w-set-break/",
+     "conf": "high"
     }
    }
   },
@@ -53,6 +53,14 @@
      "party": "",
      "doors": "20:00",
      "src": "https://www.stephentalkhouse.com/events/205617",
+     "conf": "high"
+    },
+    "2026-10-09": {
+     "hl": "Chaparelle",
+     "line": "Chaparelle · Candy Shop",
+     "party": "",
+     "doors": "20:00",
+     "src": "https://www.stephentalkhouse.com/events/202384",
      "conf": "high"
     }
    }
@@ -90,6 +98,14 @@
      "doors": "23:30",
      "src": "https://www.hiibiza.com/events/2026/eastenderz/2026-10-06",
      "conf": "high"
+    },
+    "2026-10-09": {
+     "hl": "Hï Ibiza Closing Party",
+     "line": "Adam Ten B2B Mita Gami · Black Coffee · Delilah · Maz B2B Antdot · Paco Osuna · The Martinez Brothers · Skepta · Gaskin · Laidlaw · Djammin · Ossie · Meeshy · The Menendez Brothers · LF System · Melon Bomb · Edd · Candidate · Minna · Saigon",
+     "party": "Connecting Cultures",
+     "doors": "23:00",
+     "src": "https://www.hiibiza.com/events/2026/hi-ibiza-closing-party/2026-10-09",
+     "conf": "high"
     }
    }
   },
@@ -123,14 +139,6 @@
   },
   "ibiza|nightclubs|2": {
    "nights": {
-    "2026-10-01": {
-     "hl": "Purple Disco Machine",
-     "line": "Purple Disco Machine · Gerd Janson · Busy P · Breakbot · David Bay",
-     "party": "Pure Pacha Closing Party",
-     "doors": "23:00",
-     "src": "https://pacha.com/event/purple-disco-machine--pure-pacha---closing-party-01-10-2026",
-     "conf": "high"
-    },
     "2026-10-02": {
      "hl": "Marco Carola",
      "line": "Marco Carola · Adriatique · Mita Gami · II Faces",
@@ -186,19 +194,19 @@
      "doors": "23:00",
      "src": "https://pacha.com/event/marco-carola-presents-music-on---closing-party-part-1-08-10-2026",
      "conf": "high"
+    },
+    "2026-10-09": {
+     "hl": "Marco Carola",
+     "line": "Marco Carola · Franky Rizardo · East End Dubs · Ilario Alicante · Ale De Tuglie",
+     "party": "Music On Closing Party (Part 2)",
+     "doors": "23:00",
+     "src": "https://pacha.com/event/marco-carola-presents-music-on---closing-party-part-2-09-10-2026",
+     "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|3": {
    "nights": {
-    "2026-10-01": {
-     "hl": "Tiempo",
-     "line": "",
-     "party": "Closing Party",
-     "doors": "",
-     "src": "https://www.liogroup.com/events/closing-tiempo-1-oct-2026",
-     "conf": "high"
-    },
     "2026-10-02": {
      "hl": "Vintage",
      "line": "",
@@ -227,14 +235,6 @@
   },
   "ibiza|nightclubs|4": {
    "nights": {
-    "2026-10-01": {
-     "hl": "Josh Baker",
-     "line": "Josh Baker (Sunset Set + Sunrise Set) · Alexandria · Enzo Siragusa B2B Silva Bumpa · Laidlaw · Marsolo · Max Dean · Moxie · Alisha · Jamie Fielding · jWave · Local Dub · Reeshy",
-     "party": "You&Me Closing Party",
-     "doors": "16:00",
-     "src": "https://sales.ticketing.cm.com/YouandMe-Amnesia-1stOctober2026",
-     "conf": "high"
-    },
     "2026-10-02": {
      "hl": "Glitterbox",
      "line": "Danny Tenaglia · Dave Lee · Denis Sulta (Disco Set) · Eats Everything · Jamie Love · Coco & Breezy · Todd Terry",
@@ -261,24 +261,24 @@
     },
     "2026-10-08": {
      "hl": "Teletech",
-     "line": "Bella Claxton · Benwal · BLK. B2B Winson · Clara Cuvé · Emilija · Faster Horses · Kyle Starkey B2B Paige Tomlinson · Morgan Seatree · Sim0ne B2B SPFDJ · Vieze Asbak",
+     "line": "Bella Claxton B2B Benwal · BLK. B2B Winson · Clara Cuvé · Kyle Starkey B2B Paige Tomlinson · Morgan Seatree B2B Faster Horses · Sim0ne B3B SPFDJ B3B Emilija · Vieze Asbak",
      "party": "Closing Party",
      "doors": "23:00",
      "src": "https://sales.ticketing.cm.com/Teletech-Amnesia-8thOctober2026",
+     "conf": "high"
+    },
+    "2026-10-09": {
+     "hl": "Glitterbox",
+     "line": "Jorja Smith (Live PA) · Dimitri From Paris · HoneyLuv · Jamie Love · Masters at Work · Melvo Baptiste · Mousse T. · Natasha Diggs",
+     "party": "Closing Party",
+     "doors": "23:30",
+     "src": "https://sales.ticketing.cm.com/Glitterbox-Amnesia-9thOctober2026",
      "conf": "high"
     }
    }
   },
   "ibiza|nightclubs|5": {
    "nights": {
-    "2026-10-01": {
-     "hl": "Solid Grooves",
-     "line": "",
-     "party": "Closing Party",
-     "doors": "18:00",
-     "src": "https://dice.fm/event/avq6ev-solid-grooves-closing-party-1st-oct-dc-10-ibiza-tickets",
-     "conf": "high"
-    },
     "2026-10-05": {
      "hl": "Circoloco",
      "line": "&ME · Âme · Bradley Zero · Carlita · Chaos In The CBD · O.BEE · Omar+ · Palms Trax · Pional · Prospa · Reptant · Sam Alfred · Serenda · Sossa · Tomas Station",
@@ -291,14 +291,6 @@
   },
   "ibiza|nightclubs|6": {
    "nights": {
-    "2026-10-01": {
-     "hl": "Ryan O Gorman",
-     "line": "Ryan O Gorman · Archie Hamilton · Ballarem Sound System · Hugo Martinez · Nuzzo · Pol K · San Francis B2B L3Ni · Cami Jones B2B Danny Beck · Uokhun",
-     "party": "Vitalik",
-     "doors": "",
-     "src": "https://www.pikesibiza.com/event/vitalik-01-10-2026/",
-     "conf": "high"
-    },
     "2026-10-02": {
      "hl": "Laidlaw",
      "line": "Laidlaw · Laura & Santiago · Aka Jay · Corbi · Jo Mills · Camilo Miranda · Rhythm & Bliss Collective",
@@ -374,19 +366,19 @@
      "doors": "23:00",
      "src": "https://www.livenation.com/event/rZ7HnEZ1A4ZfaK/karol-g-official-afterparty",
      "conf": "high"
+    },
+    "2026-10-09": {
+     "hl": "Alesso",
+     "line": "Alesso",
+     "party": "",
+     "doors": "23:00",
+     "src": "https://www.livenation.com/event/rZ7HnEZ1A4ZfaN/alesso",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|1": {
    "nights": {
-    "2026-10-01": {
-     "hl": "Rockwell Talent",
-     "line": "Dexes · Illicit · Raphy Prior · Zilla",
-     "party": "",
-     "doors": "",
-     "src": "https://speakeasygo.com/E11EVEN/ROCKWELL-AT-E11EVEN?eid=EVE-JPSYRF",
-     "conf": "high"
-    },
     "2026-10-02": {
      "hl": "Nelly",
      "line": "Nelly",
@@ -442,19 +434,19 @@
      "doors": "",
      "src": "https://speakeasygo.com/E11EVEN/CARNIVAL-NIGHT-AT-E11EVEN?eid=EVE-DNOZO5",
      "conf": "high"
+    },
+    "2026-10-09": {
+     "hl": "Yung Miami",
+     "line": "Yung Miami",
+     "party": "",
+     "doors": "",
+     "src": "https://speakeasygo.com/E11EVEN/YUNG-MIAMI-AT-E11EVEN?eid=EVE-KDNFHC",
+     "conf": "high"
     }
    }
   },
   "miami|nightclubs|2": {
    "nights": {
-    "2026-10-01": {
-     "hl": "B0YG1RL",
-     "line": "B0YG1RL · ALI RQ · prblm",
-     "party": "Album Release Party",
-     "doors": "20:00",
-     "src": "https://dice.fm/event/pyxyvk-b0yg1rl-album-release-party-1st-oct-club-space-miami-miami-tickets",
-     "conf": "high"
-    },
     "2026-10-02": {
      "hl": "Disco Dom & The Brothers Macklovitch",
      "line": "Disco Dom · The Brothers Macklovitch · Bakke · Danyelino",
@@ -469,6 +461,14 @@
      "party": "",
      "doors": "23:00",
      "src": "https://dice.fm/event/dk7gme-me-dj-hardt-antoine-maceo-plex-3rd-oct-club-space-miami-miami-tickets",
+     "conf": "high"
+    },
+    "2026-10-09": {
+     "hl": "Mind Against, Maxi Meraki & Luch",
+     "line": "Mind Against · Maxi Meraki · Luch · Bakke · Danyelino · Differ",
+     "party": "",
+     "doors": "23:00",
+     "src": "https://dice.fm/event/eongy2-mind-against-maxi-meraki-luch-9th-oct-club-space-miami-miami-tickets",
      "conf": "high"
     }
    }
